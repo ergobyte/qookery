@@ -108,20 +108,17 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		qx.log.Logger.debug(this, qx.lang.String.format("Qookery form '%1' is being destructed", [ this.__id ]));
-		
-		//this.__controller.removeAllBindings(); // Remove all bindings
-		//this.__controller.setModel(null);	// Just to be sure
-		this.__controller.dispose();
+		qx.log.Logger.debug(this, qx.lang.String.format("Form '%1' is being destructed", [ this.__id ]));
 		
 		// Remove all validations
 		var validationItems = this.__validationManager.getItems();
 		for(var validationItem in validationItems)
 			this.__validationManager.remove(validationItem); 
 		
-		this.__validationManager.dispose();
-		// this.__controller = null;
-		this.__validationManager = null;
+		// Remove all bindings
+		this.__controller.removeAllBindings(); 
+
+		this._disposeObjects("__controller", "__validationManager");
 		this.__componentMap = null;
 		this.__userContextMap = null;
 		this.__registration = null;

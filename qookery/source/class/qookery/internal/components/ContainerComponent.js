@@ -5,9 +5,11 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 	
 	type : "abstract",
 	extend: qookery.internal.components.BaseComponent,
+	implement: [ qookery.IContainerComponent ],
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__children = [ ];
 		this._currentRow = 0;
 		this._currentColumn = 0;
 		this._grabHorizontal = false;
@@ -18,6 +20,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 	members: {
 
+		__children: null,
 		_numOfColumns: null,
 		_layout: null,
 		_currentRow: 0,
@@ -30,7 +33,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			var layout = this.getMainWidget().getLayout();
 			for(var i=0; i < controls.length; i++) {
 				
-				if ( controls[i] instanceof qx.ui.basic.Label ) {
+				if(controls[i] instanceof qx.ui.basic.Label) {
 					this._labelColumn = this._currentColumn;
 					layout.setColumnFlex(this._currentColumn, 0);
 				}
@@ -65,26 +68,30 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 				}
 			}
 		},
+		
+		listChildren: function() {
+			return this.__children;
+		},
 
-		__disposeChildren: function() {
-			var controls = this.getMainWidget().getChildren();
-			if(controls.length == 0) return;
-			for(var i=0; i < controls.length; i++) {
-				if ( !controls[i].isDisposed() ) {
-					var thatControl = controls[i].getUserData('qookeryComponent');
-					thatControl.dispose();
-				}
+		/**
+		 * Add a component as a child of this component
+		 * 
+		 * @param childComponent {qookery.IComponent} the component to add to this component
+		 * 
+		 * @throw an exception is thrown in case this component does not support children
+		 */
+		addChild: function(childComponent) {
+			this.__children.push(childComponent);
+			var widgets = childComponent.listWidgets();
+			for(var i = 0; i < widgets.length; i++) {
+				this.getMainWidget().add(widgets[i]);
 			}
 		}
 	},
 
 	destruct: function() {
-		this.__disposeChildren();
-		this._numOfColumns = null;
+		this._disposeArray("__children");
 		this._layout = null;
-		this._currentRow = null;
-		this._currentColumn = null;
 		this._labelColumn = null;
-		this._grabHorizontal = null;
 	}
 });

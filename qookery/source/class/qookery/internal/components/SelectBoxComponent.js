@@ -74,7 +74,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			subData.push({ label: "Select a value", data: null });
 			for(var i=0; i<choices.length; i++ ) {
 				var recreatedLabel = choices[i][labelfield];
-				var recreatedData = waffle.protocols.Protocols.forceCreateModel(choices[i], protocolName);
+				var recreatedData = waffle.protocols.Protocols.createEntity(choices[i], protocolName);
 				var recreatedChoice = { label:recreatedLabel, data: recreatedData };
 				subData.push(recreatedChoice);
 			}

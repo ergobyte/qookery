@@ -69,12 +69,6 @@ qx.Class.define("qookery.internal.XmlParser", {
 			return this.__formComponent;
 		},
 
-		/** 
-		 * Public dispose
-		 * Dispose created items.
-		 */
-		dispose: function(parentComponent) { },
-
 		/**
 		 * Private parseStatementBlock
 		 * Parse tags and call the appropriate parser to continue

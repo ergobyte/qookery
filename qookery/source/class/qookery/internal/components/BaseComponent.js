@@ -1,5 +1,5 @@
 /**
- * Base class for all qookery components. 
+ * Base class for all Qookery components. 
  */
 qx.Class.define("qookery.internal.components.BaseComponent", {
 
@@ -41,20 +41,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 */
 		getCreateOptions: function() {
 			return this._createOptions;
-		},
-
-		/**
-		 * Add a component as a child of this component
-		 * 
-		 * @param childComponent {qookery.IComponent} the component to add to this component
-		 * 
-		 * @throw an exception is thrown in case this component does not support children
-		 */
-		addChild: function(childComponent) {
-			var widgets = childComponent.listWidgets();
-			for(var i = 0; i < widgets.length; i++) {
-				this.getMainWidget().add(widgets[i]);
-			}
 		},
 
 		/**
@@ -232,11 +218,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		/**
-		 * <pre>
-		 * Generate Contex to be used in executeClientCode function.
-		 * </pre>
-		 * @param {qx.event} event
-		 * @return a keyPairValue list that contain the generated event , the widget, the getComponent(id) function and the getContext(contextId) function.
+		 * Generate a JavaScript context to be used by Qookery client code 
+		 * 
+		 * @param {qx.event.type.Event} optional Qooxdoo event to set into context
+		 * 
+		 * @return {Object} a suitable JavaScript context
 		 */
 		__createClientCodeContext: function(event) {
 			var component = this;
@@ -245,35 +231,26 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				
 				widget: this.listWidgets("user")[0],
 				
+				getForm: function() {
+					return component.getForm();
+				},
+				
 				getComponent: function(id) {
-					if(id == null || id.length == 0) return component;
+					if(!id) return component;
 					return component.getForm().getComponentById(id);
 				},
 				
 				getContext: function(contextId) {
-					if(contextId == null) return this;
+					if(!contextId) return this;
 					return component.getForm().getUserContext(contextId);
 				}
 			};
-		},
-
-		/**
-		 * Dispose all windgets and remove them form the parent.
-		 */
-		_disposeAllWidgets: function(){
-			// Overide if you need to handle the disposal of widgets.
-			for(var i = 0; i < this._widgets.length; i++) {
-				this._widgets[i].removeAllBindings(); // Just to be sure
-				this._widgets[i].destroy(); // Removes the widget from the parent and dispose it.
-			}
-			this._widgets = null;
 		}
 	},
 
 	destruct: function() {
-		this._disposeAllWidgets();
+		this._disposeArray("_widgets");
 		this._parentComponent = null;
 		this._createOptions = null;
-		this._widgets = null;
 	}
 });

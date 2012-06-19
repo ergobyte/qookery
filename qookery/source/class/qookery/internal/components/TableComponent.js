@@ -80,7 +80,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.__tableModel = tableModel;
 			this._widgets[0].setTableModel(tableModel);
 			
-			if(tableModel instanceof waffle.TableSimpleModel) { 
+			if(tableModel instanceof waffle.ui.internal.TableSimpleModel) { 
 				// TODO Find another way
 				this.bind("items", this.__tableModel, "waffleItems");
 				this.__tableModel.bind("waffleItems", this, "items");
@@ -104,8 +104,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		
 		disableFraction: function(columnId) {
 			var tcm = this._widgets[0].getTableColumnModel();
-			var cellRenderer = new qx.ui.table.cellrenderer.Number;
-			var numberFormat = new qx.util.format.NumberFormat;
+			var cellRenderer = new qx.ui.table.cellrenderer.Number();
+			var numberFormat = new qx.util.format.NumberFormat();
 			numberFormat.set({
 				maximumFractionDigits : 0,
 				groupingUsed : false

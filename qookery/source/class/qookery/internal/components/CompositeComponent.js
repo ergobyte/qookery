@@ -28,8 +28,5 @@ qx.Class.define("qookery.internal.components.CompositeComponent", {
 		show: function() {
 			this._widgets[0].show();
 		}
-	},
-
-	destruct : function() {
 	}
 });
