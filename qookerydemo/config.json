@@ -1,61 +1,60 @@
 {
-  "name"    : "qookerydemo",
+	"name": "qookerydemo",
+	"include":
+	[
+		{
+			"path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+		}
+	],
 
-  "include" :
-  [
-    {
-      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
-    }
-  ],
+	"export":
+	[
+		"api",
+		"api-data",
+		"build",
+		"clean",
+		"distclean",
+		"fix",
+		"info",
+		"inspector",
+		"lint",
+		"migration",
+		"pretty",
+		"profiling",
+		"source",
+		"source-all",
+		"source-hybrid",		
+		"simulation-build",
+		"simulation-run",
+		"test",
+		"test-source",
+		"translation"
+	],
+	
+	"default-job": "source-hybrid",
 
-  "export" :
-  [
-    "api",
-    "api-data",
-    "build",
-    "clean",
-    "distclean",
-    "fix",
-    "info",
-    "inspector",
-    "lint",
-    "migration",
-    "pretty",
-    "profiling",
-    "source",
-    "source-all",
-    "source-hybrid",    
-    "simulation-build",
-    "simulation-run",
-    "test",
-    "test-source",
-    "translation"
-  ],
-  
-  "default-job" : "source-hybrid",
-
-  "let" :
-  {
-    "APPLICATION"  : "qookerydemo",
-    "QOOXDOO_PATH" : "../../qooxdoo",
-	"QXTHEME": "qx.theme.Modern",
-    "API_EXCLUDE"  : ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*", "${APPLICATION}.simulation.*"],
-    "LOCALES"      : [ "en" ],
-    "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
-    "ROOT"         : "."
-  },
-  
-  "jobs" : {
-    "libraries" : {
-    	"library" : [
-    	    { "manifest" : "${QOOXDOO_PATH}/framework/Manifest.json" },
-			{ "manifest" : "../qookery/Manifest.json" }
-	     ]
+	"let":
+	{
+		"APPLICATION": "qookerydemo",
+		"QOOXDOO_PATH": "../../qooxdoo",
+		"QXTHEME": "qx.theme.Modern",
+		"API_EXCLUDE": ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*", "${APPLICATION}.simulation.*"],
+		"LOCALES": [ "en" ],
+		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
+		"ROOT": "."
 	},
-	"includes": {
+	
+	"jobs" : {
+		"libraries": {
+			"library": [
+				{ "manifest" : "${QOOXDOO_PATH}/framework/Manifest.json" },
+				{ "manifest" : "../qookery/Manifest.json" }
+			]
+		},
+		"includes": {
 			"include": [
 				"qookery.*"
 			]
 		}
-  }
+	}
 }

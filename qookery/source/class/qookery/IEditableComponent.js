@@ -19,7 +19,7 @@
 */
 
 /**
- * Interface for components that are containers of other components
+ * Interface for components that support data editing
  */
 qx.Interface.define("qookery.IEditableComponent", {
 
@@ -49,6 +49,6 @@ qx.Interface.define("qookery.IEditableComponent", {
 		 * 
 		 * @param {} component
 		 */
-		 clearValidations: function() { }
+		clearValidations: function() { }
 	}
 });
