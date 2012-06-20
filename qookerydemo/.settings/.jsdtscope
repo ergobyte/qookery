@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="simulation/|test/|theme/" kind="src" path="source/class/qookerysandbox"/>
+	<classpathentry kind="src" path="source/class/qookerysandbox/simulation"/>
+	<classpathentry kind="src" path="source/class/qookerysandbox/test"/>
+	<classpathentry kind="src" path="source/class/qookerysandbox/theme"/>
+	<classpathentry kind="src" path="source/script"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/qooxdoo"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

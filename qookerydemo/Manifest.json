@@ -1,0 +1,23 @@
+{
+	"info" : {
+		"name" : "qookerydemo",
+		"summary": "Demo runner for Qookery",
+		"homepage": "https://code.google.com/p/qookery/",
+		"license": "Apache License 2.0",
+		"authors": [
+			{ "name": "George Nikolaidis (geonik)", "email": "gnikolaidis@ergobyte.gr" },
+			{ "name": "Stelios Joseph Karras (jkarr)", "email": "stylkarr@gmail.com" }
+		],
+		"version" : "trunk",
+		"qooxdoo-versions": [ "1.6" ]
+	},
+	
+	"provides" : {
+		"namespace" : "qookerydemo",
+		"encoding" : "utf-8",
+		"class" : "source/class",
+		"resource" : "source/resource",
+		"translation" : "source/translation",
+		"type" : "application"
+	}
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	A simple login dialog in Qookery
+-->
+<form xmlns="http://dev.ergobyte.gr/ns/Forms" >
+
+	<!-- Form fields -->
+
+	<layout grabHorizontal="true" numOfColumns="2"> 
+		<element id="username" type="text" label="User name">
+			<setup>
+				getComponent().setRequired(true);
+			</setup>
+		</element>
+		<element id="password" type="password" label="Password">
+			<setup>
+				getComponent().setRequired(true);
+			</setup>
+		</element>
+	</layout>
+
+	<!-- Buttons -->
+
+	<layout grabHorizontal="true" numOfColumns="2">
+		<element type="button" label="Login">
+			<script event="execute">
+				if(!getForm().validate()) return;
+				var username = getComponent("username").getValue();
+				var password = getComponent("password").getValue();
+				alert("Login would have succeeded... probably");
+			</script>
+		</element>
+		<element type="button" label="Cancel">
+			<script event="execute">
+				getForm().dispose();
+			</script>
+		</element>
+	</layout>
+
+</form>

@@ -107,7 +107,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		executeClientCode: function(clientSourceCode, event) {
 			var context = this.__createClientCodeContext(event);
 			with(context) {
-				eval(clientSourceCode);
+				eval(qx.lang.String.format("(function() { %1 })();", [ clientSourceCode ]));
 			}
 		},
 
