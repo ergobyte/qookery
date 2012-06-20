@@ -23,87 +23,132 @@
  */
 qx.Class.define("qookery.internal.components.EditableComponent", {
 
-	type : "abstract",
-	extend: qookery.internal.components.ConnectableComponent,
+	type: "abstract",
+	implement: [ qookery.IEditableComponent ],
+	extend: qookery.internal.components.BaseComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
 	
 	members: {
-		_editableWidget: null,
-		_labelWidget: null,
 
-		getMainWidget: function() {
-			return this._editableWidget;
+		create: function(createOptions) {
+			this._widgets[0] = this._createMainWidget(createOptions);
+			this._widgets[1] = new qx.ui.basic.Label(createOptions['label']);
+			this._setupLabelAppearance(this._widgets[1], createOptions);
+			if(createOptions['disabled'] == "true")
+				this.getMainWidget().setEnabled(false);
+			this.base(arguments, createOptions);
+		},
+		
+		/**
+		 * Create a two way binding
+		 *	
+		 * @param controller {qx.data.controller.Object} The form controller that the bindings
+		 * @param path {String} The protocol path
+		 */
+		connect: function(controller, path) {
+			throw "Method not implemented";
 		},
 
-		getLabel: function() {
-			return this._labelWidget.getValue();
+		addValidation: function(validationOptions) {
+			var type = validationOptions['type'];
+			if(type == null || type.length == 0) throw "Validation type required";
+			var message = validationOptions['message'];
+			var widget = this.getMainWidget();
+			var className = "qookery.internal.validators." + qx.lang.String.firstUp(type) + "Validator";
+			var clazz = qx.Class.getByName(className);
+			if(clazz == null) throw qx.lang.String.format("Validator class '%1' not found", [ className ]);
+			var validator = new clazz(message);
+			var qxValidator = new qx.ui.form.validation.AsyncValidator(validator);
+			this.getForm().getValidationManager().add(widget, qxValidator);
+		},
+
+		clearValidations: function() {
+			var widget = this.getMainWidget();
+			this.getForm().getValidationManager().remove(widget);
+		},
+
+		_createMainWidget: function(createOptions) {
+			throw "Override _createMainWidget() to provide implementation specific code";
+		},
+
+		getLabelWidget: function() {
+			return this._widgets[1];
 		},
 
 		getValue: function() {
-			return this._editableWidget.getValue();
+			return this.getMainWidget().getValue();
 		},
 
 		setValue: function(value) {
-			this._editableWidget.setValue(value);
+			this.getMainWidget().setValue(value);
+		},
+
+		clearValue:function() {
+			this.getMainWidget().resetValue();
+		},
+
+		getLabel: function() {
+			return this.getLabelWidget().getValue();
 		},
 
 		setLabel: function(value) {
-			this._labelWidget.setValue(value);
+			this.getLabelWidget().setValue(value);
 		},
 
 		setToolTip: function(value) {
-			if(value == null || value == '') return null;
-			this._editableWidget.setToolTip(value);
+			this.getMainWidget().setToolTip(value);
+		},
+
+		getEnabled: function() {
+			return this.getMainWidget().getEnabled();
 		},
 
 		setEnabled: function(enabled) {
-			this._editableWidget.setEnabled(enabled);
+			this.getMainWidget().setEnabled(enabled);
 		},
 
 		setVisible: function(visibility) {
 			if(visibility == true)
-				this._editableWidget.show();
+				this.getMainWidget().show();
 			else if(visibility == false)
-				this._editableWidget.hide();
+				this.getMainWidget().hide();
 			else
-				qx.log.Logger.error(this, "setVisible takes only boolean.");
+				qx.log.Logger.error(this, "setVisible() takes only boolean.");
 		},
 
 		setRequired: function(isRequired) {
 			if(isRequired === true) {
-				this._labelWidget.setRich(true);
-				this._labelWidget.setValue(this._labelWidget.getValue()+" <b style='color:red'>*</b>");
-				this._editableWidget.setRequired(true);
-				this.getForm().getValidationManager().add(this._editableWidget);
+				this.getLabelWidget().setRich(true);
+				this.getLabelWidget().setValue(this.getLabelWidget().getValue()+" <b style='color:red'>*</b>");
+				this.getMainWidget().setRequired(true);
+				this.getForm().getValidationManager().add(this.getMainWidget());
 			}
 			else if(isRequired === false) {
-				this.getForm().getValdationManager().remove(this._editableWidget);
-				this._editableWidget.setRequired(false);
+				this.getForm().getValdationManager().remove(this.getMainWidget());
+				this.getMainWidget().setRequired(false);
 			}
 			else {
 				qx.log.Logger.error(this, "setRequired takes only boolean.");
 			}
 		},
 
-		clearValue:function() {
-			this._editableWidget.resetValue();
-		},
-
 		listWidgets: function(filterName) {
-			if(filterName == "user") return [ this._editableWidget ];
-			return this.base(arguments, filterName);
-		}
-	},
+			if(filterName == "user") return [ this.getMainWidget() ];
+			// Reverse order of main and label widget since 
+			// we want to present the label in front of the editor
+			return [ this._widgets[1], this._widgets[0] ];
+		},
+		
+		// Utility methods for subclasses
 
-	destruct: function() {
-		this._editableWidget.destroy();
-		this._editableWidget = null;
-		
-		this._labelWidget.destroy();
-		this._labelWidget = null;
-		
+		_valueToLabelConverter: function(value) {
+			var labelProvider = qookery.Qookery.getInstance().getLabelProvider();
+			if(labelProvider == null) return value;
+			var humanFriendlyField = labelProvider.getLabel(value);
+			return humanFriendlyField;
+		}
 	}
 });

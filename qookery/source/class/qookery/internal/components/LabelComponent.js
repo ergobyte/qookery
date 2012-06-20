@@ -20,7 +20,7 @@
 
 qx.Class.define("qookery.internal.components.LabelComponent", {
 
-	extend: qookery.internal.components.ConnectableComponent,
+	extend: qookery.internal.components.BaseComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -48,6 +48,10 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 			this.base(arguments, createOptions);
 		},
 		
+		getValue: function() {
+			return this._widgets[0].getValue();
+		},
+
 		setValue: function(value) {
 			if(this._createOptions['variant'] != "separator")
 				this._widgets[0].setValue(value);

@@ -70,10 +70,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			// Nothing to do here, override if needed
 		},
 
-		getValue: function() {
-			// Must overide
-		},
-
 		listWidgets: function(filterName) { 
 			return this._widgets;
 		},
@@ -85,16 +81,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		getForm: function() {
 			if(this._parentComponent == null) return null;
 			return this._parentComponent.getForm();
-		},
-
-		/**
-		 * Create a two way binding
-		 *	
-		 * @param controller {qx.data.controller.Object} The form controller that the bindings
-		 * @param path {String} The protocol path
-		 */
-		connect: function(controller, path) {
-			throw "Method not implemented";
 		},
 
 		/**
@@ -113,23 +99,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			}, this);
 		},
 
-		addValidation: function(options) {
-			var type = options['type'];
-			var message = options['message'];
-			var widget  = this.listWidgets("user")[0];
-			
-			if(type == null || type.length == 0) throw "Validation type required";
-			
-			var className = "qookery.internal.validators." + qx.lang.String.firstUp(type) + "Validator";
-			var clazz = qx.Class.getByName(className);
-			if(clazz == null) throw "Validator class " + className + "not found";
-			
-			var validator = new clazz(message);
-			var qxValidator = new qx.ui.form.validation.AsyncValidator(validator);
-			
-			this.getForm().getValidationManager().add(widget, qxValidator);
-		},
-
 		/**
 		 * ExecuteClientCode will be called whenever a setup or an handler need to be executed
 		 * 
@@ -146,11 +115,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		
 		getMainWidget: function() {
 			return this._widgets[0];
-		},
-
-		clearValidations: function(component) {
-			var widget = this.listWidgets('user')[0]; 
-			this.getForm().getValidationManager().remove(widget);
 		},
 
 		// Private methods for internal use

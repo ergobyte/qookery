@@ -20,30 +20,27 @@
 
 qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 
-	extend: qookery.internal.components.ConnectableComponent,
+	extend: qookery.internal.components.EditableComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
+	
+	members: {
 
-	members:{
-
-		create: function(createOptions, formComponent) {
-			this._widgets[0] = new qx.ui.form.CheckBox(createOptions['label']);
-			this._setupLabelAppearance(this._widgets[0], createOptions);
+		create: function(createOptions) {
 			this.base(arguments, createOptions);
+			this.setLabel(""); // The label is used in the main widget
+		},
+		
+		_createMainWidget: function(createOptions) {
+			var widget = new qx.ui.form.CheckBox(createOptions['label']);
+			this._setupLabelAppearance(widget, createOptions);
+			return widget;
 		},
 
 		connect: function(controller, propertyPath) {
 			controller.addTarget(this.getMainWidget(), "value", propertyPath, true);
-		},
-
-		getValue: function() {
-			return this.getMainWidget().getValue();
-		},
-
-		setValue: function(textFieldValue) {
-			this.getMainWidget().setValue(textFieldValue);	
 		}
 	}
 });

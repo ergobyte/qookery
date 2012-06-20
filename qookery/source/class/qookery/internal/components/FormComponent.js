@@ -53,8 +53,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		
 		create: function(createOptions) {
 			this.__id = createOptions['id'] || this.toString();
-			this._numOfColumns = createOptions['numOfColumns']; // TODO in case numOfColumns is null, find a way to caculate the num of childs
-			this._grabHorizontal = createOptions['grabHorizontal'] == "true";
+			this._numOfColumns = 1;
+			this._grabHorizontal = true;
 			this._layout = new qx.ui.layout.Grid();
 			this._widgets[0] = new qx.ui.container.Composite(this._layout);
 			this.base(arguments, createOptions);
@@ -110,7 +110,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		validate: function() {
-			this.__validationManager.validate();
+			return this.__validationManager.validate();
 		},
 
 		clearValidations: function() {

@@ -28,22 +28,16 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 	
 	members: {
 	
-		create: function(createOptions) {
-			this._labelWidget = new qx.ui.basic.Label(createOptions['label']);
-			this._setupLabelAppearance(this._labelWidget,createOptions);
-			
-			this._editableWidget = new qx.ui.form.TextArea();
-			this._setupWidgetAppearance(this._editableWidget,createOptions);
-			
-			if(createOptions['enabled'] == "false")
-				this._editableWidget.setEnabled(false);
-			
-			this._widgets = [ this._labelWidget, this._editableWidget ];
-			this.base(arguments, createOptions);
+		_createMainWidget: function(createOptions) {
+			var widget = new qx.ui.form.TextArea();
+			this._setupWidgetAppearance(widget, createOptions);
+			return widget;
 		},
 
 		connect: function(controller, propertyPath) {
-			controller.addTarget(this._editableWidget, "value", propertyPath, true);
+			controller.addTarget(this.getMainWidget(), "value", propertyPath, true, {
+				converter: this._valueToLabelConverter
+			});
 		}
 	}
 

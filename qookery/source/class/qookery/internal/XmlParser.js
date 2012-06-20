@@ -51,15 +51,10 @@ qx.Class.define("qookery.internal.XmlParser", {
 			// Phase 2: Creation
 			this.__formComponent.create({});
 			
-			try {
-				// Phase 3: Children
-				this.__parseStatementBlock(formElement, this.__formComponent);
-				// Phase 4: Setup
-				this.__formComponent.setup();
-			} 
-			catch(error) {
-				qx.log.Logger.error(this, error);
-			}
+			// Phase 3: Children
+			this.__parseStatementBlock(formElement, this.__formComponent);
+			// Phase 4: Setup
+			this.__formComponent.setup();
 			
 			var widgets = this.__formComponent.listWidgets();
 			if(widgets.length != 1) throw "Form component must have exactly one widget";

@@ -20,16 +20,21 @@
 
 qx.Class.define("qookery.internal.components.RadioComponent", {
 
-	extend: qookery.internal.components.ConnectableComponent,
+	extend: qookery.internal.components.EditableComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-
+	
 	members: {
+
 		create: function(createOptions) {
-			this._widgets[0] = new qx.ui.form.RadioGroup();
 			this.base(arguments, createOptions);
+			this.setLabel(""); // The label is used in the main widget
+		},
+		
+		_createMainWidget: function(createOptions) {
+			return new qx.ui.form.RadioGroup();
 		}
 	}
 });
