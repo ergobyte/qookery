@@ -49,17 +49,17 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		 * @param path {String} The protocol path
 		 */
 		connect: function(controller, path) {
-			throw "Method not implemented";
+			throw new Error("Method not implemented");
 		},
 
 		addValidation: function(validationOptions) {
 			var type = validationOptions['type'];
-			if(type == null || type.length == 0) throw "Validation type required";
+			if(type == null || type.length == 0) throw new Error("Validation type required");
 			var message = validationOptions['message'];
 			var widget = this.getMainWidget();
 			var className = "qookery.internal.validators." + qx.lang.String.firstUp(type) + "Validator";
 			var clazz = qx.Class.getByName(className);
-			if(clazz == null) throw qx.lang.String.format("Validator class '%1' not found", [ className ]);
+			if(clazz == null) throw new Error(qx.lang.String.format("Validator class '%1' not found", [ className ]));
 			var validator = new clazz(message);
 			var qxValidator = new qx.ui.form.validation.AsyncValidator(validator);
 			this.getForm().getValidationManager().add(widget, qxValidator);
@@ -71,7 +71,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_createMainWidget: function(createOptions) {
-			throw "Override _createMainWidget() to provide implementation specific code";
+			throw new Error("Override _createMainWidget() to provide implementation specific code");
 		},
 
 		getLabelWidget: function() {

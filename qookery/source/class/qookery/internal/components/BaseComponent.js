@@ -49,7 +49,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		create: function(createOptions) {
 			// Override to provide component-specific implementation and call base
 			if(this._widgets.length == 0)
-				throw "Component failed to create at least one widget";
+				throw new Error("Component failed to create at least one widget");
 			this._createOptions = createOptions;
 			for(var i = 0; i < this._widgets.length; i++) {
 				this._widgets[i].setUserData('qookeryComponent', this);
@@ -93,7 +93,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			var userWidget = null;
 			
 			userWidget = this.listWidgets('user')[0];
-			if(userWidget == null) throw "Unable to attach listener to component without a user widget";
+			if(userWidget == null) throw new Error("Unable to attach listener to component without a user widget");
 			userWidget.addListener(eventName, function(event) {
 				this.executeClientCode(listenerSourceCode, event);
 			}, this);

@@ -24,7 +24,7 @@ qx.Class.define("qookery.internal.validators.NotNullValidator", {
 
 	construct : function(message) {
 		if(message == null || message.length == 0)
-			throw "Validation message is required for not-null validator";
+			throw new Error("Validation message is required for not-null validator");
 		return function(validator, value) {
 			window.setTimeout(function() {
 				if (value == null || value.length == 0)

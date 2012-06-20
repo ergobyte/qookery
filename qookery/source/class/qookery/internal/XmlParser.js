@@ -39,8 +39,8 @@ qx.Class.define("qookery.internal.XmlParser", {
 		__connectionBaseUriMap: null,
 		
 		create: function(xmlDocument, parentComposite, layoutData, callback, callbackContext, callbackOptions, initialModel) {
-			if(xmlDocument == null) throw "An XML form must be supplied.";
-			if(parentComposite == null) throw "Parent composite must be supplied";
+			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
+			if(parentComposite == null) throw new Error("Parent composite must be supplied");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
 			var formElement = elements[0];
 			
@@ -57,7 +57,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 			this.__formComponent.setup();
 			
 			var widgets = this.__formComponent.listWidgets();
-			if(widgets.length != 1) throw "Form component must have exactly one widget";
+			if(widgets.length != 1) throw new Error("Form component must have exactly one widget");
 
 			// Phase 5: Going live
 			parentComposite.add(widgets[0], layoutData);
@@ -106,7 +106,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 				else if(elementName == 'bind')
 					this.__registerConnectionBase(statementElement, parentComponent);
 				else
-					throw qx.lang.String.format("Encountered unexpected element <%1>", [ elementName ]);
+					throw new Error(qx.lang.String.format("Encountered unexpected element <%1>", [ elementName ]));
 			}
 		},
 
@@ -129,7 +129,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 			var className = "qookery.internal.components." + qx.lang.String.firstUp(componentType) + "Component";
 			var clazz = qx.Class.getByName(className);
 			if(clazz == null) 
-				throw qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]);
+				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
 
 			// Phase 1.1: New Instance
 			var component = new clazz(parentComponent);
@@ -156,7 +156,8 @@ qx.Class.define("qookery.internal.XmlParser", {
 			// Phase 2.2 Binding 
 			if(createOptions['connect'] != '' && createOptions['connect'] != null) {
 				var connectionHandler = qookery.Qookery.getInstance().getConnectionHandler();
-				if(connectionHandler == null) throw "Install a connection handler to handle connections in XML forms";
+				if(connectionHandler == null) 
+					throw new Error("Install a connection handler to handle connections in XML forms");
 				
 				var connectionSpecification = createOptions['connect'];
 				connectionHandler.handleConnection(connectionSpecification, component);
@@ -201,7 +202,8 @@ qx.Class.define("qookery.internal.XmlParser", {
 		 */
 		__parseSetup: function(setupBlock, component) {
 			var setupSourceCode = this.__getNodeText(setupBlock);
-			if(setupSourceCode == null) throw "Encountered empty <setup> element";
+			if(setupSourceCode == null) 
+				throw new Error("Encountered empty <setup> element");
 			component.executeClientCode(setupSourceCode);
 		},
 
@@ -214,13 +216,15 @@ qx.Class.define("qookery.internal.XmlParser", {
 		__parseScript: function(observeBlock, component) {
 			var eventName = qx.xml.Element.getAttributeNS(observeBlock, null, "event");
 			var listenerSourceCode = this.__getNodeText(observeBlock);
-			if(listenerSourceCode == null) throw "Encountered empty <script> element";
+			if(listenerSourceCode == null) 
+				throw new Error("Encountered empty <script> element");
 			component.addEventHandler(eventName, listenerSourceCode);
 		},
 
 		__registerConnectionBase: function(connectionElement) {
 			var connectionHandler = qookery.Qookery.getInstance().getConnectionHandler();
-			if(connectionHandler == null) throw "Install a connection handler to handle connections in XML forms";
+			if(connectionHandler == null) 
+				throw new Error("Install a connection handler to handle connections in XML forms");
 			var type = qx.xml.Element.getAttributeNS(connectionElement, null, "type");
 			var key = qx.xml.Element.getAttributeNS(connectionElement, null, "key");
 			var uri = qx.xml.Element.getAttributeNS(connectionElement, null, "uri");
@@ -236,11 +240,12 @@ qx.Class.define("qookery.internal.XmlParser", {
 				connectionHandler.registerNameSpace(key, uri);
 			}
 			else if(type == "scripting-context") {
-				if(required == "true" && !qx.Class.isDefined(uri)) throw "Cannot find User defined context "+ uri +"\n"+ qx.xml.Element.serialize(connectionElement);
+				if(required == "true" && !qx.Class.isDefined(uri)) 
+					throw new Error("Cannot find User defined context "+ uri +"\n"+ qx.xml.Element.serialize(connectionElement));
 				this.registerUserContext(key, qx.Class.getByName(uri));
 			}
 			else {
-				throw type + " is unknown type of binding";
+				throw new Error(type + " is unknown type of binding");
 			}
 		},
 		
