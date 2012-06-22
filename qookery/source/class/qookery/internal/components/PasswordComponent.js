@@ -36,7 +36,7 @@ qx.Class.define("qookery.internal.components.PasswordComponent", {
 
 		connect: function(controller, propertyPath) {
 			controller.addTarget(this.getMainWidget(), "value", propertyPath, true, {
-				converter: this._valueToLabelConverter
+				converter: this._getLabelOf
 			});
 		}
 	}

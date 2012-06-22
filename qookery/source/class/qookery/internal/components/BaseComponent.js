@@ -104,10 +104,15 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 * 
 		 * @param clientCode {String} The Code to execute
 		 */
-		executeClientCode: function(clientSourceCode, event) {
+		executeClientCode: function(clientCode, event) {
 			var context = this.__createClientCodeContext(event);
 			with(context) {
-				eval(qx.lang.String.format("(function() { %1 })();", [ clientSourceCode ]));
+				try {
+					eval(qx.lang.String.format("(function() { %1 })();", [ clientCode ]));
+				}
+				catch(error) {
+					qx.log.Logger.error(this, qx.lang.String.format("Error executing client code: %1\n\n%2", [ error, clientCode ]));
+				}
 			}
 		},
 

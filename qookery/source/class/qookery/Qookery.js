@@ -28,32 +28,22 @@ qx.Class.define("qookery.Qookery", {
 
 	members: {
 
-		__connectionHandler: null,
-		__labelProvider: null,
+		__modelProvider: null,
 		
 		createNewParser: function() {
 			return new qookery.internal.XmlParser();
 		},
-		
-		getConnectionHandler: function() {
-			return this.__connectionHandler;
+
+		getModelProvider: function() {
+			return this.__modelProvider;
 		},
 
-		setConnectionHandler: function(handler) {
-			this.__connectionHandler = handler;
-		},
-
-		getLabelProvider: function() {
-			return this.__labelProvider;
-		},
-
-		setLabelProvider: function(provider) {
-			this.__labelProvider = provider;
+		setModelProvider: function(provider) {
+			this.__modelProvider = provider;
 		}
 	},
 	
 	destruct: function() {
-		this.__connectionHandler = null;
-		this.__labelProvider = null;
+		this.__modelProvider = null;
 	}
 });

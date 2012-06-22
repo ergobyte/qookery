@@ -62,10 +62,7 @@ qx.Class.define("qookerydemo.Application", {
 			mainContainer.add(viewsContainer, { flex: 1 });
 			this.__toolbar.addListener("run", this.runCode, this);
 			
-			var splashElement = document.getElementById('splash');
-			var fadeEffect = new qx.fx.effect.core.Fade(splashElement);
-			fadeEffect.setDuration(3);
-			fadeEffect.start();
+			qx.dom.Element.remove(document.getElementById('splash'));
 		},
 
 		runCode: function(event) {

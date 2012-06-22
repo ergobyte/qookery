@@ -26,17 +26,30 @@ qx.Class.define("qookery.internal.XmlParser", {
 
 	extend: qx.core.Object,
 	implement: [ qookery.IXmlParser ],
+	
+	statics: {
+		CREATE_OPTIONS: [
+				'id','variant', 'horizontalSpan', 'label', 'grabHorizontal', 'grabVertical',
+				'horizontalAlignment', 'numOfColumns', 'connect',
+				'widthHint', 'heightHint', 'disabled'
+		],
+		
+		SIZE_MAP: {
+				"XXS": 28, "XS": 46 , "S": 74, 
+				"M": 120, "L": 194, "XL": 314, "XXL": 508
+		}
+	},
 
 	construct: function() { 
 		this.base(arguments);
-		this.__connectionBaseUriMap = { };
+		this.__namespaces = { };
 		this.__formComponent = new qookery.internal.components.FormComponent();
 	},
 
 	members: {
 
 		__formComponent: null,
-		__connectionBaseUriMap: null,
+		__namespaces: null,
 		
 		create: function(xmlDocument, parentComposite, layoutData, callback, callbackContext, callbackOptions, initialModel) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
@@ -104,7 +117,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 				else if(elementName == 'setup')
 					this.__parseSetup(statementElement, parentComponent);
 				else if(elementName == 'bind')
-					this.__registerConnectionBase(statementElement, parentComponent);
+					this.__parseBind(statementElement, parentComponent);
 				else
 					throw new Error(qx.lang.String.format("Encountered unexpected element <%1>", [ elementName ]));
 			}
@@ -133,18 +146,14 @@ qx.Class.define("qookery.internal.XmlParser", {
 
 			// Phase 1.1: New Instance
 			var component = new clazz(parentComponent);
-			qx.core.Assert.assertNotNull(component.getParent());
 
 			// Phase 1.2: Registration
-			var componentId = qx.xml.Element.getAttributeNS(statementElement, null, "id");
-			if(componentId != '' && componentId != null) {
-				qx.core.Assert.assertNotNull(component.getForm());
+			var componentId = this.__getAttribute(statementElement, "id");
+			if(componentId)
 				this.__formComponent.registerComponent(component, componentId);
-			}
 			
-			// Phase 2.1: Creation
-			var createOptions = { };
-			this.__populateCreateOptions(createOptions, statementElement);
+			// Phase 2: Creation
+			var createOptions = this.__parseCreateOptions(statementElement);
 			component.create(createOptions);
 
 			// Phase 3: Children
@@ -153,45 +162,38 @@ qx.Class.define("qookery.internal.XmlParser", {
 			// Phase 4: Setup
 			component.setup();
 			
-			// Phase 2.2 Binding 
-			if(createOptions['connect'] != '' && createOptions['connect'] != null) {
-				var connectionHandler = qookery.Qookery.getInstance().getConnectionHandler();
-				if(connectionHandler == null) 
-					throw new Error("Install a connection handler to handle connections in XML forms");
-				
-				var connectionSpecification = createOptions['connect'];
-				connectionHandler.handleConnection(connectionSpecification, component);
+			// Phase 5: Connection
+			if(createOptions['connect']) {
+				var connection = this.__resolveQName(createOptions['connect']);
+				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+				if(modelProvider == null) 
+					throw new Error("Install a model provider to handle connections in XML forms");
+				modelProvider.handleConnection(component, connection[0], connection[1]);
 			}
 
-			// Phase 5: Going live
+			// Phase 6: Going live
 			parentComponent.addChild(component);
 		},
 		
 		/**
-		 * Populate createOptions with key value pair base on given xml Attributes array
-		 * 
-		 * @param createOption {Object} Is a null key value pair
-		 * @param statementElement {String} Is a statementElement e.g. <layout grabHorizontal="true" ... >
+		 * Parse create options from a statement element
 		 */
-		__populateCreateOptions: function(createOption, statementElement) {
-			// The XML attributes to scan in the statement .
-			var xmlAttributes = [
-				'id','variant', 'horizontalSpan', 'label', 'grabHorizontal', 'grabVertical',
-				'horizontalAlignment', 'numOfColumns', 'connect',
-				'widthHint', 'heightHint', 'disabled'
-			];
-
-			// The sizeMap for the widthHint and heightHint based on golden ratio
-			var sizeMap = {
-				"XXS": 28, "XS": 46 , "S": 74, 
-				"M": 120, "L": 194, "XL": 314, "XXL": 508
-			};
-			for(var i=0; i<xmlAttributes.length; i++) {
-				if(xmlAttributes[i] == 'widthHint' || xmlAttributes[i] == 'heightHint')
-					createOption[xmlAttributes[i]] = sizeMap[qx.lang.String.trim(qx.xml.Element.getAttributeNS(statementElement, null, xmlAttributes[i]))] || null;
-				else
-					createOption[xmlAttributes[i]] = qx.lang.String.trim(qx.xml.Element.getAttributeNS(statementElement, null, xmlAttributes[i]));
+		__parseCreateOptions: function(statementElement) {
+			var createOptions = { };
+			for(var i = 0; i < qookery.internal.XmlParser.CREATE_OPTIONS.length; i++) {
+				var attributeName = qookery.internal.XmlParser.CREATE_OPTIONS[i];
+				var text = this.__getAttribute(statementElement, attributeName);
+				if(!text) continue;
+				switch(attributeName) {
+				case "widthHint":
+				case "heightHint":
+					createOptions[attributeName] = qookery.internal.XmlParser.SIZE_MAP[text] || parseInt(text);
+					break;
+				default:
+					createOptions[attributeName] = text;
+				}
 			}
+			return createOptions;
 		},
 
 		/**
@@ -210,57 +212,66 @@ qx.Class.define("qookery.internal.XmlParser", {
 		/**
 		 * Create a script on given component
 		 * 
-		 * @param observeBlock {String} The code block and the type of the event
+		 * @param scriptElement {String} The code block and the type of the event
 		 * @param component {qookery.internal.components.*}	The control Component that the handler will be applied
 		 */
-		__parseScript: function(observeBlock, component) {
-			var eventName = qx.xml.Element.getAttributeNS(observeBlock, null, "event");
-			var listenerSourceCode = this.__getNodeText(observeBlock);
+		__parseScript: function(scriptElement, component) {
+			var eventName = this.__getAttribute(scriptElement, "event");
+			var listenerSourceCode = this.__getNodeText(scriptElement);
 			if(listenerSourceCode == null) 
 				throw new Error("Encountered empty <script> element");
 			component.addEventHandler(eventName, listenerSourceCode);
 		},
 
-		__registerConnectionBase: function(connectionElement) {
-			var connectionHandler = qookery.Qookery.getInstance().getConnectionHandler();
-			if(connectionHandler == null) 
-				throw new Error("Install a connection handler to handle connections in XML forms");
-			var type = qx.xml.Element.getAttributeNS(connectionElement, null, "type");
-			var key = qx.xml.Element.getAttributeNS(connectionElement, null, "key");
-			var uri = qx.xml.Element.getAttributeNS(connectionElement, null, "uri");
-			var required = qx.xml.Element.getAttributeNS(connectionElement, null, "required");
+		__parseBind: function(bindElement) {
+			var type = this.__getAttribute(bindElement, "type");
+			var key = this.__getAttribute(bindElement, "key");
+			var uri = this.__getAttribute(bindElement, "uri");
 			
-			// Clean up whitespace
-			type = qx.lang.String.trim(type);
-			key = qx.lang.String.trim(key);
-			uri = qx.lang.String.trim(uri);
-			required = qx.lang.String.trim(required);
-			
-			if(type == "connection-prefix" ) {
-				connectionHandler.registerNameSpace(key, uri);
-			}
-			else if(type == "scripting-context") {
+			switch(type) {
+			case "namespace":
+				this.__namespaces[key] = uri;
+				break;
+			case "scripting-context":
+				var required = this.__getAttribute(bindElement, "required");
 				if(required == "true" && !qx.Class.isDefined(uri)) 
-					throw new Error("Cannot find User defined context "+ uri +"\n"+ qx.xml.Element.serialize(connectionElement));
+					throw new Error("Cannot find User defined context "+ uri +"\n"+ qx.xml.Element.serialize(bindElement));
 				this.registerUserContext(key, qx.Class.getByName(uri));
+				break;
+			default:
+				throw new Error(qx.lang.String.format("Unknown binding type '%1'", [ type ]));
 			}
-			else {
-				throw new Error(type + " is unknown type of binding");
-			}
+		},
+
+		__getAttribute: function(element, attributeName) {
+			var text = qx.xml.Element.getAttributeNS(element, null, attributeName);
+			if(text == null || text.length == 0) return null;
+			text = qx.lang.String.trim(text);
+			if(text.length == 0) return null;
+			return text;
 		},
 		
 		__getNodeText: function(node) {
 			var text = qx.dom.Node.getText(node);
-			if(text == null) return null;
-			if(text.length == 0) return null;
+			if(text == null || text.length == 0) return null;
 			text = qx.lang.String.trim(text);
 			if(text.length == 0) return null;
 			return text;
+		},
+		
+		__resolveQName: function(qname) {
+			var parts = qname.split(":");
+			if(parts.length == 1) return qname;
+			var prefix = parts[0];
+			var localPart = parts[1];
+			var namespaceUri = this.__namespaces[prefix];
+			if(!namespaceUri) throw new Error(qx.lang.String.format("Unable to resolve unknown namespace prefix '%1'", [ prefix ]));
+			return [ namespaceUri, localPart ];
 		}
 	},
 
 	destruct: function() {
 		this.__formComponent = null;
-		this.__connectionBaseUriMap = null;
+		this.__namespaces = null;
 	}
 });

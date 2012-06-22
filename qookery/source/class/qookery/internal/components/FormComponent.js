@@ -70,15 +70,15 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__id;
 		},
 
+		getModel: function() {
+			return this.__controller.getModel();
+		},
+
 		setModel: function(model) {
 			qx.log.Logger.debug(this, "Setting model");
 			if(model == null) return;
 			this.__controller.setModel(model);
 			this.fireEvent("modelChanged", qx.event.type.Event, null);
-		},
-
-		getModel: function() {
-			return this.__controller.getModel();
 		},
 
 		getController: function() {

@@ -144,10 +144,18 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		
 		// Utility methods for subclasses
 
-		_valueToLabelConverter: function(value) {
-			var labelProvider = qookery.Qookery.getInstance().getLabelProvider();
-			if(labelProvider == null) return value;
-			var humanFriendlyField = labelProvider.getLabel(value);
+		_getIdentityOf: function(value) {
+			if(!value) return null;
+			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+			if(!modelProvider) return value.toString();
+			return modelProvider.getIdentity(value);
+		},
+		
+		_getLabelOf: function(value) {
+			if(!value) return "";
+			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+			if(!modelProvider) return value.toString();
+			var humanFriendlyField = modelProvider.getLabel(value);
 			return humanFriendlyField;
 		}
 	}
