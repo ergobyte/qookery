@@ -67,6 +67,15 @@ qx.Interface.define("qookery.IFormComponent", {
 		 * 
 		 * @return {qx.data.controller.Object} The form's controller
 		 */
-		getController: function() { }
+		getController: function() { },
+
+		/**
+		 * Return a component registered within this form
+		 * 
+		 * @param componentId {String} the unique identifier of the requested component
+		 * 
+		 * @return {qookery.IComponent} The component or <code>null</cide> if not found
+		 */
+		getComponent: function(componentId) { }
 	}
 });

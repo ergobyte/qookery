@@ -2,39 +2,43 @@
 <!-- 
 	A simple login dialog in Qookery
 -->
-<form xmlns="http://dev.ergobyte.gr/ns/Forms" >
+<form xmlns="http://www.qookery.org/ns/Form">
 
 	<!-- Form fields -->
 
-	<layout grabHorizontal="true" numOfColumns="2"> 
+	<layout grab-horizontal="true" num-of-columns="2"> 
 		<element id="username" type="text" label="User name">
-			<setup>
-				getComponent().setRequired(true);
-			</setup>
+			<script>
+				this.setRequired(true);
+			</script>
 		</element>
 		<element id="password" type="password" label="Password">
-			<setup>
-				getComponent().setRequired(true);
-			</setup>
+			<script>
+				this.setRequired(true);
+			</script>
 		</element>
 	</layout>
 
 	<!-- Buttons -->
 
-	<layout grabHorizontal="true" numOfColumns="2">
+	<layout grab-horizontal="true" num-of-columns="2">
 		<element type="button" label="Login">
 			<script event="execute">
-				if(!getForm().validate()) return;
-				var username = getComponent("username").getValue();
-				var password = getComponent("password").getValue();
+				if(!$.form.validate()) return;
+				var username = $("#username").getValue();
+				var password = $("#password").getValue();
 				alert("Login would have succeeded... probably");
 			</script>
 		</element>
 		<element type="button" label="Cancel">
 			<script event="execute">
-				getForm().dispose();
+				$.form.dispose();
 			</script>
 		</element>
 	</layout>
+
+	<script event="formOpen">
+		$("#username").focus();
+	</script>
 
 </form>

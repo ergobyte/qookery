@@ -29,14 +29,28 @@ qx.Class.define("qookery.internal.XmlParser", {
 	
 	statics: {
 		CREATE_OPTIONS: [
-				'id','variant', 'horizontalSpan', 'label', 'grabHorizontal', 'grabVertical',
-				'horizontalAlignment', 'numOfColumns', 'connect',
-				'widthHint', 'heightHint', 'disabled'
+			'id',
+			'variant', 
+			'horizontal-span',
+			'label', 
+			'grab-horizontal', 
+			'grab-vertical',
+			'horizontal-alignment', 
+			'num-of-columns', 
+			'connect',
+			'width-hint', 
+			'height-hint', 
+			'enabled'
 		],
 		
 		SIZE_MAP: {
-				"XXS": 28, "XS": 46 , "S": 74, 
-				"M": 120, "L": 194, "XL": 314, "XXL": 508
+			"XXS":  28,
+			"XS" :  46,
+			"S"  :  74,
+			"M"  : 120,
+			"L"  : 194,
+			"XL" : 314,
+			"XXL": 508
 		}
 	},
 
@@ -51,7 +65,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 		__formComponent: null,
 		__namespaces: null,
 		
-		create: function(xmlDocument, parentComposite, layoutData, callback, callbackContext, callbackOptions, initialModel) {
+		create: function(xmlDocument, parentComposite, layoutData) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			if(parentComposite == null) throw new Error("Parent composite must be supplied");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
@@ -59,28 +73,25 @@ qx.Class.define("qookery.internal.XmlParser", {
 			
 			// The form component, like all components, must go through all creation phases
 
-			// Phase 1: New instance - done in contructor
+			// Phase 1: New instance - already done in contructor
 
 			// Phase 2: Creation
+
 			this.__formComponent.create({});
 			
 			// Phase 3: Children
+
 			this.__parseStatementBlock(formElement, this.__formComponent);
+
 			// Phase 4: Setup
+
 			this.__formComponent.setup();
 			
-			var widgets = this.__formComponent.listWidgets();
-			if(widgets.length != 1) throw new Error("Form component must have exactly one widget");
-
 			// Phase 5: Going live
-			parentComposite.add(widgets[0], layoutData);
-			
-			if(callback != null) 
-				qx.lang.Function.bind(callback, callbackContext, this.__formComponent, callbackOptions)();
-			
-			if(initialModel != null)
-				this.__formComponent.setModel(initialModel);
 
+			var formWidget = this.__formComponent.getMainWidget();
+			parentComposite.add(formWidget, layoutData);
+			
 			return this.__formComponent;
 		},
 		
@@ -114,8 +125,6 @@ qx.Class.define("qookery.internal.XmlParser", {
 					this.__parseStatement(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
-				else if(elementName == 'setup')
-					this.__parseSetup(statementElement, parentComponent);
 				else if(elementName == 'bind')
 					this.__parseBind(statementElement, parentComponent);
 				else
@@ -144,25 +153,25 @@ qx.Class.define("qookery.internal.XmlParser", {
 			if(clazz == null) 
 				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
 
-			// Phase 1.1: New Instance
-			var component = new clazz(parentComponent);
+			// Phase 1: New Instance
 
-			// Phase 1.2: Registration
+			var component = new clazz(parentComponent);
 			var componentId = this.__getAttribute(statementElement, "id");
 			if(componentId)
 				this.__formComponent.registerComponent(component, componentId);
 			
 			// Phase 2: Creation
+
 			var createOptions = this.__parseCreateOptions(statementElement);
 			component.create(createOptions);
 
 			// Phase 3: Children
+
 			this.__parseStatementBlock(statementElement, component);
 			
 			// Phase 4: Setup
+
 			component.setup();
-			
-			// Phase 5: Connection
 			if(createOptions['connect']) {
 				var connection = this.__resolveQName(createOptions['connect']);
 				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
@@ -171,7 +180,8 @@ qx.Class.define("qookery.internal.XmlParser", {
 				modelProvider.handleConnection(component, connection[0], connection[1]);
 			}
 
-			// Phase 6: Going live
+			// Phase 5: Going live
+
 			parentComponent.addChild(component);
 		},
 		
@@ -184,29 +194,19 @@ qx.Class.define("qookery.internal.XmlParser", {
 				var attributeName = qookery.internal.XmlParser.CREATE_OPTIONS[i];
 				var text = this.__getAttribute(statementElement, attributeName);
 				if(!text) continue;
+				var value = text;
 				switch(attributeName) {
-				case "widthHint":
-				case "heightHint":
-					createOptions[attributeName] = qookery.internal.XmlParser.SIZE_MAP[text] || parseInt(text);
-					break;
-				default:
-					createOptions[attributeName] = text;
+				case "width-hint": 
+				case "height-hint":
+					value = qookery.internal.XmlParser.SIZE_MAP[text] || parseInt(text); break;
+				case "enabled":
+				case "grab-horizontal":
+				case "grab-vertical":
+					value = text == "true"; break;
 				}
+				createOptions[attributeName] = value;
 			}
 			return createOptions;
-		},
-
-		/**
-		 * Populate a component or add a validator on given component
-		 * 
-		 * @param setupBlock	{String}	The code block with the code to execute e.g. <setup>code</setup>
-		 * @param component {qookery.internal.components.*}	The controlComponent to apply the results
-		 */
-		__parseSetup: function(setupBlock, component) {
-			var setupSourceCode = this.__getNodeText(setupBlock);
-			if(setupSourceCode == null) 
-				throw new Error("Encountered empty <setup> element");
-			component.executeClientCode(setupSourceCode);
 		},
 
 		/**
@@ -216,11 +216,14 @@ qx.Class.define("qookery.internal.XmlParser", {
 		 * @param component {qookery.internal.components.*}	The control Component that the handler will be applied
 		 */
 		__parseScript: function(scriptElement, component) {
-			var eventName = this.__getAttribute(scriptElement, "event");
-			var listenerSourceCode = this.__getNodeText(scriptElement);
-			if(listenerSourceCode == null) 
+			var clientCode = this.__getNodeText(scriptElement);
+			if(clientCode == null) 
 				throw new Error("Encountered empty <script> element");
-			component.addEventHandler(eventName, listenerSourceCode);
+			var eventName = this.__getAttribute(scriptElement, "event");
+			if(eventName)
+				component.addEventHandler(eventName, clientCode);
+			else
+				component.executeClientCode(clientCode);
 		},
 
 		__parseBind: function(bindElement) {

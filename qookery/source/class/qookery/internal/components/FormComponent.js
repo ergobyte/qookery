@@ -39,6 +39,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	events: {
+		"formOpen": "qx.event.type.Event",
 		"formClose": "qx.event.type.Event",
 		"modelChanged" : "qx.event.type.Event"
 	},
@@ -50,6 +51,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__componentMap: null,
 		__validationManager: null,
 		__userContextMap: null,
+		__clientCodeContext: null,
 		
 		create: function(createOptions) {
 			this.__id = createOptions['id'] || this.toString();
@@ -59,11 +61,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this._widgets[0] = new qx.ui.container.Composite(this._layout);
 			this.base(arguments, createOptions);
 		
-		},
-		
-		listWidgets: function(filterName) {
-			if(filterName == "user") return [ this ];
-			return this.base(arguments, filterName);
 		},
 		
 		getId: function() {
@@ -85,8 +82,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__controller;
 		},
 
-		getComponentById: function(id) {
-			return this.__componentMap[id];
+		getComponent: function(componentId) {
+			return this.__componentMap[componentId];
 		},
 
 		registerComponent: function(component, id) {
@@ -103,6 +100,20 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		getForm: function() {
 			return this;
+		},
+		
+		addEventHandler: function(eventName, clientCode) {
+			switch(eventName) {
+			case "changeValid":
+				this.__validationManager.addListener(eventName, function(event) { this.executeClientCode(clientCode, event); }, this);
+				return;
+			case "formOpen":
+			case "formClose":
+			case "modelChanged":
+				this.addListener(eventName, function(event) { this.executeClientCode(clientCode, event); }, this);
+				return;
+			}
+			this.base(arguments, eventName, clientCode);
 		},
 
 		getValidationManager: function() {
@@ -124,6 +135,25 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		dispose: function() {
 			this.fireEvent("formClose", qx.event.type.Event, null);
 			this.base(arguments);
+		},
+
+		/**
+		 * Generate a JavaScript context to be used by Qookery client code 
+		 * 
+		 * @return {Object} a suitable JavaScript context
+		 */
+		getClientCodeContext: function() {
+			if(this.__clientCodeContext != null) return this.__clientCodeContext;
+			var form = this;
+			var context = function(selector) {
+				if(!selector)
+					throw new Error("$() without a selector is not supported");
+				if(selector.charAt(0) == '#')
+					return form.getComponent(selector.substr(1));
+				return null;
+			};
+			context["form"] = this;
+			return this.__clientCodeContext = context;
 		}
 	},
 
@@ -142,5 +172,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__componentMap = null;
 		this.__userContextMap = null;
 		this.__registration = null;
+		this.__clientCodeContext = null;
 	}
 });

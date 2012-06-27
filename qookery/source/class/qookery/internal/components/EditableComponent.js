@@ -37,7 +37,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this._widgets[0] = this._createMainWidget(createOptions);
 			this._widgets[1] = new qx.ui.basic.Label(createOptions['label']);
 			this._setupLabelAppearance(this._widgets[1], createOptions);
-			if(createOptions['disabled'] == "true")
+			if(createOptions['enabled'] == false)
 				this.getMainWidget().setEnabled(false);
 			this.base(arguments, createOptions);
 		},
@@ -109,14 +109,14 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		setEnabled: function(enabled) {
 			this.getMainWidget().setEnabled(enabled);
 		},
-
+		
 		setVisible: function(visibility) {
 			if(visibility == true)
 				this.getMainWidget().show();
 			else if(visibility == false)
 				this.getMainWidget().hide();
 			else
-				qx.log.Logger.error(this, "setVisible() takes only boolean.");
+				qx.log.Logger.error(this, "Illegal argument for setVisible()");
 		},
 
 		setRequired: function(isRequired) {
@@ -131,12 +131,12 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				this.getMainWidget().setRequired(false);
 			}
 			else {
-				qx.log.Logger.error(this, "setRequired takes only boolean.");
+				qx.log.Logger.error(this, "Illegal argument for setRequired()");
 			}
 		},
 
 		listWidgets: function(filterName) {
-			if(filterName == "user") return [ this.getMainWidget() ];
+			if(filterName == "main") return [ this._widgets[0] ];
 			// Reverse order of main and label widget since 
 			// we want to present the label in front of the editor
 			return [ this._widgets[1], this._widgets[0] ];

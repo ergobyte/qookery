@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (C) Ergobyte Informatics S.A. - All Rights Reserved
+
+ 	This material is proprietary to Ergobyte. The methods and techniques described herein are considered trade secrets
+	and/or confidential. Reproduction or distribution, in whole or in part, is forbidden except by express written permission.
+ 
+	$Id$ 
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		xmlns:tns="http://www.qookery.org/ns/Form"
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		xmlns:xml="http://www.w3.org/XML/1998/namespace"
+		targetNamespace="http://www.qookery.org/ns/Form"
+		elementFormDefault="qualified">
+
+	<import namespace="http://www.w3.org/2001/XInclude" />
+	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
+
+	<!-- Enumerations -->
+
+	<simpleType name='binding-types' >
+		<restriction base="token">
+			<enumeration value='scripting-context' />
+			<enumeration value='namespace' />
+		</restriction>
+	</simpleType>
+
+	<!-- Types -->
+
+	<complexType name="component-attributes">
+		<!-- Identity -->
+		<attribute name="id" type="ID" />
+		<!-- Type and variant -->
+		<attribute name="variant" type="string" />
+		<!-- Properties -->
+		<attribute name="label" type="string" />
+		<attribute name="icon" type="anyURI" />
+		<attribute name="enabled" type="boolean" />
+		<!-- Layouting -->
+		<attribute name="grab-horizontal" type="boolean" />
+		<attribute name="grab-vertical" type="boolean" />
+		<attribute name="height-hint" />
+		<attribute name="width-hint" />
+		<attribute name="horizontal-alignment" />
+		<attribute name="vertical-alignment" />
+		<attribute name="horizontal-span" type="integer" />
+		<attribute name="vertical-span" type="integer" />
+	</complexType>
+
+	<complexType name="container-attributes">
+		<complexContent>
+			<extension base="tns:component-attributes">
+				<attribute name="num-of-columns" type="integer" />
+				<attribute name="margin-width" />
+				<attribute name="margin-height" />
+				<attribute name="horizontal-spacing" />
+				<attribute name="vertical-spacing" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="statement-block">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<group ref="tns:statement-elements" />
+		</choice>
+	</complexType>
+
+	<!-- Groups -->
+
+	<group name="statement-elements">
+		<choice>
+			<element ref="tns:form" />
+			<element ref="tns:script" />
+			<element ref="tns:layout" />
+			<element ref="tns:element" />
+			<element ref="xi:include" />
+		</choice>
+	</group>
+
+	<!-- Elements -->
+
+	<element name="form">
+		<complexType>
+			<sequence>
+				<element ref="tns:bind" minOccurs="0" maxOccurs="unbounded" />
+				<group ref="tns:statement-elements" minOccurs="0" maxOccurs="unbounded" />
+			</sequence>
+			<attribute ref="xml:base" use="optional" />
+		</complexType>
+	</element>
+
+	<element name="bind">
+		<complexType>
+			<attribute name="type" type="tns:binding-types" use="required" />
+			<attribute name="key" type="token" use="required" />
+			<attribute name="uri" type="anyURI" use="required" />
+			<attribute name="required" type="boolean" />
+		</complexType>
+	</element>
+
+	<element name="script">
+		<complexType>
+			<simpleContent>
+				<extension base="string">
+					<attribute name="event" type="token" />
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="layout">
+		<complexType>
+			<complexContent>
+				<extension base="tns:container-attributes">
+					<sequence>
+						<group ref="tns:statement-elements" minOccurs="0" maxOccurs="unbounded" />
+					</sequence>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="element">
+		<complexType>
+			<complexContent>
+				<extension base="tns:component-attributes">
+					<sequence>
+						<group ref="tns:statement-elements" minOccurs="0" maxOccurs="unbounded" />
+					</sequence>
+					<attribute name="type" use="required" type="token" />
+					<attribute name="connect" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+</schema>

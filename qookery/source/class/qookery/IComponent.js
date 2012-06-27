@@ -34,14 +34,28 @@ qx.Interface.define("qookery.IComponent", {
 		 * @return {qookery.IComponent} parent component or <code>null</code> if none exists
 		 */
 		getParent: function() { },
+		
+		/**
+		 * Set the focus to this component
+		 */
+		focus: function() { },
 
 		/**
 		 * Return a list of widgets that are handled by this component
 		 * 
 		 * @param filterName {String} If set, one of 'topMost', 'main' to restrict resulting list
 		 * 
-		 * @return {Array of qx.ui.core.Widget} widget list - an empty array if none found
+		 * @return {qx.ui.core.Widget[]} widget list - an empty array if none found
 		 */
-		listWidgets: function(filterName) { }
+		listWidgets: function(filterName) { },
+
+		/**
+		 * Return the first main widget
+		 * 
+		 * <p>This method a shorthand for #listWidgets('main')[0]</p>
+		 * 
+		 * @return {qx.ui.core.Widget} the first main widget
+		 */
+		getMainWidget: function() { }
 	}
 });

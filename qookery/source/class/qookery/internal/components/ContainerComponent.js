@@ -62,13 +62,13 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 					layout.setColumnFlex(this._currentColumn, 3);
 
 				var createOptions = controls[i].getUserData('qookeryComponent').getCreateOptions();
-				if(createOptions['horizontalSpan'] != null && createOptions['horizontalSpan'] != '') {
+				if(createOptions['horizontal-span']) {
 					controls[i].setLayoutProperties({
 						row: this._currentRow, 
 						column: this._currentColumn, 
-						colSpan: parseInt(createOptions['horizontalSpan'])
+						colSpan: parseInt(createOptions['horizontal-span'])
 					});
-					this._currentColumn += parseInt(createOptions['horizontalSpan']) - 1;
+					this._currentColumn += parseInt(createOptions['horizontal-span']) - 1;
 				}
 				else if(controls[i] instanceof qx.ui.form.CheckBox) {
 					controls[i].setLayoutProperties({

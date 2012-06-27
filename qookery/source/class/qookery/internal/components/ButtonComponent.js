@@ -26,7 +26,8 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 		this.base(arguments, parentComponent);	
 	},
 
-	members:{
+	members: {
+
 		create: function(createOptions) {
 			this._widgets[0] = new qx.ui.form.Button(
 				createOptions['label'], 

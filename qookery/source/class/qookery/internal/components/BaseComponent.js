@@ -32,6 +32,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		this._parentComponent = parentComponent;
 		this._widgets = [ ];
 	},
+	
+	statics: {
+		QOOKERY_FUNCTION: function(selector) {
+			
+		}
+	},
 
 	members: {
 
@@ -73,6 +79,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		listWidgets: function(filterName) { 
 			return this._widgets;
 		},
+		
+		getMainWidget: function() {
+			return this.listWidgets('main')[0];
+		},
 
 		getParent: function() {
 			return this._parentComponent;
@@ -83,19 +93,21 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this._parentComponent.getForm();
 		},
 
+		focus: function() {
+			this.getMainWidget().focus();
+		},
+		
 		/**
 		 * Add a listener to this component
 		 * 
 		 * @param {String} eventName The name of the event to listen to
-		 * @param {String} listenerSourceCode The JavaScript source code to execute when the event is triggered
+		 * @param {String} clientCode The JavaScript source code to execute when the event is triggered
 		 */
-		addEventHandler: function(eventName, listenerSourceCode) {
-			var userWidget = null;
-			
-			userWidget = this.listWidgets('user')[0];
-			if(userWidget == null) throw new Error("Unable to attach listener to component without a user widget");
-			userWidget.addListener(eventName, function(event) {
-				this.executeClientCode(listenerSourceCode, event);
+		addEventHandler: function(eventName, clientCode) {
+			var mainWidget = this.getMainWidget();
+			if(mainWidget == null) throw new Error("Unable to attach listener to component without a main widget");
+			mainWidget.addListener(eventName, function(event) {
+				this.executeClientCode(clientCode, event);
 			}, this);
 		},
 
@@ -103,23 +115,16 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 * ExecuteClientCode will be called whenever a setup or an handler need to be executed
 		 * 
 		 * @param clientCode {String} The Code to execute
+		 * @param event {qx.event.type.Event} optional Qooxdoo event to set into context
 		 */
 		executeClientCode: function(clientCode, event) {
-			var context = this.__createClientCodeContext(event);
-			with(context) {
-				try {
-					eval(qx.lang.String.format("(function() { %1 })();", [ clientCode ]));
-				}
-				catch(error) {
-					qx.log.Logger.error(this, qx.lang.String.format("Error executing client code: %1\n\n%2", [ error, clientCode ]));
-				}
+			try {
+				var clientFunction = new Function("$", "event", clientCode);
+				clientFunction.call(this, this.getForm().getClientCodeContext(), event);
 			}
-		},
-
-		// Public methods for internal use
-		
-		getMainWidget: function() {
-			return this._widgets[0];
+			catch(error) {
+				qx.log.Logger.error(this, qx.lang.String.format("Error executing client code: %1\n\n%2", [ error, clientCode ]));
+			}
 		},
 
 		// Private methods for internal use
@@ -204,36 +209,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				labelWidget.setAlignY("bottom");
 			else
 				labelWidget.setAlignY("middle");
-		},
-
-		/**
-		 * Generate a JavaScript context to be used by Qookery client code 
-		 * 
-		 * @param {qx.event.type.Event} optional Qooxdoo event to set into context
-		 * 
-		 * @return {Object} a suitable JavaScript context
-		 */
-		__createClientCodeContext: function(event) {
-			var component = this;
-			return {
-				event: event,
-				
-				widget: this.listWidgets("user")[0],
-				
-				getForm: function() {
-					return component.getForm();
-				},
-				
-				getComponent: function(id) {
-					if(!id) return component;
-					return component.getForm().getComponentById(id);
-				},
-				
-				getContext: function(contextId) {
-					if(!contextId) return this;
-					return component.getForm().getUserContext(contextId);
-				}
-			};
 		}
 	},
 
