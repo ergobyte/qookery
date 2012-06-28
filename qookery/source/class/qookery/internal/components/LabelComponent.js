@@ -27,14 +27,15 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 	},
 
 	members: {
+		
+		__variant: null,
 
 		create: function(createOptions) {
-			
-			if(createOptions['rich'] == "true"){
+			this.__variant = createOptions["variant"] || "plain";
+			if(createOptions['rich'] == "true") {
 				this._widgets[0].setRich(true);
 			}
-			
-			if(createOptions['variant'] == "separator") {
+			if(this.__variant == "separator") {
 				this._widgets[0] = new qx.ui.core.Widget().set({
 					decorator: "separator-horizontal",
 					backgroundColor: "gray",
@@ -49,17 +50,17 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 		},
 		
 		getValue: function() {
-			return this._widgets[0].getValue();
+			return this.getMainWidget().getValue();
 		},
 
 		setValue: function(value) {
-			if(this._createOptions['variant'] != "separator")
-				this._widgets[0].setValue(value);
+			if(this.__variant == "separator") return;
+			this.getMainWidget().setValue(value);
 		},
 		
 		setRich: function(value) {
-			if(this._createOptions['variant'] != "separator")
-				this._widgets[0].setRich(value);
+			if(this.__variant == "separator") return;
+			this.getMainWidget().setRich(value);
 		}
 	}
 });

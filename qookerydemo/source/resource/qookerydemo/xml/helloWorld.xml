@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	A "Hello World" example for Qookery. Presents a button to the
-	user that opens an alert when clicked.
+	A "Hello World" example for Qookery. It presents a button to the
+	user which opens an alert when clicked.
 -->
 <form xmlns="http://www.qookery.org/ns/Form">
 
-	<element type="button" label="Press me!">
+	<button label="Press me!">
 		<script event="execute">
 			alert("Hello, World!");
 		</script>
-	</element>
+	</button>
 	
 </form>

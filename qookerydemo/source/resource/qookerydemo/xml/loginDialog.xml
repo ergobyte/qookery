@@ -6,36 +6,36 @@
 
 	<!-- Form fields -->
 
-	<layout grab-horizontal="true" num-of-columns="2"> 
-		<element id="username" type="text" label="User name">
+	<composite column-count="2"> 
+		<text-field id="username" label="User name">
 			<script>
 				this.setRequired(true);
 			</script>
-		</element>
-		<element id="password" type="password" label="Password">
+		</text-field>
+		<text-field id="password" label="Password">
 			<script>
 				this.setRequired(true);
 			</script>
-		</element>
-	</layout>
+		</text-field>
+	</composite>
 
 	<!-- Buttons -->
 
-	<layout grab-horizontal="true" num-of-columns="2">
-		<element type="button" label="Login">
+	<composite column-count="auto">
+		<button label="Login">
 			<script event="execute">
 				if(!$.form.validate()) return;
 				var username = $("#username").getValue();
 				var password = $("#password").getValue();
 				alert("Login would have succeeded... probably");
 			</script>
-		</element>
-		<element type="button" label="Cancel">
+		</button>
+		<button label="Cancel">
 			<script event="execute">
 				$.form.dispose();
 			</script>
-		</element>
-	</layout>
+		</button>
+	</composite>
 
 	<script event="formOpen">
 		$("#username").focus();

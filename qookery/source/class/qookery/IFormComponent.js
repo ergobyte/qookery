@@ -41,11 +41,6 @@ qx.Interface.define("qookery.IFormComponent", {
 	members: {
 		
 		/**
-		 * Return form identifier, as provided on form creation
-		 */
-		getId: function() { },
-
-		/**
 		 * Validate the form's state
 		 *
 		 * @return {Boolean} <code>true</code> in case the form's state is valid

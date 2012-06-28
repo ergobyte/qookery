@@ -34,7 +34,7 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
-			this._setupWidgetAppearance(widget, createOptions);
+			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
 

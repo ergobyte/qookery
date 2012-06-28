@@ -29,7 +29,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments);
-		this._parentComponent = parentComponent;
+		this.__parentComponent = parentComponent;
 		this._widgets = [ ];
 	},
 	
@@ -41,8 +41,9 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 	members: {
 
-		_parentComponent: null,
-		_createOptions: null,
+		__id: null,
+		__parentComponent: null,
+		__createOptions: null,
 		_widgets: null,
 		
 		// Implementations
@@ -53,20 +54,25 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 * @param createOptions {keyValuePairList} an object with any number of setup options
 		 */
 		create: function(createOptions) {
-			// Override to provide component-specific implementation and call base
+			this.__id = createOptions['id'];
+			this.__createOptions = createOptions;
+
 			if(this._widgets.length == 0)
 				throw new Error("Component failed to create at least one widget");
-			this._createOptions = createOptions;
-			for(var i = 0; i < this._widgets.length; i++) {
+
+			for(var i = 0; i < this._widgets.length; i++)
 				this._widgets[i].setUserData('qookeryComponent', this);
-			}
+		},
+
+		getId: function() {
+			return this.__id;
 		},
 
 		/**
 		 * @return the keyValuePairList that contains the parameters that the component has been created
 		 */
 		getCreateOptions: function() {
-			return this._createOptions;
+			return this.__createOptions;
 		},
 
 		/**
@@ -85,12 +91,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		getParent: function() {
-			return this._parentComponent;
+			return this.__parentComponent;
 		},
 
 		getForm: function() {
-			if(this._parentComponent == null) return null;
-			return this._parentComponent.getForm();
+			if(this.__parentComponent == null) return null;
+			return this.__parentComponent.getForm();
 		},
 
 		focus: function() {
@@ -130,91 +136,56 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		// Private methods for internal use
 
 		/**
-		 * Perform all operation about align, width and height for a component
+		 * Apply layout properties to a widget
 		 * 
-		 * @param widget {widget} A widget
-		 * @param positionOptions {keyValuePairList} The instruction about the widget apperance
+		 * @param widget {qx.ui.core.Widget} Widget to receive layout properties
+		 * @param createOptions {Object} Layouting instructions as provided by the XML parser
 		 */
-		_setupWidgetAppearance:function(widget, positionOptions) {
-			// Components appearance parameters 
-			
-			if(!(positionOptions['widthHint'] == '' || positionOptions['widthHint'] == null )) {
-				widget.setMinWidth(positionOptions['widthHint']);
-			}
-			
-			if(!(positionOptions['heightHint'] == '' || positionOptions['heightHint'] == null )) {
-				widget.setMinHeight(positionOptions['heightHint']);
-			}
-			
-			if(positionOptions['grabHorizontal'] == "false") {
-				widget.setMaxWidth(positionOptions['widthHint']);
-				widget.setAllowStretchX(false, false);
-			}
-			else {
-				widget.setAllowStretchX(true, true);
-			}
-			
-			if(positionOptions['grabVertical'] == "false") {
-				widget.setMaxHeigth(positionOptions['heightHint']);
-				widget.setAllowStretchY(false, false);
-			}
-			else {
-				widget.setAllowStretchY(true, true);
-			}
-			
-			// Component horizontal position 
-			if(positionOptions['horizontalAlignment'] == "left") {
-				widget.setAlignX("left");
-			} 
-			else if(positionOptions['horizontalAlignment'] == "right") {
-				widget.setAlignX("right");
-			}
-
-			// Component vertical position
-			if(positionOptions['verticalAlignment'] == "top") {
-				widget.setAlignY("top");
-			}
-			else if( positionOptions['verticalAlignment'] == "bottom") {
-				widget.setAlignY("bottom");
-			}
-			else {
-				widget.setAlignY("middle");
-			}
+		_applyLayoutProperties: function(widget, createOptions) {
+			if(createOptions['width']) widget.setWidth(createOptions['width']);
+			if(createOptions['height']) widget.setHeight(createOptions['height']);
+			if(createOptions['min-width']) widget.setMinWidth(createOptions['min-width']);
+			if(createOptions['min-height']) widget.setMinHeight(createOptions['min-height']);
+			if(createOptions['max-width']) widget.setMaxWidth(createOptions['max-width']);
+			if(createOptions['max-height']) widget.setMaxHeight(createOptions['max-height']);
+			if(createOptions['alignment-x']) widget.setAlignX(createOptions['alignment-x']);
+			if(createOptions['alignment-y']) widget.setAlignX(createOptions['alignment-y']);
+			var stretchX = createOptions['stretch-x'] || createOptions['stretch'] || null;
+			if(stretchX != null) widget.setAllowStretchX(stretchX);
+			var stretchY = createOptions['stretch-y'] || createOptions['stretch'] || null;
+			if(stretchY != null) widget.setAllowStretchY(stretchY);
+			if(createOptions['margin']) widget.setMargin(createOptions['margin']);
+			if(createOptions['margin-top']) widget.setMarginTop(createOptions['margin-top']);
+			if(createOptions['margin-right']) widget.setMarginRight(createOptions['margin-right']);
+			if(createOptions['margin-bottom']) widget.setMarginBottom(createOptions['margin-bottom']);
+			if(createOptions['margin-left']) widget.setMarginLeft(createOptions['margin-left']);
+			if(createOptions['padding']) widget.setPadding(createOptions['padding']);
+			if(createOptions['padding-top']) widget.setPaddingTop(createOptions['padding-top']);
+			if(createOptions['padding-right']) widget.setPaddingRight(createOptions['padding-right']);
+			if(createOptions['padding-bottom']) widget.setPaddingBottom(createOptions['padding-bottom']);
+			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
+			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
+			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
 		},
 
 		/**
 		 * Perform all operation about align, width and height for a label
 		 * 
 		 * @param widget {qx.ui.basic.Label} A label widget
-		 * @param positionOptions {keyValuePairList} The instruction about the label apperance
+		 * @param createOptions {keyValuePairList} The instruction about the label apperance
 		 */
-		_setupLabelAppearance: function(labelWidget, positionOptions) {
+		_setupLabelAppearance: function(labelWidget, createOptions) {
 			var currentWidth = labelWidget.getWidth();
 			labelWidget.setMinWidth(currentWidth);
 			labelWidget.setMaxWidth(currentWidth);
-			
 			labelWidget.setAllowShrinkX(false);
 			labelWidget.setAllowGrowX(false);
-			
-			// Component horizontal position 
-			if(positionOptions['horizontalAlignment'] == "left")
-				labelWidget.setAlignX("left");
-			else if(positionOptions['horizontalAlignment'] == "right")
-				labelWidget.setAlignX("right");
-
-			// Component vertical position
-			if(positionOptions['verticalAlignment'] == "top")
-				labelWidget.setAlignY("top");
-			else if(positionOptions['verticalAlignment'] == "bottom")
-				labelWidget.setAlignY("bottom");
-			else
-				labelWidget.setAlignY("middle");
 		}
 	},
 
 	destruct: function() {
 		this._disposeArray("_widgets");
-		this._parentComponent = null;
-		this._createOptions = null;
+		this.__parentComponent = null;
+		this.__createOptions = null;
 	}
 });

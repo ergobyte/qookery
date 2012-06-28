@@ -30,65 +30,33 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__children = [ ];
-		this._currentRow = 0;
-		this._currentColumn = 0;
-		this._grabHorizontal = false;
-		this._numOfColumns = null;
-		this._layout = null;
-		this._labelColumn =  null;
 	},
 
 	members: {
 
 		__children: null,
-		_numOfColumns: null,
-		_layout: null,
-		_currentRow: 0,
-		_currentColumn: 0,
-		_labelColumn: null,
-		_grabHorizontal: false,
+		__currentRow: 0,
+		__currentColumn: 0,
 
-		setup: function() {
-			var controls = this.getMainWidget().getChildren();
-			var layout = this.getMainWidget().getLayout();
-			for(var i=0; i < controls.length; i++) {
-				
-				if(controls[i] instanceof qx.ui.basic.Label) {
-					this._labelColumn = this._currentColumn;
-					layout.setColumnFlex(this._currentColumn, 0);
-				}
-				
-				if(this._labelColumn != this._currentColumn)
-					layout.setColumnFlex(this._currentColumn, 3);
+		__layout: null,
+		__columnCount: 1,
 
-				var createOptions = controls[i].getUserData('qookeryComponent').getCreateOptions();
-				if(createOptions['horizontal-span']) {
-					controls[i].setLayoutProperties({
-						row: this._currentRow, 
-						column: this._currentColumn, 
-						colSpan: parseInt(createOptions['horizontal-span'])
-					});
-					this._currentColumn += parseInt(createOptions['horizontal-span']) - 1;
-				}
-				else if(controls[i] instanceof qx.ui.form.CheckBox) {
-					controls[i].setLayoutProperties({
-						row: this._currentRow, 
-						column: this._currentColumn
-					});
-				
-					this._currentColumn++;
-				}
-				else {
-					controls[i].setLayoutProperties({ row: this._currentRow, column: this._currentColumn });
-				}
-				
-				if(++this._currentColumn >= this._numOfColumns) {
-					this._currentRow++;
-					this._currentColumn = 0;
-				}
-			}
+		create: function(createOptions) {
+			this.__columnCount = createOptions['column-count'] || 1;
+			this.__layout = new qx.ui.layout.Grid();
+			var spacingX = createOptions['spacing-x'] || createOptions['spacing'] || 10;
+			this.__layout.setSpacingX(spacingX);
+			var spacingY = createOptions['spacing-y'] || createOptions['spacing'] || 10;
+			this.__layout.setSpacingY(spacingY);
+			this._widgets[0] = this._createContainerWidget(createOptions);
+			this._widgets[0].setLayout(this.__layout);
+			this.base(arguments, createOptions);
 		},
 		
+		_createContainerWidget: function(createOptions) {
+			throw new Error("Override _createContainerWidget() to provide implementation specific code");
+		},
+
 		listChildren: function() {
 			return this.__children;
 		},
@@ -102,16 +70,29 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		 */
 		addChild: function(childComponent) {
 			this.__children.push(childComponent);
+			var container = this.getMainWidget();
 			var widgets = childComponent.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
-				this.getMainWidget().add(widgets[i]);
+				var widget = widgets[i];
+				var layoutProperties = widget.getLayoutProperties();
+				// TODO automatic cell positioning does not support row span yet
+				var colSpan = layoutProperties["colSpan"] || 1;
+				widget.setLayoutProperties({
+					row: this.__currentRow,
+					column: this.__currentColumn
+				});
+				this.__currentColumn += colSpan;
+				if(this.__columnCount != "auto" && this.__currentColumn >= this.__columnCount) {
+					this.__currentColumn = 0;
+					this.__currentRow++;
+				}
+				container.add(widget);
 			}
 		}
 	},
 
 	destruct: function() {
 		this._disposeArray("__children");
-		this._layout = null;
-		this._labelColumn = null;
+		this._disposeObjects("__layout");
 	}
 });

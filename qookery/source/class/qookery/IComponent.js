@@ -26,12 +26,27 @@ qx.Interface.define("qookery.IComponent", {
 	members: {
 
 		/**
+		 * Return the component identifier, if any
+		 * 
+		 * <p>
+		 * The identifier must by unique for each component within a form
+		 * </p>
+		 * 
+		 * @return {String} unique identifier or <code>null</code>
+		 */
+		getId: function() { },
+
+		/**
+		 * Return the form containing this component
+		 * 
 		 * @return {qookery.IFormComponent} the form containing this component
 		 */
 		getForm: function() { },
 
 		/**
-		 * @return {qookery.IComponent} parent component or <code>null</code> if none exists
+		 * Return the parent component or <code>null</cide> if this is the root component
+		 * 
+		 * @return {qookery.IComponent} parent component or <code>null</code>
 		 */
 		getParent: function() { },
 		

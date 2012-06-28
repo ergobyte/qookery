@@ -41,7 +41,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this._widgets[0].addListener("cellClick", function(event) {
 				this._lastRowSelected = event.getRow();
 			},this);
-			this._setupWidgetAppearance(this._widgets[0], createOptions);
+			this._applyLayoutProperties(this._widgets[0], createOptions);
 			
 			this.addListener("itemsChanged", function(event) {
 				if(this.__propertyPath != null) {

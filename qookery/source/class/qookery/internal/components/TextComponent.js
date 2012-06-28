@@ -30,7 +30,7 @@ qx.Class.define("qookery.internal.components.TextComponent", {
 
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.TextField();
-			this._setupWidgetAppearance(widget, createOptions);
+			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
 

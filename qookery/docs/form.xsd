@@ -17,82 +17,203 @@
 	<import namespace="http://www.w3.org/2001/XInclude" />
 	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
 
-	<!-- Enumerations -->
+	<!-- Simple types -->
 
-	<simpleType name='binding-types' >
+	<simpleType name='binding-type' >
 		<restriction base="token">
 			<enumeration value='scripting-context' />
 			<enumeration value='namespace' />
 		</restriction>
 	</simpleType>
 
-	<!-- Types -->
+	<simpleType name='x-alignment' >
+		<restriction base="token">
+			<enumeration value='left' />
+			<enumeration value='center' />
+			<enumeration value='right' />
+		</restriction>
+	</simpleType>
+
+	<simpleType name='y-alignment' >
+		<restriction base="token">
+			<enumeration value='top' />
+			<enumeration value='middle' />
+			<enumeration value='bottom' />
+			<enumeration value='baseline' />
+		</restriction>
+	</simpleType>
+
+	<simpleType name='widget-size'>
+		<union memberTypes="integer">
+			<simpleType>
+				<restriction base="token">
+					<enumeration value='XXS' />
+					<enumeration value='XS' />
+					<enumeration value='S' />
+					<enumeration value='M' />
+					<enumeration value='L' />
+					<enumeration value='XL' />
+					<enumeration value='XXL' />
+				</restriction>
+			</simpleType>
+		</union>
+	</simpleType>
+
+	<simpleType name='row-and-column-count'>
+		<union memberTypes="integer">
+			<simpleType>
+				<restriction base="token">
+					<enumeration value='auto' />
+				</restriction>
+			</simpleType>
+		</union>
+	</simpleType>
+
+	<!-- Complex types -->
 
 	<complexType name="component-attributes">
 		<!-- Identity -->
 		<attribute name="id" type="ID" />
+
 		<!-- Type and variant -->
 		<attribute name="variant" type="string" />
+
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="icon" type="anyURI" />
 		<attribute name="enabled" type="boolean" />
-		<!-- Layouting -->
-		<attribute name="grab-horizontal" type="boolean" />
-		<attribute name="grab-vertical" type="boolean" />
-		<attribute name="height-hint" />
-		<attribute name="width-hint" />
-		<attribute name="horizontal-alignment" />
-		<attribute name="vertical-alignment" />
-		<attribute name="horizontal-span" type="integer" />
-		<attribute name="vertical-span" type="integer" />
+
+		<!-- Layout item -->
+		<attribute name="width" type="tns:widget-size" />
+		<attribute name="height" type="tns:widget-size" />
+		<attribute name="min-width" type="tns:widget-size" />
+		<attribute name="min-height" type="tns:widget-size" />
+		<attribute name="max-width" type="tns:widget-size" />
+		<attribute name="max-height" type="tns:widget-size" />
+		<attribute name="margin-top" type="integer" default="0" />
+		<attribute name="margin-right" type="integer" default="0" />
+		<attribute name="margin-bottom" type="integer" default="0" />
+		<attribute name="margin-left" type="integer" default="0" />
+		<attribute name="margin"><simpleType><list itemType="integer" /></simpleType></attribute>
+		<attribute name="stretch-x" type="boolean" default="true" />
+		<attribute name="stretch-y" type="boolean" default="true" />
+		<attribute name="stretch" type="boolean" default="true" />
+		<attribute name="alignment-x" type="tns:x-alignment" />
+		<attribute name="alignment-y" type="tns:y-alignment" />
+
+		<!-- Widget -->
+		<attribute name="padding-top" type="integer" default="0" />
+		<attribute name="padding-right" type="integer" default="0" />
+		<attribute name="padding-bottom" type="integer" default="0" />
+		<attribute name="padding-left" type="integer" default="0" />
+		<attribute name="padding"><simpleType><list itemType="integer" /></simpleType></attribute>
+
+		<!-- Grid layout data -->
+		<attribute name="row-span" type="integer" default="1" />
+		<attribute name="column-span" type="integer" default="1" />
 	</complexType>
 
-	<complexType name="container-attributes">
+	<complexType name="component">
 		<complexContent>
 			<extension base="tns:component-attributes">
-				<attribute name="num-of-columns" type="integer" />
-				<attribute name="margin-width" />
-				<attribute name="margin-height" />
-				<attribute name="horizontal-spacing" />
-				<attribute name="vertical-spacing" />
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<group ref="tns:statement-elements" />
+				</choice>
 			</extension>
 		</complexContent>
 	</complexType>
 
-	<complexType name="statement-block">
-		<choice minOccurs="0" maxOccurs="unbounded">
-			<group ref="tns:statement-elements" />
-		</choice>
+	<complexType name="container-component-attributes">
+		<complexContent>
+			<extension base="tns:component-attributes">
+				<attribute name="row-count" type="tns:row-and-column-count" default="auto" />
+				<attribute name="column-count" type="tns:row-and-column-count" default="1" />
+				<attribute name="spacing-x" type="integer" default="10" />
+				<attribute name="spacing-y" type="integer" default="10" />
+				<attribute name="spacing" type="integer" default="10" />
+				<attribute name="row-flexes"><simpleType><list itemType="integer" /></simpleType></attribute>
+				<attribute name="column-flexes"><simpleType><list itemType="integer" /></simpleType></attribute>
+				<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="tns:x-alignment tns:y-alignment" /></simpleType></list></simpleType></attribute>
+				<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="tns:x-alignment tns:y-alignment" /></simpleType></list></simpleType></attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="container-component">
+		<complexContent>
+			<extension base="tns:container-component-attributes">
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<group ref="tns:statement-elements" />
+					<group ref="tns:component-elements" />
+				</choice>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="editable-component-attributes">
+		<complexContent>
+			<extension base="tns:component-attributes">
+				<attribute name="connect" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="editable-component">
+		<complexContent>
+			<extension base="tns:editable-component-attributes">
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<group ref="tns:statement-elements" />
+				</choice>
+			</extension>
+		</complexContent>
 	</complexType>
 
 	<!-- Groups -->
 
 	<group name="statement-elements">
 		<choice>
-			<element ref="tns:form" />
 			<element ref="tns:script" />
-			<element ref="tns:layout" />
-			<element ref="tns:element" />
-			<element ref="xi:include" />
+		</choice>
+	</group>
+
+	<group name="component-elements">
+		<choice>
+			<element name="button" type="tns:component" />
+			<element name="check-box" type="tns:editable-component" />
+			<element name="composite" type="tns:container-component" />
+			<element name="date-field" type="tns:editable-component" />
+			<element name="group-box" type="tns:container-component" />
+			<element name="label" type="tns:component" />
+			<element name="password-field" type="tns:editable-component" />
+			<element name="radio-group" type="tns:editable-component" />
+			<element name="select-box" type="tns:editable-component" />
+			<element name="tab-view" type="tns:container-component" />
+			<element name="tab-view-page" type="tns:container-component" />
+			<element name="table" type="tns:component" />
+			<element name="text-area" type="tns:editable-component" />
+			<element name="text-field" type="tns:editable-component" />
 		</choice>
 	</group>
 
 	<!-- Elements -->
-
+	
 	<element name="form">
 		<complexType>
 			<sequence>
 				<element ref="tns:bind" minOccurs="0" maxOccurs="unbounded" />
-				<group ref="tns:statement-elements" minOccurs="0" maxOccurs="unbounded" />
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<group ref="tns:statement-elements" />
+					<group ref="tns:component-elements" />
+				</choice>
 			</sequence>
 			<attribute ref="xml:base" use="optional" />
+			<attribute name="id" type="ID" />
 		</complexType>
 	</element>
 
 	<element name="bind">
 		<complexType>
-			<attribute name="type" type="tns:binding-types" use="required" />
+			<attribute name="type" type="tns:binding-type" use="required" />
 			<attribute name="key" type="token" use="required" />
 			<attribute name="uri" type="anyURI" use="required" />
 			<attribute name="required" type="boolean" />
@@ -106,32 +227,6 @@
 					<attribute name="event" type="token" />
 				</extension>
 			</simpleContent>
-		</complexType>
-	</element>
-
-	<element name="layout">
-		<complexType>
-			<complexContent>
-				<extension base="tns:container-attributes">
-					<sequence>
-						<group ref="tns:statement-elements" minOccurs="0" maxOccurs="unbounded" />
-					</sequence>
-				</extension>
-			</complexContent>
-		</complexType>
-	</element>
-	
-	<element name="element">
-		<complexType>
-			<complexContent>
-				<extension base="tns:component-attributes">
-					<sequence>
-						<group ref="tns:statement-elements" minOccurs="0" maxOccurs="unbounded" />
-					</sequence>
-					<attribute name="type" use="required" type="token" />
-					<attribute name="connect" />
-				</extension>
-			</complexContent>
 		</complexType>
 	</element>
 

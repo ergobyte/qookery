@@ -33,7 +33,7 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 				createOptions['label'], 
 				createOptions['icon']
 			);
-			this._setupWidgetAppearance(this._widgets[0], createOptions);
+			this._applyLayoutProperties(this._widgets[0], createOptions);
 			this.base(arguments, createOptions);
 		},
 

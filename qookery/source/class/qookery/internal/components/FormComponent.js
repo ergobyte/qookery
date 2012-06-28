@@ -26,12 +26,11 @@
  */
 qx.Class.define("qookery.internal.components.FormComponent", {
 
-	extend: qookery.internal.components.ContainerComponent,
+	extend: qookery.internal.components.CompositeComponent,
 	implement: [ qookery.IFormComponent ],
 
 	construct: function() {
 		this.base(arguments, null);
-		this.__id = "-";
 		this.__controller = new qx.data.controller.Object();
 		this.__validationManager = new qx.ui.form.validation.Manager();
 		this.__userContextMap = [ ];
@@ -46,7 +45,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__id: null,
 		__controller: null,
 		__componentMap: null,
 		__validationManager: null,
@@ -54,19 +52,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__clientCodeContext: null,
 		
 		create: function(createOptions) {
-			this.__id = createOptions['id'] || this.toString();
-			this._numOfColumns = 1;
-			this._grabHorizontal = true;
-			this._layout = new qx.ui.layout.Grid();
-			this._widgets[0] = new qx.ui.container.Composite(this._layout);
 			this.base(arguments, createOptions);
-		
 		},
 		
-		getId: function() {
-			return this.__id;
-		},
-
 		getModel: function() {
 			return this.__controller.getModel();
 		},
@@ -158,8 +146,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		qx.log.Logger.debug(this, qx.lang.String.format("Form '%1' is being destructed", [ this.__id ]));
-		
 		// Remove all validations
 		var validationItems = this.__validationManager.getItems();
 		for(var validationItem in validationItems)

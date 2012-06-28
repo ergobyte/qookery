@@ -41,7 +41,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		
 		_createMainWidget: function(createOptions) {
 			var selectBox = new qx.ui.form.SelectBox();
-			this._setupWidgetAppearance(selectBox, createOptions);
+			this._applyLayoutProperties(selectBox, createOptions);
 			selectBox.addListener("changeSelection", function(event) {
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;

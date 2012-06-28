@@ -28,22 +28,24 @@ qx.Class.define("qookery.internal.XmlParser", {
 	implement: [ qookery.IXmlParser ],
 	
 	statics: {
-		CREATE_OPTIONS: [
-			'id',
-			'variant', 
-			'horizontal-span',
-			'label', 
-			'grab-horizontal', 
-			'grab-vertical',
-			'horizontal-alignment', 
-			'num-of-columns', 
-			'connect',
-			'width-hint', 
-			'height-hint', 
-			'enabled'
-		],
-		
-		SIZE_MAP: {
+		COMPONENTS: {
+			"button": qookery.internal.components.ButtonComponent,
+			"check-box": qookery.internal.components.CheckBoxComponent,
+			"composite": qookery.internal.components.CompositeComponent,
+			"date-field": qookery.internal.components.DateChooserComponent,
+			"form": qookery.internal.components.FormComponent,
+			"group-box": qookery.internal.components.GroupComponent,
+			"label": qookery.internal.components.LabelComponent,
+			"password-field": qookery.internal.components.PasswordComponent,
+			"radio-group": qookery.internal.components.RadioComponent,
+			"select-box": qookery.internal.components.SelectBoxComponent,
+			"tab-view": qookery.internal.components.TabHolderComponent,
+			"tab-view-page": qookery.internal.components.TabPageComponent,
+			"table": qookery.internal.components.TableComponent,
+			"text-area": qookery.internal.components.TextAreaComponent,
+			"text-field": qookery.internal.components.TextComponent
+		},
+		NAMED_SIZES: {
 			"XXS":  28,
 			"XS" :  46,
 			"S"  :  74,
@@ -121,7 +123,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
-				if(elementName == 'form' || elementName == 'layout' || elementName =='element')
+				if(qookery.internal.XmlParser.COMPONENTS[elementName])
 					this.__parseStatement(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
@@ -140,22 +142,14 @@ qx.Class.define("qookery.internal.XmlParser", {
 		 * @param 	parentComponet	{qookery.internal.components.*}	The parent where the new component will delivered
 		 */
 		__parseStatement: function(statementElement, parentComponent) { 
-			var componentType = qx.xml.Element.getAttributeNS(statementElement, null, "type");
-			if(componentType == '') componentType = qx.dom.Node.getName(statementElement);
-			if(componentType == "layout"){
-				if(qx.xml.Element.getAttributeNS(statementElement, null, "variant") != '')
-					componentType = qx.xml.Element.getAttributeNS(statementElement, null, "variant");
-				else
-					componentType = "composite";
-			}
-			var className = "qookery.internal.components." + qx.lang.String.firstUp(componentType) + "Component";
-			var clazz = qx.Class.getByName(className);
-			if(clazz == null) 
+			var componentType = qx.dom.Node.getName(statementElement);
+			var componentClass = qookery.internal.XmlParser.COMPONENTS[componentType];
+			if(!componentClass) 
 				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
 
 			// Phase 1: New Instance
 
-			var component = new clazz(parentComponent);
+			var component = new componentClass(parentComponent);
 			var componentId = this.__getAttribute(statementElement, "id");
 			if(componentId)
 				this.__formComponent.registerComponent(component, componentId);
@@ -190,21 +184,46 @@ qx.Class.define("qookery.internal.XmlParser", {
 		 */
 		__parseCreateOptions: function(statementElement) {
 			var createOptions = { };
-			for(var i = 0; i < qookery.internal.XmlParser.CREATE_OPTIONS.length; i++) {
-				var attributeName = qookery.internal.XmlParser.CREATE_OPTIONS[i];
-				var text = this.__getAttribute(statementElement, attributeName);
-				if(!text) continue;
-				var value = text;
-				switch(attributeName) {
-				case "width-hint": 
-				case "height-hint":
-					value = qookery.internal.XmlParser.SIZE_MAP[text] || parseInt(text); break;
+			var attributes = statementElement.attributes;
+			for(var i = 0; i < attributes.length; i++) {
+				var attribute = attributes.item(i);
+				var key = attribute.nodeName;
+				var text = attribute.nodeValue;
+				if(text == null || text.length == 0) continue;
+				text = qx.lang.String.trim(text);
+				if(text.length == 0) continue;
+				var value = null;
+				switch(key) {
+				case "width": 
+				case "height":
+				case "min-width": 
+				case "min-height":
+				case "max-width": 
+				case "max-height":
+					value = qookery.internal.XmlParser.NAMED_SIZES[text] || parseInt(text); break;
+				case "margin-top": 
+				case "margin-right":
+				case "margin-bottom": 
+				case "margin-left":
+				case "padding-top": 
+				case "padding-right":
+				case "padding-bottom": 
+				case "padding-left":
+				case "row-span":
+				case "column-span":
+				case "spacing-x":
+				case "spacing-y":
+				case "spacing":
+					value = parseInt(text); break;
 				case "enabled":
-				case "grab-horizontal":
-				case "grab-vertical":
+				case "stretch-x":
+				case "stretch-y":
+				case "stretch":
 					value = text == "true"; break;
+				default:
+					value = text;
 				}
-				createOptions[attributeName] = value;
+				createOptions[key] = value;
 			}
 			return createOptions;
 		},

@@ -44,6 +44,7 @@ qx.Class.define("qookerydemo.ResultArea",
 				this.__formComponent.addListener("formClose", function() {
 					this.removeAll();
 				}, this);
+				this.__formComponent.fireEvent("formOpen", qx.event.type.Event, null);
 			}
 			catch(e) {
 				qx.log.Logger.error(this, qx.lang.String.format("Error creating Qookery form '%1'", [ e ]));
