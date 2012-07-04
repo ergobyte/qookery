@@ -29,10 +29,12 @@ qx.Class.define("qookery.internal.components.CompositeComponent", {
 		this.base(arguments, parentComponent);
 	},
 
-	members:{
+	members: {
 
-		_createContainerWidget: function(createOptions, layout) {
-			return new qx.ui.container.Composite();
+		_createContainerWidget: function(createOptions) {
+			var container = new qx.ui.container.Composite();
+			this._applyLayoutProperties(container, createOptions);
+			return container;
 		}
 	}
 });

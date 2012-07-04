@@ -22,35 +22,33 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 	extend: qx.ui.toolbar.ToolBar,
 
-	events: {
-		"run": "qx.event.type.Event"
+	statics: {
+		DEMOS: [
+			{ label: "Hello, World!", file: "helloWorld.xml" },
+			{ label: "Login Dialog", file: "loginDialog.xml" }
+		]
 	},
 
 	construct: function() {
 		this.base(arguments);
-		var runButton = new qx.ui.toolbar.Button("Run", "resource/qookerydemo/icons/24/run.png");
-		runButton.addListener("execute", function() {
-			this.fireEvent("run");
+		var runAgainButton = new qx.ui.toolbar.Button("Run Again", "resource/qookerydemo/icons/24/run.png");
+		runAgainButton.addListener("execute", function() {
+			qx.core.Init.getApplication().runCode();
 		}, this);
 		
-		var demosMenu = new qx.ui.menu.Menu();
-		var demo1 = new qx.ui.menu.Button("Hello, world!");
-		demo1.addListener("execute", function() {
-			this.getDemo("helloWorld.xml")
+		var demoListMenu = new qx.ui.menu.Menu();
+		qookerydemo.Toolbar.DEMOS.forEach(function(demoArguments, index) {
+			var button = new qx.ui.menu.Button(demoArguments['label']);
+			button.addListener("execute", function() {
+				this.getDemo(demoArguments['file'])
+			}, this);
+			demoListMenu.add(button);
 		}, this);
 		
-		var demo2 = new qx.ui.menu.Button("Login Dialog");
-		demo2.addListener("execute", function() {
-			this.getDemo("loginDialog.xml")
-		}, this);
-		
-		demosMenu.add(demo1);
-		demosMenu.add(demo2);
-		
-		var demoMenu = new qx.ui.toolbar.MenuButton("Demos", "resource/qookerydemo/icons/24/samples.png");
-		demoMenu.setMenu(demosMenu);
+		var demoMenu = new qx.ui.toolbar.MenuButton("Demo Selection", "resource/qookerydemo/icons/24/samples.png");
+		demoMenu.setMenu(demoListMenu);
 		this.add(demoMenu);
-		this.add(runButton);
+		this.add(runAgainButton);
 	},
 
 	members: {
@@ -60,6 +58,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 			req.onload = function() {
 				var xmlCode = req.responseText;
 				qx.core.Init.getApplication().setEditor(xmlCode);
+				qx.core.Init.getApplication().runCode();
 			}
 			req.open("GET", qx.lang.String.format("resource/qookerydemo/xml/%1?nocache=%2", [ url, new Date().getTime() ]));
 			req.send();

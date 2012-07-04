@@ -49,10 +49,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__validationManager: null,
 		__clientCodeContext: null,
 		
-		create: function(createOptions) {
-			this.base(arguments, createOptions);
-		},
-		
 		getModel: function() {
 			return this.__controller.getModel();
 		},

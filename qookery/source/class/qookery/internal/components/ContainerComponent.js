@@ -48,6 +48,14 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			this.__layout.setSpacingX(spacingX);
 			var spacingY = createOptions['spacing-y'] || createOptions['spacing'] || 10;
 			this.__layout.setSpacingY(spacingY);
+			var columnFlexes = createOptions['column-flexes'];
+			if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
+				this.__layout.setColumnFlex(index, parseInt(columnFlex));
+			}, this);
+			var rowFlexes = createOptions['row-flexes'];
+			if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
+				this.__layout.setRowFlex(index, parseInt(rowFlex));
+			}, this);
 			this._widgets[0] = this._createContainerWidget(createOptions);
 			this._widgets[0].setLayout(this.__layout);
 			this.base(arguments, createOptions);

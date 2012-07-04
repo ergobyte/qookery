@@ -2,11 +2,11 @@
 <!-- 
 	A simple login dialog in Qookery
 -->
-<form xmlns="http://www.qookery.org/ns/Form">
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
 
 	<!-- Form fields -->
 
-	<composite column-count="2"> 
+	<composite column-count="2" column-flexes="0 1"> 
 		<text-field id="username" label="User name">
 			<script>
 				this.setRequired(true);
@@ -21,7 +21,7 @@
 
 	<!-- Buttons -->
 
-	<composite column-count="auto">
+	<composite column-count="auto" max-width="300" alignment-x="right" column-flexes="1 1">
 		<button label="Login">
 			<script event="execute">
 				if(!$.form.validate()) return;

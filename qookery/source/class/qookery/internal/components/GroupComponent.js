@@ -29,7 +29,9 @@ qx.Class.define("qookery.internal.components.GroupComponent", {
 	members: {
 
 		_createContainerWidget: function(createOptions) {
-			return new qx.ui.groupbox.GroupBox(createOptions['label']);
+			var container = new qx.ui.groupbox.GroupBox(createOptions['label']);
+			this._applyLayoutProperties(container, createOptions);
+			return container;
 		}
 	}
 });

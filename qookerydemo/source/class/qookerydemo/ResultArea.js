@@ -20,11 +20,10 @@
 
 qx.Class.define("qookerydemo.ResultArea",
 {
-	extend : qx.ui.container.Composite,
+	extend: qx.ui.container.Scroll,
 
 	construct: function() {
 		this.base(arguments);
-		this.setLayout(new qx.ui.layout.Grow());
 		this.setPadding(10);
 	},
 
@@ -35,28 +34,28 @@ qx.Class.define("qookerydemo.ResultArea",
 		loadForm: function(xmlCode) {
 			if(this.__formComponent) {
 				this.__formComponent.dispose();
+				this._disposeObjects("__formComponent");
 			}
-			this._disposeObjects("__formComponent");
 			var xmlDocument = qx.xml.Document.fromString(xmlCode);
-			var qookeryParser = qookery.Qookery.getInstance().createNewParser();
+			var parser = qookery.Qookery.getInstance().createNewParser();
 			try {
-				this.__formComponent = qookeryParser.create(xmlDocument, this, { });
+				this.__formComponent = parser.create(xmlDocument, this, null);
 				this.__formComponent.addListener("formClose", function() {
-					this.removeAll();
+					this.remove(this.getChildren()[0]);
 				}, this);
 				this.__formComponent.fireEvent("formOpen", qx.event.type.Event, null);
 			}
 			catch(e) {
-				qx.log.Logger.error(this, qx.lang.String.format("Error creating Qookery form '%1'", [ e ]));
-				console.error(e.stack);
+				qx.log.Logger.error(this, qx.lang.String.format("Error creating form: %1", [ e ]));
+				qx.log.Logger.error(e.stack);
 			}
 			finally {
-				qookeryParser.dispose();
+				parser.dispose();
 			}
 		}
 	},
 
 	destruct: function() {
-		this._disposeObjects("__captionLabel", "__formComponent");
+		this._disposeObjects("__formComponent");
 	}
 });

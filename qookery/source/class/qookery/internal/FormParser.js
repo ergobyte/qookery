@@ -33,7 +33,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			"check-box": qookery.internal.components.CheckBoxComponent,
 			"composite": qookery.internal.components.CompositeComponent,
 			"date-field": qookery.internal.components.DateChooserComponent,
-			"form": qookery.internal.components.FormComponent,
 			"group-box": qookery.internal.components.GroupComponent,
 			"label": qookery.internal.components.LabelComponent,
 			"password-field": qookery.internal.components.PasswordComponent,
@@ -79,7 +78,8 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Phase 2: Creation
 
-			this.__formComponent.create({});
+			var createOptions = this.__parseCreateOptions(formElement);
+			this.__formComponent.create(createOptions);
 			
 			// Phase 3: Children
 

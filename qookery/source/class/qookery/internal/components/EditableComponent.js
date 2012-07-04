@@ -169,7 +169,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			var currentWidth = labelWidget.getWidth();
 			labelWidget.setMinWidth(currentWidth);
 			labelWidget.setAllowStretchX(false);
-			labelWidget.setAllowStretchY(true);
+			labelWidget.setAllowStretchY(false);
 			labelWidget.setAlignX("left");
 			labelWidget.setAlignY("middle");
 		}

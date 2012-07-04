@@ -29,57 +29,47 @@ qx.Class.define("qookerydemo.Application", {
 	members: {
 
 		__toolBar: null,
-		__editor: null,
-		__riaArea: null,
+		__xmlEditor: null,
+		__resultArea: null,
 		
 		main: function() {
 			this.base(arguments);
-			
 			if(qx.core.Environment.get("qx.debug")) {
 				qx.log.appender.Native;
 				qx.log.appender.Console;
 			}
-			var layout = new qx.ui.layout.VBox();
-			
-			var mainContainer = new qx.ui.container.Composite(layout);
-			this.getRoot().add(mainContainer, { edge: 0 });
 			
 			this.__toolbar = new qookerydemo.Toolbar();
-			mainContainer.add(this.__toolbar, { flex: 0 });
-			
-			this.__editor = new qookerydemo.Editor();
-			this.__riaArea = new qookerydemo.ResultArea();
-			
+			this.__xmlEditor = new qookerydemo.XmlEditor();
+			this.__resultArea = new qookerydemo.ResultArea();
+
 			var splitter = new qx.ui.splitpane.Pane("horizontal");
-			splitter.setDecorator(null); // remove the 3px broder
-			var viewLayout = new qx.ui.layout.HBox(); 
-			var viewsContainer = new qx.ui.container.Composite(viewLayout);
+			splitter.add(this.__xmlEditor, 0);
+			splitter.add(this.__resultArea, 1);
 			
-			splitter.add(this.__editor, 0);
-			splitter.add(this.__riaArea, 1);
-			
-			viewsContainer.add(splitter, { flex: 1 });
-			mainContainer.add(viewsContainer, { flex: 1 });
-			this.__toolbar.addListener("run", this.runCode, this);
+			var mainContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+			mainContainer.add(this.__toolbar, { flex: 0 });
+			mainContainer.add(splitter, { flex: 1 });
+			this.getRoot().add(mainContainer, { edge: 0 });
 			
 			qx.dom.Element.remove(document.getElementById('splash'));
 		},
 
-		runCode: function(event) {
-			var xmlCode = this.__editor.getCode();
+		runCode: function() {
+			var xmlCode = this.__xmlEditor.getCode();
 			if(!xmlCode) {
 				alert("You must supply some code");
 				return;
 			}
-			this.__riaArea.loadForm(xmlCode);
+			this.__resultArea.loadForm(xmlCode);
 		},
 
 		setEditor: function(text) {
-			this.__editor.setCode(text);
+			this.__xmlEditor.setCode(text);
 		}
 	},
 
 	destruct: function() {
-		this._disposeObjects("__toolbar", "__editor", "__riaArea" );
+		this._disposeObjects("__toolbar", "__xmlEditor", "__resultArea" );
 	}
 });
