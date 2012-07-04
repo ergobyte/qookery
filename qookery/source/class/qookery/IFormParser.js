@@ -18,7 +18,7 @@
 	$Id$
 */
 
-qx.Interface.define("qookery.IXmlParser", {
+qx.Interface.define("qookery.IFormParser", {
 
 	members: {
 		

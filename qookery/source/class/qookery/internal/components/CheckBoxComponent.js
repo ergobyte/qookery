@@ -34,9 +34,7 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 		},
 		
 		_createMainWidget: function(createOptions) {
-			var widget = new qx.ui.form.CheckBox(createOptions['label']);
-			this._setupLabelAppearance(widget, createOptions);
-			return widget;
+			return new qx.ui.form.CheckBox(createOptions['label']);
 		},
 
 		connect: function(controller, propertyPath) {

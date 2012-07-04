@@ -150,10 +150,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['max-height']) widget.setMaxHeight(createOptions['max-height']);
 			if(createOptions['alignment-x']) widget.setAlignX(createOptions['alignment-x']);
 			if(createOptions['alignment-y']) widget.setAlignX(createOptions['alignment-y']);
-			var stretchX = createOptions['stretch-x'] || createOptions['stretch'] || null;
-			if(stretchX != null) widget.setAllowStretchX(stretchX);
-			var stretchY = createOptions['stretch-y'] || createOptions['stretch'] || null;
-			if(stretchY != null) widget.setAllowStretchY(stretchY);
+			var stretchX = createOptions['stretch-x'] !== undefined ? createOptions['stretch-x'] : createOptions['stretch'];
+			var stretchY = createOptions['stretch-y'] !== undefined ? createOptions['stretch-y'] : createOptions['stretch'];
+			if(stretchX !== undefined) widget.setAllowStretchX(stretchX);
+			if(stretchY !== undefined) widget.setAllowStretchY(stretchY);
 			if(createOptions['margin']) widget.setMargin(createOptions['margin']);
 			if(createOptions['margin-top']) widget.setMarginTop(createOptions['margin-top']);
 			if(createOptions['margin-right']) widget.setMarginRight(createOptions['margin-right']);
@@ -166,20 +166,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
 			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
 			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
-		},
-
-		/**
-		 * Perform all operation about align, width and height for a label
-		 * 
-		 * @param widget {qx.ui.basic.Label} A label widget
-		 * @param createOptions {keyValuePairList} The instruction about the label apperance
-		 */
-		_setupLabelAppearance: function(labelWidget, createOptions) {
-			var currentWidth = labelWidget.getWidth();
-			labelWidget.setMinWidth(currentWidth);
-			labelWidget.setMaxWidth(currentWidth);
-			labelWidget.setAllowShrinkX(false);
-			labelWidget.setAllowGrowX(false);
 		}
 	},
 

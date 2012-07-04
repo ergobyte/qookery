@@ -157,6 +157,21 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!modelProvider) return value.toString();
 			var humanFriendlyField = modelProvider.getLabel(value);
 			return humanFriendlyField;
+		},
+
+		/**
+		 * Perform all operation about align, width and height for a label
+		 * 
+		 * @param widget {qx.ui.basic.Label} A label widget
+		 * @param createOptions {keyValuePairList} The instruction about the label apperance
+		 */
+		_setupLabelAppearance: function(labelWidget, createOptions) {
+			var currentWidth = labelWidget.getWidth();
+			labelWidget.setMinWidth(currentWidth);
+			labelWidget.setAllowStretchX(false);
+			labelWidget.setAllowStretchY(true);
+			labelWidget.setAlignX("left");
+			labelWidget.setAlignY("middle");
 		}
 	}
 });

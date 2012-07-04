@@ -31,7 +31,7 @@ qx.Class.define("qookery.Qookery", {
 		__modelProvider: null,
 		
 		createNewParser: function() {
-			return new qookery.internal.XmlParser();
+			return new qookery.internal.FormParser();
 		},
 
 		getModelProvider: function() {

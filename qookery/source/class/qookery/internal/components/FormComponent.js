@@ -33,7 +33,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.base(arguments, null);
 		this.__controller = new qx.data.controller.Object();
 		this.__validationManager = new qx.ui.form.validation.Manager();
-		this.__userContextMap = [ ];
 		this.__componentMap = { };
 	},
 
@@ -48,7 +47,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__controller: null,
 		__componentMap: null,
 		__validationManager: null,
-		__userContextMap: null,
 		__clientCodeContext: null,
 		
 		create: function(createOptions) {
@@ -78,12 +76,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__componentMap[id] = component;
 		},
 
-		getUserContext: function(id) {
-			return this.__userContextMap[id];
-		},
-
 		registerUserContext: function(id, userContext) {
-			this.__userContextMap[id] = userContext;
+			var clientCodeContext = this.getClientCodeContext();
+			clientCodeContext[id] = userContext;
 		},
 
 		getForm: function() {
@@ -140,7 +135,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					return form.getComponent(selector.substr(1));
 				return null;
 			};
-			context["form"] = this;
+			context.form = this;
 			return this.__clientCodeContext = context;
 		}
 	},

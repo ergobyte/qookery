@@ -19,13 +19,13 @@
 */
 
 /**
- * The XMLParser will parse the given xml document and deliver 
- * a GUI in the given parent.
+ * The FormParser will parse a form XML document to create
+ * a fully populated IFormComponent into a container composite
  */
-qx.Class.define("qookery.internal.XmlParser", {
+qx.Class.define("qookery.internal.FormParser", {
 
 	extend: qx.core.Object,
-	implement: [ qookery.IXmlParser ],
+	implement: [ qookery.IFormParser ],
 	
 	statics: {
 		COMPONENTS: {
@@ -97,15 +97,6 @@ qx.Class.define("qookery.internal.XmlParser", {
 			return this.__formComponent;
 		},
 		
-		/**
-		 * register external context like function that will be called form xml forms
-		 * @param id {String } the identifier of the context
-		 * @param userContext 
-		 */
-		registerUserContext: function(id, userContext) {
-			this.__formComponent.registerUserContext(id, userContext);
-		},
-		
 		getFormComponent: function() {
 			return this.__formComponent;
 		},
@@ -123,7 +114,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
-				if(qookery.internal.XmlParser.COMPONENTS[elementName])
+				if(qookery.internal.FormParser.COMPONENTS[elementName])
 					this.__parseStatement(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
@@ -143,7 +134,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 		 */
 		__parseStatement: function(statementElement, parentComponent) { 
 			var componentType = qx.dom.Node.getName(statementElement);
-			var componentClass = qookery.internal.XmlParser.COMPONENTS[componentType];
+			var componentClass = qookery.internal.FormParser.COMPONENTS[componentType];
 			if(!componentClass) 
 				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
 
@@ -200,7 +191,7 @@ qx.Class.define("qookery.internal.XmlParser", {
 				case "min-height":
 				case "max-width": 
 				case "max-height":
-					value = qookery.internal.XmlParser.NAMED_SIZES[text] || parseInt(text); break;
+					value = qookery.internal.FormParser.NAMED_SIZES[text] || parseInt(text); break;
 				case "margin-top": 
 				case "margin-right":
 				case "margin-bottom": 
@@ -249,19 +240,23 @@ qx.Class.define("qookery.internal.XmlParser", {
 			var type = this.__getAttribute(bindElement, "type");
 			var key = this.__getAttribute(bindElement, "key");
 			var uri = this.__getAttribute(bindElement, "uri");
-			
 			switch(type) {
 			case "namespace":
 				this.__namespaces[key] = uri;
 				break;
 			case "scripting-context":
-				var required = this.__getAttribute(bindElement, "required");
-				if(required == "true" && !qx.Class.isDefined(uri)) 
-					throw new Error("Cannot find User defined context "+ uri +"\n"+ qx.xml.Element.serialize(bindElement));
-				this.registerUserContext(key, qx.Class.getByName(uri));
+				var clazz = qx.Class.getByName(uri);
+				if(clazz) {
+					this.__formComponent.registerUserContext(key, clazz);
+				}
+				else {
+					var required = this.__getAttribute(bindElement, "required");
+					if(required == "true")
+						throw new Error(qx.lang.String.format("Required scripting context %1 missing", [ uri ]));
+				}
 				break;
 			default:
-				throw new Error(qx.lang.String.format("Unknown binding type '%1'", [ type ]));
+				throw new Error(qx.lang.String.format("Unable to process binding of unknown type '%1'", [ type ]));
 			}
 		},
 
