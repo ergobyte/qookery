@@ -27,18 +27,23 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	extend: qx.core.Object,
 	implement: [ qookery.IComponent ],
 
-	construct: function(parentComponent) {
-		this.base(arguments);
-		this.__parentComponent = parentComponent;
-		this._widgets = [ ];
-	},
-	
 	statics: {
 		QOOKERY_FUNCTION: function(selector) {
 			
 		}
 	},
 
+	properties: {
+	    enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
+	    visible: { init: true, check: "Boolean", inheritable: true, apply: "_applyVisible" }
+	},
+	
+	construct: function(parentComponent) {
+		this.base(arguments);
+		this.__parentComponent = parentComponent;
+		this._widgets = [ ];
+	},
+	
 	members: {
 
 		__id: null,
@@ -62,6 +67,9 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			for(var i = 0; i < this._widgets.length; i++)
 				this._widgets[i].setUserData('qookeryComponent', this);
+
+			if(createOptions['enabled'] == false) this.setEnabled(false);
+			if(createOptions['visible'] == false) this.setVisible(false);
 		},
 
 		getId: function() {
@@ -166,6 +174,22 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
 			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
 			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
+		},
+		
+		_applyEnabled: function(enabled) {
+			var widgets = this.listWidgets();
+			for(var i = 0; i < widgets.length; i++) {
+				var widget = widgets[i];
+				widget.setEnabled(enabled);
+			}
+		},
+
+		_applyVisible: function(visible) {
+			var widgets = this.listWidgets();
+			for(var i = 0; i < widgets.length; i++) {
+				var widget = widgets[i];
+				if(visible) widget.show(); else widget.hide();
+			}
 		}
 	},
 

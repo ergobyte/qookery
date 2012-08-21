@@ -7,16 +7,8 @@
 	<!-- Form fields -->
 
 	<composite column-count="2" column-flexes="0 1"> 
-		<text-field id="username" label="User name">
-			<script>
-				this.setRequired(true);
-			</script>
-		</text-field>
-		<text-field id="password" label="Password">
-			<script>
-				this.setRequired(true);
-			</script>
-		</text-field>
+		<text-field id="username" label="User name" required="true" />
+		<password-field id="password" label="Password" required="true" />
 	</composite>
 
 	<!-- Buttons -->

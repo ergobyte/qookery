@@ -31,14 +31,21 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		this.base(arguments, parentComponent);
 	},
 	
+	properties: {
+
+		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
+	    toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
+		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" }
+	},
+	
 	members: {
 
 		create: function(createOptions) {
 			this._widgets[0] = this._createMainWidget(createOptions);
-			this._widgets[1] = new qx.ui.basic.Label(createOptions['label']);
+			this._widgets[1] = new qx.ui.basic.Label();
 			this._setupLabelAppearance(this._widgets[1], createOptions);
-			if(createOptions['enabled'] == false)
-				this.getMainWidget().setEnabled(false);
+			if(createOptions['label']) this.setLabel(createOptions['label']);
+			if(createOptions['required']) this.setRequired(true);
 			this.base(arguments, createOptions);
 		},
 		
@@ -56,18 +63,18 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			var type = validationOptions['type'];
 			if(type == null || type.length == 0) throw new Error("Validation type required");
 			var message = validationOptions['message'];
-			var widget = this.getMainWidget();
+			var mainWidget = this.getMainWidget();
 			var className = "qookery.internal.validators." + qx.lang.String.firstUp(type) + "Validator";
 			var clazz = qx.Class.getByName(className);
 			if(clazz == null) throw new Error(qx.lang.String.format("Validator class '%1' not found", [ className ]));
 			var validator = new clazz(message);
 			var qxValidator = new qx.ui.form.validation.AsyncValidator(validator);
-			this.getForm().getValidationManager().add(widget, qxValidator);
+			this.getForm().getValidationManager().add(mainWidget, qxValidator);
 		},
 
 		clearValidations: function() {
-			var widget = this.getMainWidget();
-			this.getForm().getValidationManager().remove(widget);
+			var mainWidget = this.getMainWidget();
+			this.getForm().getValidationManager().remove(mainWidget);
 		},
 
 		_createMainWidget: function(createOptions) {
@@ -86,53 +93,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.getMainWidget().setValue(value);
 		},
 
-		clearValue:function() {
+		clearValue: function() {
 			this.getMainWidget().resetValue();
-		},
-
-		getLabel: function() {
-			return this.getLabelWidget().getValue();
-		},
-
-		setLabel: function(value) {
-			this.getLabelWidget().setValue(value);
-		},
-
-		setToolTip: function(value) {
-			this.getMainWidget().setToolTip(value);
-		},
-
-		getEnabled: function() {
-			return this.getMainWidget().getEnabled();
-		},
-
-		setEnabled: function(enabled) {
-			this.getMainWidget().setEnabled(enabled);
-		},
-		
-		setVisible: function(visibility) {
-			if(visibility == true)
-				this.getMainWidget().show();
-			else if(visibility == false)
-				this.getMainWidget().hide();
-			else
-				qx.log.Logger.error(this, "Illegal argument for setVisible()");
-		},
-
-		setRequired: function(isRequired) {
-			if(isRequired === true) {
-				this.getLabelWidget().setRich(true);
-				this.getLabelWidget().setValue(this.getLabelWidget().getValue()+" <b style='color:red'>*</b>");
-				this.getMainWidget().setRequired(true);
-				this.getForm().getValidationManager().add(this.getMainWidget());
-			}
-			else if(isRequired === false) {
-				this.getForm().getValdationManager().remove(this.getMainWidget());
-				this.getMainWidget().setRequired(false);
-			}
-			else {
-				qx.log.Logger.error(this, "Illegal argument for setRequired()");
-			}
 		},
 
 		listWidgets: function(filterName) {
@@ -141,7 +103,35 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			// we want to present the label in front of the editor
 			return [ this._widgets[1], this._widgets[0] ];
 		},
+
+		// Properties
 		
+		_applyLabel: function(label) {
+			var labelWidget = this.getLabelWidget();
+			if(labelWidget) labelWidget.setValue(label);
+		},
+
+		_applyToolTip: function(toolTip) {
+			var mainWidget = this.getMainWidget();
+			if(mainWidget) mainWidget.setToolTip(toolTip);
+		},
+
+		_applyRequired: function(required) {
+			var mainWidget = this.getMainWidget();
+			if(!mainWidget) return;
+			if(required === true) {
+				mainWidget.setRequired(true);
+				this.getForm().getValidationManager().add(mainWidget);
+			}
+			else if(required === false) {
+				mainWidget.setRequired(false);
+				this.getForm().getValidationManager().remove(mainWidget);
+			}
+			else {
+				qx.log.Logger.error(this, "Illegal argument for setRequired()");
+			}
+		},
+
 		// Utility methods for subclasses
 
 		_getIdentityOf: function(value) {

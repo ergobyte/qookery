@@ -23,6 +23,15 @@
  */
 qx.Interface.define("qookery.IComponent", {
 
+	properties: {
+
+		/** Whether the component is enabled */
+		enabled: { init: true, check: "Boolean" },
+
+		/** Whether the component is visible */
+		visible: { init: true, check: "Boolean" }
+	},
+	
 	members: {
 
 		/**

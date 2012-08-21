@@ -210,6 +210,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "stretch-x":
 				case "stretch-y":
 				case "stretch":
+				case "required":
 					value = text == "true"; break;
 				default:
 					value = text;

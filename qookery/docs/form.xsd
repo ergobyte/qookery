@@ -92,7 +92,8 @@
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="icon" type="anyURI" />
-		<attribute name="enabled" type="boolean" />
+		<attribute name="enabled" type="boolean" default="true" />
+		<attribute name="visible" type="boolean" default="true" />
 
 		<!-- Layout item -->
 		<attribute name="width" type="tns:widget-size" />
@@ -164,7 +165,8 @@
 	<complexType name="editable-component-attributes">
 		<complexContent>
 			<extension base="tns:component-attributes">
-				<attribute name="connect" />
+				<attribute name="connect" type="string" />
+				<attribute name="required" type="boolean" default="false" />
 			</extension>
 		</complexContent>
 	</complexType>

@@ -24,6 +24,18 @@
 qx.Interface.define("qookery.IEditableComponent", {
 
 	extend: qookery.IComponent,
+
+	properties: {
+		
+		/** The component's label */
+		label: { check: "String", nullable: true },
+
+		/** The component's tooltip text */
+		toolTip: { check: "String", nullable: true },
+
+		/** Whether the component's value is required */
+		required: { check: "Boolean", nullable: false, init: false }
+	},
 	
 	members: {
 
