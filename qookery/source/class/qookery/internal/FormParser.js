@@ -120,6 +120,8 @@ qx.Class.define("qookery.internal.FormParser", {
 					this.__parseScript(statementElement, parentComponent);
 				else if(elementName == 'bind')
 					this.__parseBind(statementElement, parentComponent);
+				else if(elementName == 'parsererror')
+					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				else
 					throw new Error(qx.lang.String.format("Encountered unexpected element <%1>", [ elementName ]));
 			}

@@ -29,14 +29,6 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		this.base(arguments, parentComponent);
 	},
 
-	properties: {
-		selection: {
-			init: null,
-			event: "changeSelection",
-			apply: "_refreshSelection"
-		}
-	},
-	
 	members: {
 		
 		_createMainWidget: function(createOptions) {
@@ -45,40 +37,51 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			selectBox.addListener("changeSelection", function(event) {
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;
-				this.setSelection(model);
+				this.setValue(model);
 			}, this);
 			return selectBox;
 		},
 		
-		_refreshSelection: function(selection) {
-			var selectionIdentity = this._getIdentityOf(selection);
-			var listItems = this.getMainWidget().getChildren();
+		_applyValue: function(value) {
+			var selectBox = this.getMainWidget();
+			var valueIdentity = this._getIdentityOf(value);
+			var listItems = selectBox.getChildren();
 			for(var i = 0; i < listItems.length; i++) {
 				var listItem = listItems[i];
 				var item = listItem.getModel();
 				var itemIdentity = this._getIdentityOf(item);
-				if(selectionIdentity != itemIdentity) continue;
-				this.getMainWidget().setSelection([ listItem ]);
+				if(valueIdentity != itemIdentity) continue;
+				selectBox.setSelection([ listItem ]);
 				return;
 			}
 		},
 
-		connect: function(controller, propertyPath) {
-			controller.addTarget(this, "selection", propertyPath, true);
+		addItem: function(model, label, icon) {
+			qx.core.Assert.assertNotNull(model);
+			if(!label) label = this._getLabelOf(model);
+			var item = new qx.ui.form.ListItem(label, icon, model);
+			this.getMainWidget().add(item);
 		},
 
-		setItems: function(itemList) {
+		setItems: function(items) {
 			var selectBox = this.getMainWidget();
-			for(var i = 0; i < itemList.length; i++) {
-				var model = itemList.getItem(i);
-				var label = this._getLabelOf(model);
-				var listItem = new qx.ui.form.ListItem(label, null, model);
-				selectBox.add(listItem);
+			selectBox.removeAll();
+			if(qx.lang.Type.isArray(items)) {
+				for(var i = 0; i < items.length; i++) {
+					var model = items.getItem(i);
+					var label = this._getLabelOf(model);
+					var listItem = new qx.ui.form.ListItem(label, null, model);
+					selectBox.add(listItem);
+				}
+				return;
+			}
+			if(qx.lang.Type.isObject(items)) {
+				for(var model in items) {
+					var label = items[model];
+					var listItem = new qx.ui.form.ListItem(label, null, model);
+					selectBox.add(listItem);
+				}
 			}
 		}
-	},
-	
-	destruct: function() {
-		this._disposeObjects("__listController");
 	}
 });

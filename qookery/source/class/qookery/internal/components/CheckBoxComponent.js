@@ -34,11 +34,15 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 		},
 		
 		_createMainWidget: function(createOptions) {
-			return new qx.ui.form.CheckBox(createOptions['label']);
+			var widget = new qx.ui.form.CheckBox(createOptions['label']);
+			widget.addListener("changeValue", function(event) {
+				this.setValue(event.getData());
+			}, this);
+			return widget;
 		},
-
-		connect: function(controller, propertyPath) {
-			controller.addTarget(this.getMainWidget(), "value", propertyPath, true);
+		
+		_applyValue: function(value) {
+			this.getMainWidget().setValue(value);
 		}
 	}
 });

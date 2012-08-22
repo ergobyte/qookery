@@ -30,14 +30,16 @@ qx.Class.define("qookery.internal.components.PasswordComponent", {
 		
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.PasswordField();
+			widget.setLiveUpdate(true);
+			widget.addListener("changeValue", function(event) { 
+				this.setValue(event.getData()); 
+			}, this);
 			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
-
-		connect: function(controller, propertyPath) {
-			controller.addTarget(this.getMainWidget(), "value", propertyPath, true, {
-				converter: this._getLabelOf
-			});
+		
+		_applyValue: function(value) {
+			this.getMainWidget().setValue(this._getLabelOf(value));
 		}
 	}
 });

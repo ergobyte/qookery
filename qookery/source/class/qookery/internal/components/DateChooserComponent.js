@@ -34,12 +34,16 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
+			widget.addListener("changeValue", function(event) {
+				this.setValue(event.getData());
+			}, this);
 			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
-
-		connect: function(controller, propertyPath) {
-			controller.addTarget(this.getMainWidget(), "value", propertyPath, true);
+		
+		_applyValue: function(value) {
+			var dateField = this.getMainWidget();
+			dateField.setValue(value);
 		}
 	}
 });

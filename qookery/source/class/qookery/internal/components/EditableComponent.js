@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	},
 	
 	properties: {
-
+		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", event: "valueChanged" },
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
 	    toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" }
@@ -50,13 +50,13 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 		
 		/**
-		 * Create a two way binding
+		 * Create a two way binding between controller and component's value
 		 *	
 		 * @param controller {qx.data.controller.Object} The form controller that the bindings
 		 * @param path {String} The protocol path
 		 */
-		connect: function(controller, path) {
-			throw new Error("Method not implemented");
+		connect: function(controller, propertyPath) {
+			controller.addTarget(this, "value", propertyPath, true);
 		},
 
 		addValidation: function(validationOptions) {
@@ -85,18 +85,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			return this._widgets[1];
 		},
 
-		getValue: function() {
-			return this.getMainWidget().getValue();
-		},
-
-		setValue: function(value) {
-			this.getMainWidget().setValue(value);
-		},
-
-		clearValue: function() {
-			this.getMainWidget().resetValue();
-		},
-
 		listWidgets: function(filterName) {
 			if(filterName == "main") return [ this._widgets[0] ];
 			// Reverse order of main and label widget since 
@@ -105,6 +93,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		// Properties
+
+		_applyValue: function(value) {
+			// Override to update UI according to value
+		},
 		
 		_applyLabel: function(label) {
 			var labelWidget = this.getLabelWidget();
@@ -135,9 +127,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		// Utility methods for subclasses
 
 		_getIdentityOf: function(value) {
-			if(!value) return null;
+			if(value == null) return null;
 			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
-			if(!modelProvider) return value.toString();
+			if(!modelProvider) return value;
 			return modelProvider.getIdentity(value);
 		},
 		

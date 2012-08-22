@@ -19,32 +19,28 @@
 */
 
 /**
- * Interface for components that support data editing
+ * Interface for components that support value editing
  */
 qx.Interface.define("qookery.IEditableComponent", {
 
 	extend: qookery.IComponent,
 
 	properties: {
-		
-		/** The component's label */
+
+		/** Component's current value */
+		value: { event: "changeValue" },
+
+		/** Label which will be displayed close to component's interactive widgets */
 		label: { check: "String", nullable: true },
 
-		/** The component's tooltip text */
+		/** Tooltip text to display when the user hovers the mouse over the component's interactive widgets */
 		toolTip: { check: "String", nullable: true },
 
 		/** Whether the component's value is required */
 		required: { check: "Boolean", nullable: false, init: false }
 	},
-	
-	members: {
 
-		/**
-		 * Return the component's main value, if any
-		 * 
-		 * @return {any} the component's main value
-		 */
-		getValue: function() { },
+	members: {
 
 		/**
 		 * Add a validation to the component
