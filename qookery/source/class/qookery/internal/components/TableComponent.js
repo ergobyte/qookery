@@ -20,122 +20,55 @@
 
 qx.Class.define("qookery.internal.components.TableComponent", {
 
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.EditableComponent,
+	
+	events: {
+		"changeSelection" : "qx.event.type.Data"
+	},
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__tableModel = new qookery.impl.SimpleTableModel();
 	},
-
+	
 	properties: {
-		items: { nullable: true, init: [], event: "itemsChanged" }
+		value: { refine: true, init: [] }
 	},
 
 	members: {
 
 		__tableModel: null,
-		__propertyPath: null,
-		_lastRowSelected: null,
 		
-		create: function(createOptions) {
-			this._widgets[0] = new qx.ui.table.Table();
-			this._widgets[0].addListener("cellClick", function(event) {
-				this._lastRowSelected = event.getRow();
-			},this);
-			this._applyLayoutProperties(this._widgets[0], createOptions);
-			
-			this.addListener("itemsChanged", function(event) {
-				if(this.__propertyPath != null) {
-					var data = this.getForm().getModel();
-					var getterName = "get" + qx.lang.String.firstUp(this.__propertyPath);
-					data = data[getterName]();
-					this.__tableModel.populate(data);
-				}
+		initialize: function(options) {
+			if(!options || !options["columns"]) return;
+			var editable = options["editable"] || false;
+			var ids = options.hasOwnProperty("columnIds") ? options["columnIds"] : null;
+			this.__tableModel.setColumns(options["columns"], ids);
+			this.__tableModel.setEditable(editable);
+			this._widgets[0].setTableModel(this.__tableModel);
+		},
+		
+		_createMainWidget: function(createOptions) {
+			var widget = new qx.ui.table.Table();
+			widget.getSelectionModel().addListener('changeSelection', function(e) {
+				var selectionModel = e.getTarget();
+				var selectionRanges = selectionModel.getSelectedRanges();
+				var selectionIndex = selectionRanges[0].minIndex;
+				this.fireDataEvent("changeSelection", this.getValue().getItem(selectionIndex));
 			}, this);
-			
-			this.base(arguments, createOptions);
+
+			this._applyLayoutProperties(this._widgets[0], createOptions);
+			return widget;
 		},
 
-		connect: function(controller, propertyPath ) {
-			controller.addTarget(this, "items", propertyPath, true);
-			this.__propertyPath = propertyPath;
-		},
-
-		getLabel: function() {
-			return null;
-		},
-
-		setLabel: function() {
-			// TODO Label on top of the table 
-		},
-		
-		getValue: function(columnIndex, rowIndex) {
-			var model = this._widgets[0].getTableModel();
-			return model.getValue(columnIndex, rowIndex);
-		},
-
-		getModel: function() {
-			return this.__tableModel;
-		},
-
-		getLastRowSelected: function() {
-			return this._lastRowSelected;
-		},
-
-		setColumns: function(columns) {
-			this.__tableModel.setColumns(columns);
-		},
-
-		setVisible: function(visibility) {
-			if(visibility == true)
-				this._widgets[0].show();
-			else if(visibility == false)
-				this._widgets[0].hide();
-		},
-
-		setModel: function(tableModel) {
-			if(this.__tableModel != null) {
-				this.__tableModel.dispose();
-			}
-			this.__tableModel = tableModel;
-			this._widgets[0].setTableModel(tableModel);
-			
-			if(tableModel instanceof waffle.ui.internal.TableSimpleModel) { 
-				// TODO Find another way
-				this.bind("items", this.__tableModel, "waffleItems");
-				this.__tableModel.bind("waffleItems", this, "items");
-			}
-		},
-
-		getSelection: function() {
-			var selection = [];
-			this._widgets[0].getSelectionModel().iterateSelection(function(id) {
-				selection.push(id);
-			});
-			return selection;
-		},
-
-		setMultySelection: function(selection) {
-			if(selection)
-				this._widgets[0].getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
-			else
-				this._widgets[0].getSelectionModel().setSelectionMode(qx.ui.table.selection.Model.SINGLE_SELECTION);
-		},
-		
-		disableFraction: function(columnId) {
-			var tcm = this._widgets[0].getTableColumnModel();
-			var cellRenderer = new qx.ui.table.cellrenderer.Number();
-			var numberFormat = new qx.util.format.NumberFormat();
-			numberFormat.set({
-				maximumFractionDigits : 0,
-				groupingUsed : false
-			});
-			cellRenderer.setNumberFormat(numberFormat);
-			tcm.setDataCellRenderer(columnId, cellRenderer);
+		_applyValue: function(value) {
+			this.__tableModel.setDataAsMapArray(value);
+			if(this.getValue().length == 0)
+				this.fireDataEvent("changeSelection", null);
 		}
 	},
 
 	destruct: function() {
-		if(this.__tableModel != null)
-			this.__tableModel.dispose();
+		this._disposeObjects("__tableModel");
 	}
 });

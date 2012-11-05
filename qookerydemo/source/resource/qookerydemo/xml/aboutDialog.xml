@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
+
+    <!-- Form fields -->
+
+	<label label="Qookery Demo and Playground application" text-color="blue" />
+
+    <button label="Close">
+		<script event="execute">
+			$.form.dispose();
+		</script>
+	</button>
+
+</form>

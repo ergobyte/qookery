@@ -55,7 +55,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		setModel: function(model) {
 			qx.log.Logger.debug(this, "Setting model");
-			if(model == null) return;
 			this.__controller.setModel(model);
 			this.fireEvent("modelChanged", qx.event.type.Event, null);
 		},

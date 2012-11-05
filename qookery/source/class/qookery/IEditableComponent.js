@@ -43,6 +43,14 @@ qx.Interface.define("qookery.IEditableComponent", {
 	members: {
 
 		/**
+		 * Create a two way binding between controller and component's value
+		 *	
+		 * @param controller {qx.data.controller.Object} The form controller that the bindings
+		 * @param path {String} The protocol path
+		 */
+		connect: function(controller, propertyPath) { },
+
+		/**
 		 * Add a validation to the component
 		 *
 		 * @param validationOptions {Object} validation options, see below

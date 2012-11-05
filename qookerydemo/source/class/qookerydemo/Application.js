@@ -31,6 +31,7 @@ qx.Class.define("qookerydemo.Application", {
 		__toolBar: null,
 		__xmlEditor: null,
 		__resultArea: null,
+		__modelArea: null,
 		
 		main: function() {
 			this.base(arguments);
@@ -42,15 +43,22 @@ qx.Class.define("qookerydemo.Application", {
 			this.__toolbar = new qookerydemo.Toolbar();
 			this.__xmlEditor = new qookerydemo.XmlEditor();
 			this.__resultArea = new qookerydemo.ResultArea();
-
-			var splitter = new qx.ui.splitpane.Pane("horizontal");
-			splitter.add(this.__xmlEditor, 0);
-			splitter.add(this.__resultArea, 1);
+			this.__modelArea = new qookerydemo.JsonModelArea();
+					
+			var splitter = new qx.ui.splitpane.Pane("vertical");
+			splitter.add(this.__xmlEditor);
+			splitter.add(this.__modelArea);
+			
+			var outerSplitter = new qx.ui.splitpane.Pane("horizontal");
+			outerSplitter.add(splitter);
+			outerSplitter.add(this.__resultArea);
 			
 			var mainContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 			mainContainer.add(this.__toolbar, { flex: 0 });
-			mainContainer.add(splitter, { flex: 1 });
+			mainContainer.add(outerSplitter, { flex: 1 });
 			this.getRoot().add(mainContainer, { edge: 0 });
+			
+			qookery.Qookery.getInstance().setModelProvider(qookery.impl.DefaultModelProvider.getInstance());
 			
 			qx.dom.Element.remove(document.getElementById('splash'));
 		},
@@ -64,8 +72,16 @@ qx.Class.define("qookerydemo.Application", {
 			this.__resultArea.loadForm(xmlCode);
 		},
 
-		setEditor: function(text) {
-			this.__xmlEditor.setCode(text);
+		setModelAreaCode: function(code) {
+			this.__modelArea.setCode(code);			
+		},
+
+		setXmlEditorCode: function(code) {
+			this.__xmlEditor.setCode(code);
+		},
+		
+		setFormModel: function(model) {
+			this.__resultArea.getFormComponent().setModel(model);
 		}
 	},
 

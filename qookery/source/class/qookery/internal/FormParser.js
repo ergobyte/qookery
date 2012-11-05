@@ -33,6 +33,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"check-box": qookery.internal.components.CheckBoxComponent,
 			"composite": qookery.internal.components.CompositeComponent,
 			"date-field": qookery.internal.components.DateChooserComponent,
+			"form": qookery.internal.components.FormComponent,
 			"group-box": qookery.internal.components.GroupComponent,
 			"label": qookery.internal.components.LabelComponent,
 			"password-field": qookery.internal.components.PasswordComponent,
@@ -281,7 +282,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		
 		__resolveQName: function(qname) {
 			var parts = qname.split(":");
-			if(parts.length == 1) return qname;
+			if(parts.length == 1) return [ "", qname ];
 			var prefix = parts[0];
 			var localPart = parts[1];
 			var namespaceUri = this.__namespaces[prefix];

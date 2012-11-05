@@ -94,6 +94,7 @@
 		<attribute name="icon" type="anyURI" />
 		<attribute name="enabled" type="boolean" default="true" />
 		<attribute name="visible" type="boolean" default="true" />
+		<attribute name="text-color" type="string" default="black"/>
 
 		<!-- Layout item -->
 		<attribute name="width" type="tns:widget-size" />
@@ -195,6 +196,7 @@
 			<element name="check-box" type="tns:editable-component" />
 			<element name="composite" type="tns:container-component" />
 			<element name="date-field" type="tns:editable-component" />
+			<element ref="tns:form" />
 			<element name="group-box" type="tns:container-component" />
 			<element name="label" type="tns:component" />
 			<element name="password-field" type="tns:editable-component" />

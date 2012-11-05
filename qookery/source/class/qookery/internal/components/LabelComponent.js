@@ -32,9 +32,6 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 
 		create: function(createOptions) {
 			this.__variant = createOptions["variant"] || "plain";
-			if(createOptions['rich'] == "true") {
-				this._widgets[0].setRich(true);
-			}
 			if(this.__variant == "separator") {
 				this._widgets[0] = new qx.ui.core.Widget().set({
 					decorator: "separator-horizontal",
@@ -44,8 +41,11 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 			}
 			else {
 				this._widgets[0] = new qx.ui.basic.Label(createOptions['label']);
+				if(qx.util.ColorUtil.isValidPropertyValue(createOptions['text-color'])) 
+					this._widgets[0].setTextColor(createOptions['text-color']);
+				if(createOptions['rich'] == "true")
+					this._widgets[0].setRich(true);
 			}
-			
 			this.base(arguments, createOptions);
 		},
 		

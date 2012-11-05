@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	
+-->
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
+	<table id="passwordsTable" label="User passwords" connect="passwords">
+		<script>
+			var columns = ["Username","Password"];
+			var columnIds = ["username", "password"];
+			this.initialize({ "columns" : columns, 
+				"columnIds": columnIds, 
+				"editable" : false });
+		</script>
+		<script>
+			this.addListener("changeSelection", function(event) {
+				var data = event.getData();
+				$("#subForm").setModel(data);
+			})
+		</script>
+	</table>
+	<form id="subForm" column-flexes="1">
+		<composite column-count="2" column-flexes="0 1">
+			<text-field  required="true" label= "Username" connect="username"/>
+			<text-field required="true" label= "Password" connect="password"/>
+		</composite>
+	</form>
+</form>

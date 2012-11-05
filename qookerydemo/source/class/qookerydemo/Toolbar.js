@@ -24,8 +24,9 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 	statics: {
 		DEMOS: [
-			{ label: "Hello, World!", file: "helloWorld.xml" },
-			{ label: "Login Dialog", file: "loginDialog.xml" }
+			{ label: "Hello, World!", formFile: "helloWorld.xml"},
+			{ label: "Login Dialog", formFile: "loginDialog.xml", dataFile: "loginDialog.json" },
+			{ label: "Master Details", formFile: "masterDetails.xml", dataFile: "masterDetails.json" }
 		]
 	},
 
@@ -36,11 +37,16 @@ qx.Class.define("qookerydemo.Toolbar", {
 			qx.core.Init.getApplication().runCode();
 		}, this);
 		
+		var aboutButton = new qx.ui.toolbar.Button("About", "resource/qookerydemo/icons/24/about_gs.png");
+		aboutButton.addListener("execute", function () {
+			qookerydemo.AboutWindow.open();
+		}, this);
+		
 		var demoListMenu = new qx.ui.menu.Menu();
 		qookerydemo.Toolbar.DEMOS.forEach(function(demoArguments, index) {
 			var button = new qx.ui.menu.Button(demoArguments['label']);
 			button.addListener("execute", function() {
-				this.getDemo(demoArguments['file'])
+				this.getDemo(demoArguments['formFile'], demoArguments['dataFile']);
 			}, this);
 			demoListMenu.add(button);
 		}, this);
@@ -49,19 +55,23 @@ qx.Class.define("qookerydemo.Toolbar", {
 		demoMenu.setMenu(demoListMenu);
 		this.add(demoMenu);
 		this.add(runAgainButton);
+		this.add(aboutButton);
 	},
 
 	members: {
 		
-		getDemo: function(url) {
-			var req = new qx.bom.request.Xhr();
-			req.onload = function() {
-				var xmlCode = req.responseText;
-				qx.core.Init.getApplication().setEditor(xmlCode);
+		getDemo: function(formUrl, dataUrl) {
+			qookerydemo.Utils.getFile(formUrl, function(event, req) {
+				qx.core.Init.getApplication().setXmlEditorCode(req.responseText);
 				qx.core.Init.getApplication().runCode();
+			});
+			if(!dataUrl) {
+				qx.core.Init.getApplication().setModelAreaCode("");
+				return;
 			}
-			req.open("GET", qx.lang.String.format("resource/qookerydemo/xml/%1?nocache=%2", [ url, new Date().getTime() ]));
-			req.send();
+			qookerydemo.Utils.getFile(dataUrl, function(event, req) {
+				qx.core.Init.getApplication().setModelAreaCode(req.responseText);
+			});
 		}
 	}
 });

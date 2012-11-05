@@ -52,6 +52,10 @@ qx.Class.define("qookerydemo.ResultArea",
 			finally {
 				parser.dispose();
 			}
+		},
+		
+		getFormComponent: function() {
+			return this.__formComponent;
 		}
 	},
 
