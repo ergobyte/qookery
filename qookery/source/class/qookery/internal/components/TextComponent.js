@@ -40,6 +40,12 @@ qx.Class.define("qookery.internal.components.TextComponent", {
 		
 		_applyValue: function(value) {
 			this.getMainWidget().setValue(this._getLabelOf(value));
+		},
+		
+		_applyReadOnly: function(readOnly) {
+			var mainWidget = this.getMainWidget();
+			if(!mainWidget) return;
+			mainWidget.setReadOnly(readOnly);
 		}
 	}
 });

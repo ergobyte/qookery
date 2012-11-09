@@ -35,17 +35,21 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", event: "valueChanged" },
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
 	    toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
-		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" }
+		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
+		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" }
 	},
 	
 	members: {
 
+		_disableValueEvents: false,
+		
 		create: function(createOptions) {
 			this._widgets[0] = this._createMainWidget(createOptions);
 			this._widgets[1] = new qx.ui.basic.Label();
 			this._setupLabelAppearance(this._widgets[1], createOptions);
 			if(createOptions['label']) this.setLabel(createOptions['label']);
 			if(createOptions['required']) this.setRequired(true);
+			if(createOptions['read-only']) this.setReadOnly(true);
 			this.base(arguments, createOptions);
 		},
 		
@@ -95,9 +99,19 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		// Properties
 
 		_applyValue: function(value) {
-			// Override to update UI according to value
+			this._disableValueEvents = true;
+			try {
+				this._updateUI(value);
+			}
+			finally {
+				this._disableValueEvents = false;
+			}
 		},
-		
+
+		_updateUI: function(value) {
+			// Override to update UI according to new value
+		},
+
 		_applyLabel: function(label) {
 			var labelWidget = this.getLabelWidget();
 			if(labelWidget) labelWidget.setValue(label);
@@ -122,6 +136,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			else {
 				qx.log.Logger.error(this, "Illegal argument for setRequired()");
 			}
+		},
+		
+		_applyReadOnly: function(readOnly) {
+			// Subclasses should override to implement the read only property
 		},
 
 		// Utility methods for subclasses

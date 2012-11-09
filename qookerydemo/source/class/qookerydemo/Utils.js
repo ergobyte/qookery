@@ -28,10 +28,33 @@ qx.Class.define("qookerydemo.Utils", {
 			var req = new qx.bom.request.Xhr();
 			if(callback != null)
 				req.onload = function(event) {
-					callback(event, req);
-				}
+					callback(req);
+				};
 			req.open("GET", qx.lang.String.format("resource/qookerydemo/xml/%1?nocache=%2", [ url, new Date().getTime() ]));
 			req.send();
+		},
+		
+		createFormComponent: function(xmlCode, parentComposite, layoutData, formCloseHandler) {
+			var xmlDocument = qx.xml.Document.fromString(xmlCode);
+			var parser = qookery.Qookery.getInstance().createNewParser();
+			try {
+				var formComponent = parser.create(xmlDocument, parentComposite, layoutData);
+				formComponent.addListener("closeForm", function(event) {
+					if(formCloseHandler) formCloseHandler(event);
+					qx.log.Logger.debug(parentComposite, "Form window destroyed");
+				});
+				formComponent.fireEvent("openForm", qx.event.type.Event, null);
+				qx.log.Logger.debug(parentComposite, "Form window created");
+				return formComponent;
+			}
+			catch(e) {
+				qx.log.Logger.error(parentComposite, "Error creating form window");
+				qx.log.Logger.error(e.stack);
+			}
+			finally {
+				parser.dispose();
+			}
+			return null;
 		}
 	}
 });

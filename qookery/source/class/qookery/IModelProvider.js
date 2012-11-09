@@ -54,7 +54,11 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * @param namespaceUri {String} a namespace URI that the provider may use to differentiate connection types
 		 * @param path {String} the path of the property specified by the XML author
 		 */
-		handleConnection: function(connectableComponent, connectionUri, path) { }
+		handleConnection: function(connectableComponent, connectionUri, path) { },
 		
+		/**
+		 * Clone an object
+		 */
+		clone: function(object) { }
 	}
 });

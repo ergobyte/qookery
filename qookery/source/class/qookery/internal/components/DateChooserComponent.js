@@ -31,19 +31,45 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 	},
 	
 	members: {
+		
+		initialize: function(initOptions) {
+			if(!initOptions || !initOptions["dateFormat"]) return;
+			var dateField = this.getMainWidget();
+			dateField.setDateFormat(new qx.util.format.DateFormat(initOptions["dateFormat"]));
+		},
 
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
 			widget.addListener("changeValue", function(event) {
-				this.setValue(event.getData());
+				if(event.getData() instanceof Date && !this._disableValueEvents) // convert date to ISO 8601
+					this.setValue(event.getData().toISOString());
 			}, this);
 			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
 		
-		_applyValue: function(value) {
+		_updateUI: function(value) {
 			var dateField = this.getMainWidget();
+			if(!value) {
+				dateField.resetValue();
+				return;
+			}
+			value = this.__convertFromString(value);
 			dateField.setValue(value);
+		},
+		
+		__convertFromString: function(dateString) {
+			var reggie = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g;
+			var dateArray = reggie.exec(dateString); 
+			var dateObject = new Date(
+				(+dateArray[1]),
+				(+dateArray[2])-1,//month starts with 0
+				(+dateArray[3]),
+				(+dateArray[4]),
+				(+dateArray[5]),
+				(+dateArray[6])
+			);
+			return dateObject;
 		}
 	}
 });

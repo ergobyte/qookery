@@ -44,34 +44,16 @@ qx.Class.define("qookerydemo.AboutWindow", {
 	
 	members: {
 		
-		__formComponent: null,
-		
 		__xmlInit: function() {
 			var formUrl = "aboutDialog.xml";
 			var that = this;
-			qookerydemo.Utils.getFile(formUrl, function (event, req) {
-				var data =  req.responseText;
-				var xmlDocument = qx.xml.Document.fromString(data);
-				var parser = qookery.Qookery.getInstance().createNewParser();
-				try {
-					that.__formComponent = parser.create(xmlDocument, that, { row: 0, column: 0});
-					that.__formComponent.addListener("formClose", function() {
-						that.close();
-						qx.log.Logger.debug(that, qx.lang.String.format("Form window '%1' destroyed", [ formUrl ]));
-					}, that);
-					that.center();
-					that.open();
-					that.__formComponent.fireEvent("formOpen", qx.event.type.Event, null);
-					qx.log.Logger.debug(that, qx.lang.String.format("Form window '%1' created", [ formUrl ]));
-				}
-				catch(e) {
-					qx.log.Logger.error(that, qx.lang.String.format("Error creating form window '%1'", [ formUrl ]));
-					qx.log.Logger.error(e.stack);
-				}
-				finally {
-					parser.dispose();
-				}
-			}, this);
+			qookerydemo.Utils.getFile(formUrl, function(req) {
+				qookery.impl.QookeryContext.createFormComponent(req.responseText, that, { row: 0, column: 0 }, function () {
+					that.close();
+				});
+				that.center();
+				that.open();
+			});
 		}
 	}
 });

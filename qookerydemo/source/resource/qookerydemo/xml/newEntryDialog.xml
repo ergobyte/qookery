@@ -14,17 +14,17 @@
 	<!-- Buttons -->
 
 	<composite column-count="auto" max-width="300" alignment-x="right" column-flexes="1 1">
-		<button label="Login">
+		<button label="OK">
 			<script event="execute">
 				if(!$.form.validate()) return;
 				var username = $("#username").getValue();
 				var password = $("#password").getValue();
-				alert("Login would have succeeded... probably");
+				$.form.close("OK");
 			</script>
 		</button>
 		<button label="Cancel">
 			<script event="execute">
-				$.form.dispose();
+				$.form.close();
 			</script>
 		</button>
 	</composite>

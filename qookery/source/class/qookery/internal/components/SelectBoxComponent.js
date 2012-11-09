@@ -82,6 +82,11 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 					selectBox.add(listItem);
 				}
 			}
+		},
+		
+		initialize: function(initOptions) {
+			if(!initOptions || !initOptions["itemsMap"]) return;
+			this.setItems(initOptions["itemsMap"]);
 		}
 	}
 });

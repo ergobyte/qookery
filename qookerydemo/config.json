@@ -53,7 +53,8 @@
 		},
 		"includes": {
 			"include": [
-				"qookery.*"
+				"qookery.*",
+				"qookerydemo.*"
 			]
 		}
 	}

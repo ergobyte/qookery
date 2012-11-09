@@ -97,6 +97,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		getMainWidget: function() {
 			return this.listWidgets('main')[0];
 		},
+		
+		initialize: function(initOptions) {
+			// Subclasses that require additional initialization
+			// should override this method
+		},
 
 		getParent: function() {
 			return this.__parentComponent;
@@ -118,11 +123,21 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 * @param {String} clientCode The JavaScript source code to execute when the event is triggered
 		 */
 		addEventHandler: function(eventName, clientCode) {
+			if(qx.Class.supportsEvent(this.constructor, eventName)) {
+				this.addListener(eventName, function(event) {
+					this.executeClientCode(clientCode, event);
+				}, this);
+				return;
+			}
 			var mainWidget = this.getMainWidget();
-			if(mainWidget == null) throw new Error("Unable to attach listener to component without a main widget");
-			mainWidget.addListener(eventName, function(event) {
-				this.executeClientCode(clientCode, event);
-			}, this);
+			if(mainWidget != null && qx.Class.supportsEvent(mainWidget.constructor, eventName)) {
+				mainWidget.addListener(eventName, function(event) {
+					this.executeClientCode(clientCode, event);
+				}, this);
+				return;
+			}
+			throw new Error(qx.lang.String.format(
+					"Event %1 not supported", eventName));
 		},
 
 		/**
@@ -137,7 +152,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				clientFunction.call(this, this.getForm().getClientCodeContext(), event);
 			}
 			catch(error) {
-				qx.log.Logger.error(this, qx.lang.String.format("Error executing client code: %1\n\n%2", [ error, clientCode ]));
+				qx.log.Logger.error(this, qx.lang.String.format(
+						"Error executing client code: %1\n\n%2", [ error, clientCode ]));
 			}
 		},
 

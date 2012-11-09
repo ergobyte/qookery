@@ -26,7 +26,9 @@ qx.Class.define("qookerydemo.Toolbar", {
 		DEMOS: [
 			{ label: "Hello, World!", formFile: "helloWorld.xml"},
 			{ label: "Login Dialog", formFile: "loginDialog.xml", dataFile: "loginDialog.json" },
-			{ label: "Master Details", formFile: "masterDetails.xml", dataFile: "masterDetails.json" }
+			{ label: "Master Details", formFile: "masterDetails.xml", dataFile: "masterDetails.json" },
+			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", dataFile: "tableWithFormEditor.json" },
+			{ label: "Multiple Connections", formFile: "multipleConnections.xml", dataFile: "multipleConnections.json" }
 		]
 	},
 
@@ -61,7 +63,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 	members: {
 		
 		getDemo: function(formUrl, dataUrl) {
-			qookerydemo.Utils.getFile(formUrl, function(event, req) {
+			qookerydemo.Utils.getFile(formUrl, function(req) {
 				qx.core.Init.getApplication().setXmlEditorCode(req.responseText);
 				qx.core.Init.getApplication().runCode();
 			});
@@ -69,7 +71,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 				qx.core.Init.getApplication().setModelAreaCode("");
 				return;
 			}
-			qookerydemo.Utils.getFile(dataUrl, function(event, req) {
+			qookerydemo.Utils.getFile(dataUrl, function(req) {
 				qx.core.Init.getApplication().setModelAreaCode(req.responseText);
 			});
 		}

@@ -38,6 +38,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	members: {
 
 		__tableModel: null,
+		__selectedRowIndex: null,
 		
 		initialize: function(options) {
 			if(!options || !options["columns"]) return;
@@ -48,16 +49,44 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this._widgets[0].setTableModel(this.__tableModel);
 		},
 		
+		getRow: function(rowIndex) {
+			return this.getValue().getItem(rowIndex);
+		},
+		
+		addRow: function(newRowModel) {
+			this.getValue().push(newRowModel);
+			this.__tableModel.addRowsAsMapArray([ newRowModel ], this.getValue().length - 1);
+		},
+		
+		removeRow: function(rowIndex) {
+			this.__tableModel.removeRows(rowIndex, 1);
+			this.getValue().removeAt(rowIndex);
+		},
+		
+		replaceRow: function(rowIndex, newModel) {
+			this.__tableModel.setRowsAsMapArray([ newModel ], rowIndex);
+			this.getValue().setItem(rowIndex, newModel);
+			this.fireDataEvent("changeSelection", newModel);
+		},
+		
+		getSelectedRowIndex: function() {
+			return this.__selectedRowIndex;
+		},
+		
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.table.Table();
 			widget.getSelectionModel().addListener('changeSelection', function(e) {
 				var selectionModel = e.getTarget();
 				var selectionRanges = selectionModel.getSelectedRanges();
-				var selectionIndex = selectionRanges[0].minIndex;
-				this.fireDataEvent("changeSelection", this.getValue().getItem(selectionIndex));
+				if(selectionRanges.length == 0) {
+					this.fireDataEvent("changeSelection", null);
+					return;
+				}
+				this.__selectedRowIndex = selectionRanges[0].minIndex;
+				this.fireDataEvent("changeSelection", this.getValue().getItem(this.__selectedRowIndex));
 			}, this);
 
-			this._applyLayoutProperties(this._widgets[0], createOptions);
+			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
 

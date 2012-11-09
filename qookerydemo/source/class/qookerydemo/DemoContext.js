@@ -18,24 +18,27 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.TabHolderComponent", {
+qx.Class.define("qookerydemo.DemoContext", {
+	
+	type: "static",
+	
+	statics: {
 
-	extend: qookery.internal.components.ContainerComponent,
-
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
-	},
-
-	members: {
-		
-		create: function(createOptions) {
-			this._widgets[0] = this._createContainerWidget(createOptions);
+		openAboutWindow: function() {
+			qookerydemo.AboutWindow.open();
 		},
-
-		_createContainerWidget: function(createOptions) {
-			var  tabView = new qx.ui.tabview.TabView();
-			this._applyLayoutProperties(tabView, createOptions);
-			return tabView;
+		
+		loadForm: function(formUrl, callback) {
+			qookerydemo.Utils.getFile(formUrl, callback);
+		},
+		
+		createModel: function(jsObject) {
+			return qx.data.marshal.Json.createModel(jsObject, true);
+		},
+		
+		cloneModel: function(model) {
+			var jsObject = qx.util.Serializer.toNativeObject(model);
+			return qx.data.marshal.Json.createModel(jsObject, true);
 		}
 	}
 });

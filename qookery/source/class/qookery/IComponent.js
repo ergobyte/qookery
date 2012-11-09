@@ -72,7 +72,7 @@ qx.Interface.define("qookery.IComponent", {
 		 * @return {qx.ui.core.Widget[]} widget list - an empty array if none found
 		 */
 		listWidgets: function(filterName) { },
-
+		
 		/**
 		 * Return the first main widget
 		 * 
@@ -80,6 +80,13 @@ qx.Interface.define("qookery.IComponent", {
 		 * 
 		 * @return {qx.ui.core.Widget} the first main widget
 		 */
-		getMainWidget: function() { }
+		getMainWidget: function() { },
+		
+		/**
+		 * Perform additional component initialization
+		 * 
+		 * <p>This method is intended to be called by XML authors</p>
+		 */
+		initialize: function(initOptions) { }
 	}
 });

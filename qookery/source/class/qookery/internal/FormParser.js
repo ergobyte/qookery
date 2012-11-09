@@ -35,10 +35,14 @@ qx.Class.define("qookery.internal.FormParser", {
 			"date-field": qookery.internal.components.DateChooserComponent,
 			"form": qookery.internal.components.FormComponent,
 			"group-box": qookery.internal.components.GroupComponent,
+			"image": qookery.internal.components.ImageComponent,
 			"label": qookery.internal.components.LabelComponent,
+			"list": qookery.internal.components.ListComponent,
 			"password-field": qookery.internal.components.PasswordComponent,
 			"radio-group": qookery.internal.components.RadioComponent,
 			"select-box": qookery.internal.components.SelectBoxComponent,
+			"slider": qookery.internal.components.SliderComponent,
+			"spinner": qookery.internal.components.SpinnerComponent,
 			"tab-view": qookery.internal.components.TabHolderComponent,
 			"tab-view-page": qookery.internal.components.TabPageComponent,
 			"table": qookery.internal.components.TableComponent,
@@ -214,6 +218,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "stretch-y":
 				case "stretch":
 				case "required":
+				case "read-only":
 					value = text == "true"; break;
 				default:
 					value = text;

@@ -24,17 +24,53 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__manager = new qx.ui.form.RadioGroup();
+		this.__manager.setAllowEmptySelection(true);
 	},
 	
 	members: {
+		
+		__container: null,
+		__manager: null,
+		__radioButtonsMap: { },
+		
+		initialize: function(initOptions) {
+			if(!initOptions || !initOptions["itemsMap"]) return;
+			this.__emptyManager();
+			for(var property in initOptions["itemsMap"]) {
+				var radioButton = new qx.ui.form.RadioButton(initOptions["itemsMap"][property]);
+				this.__radioButtonsMap[property] = radioButton;
+				this.__container.add(radioButton);
+				this.__manager.add(radioButton);
+			}
+			this.__manager.addListener("changeSelection", this.__onChangeSelection, this);
+		},
 
-		create: function(createOptions) {
-			this.base(arguments, createOptions);
-			this.setLabel(""); // The label is used in the main widget
+		_createMainWidget: function(createOptions) {
+			var mainLayout = new qx.ui.layout.HBox();
+      		mainLayout.setSpacing(10);
+			this.__container = new qx.ui.container.Composite(mainLayout);
+			this._applyLayoutProperties(this.__container, createOptions);
+			return this.__container;
 		},
 		
-		_createMainWidget: function(createOptions) {
-			return new qx.ui.form.RadioGroup();
+		_updateUI: function(value) {
+			if(!value || !this.__radioButtonsMap[value]) {
+				this.__manager.resetSelection();
+				return;
+			}
+			this.__manager.setSelection([this.__radioButtonsMap[value]]);
+		},
+		
+		__emptyManager: function() {
+			for(var radioButton in this.__radioButtonsMap) this.__manager.remove(radioButton);
+			this.__radioButtonsMap = { };
+		},
+		
+		__onChangeSelection:function(e) {
+			if(e.getData().length == 0 || this._disableValueEvents) return;
+			var selectedButton = e.getData()[0];
+      		this.setValue(qx.lang.Object.getKeyFromValue(this.__radioButtonsMap, selectedButton));
 		}
 	}
 });

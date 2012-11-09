@@ -168,6 +168,7 @@
 			<extension base="tns:component-attributes">
 				<attribute name="connect" type="string" />
 				<attribute name="required" type="boolean" default="false" />
+				<attribute name="read-only" type="boolean" default="false" />
 			</extension>
 		</complexContent>
 	</complexType>
@@ -198,13 +199,17 @@
 			<element name="date-field" type="tns:editable-component" />
 			<element ref="tns:form" />
 			<element name="group-box" type="tns:container-component" />
+			<element name="image" type="tns:component" />
 			<element name="label" type="tns:component" />
+			<element name="list" type="tns:editable-component" />
 			<element name="password-field" type="tns:editable-component" />
 			<element name="radio-group" type="tns:editable-component" />
 			<element name="select-box" type="tns:editable-component" />
+			<element name="slider" type="tns:editable-component" />
+			<element name="spinner" type="tns:editable-component" />
 			<element name="tab-view" type="tns:container-component" />
 			<element name="tab-view-page" type="tns:container-component" />
-			<element name="table" type="tns:component" />
+			<element name="table" type="tns:editable-component" />
 			<element name="text-area" type="tns:editable-component" />
 			<element name="text-field" type="tns:editable-component" />
 		</choice>

@@ -30,12 +30,12 @@ qx.Interface.define("qookery.IFormComponent", {
 		/**
 		 * This event is fired when a Qookery form is about to close.
 		 */
-		"formClose": "qx.event.type.Event",
+		"closeForm": "qx.event.type.Event",
 
 		/**
 		 * Event for informing listeners that a Qookery form's model has changed
 		 */
-		"modelChanged": "qx.event.type.Event"
+		"changeModel": "qx.event.type.Event"
 	},
 
 	members: {
