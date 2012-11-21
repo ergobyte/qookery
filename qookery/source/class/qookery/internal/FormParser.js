@@ -28,27 +28,6 @@ qx.Class.define("qookery.internal.FormParser", {
 	implement: [ qookery.IFormParser ],
 	
 	statics: {
-		COMPONENTS: {
-			"button": qookery.internal.components.ButtonComponent,
-			"check-box": qookery.internal.components.CheckBoxComponent,
-			"composite": qookery.internal.components.CompositeComponent,
-			"date-field": qookery.internal.components.DateChooserComponent,
-			"form": qookery.internal.components.FormComponent,
-			"group-box": qookery.internal.components.GroupComponent,
-			"image": qookery.internal.components.ImageComponent,
-			"label": qookery.internal.components.LabelComponent,
-			"list": qookery.internal.components.ListComponent,
-			"password-field": qookery.internal.components.PasswordComponent,
-			"radio-group": qookery.internal.components.RadioComponent,
-			"select-box": qookery.internal.components.SelectBoxComponent,
-			"slider": qookery.internal.components.SliderComponent,
-			"spinner": qookery.internal.components.SpinnerComponent,
-			"tab-view": qookery.internal.components.TabHolderComponent,
-			"tab-view-page": qookery.internal.components.TabPageComponent,
-			"table": qookery.internal.components.TableComponent,
-			"text-area": qookery.internal.components.TextAreaComponent,
-			"text-field": qookery.internal.components.TextComponent
-		},
 		NAMED_SIZES: {
 			"XXS":  28,
 			"XS" :  46,
@@ -119,7 +98,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
-				if(qookery.internal.FormParser.COMPONENTS[elementName])
+				if(qookery.Qookery.getInstance().getRegistry().getComponent(elementName))
 					this.__parseStatement(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
@@ -141,7 +120,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		 */
 		__parseStatement: function(statementElement, parentComponent) { 
 			var componentType = qx.dom.Node.getName(statementElement);
-			var componentClass = qookery.internal.FormParser.COMPONENTS[componentType];
+			var componentClass = qookery.Qookery.getInstance().getRegistry().getComponent(componentType);
 			if(!componentClass) 
 				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
 

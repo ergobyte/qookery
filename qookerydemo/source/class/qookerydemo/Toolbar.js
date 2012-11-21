@@ -63,7 +63,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 	members: {
 		
 		getDemo: function(formUrl, dataUrl) {
-			qookerydemo.Utils.getFile(formUrl, function(req) {
+			qookerydemo.DemoContext.loadForm(formUrl, function(req) {
 				qx.core.Init.getApplication().setXmlEditorCode(req.responseText);
 				qx.core.Init.getApplication().runCode();
 			});
@@ -71,7 +71,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 				qx.core.Init.getApplication().setModelAreaCode("");
 				return;
 			}
-			qookerydemo.Utils.getFile(dataUrl, function(req) {
+			qookerydemo.DemoContext.loadForm(dataUrl, function(req) {
 				qx.core.Init.getApplication().setModelAreaCode(req.responseText);
 			});
 		}

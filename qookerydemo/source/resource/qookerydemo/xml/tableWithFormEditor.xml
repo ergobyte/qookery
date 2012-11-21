@@ -10,11 +10,9 @@
 	<script>
 		$.addRow = function() {
 			var rowModel = $.demo.createModel({ "username": "", "password": "" });
-			$.demo.loadForm("newEntryDialog.xml", function(req) {
-				$.qookery.openWindow(req.responseText, rowModel, function(result) {
-					if(result == "OK") $("#passwordsTable").addRow(rowModel);
-				});
-			});
+			$.qookery.openWindow("resource/qookerydemo/xml/newEntryDialog.xml", rowModel, function(result) {
+				if(result == "OK") $("#passwordsTable").addRow(rowModel);
+			}, "Add Row Model");
 		};
 		$.removeRow = function() {
 			var table = $("#passwordsTable");
@@ -25,11 +23,9 @@
 			var table = $("#passwordsTable");
 			if(table.getSelectedRowIndex() == undefined) return;
 			var rowModel = $.demo.cloneModel(table.getRow(table.getSelectedRowIndex()));
-			$.demo.loadForm("newEntryDialog.xml", function(req) {
-				$.qookery.openWindow(req.responseText, rowModel, function(result) {
-					if(result == "OK") table.replaceRow(table.getSelectedRowIndex(), rowModel);
-				});
-			});
+			$.qookery.openWindow("resource/qookerydemo/xml/newEntryDialog.xml", rowModel, function(result) {
+				if(result == "OK") table.replaceRow(table.getSelectedRowIndex(), rowModel);
+			}, "Edit Row Model");
 		};
 	</script>
 
@@ -37,8 +33,10 @@
 		<table id="passwordsTable" connect="passwords">
 			<script>
 				this.initialize({
-					columns: [ "Username", "Password" ],
-					columnIds: [ "username", "password" ]
+					columns: [
+						{ connect: "password", label: "Password" },
+						{ connect: "username", label: "Username", sortable: false, editable: true,  }
+					]
 				});
 			</script>
 			<script event="cellDblclick">

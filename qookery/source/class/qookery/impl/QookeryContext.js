@@ -28,23 +28,16 @@ qx.Class.define("qookery.impl.QookeryContext", {
 			return null;
 		},
 		
-		openWindow: function(xmlCode, model, resultCallback) {
-			var window = new qx.ui.window.Window();
-			window.set({ minWidth: 500, modal: true, showMinimize: false, showMaximize: false});
-			var grid = new qx.ui.layout.Grid();
-			grid.setColumnFlex(0, 1);
-	      	grid.setRowFlex(0, 1);
-			window.setLayout(grid);
-			var formComponent = qookery.impl.QookeryContext.createFormComponent(xmlCode, window, { row: 0, column: 0}, function () {
-				window.close();
-			});
-			window.center();
-			window.open();
-			formComponent.setModel(model);
-			window.addListener("disappear", function() {
-				resultCallback(formComponent.getResult());
-				window.destroy();
-				window = null;
+		openWindow: function(formUrl, model, resultCallback, title, icon) {
+			icon = icon || null;
+			title = title || null;
+			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, function(req) {
+				var window = new qookery.impl.FormWindow(title, icon);
+				window.createAndOpen(req.responseText, model);
+				window.addListener("disappear", function() {
+					resultCallback(window.getFormComponent().getResult());
+					window = null;
+				});
 			});
 		}
 	}

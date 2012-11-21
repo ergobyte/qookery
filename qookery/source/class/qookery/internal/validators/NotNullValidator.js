@@ -21,17 +21,26 @@
 qx.Class.define("qookery.internal.validators.NotNullValidator", {
 
 	extend: qx.core.Object,
-
-	construct : function(message) {
-		if(message == null || message.length == 0)
-			throw new Error("Validation message is required for not-null validator");
-		return function(validator, value) {
-			window.setTimeout(function() {
-				if (value == null || value.length == 0)
-					validator.setValid(false, message);
-				 else
-					validator.setValid(true);
-			}, 100);
-		};
+	implement: [ qookery.IValidator ],
+	type: "singleton",
+	
+	construct : function() {
+		this.base(arguments);
+	},
+	
+	members: {
+		createValidatorFunction: function(options) {
+			var message = options['message'];
+			if(!message || message.length == 0)
+				throw new Error("Validation message is required for not-null validator");
+			return function(validator, value) {
+				window.setTimeout(function() {
+					if (!value || value.length == 0)
+						validator.setValid(false, message);
+					 else
+						validator.setValid(true);
+				}, 100);
+			};
+		}
 	}
 });

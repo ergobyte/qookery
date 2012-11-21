@@ -30,6 +30,8 @@ qx.Class.define("qookery.impl.SimpleTableModel", {
 
    		// Simple model implementations
 		
+		__table: null,
+		
 		setData: function(data) {
 			var newData = (data instanceof qx.data.Array) ? data.toArray() : data;
 			this.base(arguments, newData);
@@ -38,6 +40,18 @@ qx.Class.define("qookery.impl.SimpleTableModel", {
 		setDataAsMapArray: function(data) {
 			var newData = (data instanceof qx.data.Array) ? data.toArray() : data;
 			this.base(arguments, newData);
+		},
+		
+		setTable: function(table) {
+			this.__table = table;
+		},
+		
+		getItem: function(rowIndex) {
+			return this.__table.getValue().getItem(rowIndex);
+		},
+		
+		reloadData: function() {
+			;//Implement if you want to reload model data.
 		},
 			
 		_mapArray2RowArr : function(mapArr, rememberMaps) {

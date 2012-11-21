@@ -15,31 +15,19 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id$
+	$Id: IModelProvider.js 21 2012-11-09 11:56:48Z nikoslam@ergobyte.gr $
 */
 
-qx.Class.define("qookerydemo.DemoContext", {
-	
-	type: "static",
-	
-	statics: {
+/**
+ * TODO
+ */
+qx.Interface.define("qookery.IValidator", {
 
-		openAboutWindow: function() {
-			qookerydemo.AboutWindow.open();
-		},
-		
-		loadForm: function(formUrl, callback) {
-			formUrl = "resource/qookerydemo/xml/" + formUrl;
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, callback);
-		},
-		
-		createModel: function(jsObject) {
-			return qx.data.marshal.Json.createModel(jsObject, true);
-		},
-		
-		cloneModel: function(model) {
-			var jsObject = qx.util.Serializer.toNativeObject(model);
-			return qx.data.marshal.Json.createModel(jsObject, true);
-		}
+	members: {
+
+		/**
+		 * TODO
+		 */
+		createValidatorFunction: function(options) { }
 	}
 });

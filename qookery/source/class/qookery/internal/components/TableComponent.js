@@ -28,7 +28,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__tableModel = new qookery.impl.SimpleTableModel();
 	},
 	
 	properties: {
@@ -41,16 +40,24 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		__selectedRowIndex: null,
 		
 		initialize: function(options) {
-			if(!options || !options["columns"]) return;
-			var editable = options["editable"] || false;
-			var ids = options.hasOwnProperty("columnIds") ? options["columnIds"] : null;
-			this.__tableModel.setColumns(options["columns"], ids);
-			this.__tableModel.setEditable(editable);
+			if(!options || (!options["model"] && !options["columns"])) return;
+			if (options["model"]) this.__tableModel = options["model"];
+			else this.__tableModel =  new qookery.impl.SimpleTableModel();
+			this.__tableModel.setTable(this);
+			if (options["columns"]) {
+				var nameArray = new Array();
+				var labelArray = new Array();
+				for(var column in options["columns"]) {
+					nameArray.push(options["columns"][column]["connect"]);
+					labelArray.push(options["columns"][column]["label"]);
+				}
+				this.__tableModel.setColumns(labelArray, nameArray);
+			}
 			this._widgets[0].setTableModel(this.__tableModel);
 		},
 		
 		getRow: function(rowIndex) {
-			return this.getValue().getItem(rowIndex);
+			return this.__tableModel.getItem(rowIndex);
 		},
 		
 		addRow: function(newRowModel) {
@@ -69,8 +76,17 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.fireDataEvent("changeSelection", newModel);
 		},
 		
+		getTableModel: function() {
+			return this.__tableModel;
+		},
+		
 		getSelectedRowIndex: function() {
 			return this.__selectedRowIndex;
+		},
+		
+		reloadData: function() {
+			this.__tableModel.reloadData();
+			this.getMainWidget().getSelectionModel().resetSelection();
 		},
 		
 		_createMainWidget: function(createOptions) {
@@ -79,11 +95,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				var selectionModel = e.getTarget();
 				var selectionRanges = selectionModel.getSelectedRanges();
 				if(selectionRanges.length == 0) {
+					this.__selectedRowIndex = null;
 					this.fireDataEvent("changeSelection", null);
 					return;
 				}
 				this.__selectedRowIndex = selectionRanges[0].minIndex;
-				this.fireDataEvent("changeSelection", this.getValue().getItem(this.__selectedRowIndex));
+				this.fireDataEvent("changeSelection", this.__tableModel.getItem(this.__selectedRowIndex));
 			}, this);
 
 			this._applyLayoutProperties(widget, createOptions);

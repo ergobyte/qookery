@@ -21,17 +21,27 @@
 qx.Class.define("qookery.internal.validators.RegularExpressionValidator", {
 
 	extend: qx.core.Object,
+	implement: [ qookery.IValidator ],
+	type: "singleton",
 
-	construct : function (regex, message) {
-		if(message == null || message.length == 0)
-			throw new Error("Validation message is required for regular expression validator");
-		return function(validator, value) {
-			window.setTimeout(function() {
-				if(regex.test(value) == false)
-					validator.setValid(false, message);
-				 else 
-					validator.setValid(true);
-			}, 100);
-		};
+	construct: function () {
+		this.base(arguments);
+	},
+
+	members: {
+		createValidatorFunction: function(options) { 
+			var regex = options['regularExpression'];
+			var message = options['message'];
+			if(!message || message.length == 0 || !regex)
+				throw new Error("Validation message and regular expression is required for regular-expression validator");
+			return function(validator, value) {
+				window.setTimeout(function() {
+					if(regex.test(value) == false)
+						validator.setValid(false, message);
+					else 
+						validator.setValid(true);
+				}, 100);
+			};
+		}
 	}
 });

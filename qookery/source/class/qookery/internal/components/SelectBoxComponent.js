@@ -35,6 +35,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			var selectBox = new qx.ui.form.SelectBox();
 			this._applyLayoutProperties(selectBox, createOptions);
 			selectBox.addListener("changeSelection", function(event) {
+				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;
 				this.setValue(model);
@@ -42,7 +43,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			return selectBox;
 		},
 		
-		_applyValue: function(value) {
+		_updateUI: function(value) {
 			var selectBox = this.getMainWidget();
 			var valueIdentity = this._getIdentityOf(value);
 			var listItems = selectBox.getChildren();

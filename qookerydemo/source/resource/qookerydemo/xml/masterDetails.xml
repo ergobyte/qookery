@@ -8,8 +8,10 @@
 		<table id="passwordsTable" connect="passwords">
 			<script>
 				this.initialize({
-					columns: [ "Username", "Password" ],
-					columnIds: [ "username", "password" ]
+					columns: [
+						{ connect: "password", label: "Password" },
+						{ connect: "username", label: "Username", sortable: false, editable: true,  }
+					]
 				});
 			</script>
 			<script>

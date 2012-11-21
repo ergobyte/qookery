@@ -15,31 +15,25 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id$
+	$Id: SimpleTableModel.js 20 2012-11-05 09:36:53Z nikoslam@ergobyte.gr $
 */
 
-qx.Class.define("qookerydemo.DemoContext", {
-	
-	type: "static",
-	
-	statics: {
+qx.Class.define("qookery.impl.SimpleResourceLoader", {
 
-		openAboutWindow: function() {
-			qookerydemo.AboutWindow.open();
-		},
-		
-		loadForm: function(formUrl, callback) {
-			formUrl = "resource/qookerydemo/xml/" + formUrl;
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, callback);
-		},
-		
-		createModel: function(jsObject) {
-			return qx.data.marshal.Json.createModel(jsObject, true);
-		},
-		
-		cloneModel: function(model) {
-			var jsObject = qx.util.Serializer.toNativeObject(model);
-			return qx.data.marshal.Json.createModel(jsObject, true);
-		}
+	implement: [ qookery.IResourceLoader ],
+	type: "singleton",
+	extend: qx.core.Object,
+
+	members: {
+
+   		loadResource: function(url, successCallback, failCallback, options) { 
+			var req = new qx.bom.request.Xhr();
+			if(successCallback != null)
+				req.onload = function(event) {
+					successCallback(req);
+				};
+			req.open("GET", (url + "?nocache=" + new Date().getTime()));
+			req.send();
+   		}
 	}
 });

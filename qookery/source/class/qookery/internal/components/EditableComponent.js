@@ -66,13 +66,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		addValidation: function(validationOptions) {
 			var type = validationOptions['type'];
 			if(type == null || type.length == 0) throw new Error("Validation type required");
-			var message = validationOptions['message'];
 			var mainWidget = this.getMainWidget();
-			var className = "qookery.internal.validators." + qx.lang.String.firstUp(type) + "Validator";
-			var clazz = qx.Class.getByName(className);
-			if(clazz == null) throw new Error(qx.lang.String.format("Validator class '%1' not found", [ className ]));
-			var validator = new clazz(message);
-			var qxValidator = new qx.ui.form.validation.AsyncValidator(validator);
+			var validator = qookery.Qookery.getInstance().getRegistry().getValidator(type);
+			var validatorFunction = validator.createValidatorFunction(validationOptions);
+			var qxValidator = new qx.ui.form.validation.AsyncValidator(validatorFunction);
 			this.getForm().getValidationManager().add(mainWidget, qxValidator);
 		},
 
