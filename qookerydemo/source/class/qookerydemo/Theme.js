@@ -18,13 +18,13 @@
 	$Id$
 */
 
-/**
- * TODO
- */
-qx.Interface.define("qookery.IResourceLoader", {
+qx.Theme.define("qookerydemo.Theme", {
 
-	members: {
-
-		loadResource: function(resourceUrl, successCallback, failCallback, options) { }
+	meta: {
+		appearance: qx.theme.modern.Appearance,
+		color: qx.theme.modern.Color,
+		decoration: qx.theme.modern.Decoration,
+		font: qx.theme.modern.Font,
+		icon: qookerydemo.IconTheme
 	}
 });

@@ -5,7 +5,7 @@
 -->
 <form xmlns="http://www.qookery.org/ns/Form">
 
-	<button label="Press me!">
+	<button label="Click me for a surprise">
 		<script event="execute">
 			alert("Hello, World!");
 		</script>

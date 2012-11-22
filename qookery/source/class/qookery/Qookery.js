@@ -19,7 +19,7 @@
 */
 
 /**
- * Entry class for accessing Qookery features
+ * Singleton class providing access to main Qookery features
  */
 qx.Class.define("qookery.Qookery", {
 
@@ -28,6 +28,7 @@ qx.Class.define("qookery.Qookery", {
 	
 	construct: function() {
 		this.base(arguments);
+		this.__modelProvider = qookery.impl.DefaultModelProvider.getInstance();
 		this.__resourceLoader = qookery.impl.SimpleResourceLoader.getInstance();
 	},
 
@@ -35,6 +36,10 @@ qx.Class.define("qookery.Qookery", {
 
 		__modelProvider: null,
 		__resourceLoader: null,
+		
+		getRegistry: function() {
+			return qookery.internal.Registry.getInstance();
+		},
 		
 		createNewParser: function() {
 			return new qookery.internal.FormParser();
@@ -48,10 +53,6 @@ qx.Class.define("qookery.Qookery", {
 			this.__modelProvider = provider;
 		},
 		
-		getRegistry: function() {
-			return qookery.internal.Registry.getInstance();
-		},
-		
 		setResourceLoader: function(loader) {
 			this.__resourceLoader = loader;
 		},
@@ -63,5 +64,6 @@ qx.Class.define("qookery.Qookery", {
 	
 	destruct: function() {
 		this.__modelProvider = null;
+		this.__resourceLoader = null;
 	}
 });

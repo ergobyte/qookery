@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	A table with row addition, removal and editing in a separate form
+-->
+<form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="1 0" row-flexes="0 1">
+
+	<bind type="scripting-context" key="demo" uri="qookerydemo.DemoContext" required="true" />
+	<bind type="scripting-context" key="qookery" uri="qookery.impl.QookeryContext" required="true" />
+
+	<label label="Hacker-Proof® Password Manager" column-span="2" />
+
+	<table id="passwordsTable" connect="passwords" label="%none">
+		<script>
+			this.initialize({
+				columns: [
+					{ connect: "serial", label: "Serial#" },
+					{ connect: "username", label: "Username" },
+					{ connect: "password", label: "Password" }
+				]
+			});
+		</script>
+		<script event="cellDblclick">
+			$("#editButton").execute();
+		</script>
+	</table>
+
+	<composite alignment-x="right">
+		<button label="Add Password">
+			<script event="execute">
+				var newModel = $.demo.createModel({ username: "", password: "", serial: "de ad be ef" });
+				$.qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", newModel, function(result) {
+					if(result == "OK") $("#passwordsTable").addRow(newModel);
+				}, "Add Password");
+			</script>
+		</button>
+		<button label="Edit Password" id="editButton">
+			<script event="execute">
+				var table = $("#passwordsTable");
+				if(table.getSelectedRowIndex() == undefined) return;
+				var currentModel = table.getRow(table.getSelectedRowIndex());
+				var clonedModel = $.demo.cloneModel(currentModel);
+				$.qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", clonedModel, function(result) {
+					if(result == "OK") table.replaceRow(table.getSelectedRowIndex(), clonedModel);
+				}, "Edit Password");
+			</script>
+		</button>
+		<button label="Remove Password">
+			<script event="execute">
+				var table = $("#passwordsTable");
+				if(table.getSelectedRowIndex() == undefined) return;
+				table.removeRow(table.getSelectedRowIndex());
+			</script>
+		</button>
+	</composite>
+	
+</form>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	A master-details form
+-->
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" row-flexes="0 1 0">
+
+	<table id="passwordsTable" connect="passwords" label="Secure® Password Manager">
+		<script>
+			this.initialize({
+				columns: [
+					{ connect: "serial", label: "Serial#" },
+					{ connect: "username", label: "Username" },
+					{ connect: "password", label: "Password" }
+				]
+			});
+		</script>
+		<script>
+			this.addListener("changeSelection", function(event) {
+				$("#subForm").setModel(event.getData());
+			})
+		</script>
+	</table>
+	
+	<form id="subForm" column-count="2" column-flexes="0 1">
+		<text-field connect="serial" label="Serial Number" read-only="true" />
+		<text-field connect="username" label="Username" read-only="true" />
+		<text-field connect="password" label="Password" read-only="true" />
+	</form>
+
+</form>

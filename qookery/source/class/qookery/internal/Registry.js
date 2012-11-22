@@ -69,6 +69,7 @@ qx.Class.define("qookery.internal.Registry", {
 			this.__components["password-field"] = qookery.internal.components.PasswordComponent;
 			this.__components["radio-group"] = qookery.internal.components.RadioComponent;
 			this.__components["select-box"] = qookery.internal.components.SelectBoxComponent;
+			this.__components["separator"] = qookery.internal.components.SeparatorComponent;
 			this.__components["slider"] = qookery.internal.components.SliderComponent;
 			this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
 			this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;

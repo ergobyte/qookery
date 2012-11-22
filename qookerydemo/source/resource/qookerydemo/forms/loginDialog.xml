@@ -13,18 +13,13 @@
 
 	<!-- Buttons -->
 
-	<composite column-count="auto" max-width="300" alignment-x="right" column-flexes="1 1">
-		<button label="OK">
+	<composite column-count="auto" max-width="100" alignment-x="right" column-flexes="1">
+		<button label="Login">
 			<script event="execute">
 				if(!$.form.validate()) return;
 				var username = $("#username").getValue();
 				var password = $("#password").getValue();
-				$.form.close("OK");
-			</script>
-		</button>
-		<button label="Cancel">
-			<script event="execute">
-				$.form.close();
+				alert("Thank you " + username + ", your password has been safely stored in plaintext on a floppy disk.");
 			</script>
 		</button>
 	</composite>

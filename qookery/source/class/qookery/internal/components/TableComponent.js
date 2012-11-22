@@ -41,10 +41,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		
 		initialize: function(options) {
 			if(!options || (!options["model"] && !options["columns"])) return;
-			if (options["model"]) this.__tableModel = options["model"];
-			else this.__tableModel =  new qookery.impl.SimpleTableModel();
+			this.__tableModel = options["model"] || new qookery.impl.SimpleTableModel();
 			this.__tableModel.setTable(this);
-			if (options["columns"]) {
+			if(options["columns"]) {
 				var nameArray = new Array();
 				var labelArray = new Array();
 				for(var column in options["columns"]) {

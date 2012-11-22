@@ -18,13 +18,24 @@
 	$Id$
 */
 
-/**
- * TODO
- */
-qx.Interface.define("qookery.IResourceLoader", {
+qx.Class.define("qookery.internal.components.SeparatorComponent", {
+
+	extend: qookery.internal.components.BaseComponent,
+
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
+	},
 
 	members: {
-
-		loadResource: function(resourceUrl, successCallback, failCallback, options) { }
+		
+		create: function(createOptions) {
+			this._widgets[0] = new qx.ui.core.Widget().set({
+				decorator: "separator-horizontal",
+				backgroundColor: "gray",
+				height: 1
+			});
+			this._applyLayoutProperties(this._widgets[0], createOptions);
+			this.base(arguments, createOptions);
+		}
 	}
 });

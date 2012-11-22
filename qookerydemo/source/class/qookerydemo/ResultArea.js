@@ -38,7 +38,7 @@ qx.Class.define("qookerydemo.ResultArea",
 			}
 			var that = this;
 			this.__formComponent = qookery.impl.QookeryContext.createFormComponent(xmlCode, this, null, function () {
-					that.remove(that.getChildren()[0]);
+				that.remove(that.getChildren()[0]);
 			});
 		},
 		

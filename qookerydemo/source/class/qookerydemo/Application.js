@@ -31,7 +31,7 @@ qx.Class.define("qookerydemo.Application", {
 		__toolBar: null,
 		__xmlEditor: null,
 		__resultArea: null,
-		__modelArea: null,
+		__jsonEditor: null,
 		
 		main: function() {
 			this.base(arguments);
@@ -42,38 +42,35 @@ qx.Class.define("qookerydemo.Application", {
 			
 			this.__toolbar = new qookerydemo.Toolbar();
 			this.__xmlEditor = new qookerydemo.XmlEditor();
+			this.__jsonEditor = new qookerydemo.JsonEditor();
 			this.__resultArea = new qookerydemo.ResultArea();
-			this.__modelArea = new qookerydemo.JsonModelArea();
 					
-			var splitter = new qx.ui.splitpane.Pane("vertical");
-			splitter.add(this.__xmlEditor);
-			splitter.add(this.__modelArea);
+			var verticalSplitter = new qx.ui.splitpane.Pane("vertical");
+			verticalSplitter.setDecorator(new qx.ui.decoration.Uniform(0));
+			verticalSplitter.setOffset(0);
+			verticalSplitter.add(this.__xmlEditor);
+			verticalSplitter.add(this.__jsonEditor);
 			
-			var outerSplitter = new qx.ui.splitpane.Pane("horizontal");
-			outerSplitter.add(splitter);
-			outerSplitter.add(this.__resultArea);
+			var horizontalSplitter = new qx.ui.splitpane.Pane("horizontal");
+			horizontalSplitter.add(verticalSplitter);
+			horizontalSplitter.add(this.__resultArea);
 			
 			var mainContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 			mainContainer.add(this.__toolbar, { flex: 0 });
-			mainContainer.add(outerSplitter, { flex: 1 });
+			mainContainer.add(horizontalSplitter, { flex: 1 });
 			this.getRoot().add(mainContainer, { edge: 0 });
-			
-			qookery.Qookery.getInstance().setModelProvider(qookery.impl.DefaultModelProvider.getInstance());
 			
 			qx.dom.Element.remove(document.getElementById('splash'));
 		},
 
 		runCode: function() {
 			var xmlCode = this.__xmlEditor.getCode();
-			if(!xmlCode) {
-				alert("You must supply some code");
-				return;
-			}
+			if(!xmlCode) return;
 			this.__resultArea.loadForm(xmlCode);
 		},
 
 		setModelAreaCode: function(code) {
-			this.__modelArea.setCode(code);			
+			this.__jsonEditor.setCode(code);			
 		},
 
 		setXmlEditorCode: function(code) {
@@ -86,6 +83,6 @@ qx.Class.define("qookerydemo.Application", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__toolbar", "__xmlEditor", "__resultArea" );
+		this._disposeObjects("__toolbar", "__xmlEditor", "__jsonEditor", "__resultArea" );
 	}
 });

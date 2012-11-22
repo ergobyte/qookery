@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: IModelProvider.js 21 2012-11-09 11:56:48Z nikoslam@ergobyte.gr $
+	$Id$
 */
 
 /**

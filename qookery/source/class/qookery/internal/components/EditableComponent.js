@@ -45,9 +45,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		
 		create: function(createOptions) {
 			this._widgets[0] = this._createMainWidget(createOptions);
-			this._widgets[1] = new qx.ui.basic.Label();
-			this._setupLabelAppearance(this._widgets[1], createOptions);
-			if(createOptions['label']) this.setLabel(createOptions['label']);
+			if(createOptions['label'] != '%none') {
+				this._widgets[1] = new qx.ui.basic.Label();
+				this._setupLabelAppearance(this._widgets[1], createOptions);
+				this.setLabel(createOptions['label'] || "");
+			}
 			if(createOptions['required']) this.setRequired(true);
 			if(createOptions['read-only']) this.setReadOnly(true);
 			this.base(arguments, createOptions);
@@ -87,10 +89,13 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		listWidgets: function(filterName) {
-			if(filterName == "main") return [ this._widgets[0] ];
+			var mainWidget = this._widgets[0];
+			if(filterName == "main") return [ mainWidget ];
+			var labelWidget = this._widgets[1];
+			if(!labelWidget) return [ mainWidget ];
 			// Reverse order of main and label widget since 
 			// we want to present the label in front of the editor
-			return [ this._widgets[1], this._widgets[0] ];
+			return [ labelWidget, mainWidget ];
 		},
 
 		// Properties
@@ -99,6 +104,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this._disableValueEvents = true;
 			try {
 				this._updateUI(value);
+			}
+			catch(e) {
+				throw e;
 			}
 			finally {
 				this._disableValueEvents = false;

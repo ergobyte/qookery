@@ -24,11 +24,12 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 	statics: {
 		DEMOS: [
-			{ label: "Hello, World!", formFile: "helloWorld.xml"},
-			{ label: "Login Dialog", formFile: "loginDialog.xml", dataFile: "loginDialog.json" },
-			{ label: "Master Details", formFile: "masterDetails.xml", dataFile: "masterDetails.json" },
-			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", dataFile: "tableWithFormEditor.json" },
-			{ label: "Multiple Connections", formFile: "multipleConnections.xml", dataFile: "multipleConnections.json" }
+			{ label: "Hello, World!", formFile: "helloWorld.xml" },
+			{ label: "About Dialog", formFile: "aboutDialog.xml" },
+			{ label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
+			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
+			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
+			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" }
 		]
 	},
 
@@ -48,7 +49,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 		qookerydemo.Toolbar.DEMOS.forEach(function(demoArguments, index) {
 			var button = new qx.ui.menu.Button(demoArguments['label']);
 			button.addListener("execute", function() {
-				this.getDemo(demoArguments['formFile'], demoArguments['dataFile']);
+				this.__loadDemo(demoArguments);
 			}, this);
 			demoListMenu.add(button);
 		}, this);
@@ -62,18 +63,21 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 	members: {
 		
-		getDemo: function(formUrl, dataUrl) {
-			qookerydemo.DemoContext.loadForm(formUrl, function(req) {
+		__loadDemo: function(demoArguments) {
+			var formUrl = "resource/qookerydemo/forms/" + demoArguments['formFile'];
+			qookery.impl.QookeryContext.loadResource(formUrl, function(req) {
 				qx.core.Init.getApplication().setXmlEditorCode(req.responseText);
 				qx.core.Init.getApplication().runCode();
 			});
-			if(!dataUrl) {
-				qx.core.Init.getApplication().setModelAreaCode("");
-				return;
+			if(demoArguments['modelFile']) {
+				var modelUrl = "resource/qookerydemo/models/" + demoArguments['modelFile'];
+				qookery.impl.QookeryContext.loadResource(modelUrl, function(req) {
+					qx.core.Init.getApplication().setModelAreaCode(req.responseText);
+				});
 			}
-			qookerydemo.DemoContext.loadForm(dataUrl, function(req) {
-				qx.core.Init.getApplication().setModelAreaCode(req.responseText);
-			});
+			else {
+				qx.core.Init.getApplication().setModelAreaCode("");
+			}
 		}
 	}
 });

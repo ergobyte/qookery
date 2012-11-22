@@ -5,6 +5,16 @@ qx.Class.define("qookery.impl.QookeryContext", {
 	
 	statics: {
 		
+		/**
+		 * Use resource loader to load a resource
+		 * 
+		 * @param {} resourceUrl the URL of the resource to load
+		 * @param {} callback a callback to call on successful loading
+		 */
+		loadResource: function(resourceUrl, callback) {
+			qookery.Qookery.getInstance().getResourceLoader().loadResource(resourceUrl, callback);
+		},
+		
 		createFormComponent: function(xmlCode, parentComposite, layoutData, formCloseHandler) {
 			var xmlDocument = qx.xml.Document.fromString(xmlCode);
 			var parser = qookery.Qookery.getInstance().createNewParser();
@@ -19,8 +29,8 @@ qx.Class.define("qookery.impl.QookeryContext", {
 				return formComponent;
 			}
 			catch(e) {
-				qx.log.Logger.error(parentComposite, qx.lang.String.format("Error creating form window", [ ]));
-				qx.log.Logger.error(e.stack);
+				qx.log.Logger.error(parentComposite, qx.lang.String.format("Error creating form window: %1", [ e ]));
+				if(e.stack) qx.log.Logger.error(e.stack);
 			}
 			finally {
 				parser.dispose();

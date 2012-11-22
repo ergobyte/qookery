@@ -167,7 +167,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				var key = attribute.nodeName;
 				var text = attribute.nodeValue;
 				if(text == null || text.length == 0) continue;
-				text = qx.lang.String.trim(text);
+				text = text.trim();
 				if(text.length == 0) continue;
 				var value = null;
 				switch(key) {
@@ -178,13 +178,15 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "max-width": 
 				case "max-height":
 					value = qookery.internal.FormParser.NAMED_SIZES[text] || parseInt(text); break;
+				case "margin": 
 				case "margin-top": 
 				case "margin-right":
 				case "margin-bottom": 
 				case "margin-left":
-				case "padding-top": 
+				case "padding":
+				case "padding-top":
 				case "padding-right":
-				case "padding-bottom": 
+				case "padding-bottom":
 				case "padding-left":
 				case "row-span":
 				case "column-span":
@@ -193,11 +195,13 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "spacing":
 					value = parseInt(text); break;
 				case "enabled":
+				case "read-only":
+				case "required":
+				case "rich":
+				case "stretch":
 				case "stretch-x":
 				case "stretch-y":
-				case "stretch":
-				case "required":
-				case "read-only":
+				case "wrap":
 					value = text == "true"; break;
 				default:
 					value = text;
@@ -251,7 +255,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		__getAttribute: function(element, attributeName) {
 			var text = qx.xml.Element.getAttributeNS(element, null, attributeName);
 			if(text == null || text.length == 0) return null;
-			text = qx.lang.String.trim(text);
+			text = text.trim();
 			if(text.length == 0) return null;
 			return text;
 		},
@@ -259,7 +263,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		__getNodeText: function(node) {
 			var text = qx.dom.Node.getText(node);
 			if(text == null || text.length == 0) return null;
-			text = qx.lang.String.trim(text);
+			text = text.trim();
 			if(text.length == 0) return null;
 			return text;
 		},

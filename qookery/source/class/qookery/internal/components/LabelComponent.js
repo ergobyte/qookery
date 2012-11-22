@@ -28,24 +28,16 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 
 	members: {
 		
-		__variant: null,
-
 		create: function(createOptions) {
-			this.__variant = createOptions["variant"] || "plain";
-			if(this.__variant == "separator") {
-				this._widgets[0] = new qx.ui.core.Widget().set({
-					decorator: "separator-horizontal",
-					backgroundColor: "gray",
-					height: 1
-				});
-			}
-			else {
-				this._widgets[0] = new qx.ui.basic.Label(createOptions['label']);
-				if(qx.util.ColorUtil.isValidPropertyValue(createOptions['text-color'])) 
-					this._widgets[0].setTextColor(createOptions['text-color']);
-				if(createOptions['rich'] == "true")
-					this._widgets[0].setRich(true);
-			}
+			var labelText = createOptions['label'] || "";
+			this._widgets[0] = new qx.ui.basic.Label(labelText);
+			if(qx.util.ColorUtil.isValidPropertyValue(createOptions['text-color'])) 
+				this._widgets[0].setTextColor(createOptions['text-color']);
+			if(createOptions['rich'])
+				this._widgets[0].setRich(true);
+			if(createOptions['wrap'])
+				this._widgets[0].setWrap(true);
+			this._applyLayoutProperties(this._widgets[0], createOptions);
 			this.base(arguments, createOptions);
 		},
 		
@@ -54,12 +46,14 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 		},
 
 		setValue: function(value) {
-			if(this.__variant == "separator") return;
 			this.getMainWidget().setValue(value);
 		},
 		
+		getRich: function() {
+			return this.getMainWidget().getRich();
+		},
+
 		setRich: function(value) {
-			if(this.__variant == "separator") return;
 			this.getMainWidget().setRich(value);
 		}
 	}

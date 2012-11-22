@@ -29,8 +29,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	extend: qookery.internal.components.CompositeComponent,
 	implement: [ qookery.IFormComponent ],
 
-	construct: function() {
-		this.base(arguments, null);
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
 		this.__controller = new qx.data.controller.Object();
 		this.__validationManager = new qx.ui.form.validation.Manager();
 		this.__componentMap = { };
@@ -39,7 +39,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	events: {
 		"openForm": "qx.event.type.Event",
 		"closeForm": "qx.event.type.Event",
-		"changeModel" : "qx.event.type.Event"
+		"changeModel": "qx.event.type.Event"
 	},
 
 	members: {
@@ -48,7 +48,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__componentMap: null,
 		__validationManager: null,
 		__clientCodeContext: null,
-		__result: 0,
+		__result: null,
 		
 		getModel: function() {
 			return this.__controller.getModel();
@@ -105,7 +105,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		clearValidations: function() {
 			var items = this.getValidationManager().getItems();
-			if( items == null ) return;
+			if(items == null) return;
 			for(var item in items) {
 				this.getValidationManager().remove(item);
 			}

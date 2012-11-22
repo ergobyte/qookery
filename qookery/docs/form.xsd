@@ -183,6 +183,15 @@
 		</complexContent>
 	</complexType>
 
+	<complexType name="label-component">
+		<complexContent>
+			<extension base="tns:component">
+				<attribute name="wrap" type="boolean" />
+				<attribute name="rich" type="boolean" />
+			</extension>
+		</complexContent>
+	</complexType>
+
 	<!-- Groups -->
 
 	<group name="statement-elements">
@@ -200,7 +209,7 @@
 			<element ref="tns:form" />
 			<element name="group-box" type="tns:container-component" />
 			<element name="image" type="tns:component" />
-			<element name="label" type="tns:component" />
+			<element name="label" type="tns:label-component" />
 			<element name="list" type="tns:editable-component" />
 			<element name="password-field" type="tns:editable-component" />
 			<element name="radio-group" type="tns:editable-component" />

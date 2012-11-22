@@ -45,9 +45,8 @@ qx.Class.define("qookerydemo.AboutWindow", {
 	members: {
 		
 		__xmlInit: function() {
-			var formUrl = "aboutDialog.xml";
 			var that = this;
-			qookerydemo.DemoContext.loadForm(formUrl, function(req) {
+			qookery.impl.QookeryContext.loadResource("resource/qookerydemo/forms/aboutDialog.xml", function(req) {
 				qookery.impl.QookeryContext.createFormComponent(req.responseText, that, { row: 0, column: 0 }, function () {
 					that.close();
 				});

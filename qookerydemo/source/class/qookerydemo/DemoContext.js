@@ -28,11 +28,6 @@ qx.Class.define("qookerydemo.DemoContext", {
 			qookerydemo.AboutWindow.open();
 		},
 		
-		loadForm: function(formUrl, callback) {
-			formUrl = "resource/qookerydemo/xml/" + formUrl;
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, callback);
-		},
-		
 		createModel: function(jsObject) {
 			return qx.data.marshal.Json.createModel(jsObject, true);
 		},

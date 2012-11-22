@@ -18,13 +18,9 @@
 	$Id$
 */
 
-/**
- * TODO
- */
-qx.Interface.define("qookery.IResourceLoader", {
+qx.Theme.define("qookerydemo.IconTheme", {
 
-	members: {
-
-		loadResource: function(resourceUrl, successCallback, failCallback, options) { }
+	aliases: {
+		"icon" : "qookerydemo/icons"
 	}
 });

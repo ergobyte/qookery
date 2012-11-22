@@ -23,7 +23,7 @@
  */
 qx.Class.define("qookery.internal.components.ContainerComponent", {
 	
-	type : "abstract",
+	type: "abstract",
 	extend: qookery.internal.components.BaseComponent,
 	implement: [ qookery.IContainerComponent ],
 

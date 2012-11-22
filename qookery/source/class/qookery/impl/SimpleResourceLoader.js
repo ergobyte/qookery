@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: SimpleTableModel.js 20 2012-11-05 09:36:53Z nikoslam@ergobyte.gr $
+	$Id$
 */
 
 qx.Class.define("qookery.impl.SimpleResourceLoader", {

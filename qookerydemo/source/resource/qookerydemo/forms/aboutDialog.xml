@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" max-width="300">
+
+    <!-- Form fields -->
+
+	<label label="Qookery Demo and Playground application" text-color="blue" />
+
+	<label label="Discover Qookery and experiment with its features, thanks to this interactive demo. Load a demo, modify XML and/or JSON code and press Run Again to see the results." rich="true" wrap="true" />
+
+	<label label="Qookery is a community project sponsored by Ergobyte and licensed under the Apache License, v2.0. Visit http://www.qookery.org/ for more information." rich="true" wrap="true" />
+
+    <button label="Close" max-width="150" alignment-x="right">
+		<script event="execute">
+			$.form.close();
+		</script>
+	</button>
+
+</form>
