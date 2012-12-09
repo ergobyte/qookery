@@ -87,6 +87,11 @@ qx.Interface.define("qookery.IComponent", {
 		 * 
 		 * <p>This method is intended to be called by XML authors</p>
 		 */
-		initialize: function(initOptions) { }
+		initialize: function(initOptions) { },
+		
+		/**
+		 * TODO
+		 */
+		getAction: function(action) {}
 	}
 });

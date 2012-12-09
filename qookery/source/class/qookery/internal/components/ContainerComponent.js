@@ -40,24 +40,31 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		__layout: null,
 		__columnCount: 1,
+		__rowArray: null,
 
 		create: function(createOptions) {
-			this.__columnCount = createOptions['column-count'] || 1;
-			this.__layout = new qx.ui.layout.Grid();
-			var spacingX = createOptions['spacing-x'] || createOptions['spacing'] || 10;
-			this.__layout.setSpacingX(spacingX);
-			var spacingY = createOptions['spacing-y'] || createOptions['spacing'] || 10;
-			this.__layout.setSpacingY(spacingY);
-			var columnFlexes = createOptions['column-flexes'];
-			if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
-				this.__layout.setColumnFlex(index, parseInt(columnFlex));
-			}, this);
-			var rowFlexes = createOptions['row-flexes'];
-			if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
-				this.__layout.setRowFlex(index, parseInt(rowFlex));
-			}, this);
 			this._widgets[0] = this._createContainerWidget(createOptions);
-			this._widgets[0].setLayout(this.__layout);
+			this.__columnCount = createOptions['column-count'] || 1;
+			if(this.__columnCount != "none") {
+				if(this.__columnCount != "auto") {
+					this.__rowArray = [ ];
+					for(var i = 0; i < this.__columnCount; i++) this.__rowArray.push(0);
+				}
+				this.__layout = new qx.ui.layout.Grid();
+				var spacingX = createOptions['spacing-x'] || createOptions['spacing'] || 10;
+				this.__layout.setSpacingX(spacingX);
+				var spacingY = createOptions['spacing-y'] || createOptions['spacing'] || 10;
+				this.__layout.setSpacingY(spacingY);
+				var columnFlexes = createOptions['column-flexes'];
+				if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
+					this.__layout.setColumnFlex(index, parseInt(columnFlex));
+				}, this);
+				var rowFlexes = createOptions['row-flexes'];
+				if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
+					this.__layout.setRowFlex(index, parseInt(rowFlex));
+				}, this);
+				this._widgets[0].setLayout(this.__layout);
+			}
 			this.base(arguments, createOptions);
 		},
 		
@@ -82,17 +89,42 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			var widgets = childComponent.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
-				var layoutProperties = widget.getLayoutProperties();
-				// TODO automatic cell positioning does not support row span yet
-				var colSpan = layoutProperties["colSpan"] || 1;
-				widget.setLayoutProperties({
-					row: this.__currentRow,
-					column: this.__currentColumn
-				});
-				this.__currentColumn += colSpan;
-				if(this.__columnCount != "auto" && this.__currentColumn >= this.__columnCount) {
-					this.__currentColumn = 0;
-					this.__currentRow++;
+				if(this.__layout != null) {
+					var layoutProperties = widget.getLayoutProperties();
+					var colSpan = layoutProperties["colSpan"] || 1;
+					var rowSpan = layoutProperties["rowSpan"] || 1;
+					if(this.__columnCount == "auto") {
+						widget.setLayoutProperties({
+							row: 0,
+							column: this.__currentColumn,
+							colSpan: colSpan
+						});
+						this.__currentColumn += colSpan;
+					}
+					else {
+						while(this.__rowArray[this.__currentColumn] > 0) {
+							this.__rowArray[this.__currentColumn]--;
+							this.__currentColumn++;
+							if(this.__currentColumn >= this.__columnCount) {
+								this.__currentColumn = 0;
+								this.__currentRow++;
+							}
+						}
+						widget.setLayoutProperties({
+							row: this.__currentRow,
+							column: this.__currentColumn,
+							colSpan: colSpan,
+							rowSpan: rowSpan
+						});
+						for(var j = 0; j < colSpan; j++) {
+							this.__rowArray[this.__currentColumn] += rowSpan - 1;
+							this.__currentColumn++;
+						}
+						if(this.__currentColumn >= this.__columnCount) {
+							this.__currentColumn = 0;
+							this.__currentRow++;
+						}
+					}
 				}
 				container.add(widget);
 			}

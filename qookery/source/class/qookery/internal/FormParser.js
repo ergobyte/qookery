@@ -102,6 +102,8 @@ qx.Class.define("qookery.internal.FormParser", {
 					this.__parseStatement(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
+				else if(elementName == 'set')
+					this.__parseSet(statementElement, parentComponent);
 				else if(elementName == 'bind')
 					this.__parseBind(statementElement, parentComponent);
 				else if(elementName == 'parsererror')
@@ -222,10 +224,22 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(clientCode == null) 
 				throw new Error("Encountered empty <script> element");
 			var eventName = this.__getAttribute(scriptElement, "event");
+			var actionName = this.__getAttribute(scriptElement, "action");
 			if(eventName)
 				component.addEventHandler(eventName, clientCode);
+			else if(actionName)
+				component.setAction(actionName, clientCode);
 			else
 				component.executeClientCode(clientCode);
+		},
+		
+		__parseSet: function(scriptElement, component) {
+			var clientCode = this.__getNodeText(scriptElement);
+			if(clientCode == null) 
+				throw new Error("Encountered empty <set> element");
+			var propertyName = this.__getAttribute(scriptElement, "attribute") || "value";
+			propertyName = "set" + qx.lang.String.firstUp(propertyName);
+			component[propertyName](clientCode);
 		},
 
 		__parseBind: function(bindElement) {

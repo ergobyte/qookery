@@ -115,6 +115,8 @@
 		<attribute name="alignment-y" type="tns:y-alignment" />
 
 		<!-- Widget -->
+		<attribute name="decorator" type="string" />
+		<attribute name="font" type="string" />
 		<attribute name="padding-top" type="integer" default="0" />
 		<attribute name="padding-right" type="integer" default="0" />
 		<attribute name="padding-bottom" type="integer" default="0" />
@@ -167,8 +169,9 @@
 		<complexContent>
 			<extension base="tns:component-attributes">
 				<attribute name="connect" type="string" />
-				<attribute name="required" type="boolean" default="false" />
+				<attribute name="format" type="string" />
 				<attribute name="read-only" type="boolean" default="false" />
+				<attribute name="required" type="boolean" default="false" />
 			</extension>
 		</complexContent>
 	</complexType>
@@ -191,11 +194,20 @@
 			</extension>
 		</complexContent>
 	</complexType>
+	
+	<complexType name="html-component">
+		<complexContent>
+			<extension base="tns:component">
+				<attribute name="html" type="string" />
+			</extension>
+		</complexContent>
+	</complexType>
 
 	<!-- Groups -->
 
 	<group name="statement-elements">
 		<choice>
+			<element ref="tns:set" />
 			<element ref="tns:script" />
 		</choice>
 	</group>
@@ -208,12 +220,14 @@
 			<element name="date-field" type="tns:editable-component" />
 			<element ref="tns:form" />
 			<element name="group-box" type="tns:container-component" />
+			<element name="html" type="tns:html-component" />
 			<element name="image" type="tns:component" />
 			<element name="label" type="tns:label-component" />
 			<element name="list" type="tns:editable-component" />
 			<element name="password-field" type="tns:editable-component" />
 			<element name="radio-group" type="tns:editable-component" />
 			<element name="select-box" type="tns:editable-component" />
+			<element name="separator" type="tns:component" />
 			<element name="slider" type="tns:editable-component" />
 			<element name="spinner" type="tns:editable-component" />
 			<element name="tab-view" type="tns:container-component" />
@@ -257,6 +271,17 @@
 			<simpleContent>
 				<extension base="string">
 					<attribute name="event" type="token" />
+					<attribute name="action" type="token" />
+				</extension>
+			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="set">
+		<complexType>
+			<simpleContent>
+				<extension base="string">
+					<attribute name="attribute" type="token" use="required" />
 				</extension>
 			</simpleContent>
 		</complexType>

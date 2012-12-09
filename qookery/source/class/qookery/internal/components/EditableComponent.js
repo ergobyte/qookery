@@ -36,11 +36,14 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
 	    toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
-		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" }
+		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" },
+		format: { check: "String", inheritable: true, nullable: false, apply: "_applyFormat" },
+		valid: { check: "Boolean", nullable: false, apply: "_applyValid" }
 	},
 	
 	members: {
-
+	
+		__formatter: null,
 		_disableValueEvents: false,
 		
 		create: function(createOptions) {
@@ -52,6 +55,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			}
 			if(createOptions['required']) this.setRequired(true);
 			if(createOptions['read-only']) this.setReadOnly(true);
+			if(createOptions['format']) this.setFormat(createOptions['format']);
 			this.base(arguments, createOptions);
 		},
 		
@@ -68,11 +72,13 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		addValidation: function(validationOptions) {
 			var type = validationOptions['type'];
 			if(type == null || type.length == 0) throw new Error("Validation type required");
-			var mainWidget = this.getMainWidget();
 			var validator = qookery.Qookery.getInstance().getRegistry().getValidator(type);
 			var validatorFunction = validator.createValidatorFunction(validationOptions);
-			var qxValidator = new qx.ui.form.validation.AsyncValidator(validatorFunction);
-			this.getForm().getValidationManager().add(mainWidget, qxValidator);
+			this.getForm().getValidationManager().add(this, validatorFunction);
+		},
+		
+		setInvalidMessage: function(message) { 
+			this.getMainWidget().setInvalidMessage(message);
 		},
 
 		clearValidations: function() {
@@ -97,8 +103,39 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			// we want to present the label in front of the editor
 			return [ labelWidget, mainWidget ];
 		},
+		
+		getFormatter: function() {
+			return this.__formatter;
+		},
 
 		// Properties
+		
+		_applyValid: function(value) {
+			this.getMainWidget().setValid(value);
+		},
+		
+		_applyFormat: function(formatterSpecification) {
+			this.__formatter = this._createFormatter(formatterSpecification);
+		},
+		
+		_createFormatter: function(formatterSpecification) {
+			var formatterName = formatterSpecification;
+			var createOptions = {};  
+			var colonCharacterPos = formatterSpecification.indexOf(":");
+			if(colonCharacterPos != -1) {
+				formatterName = formatterSpecification.slice(0, colonCharacterPos);
+				var optionsStr = formatterSpecification.slice(colonCharacterPos + 1);
+				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {     
+					key = qx.lang.String.clean(key);
+					value = qx.lang.String.clean(value);
+					createOptions[key] = value; 
+				});
+			}
+			var formatterClass = qookery.Qookery.getInstance().getRegistry().getFormatter(formatterName);
+			if(!formatterClass)
+				throw new Error("Unknown formatter requested");
+			return new formatterClass(createOptions);
+		},
 
 		_applyValue: function(value) {
 			this._disableValueEvents = true;
@@ -129,18 +166,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_applyRequired: function(required) {
 			var mainWidget = this.getMainWidget();
-			if(!mainWidget) return;
-			if(required === true) {
-				mainWidget.setRequired(true);
-				this.getForm().getValidationManager().add(mainWidget);
-			}
-			else if(required === false) {
-				mainWidget.setRequired(false);
-				this.getForm().getValidationManager().remove(mainWidget);
-			}
-			else {
-				qx.log.Logger.error(this, "Illegal argument for setRequired()");
-			}
+			if(!mainWidget || !required) return;
+			this.addValidation({ type: "notNull", message: "Not null value is required" });
 		},
 		
 		_applyReadOnly: function(readOnly) {

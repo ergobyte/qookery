@@ -31,15 +31,19 @@ qx.Class.define("qookery.internal.components.TextComponent", {
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.TextField();
 			widget.setLiveUpdate(true);
-			widget.addListener("changeValue", function(event) { 
+			widget.addListener("changeValue", function(event) {
+				if(this._disableValueEvents) return;
 				this.setValue(event.getData()); 
 			}, this);
 			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
 		
-		_applyValue: function(value) {
-			this.getMainWidget().setValue(this._getLabelOf(value));
+		_updateUI: function(value) {
+			if (!this.getFormatter())
+				this.getMainWidget().setValue(this._getLabelOf(value));
+			else
+				this.getMainWidget().setValue(this.getFormatter().format(value));
 		},
 		
 		_applyReadOnly: function(readOnly) {

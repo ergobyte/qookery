@@ -41,11 +41,11 @@ qx.Class.define("qookery.impl.QookeryContext", {
 		openWindow: function(formUrl, model, resultCallback, title, icon) {
 			icon = icon || null;
 			title = title || null;
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, function(req) {
+			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, function(data) {
 				var window = new qookery.impl.FormWindow(title, icon);
-				window.createAndOpen(req.responseText, model);
+				window.createAndOpen(data, model);
 				window.addListener("disappear", function() {
-					resultCallback(window.getFormComponent().getResult());
+					if(resultCallback) resultCallback(window.getFormComponent().getResult());
 					window = null;
 				});
 			});

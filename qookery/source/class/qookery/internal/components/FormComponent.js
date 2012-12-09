@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__controller = new qx.data.controller.Object();
-		this.__validationManager = new qx.ui.form.validation.Manager();
+		this.__validationManager = new qookery.internal.ValidatorManager();
 		this.__componentMap = { };
 	},
 
@@ -151,15 +151,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		// Remove all validations
-		var validationItems = this.__validationManager.getItems();
-		for(var validationItem in validationItems)
-			this.__validationManager.remove(validationItem); 
 		
 		// Remove all bindings
 		this.__controller.removeAllBindings(); 
 
-		this._disposeObjects("__controller", "__validationManager");
+		this._disposeObjects("__validationManager", "__controller", "__validationManager");
 		this.__componentMap = null;
 		this.__userContextMap = null;
 		this.__registration = null;

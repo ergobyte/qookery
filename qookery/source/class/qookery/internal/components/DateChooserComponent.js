@@ -32,12 +32,6 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 	
 	members: {
 		
-		initialize: function(initOptions) {
-			if(!initOptions || !initOptions["dateFormat"]) return;
-			var dateField = this.getMainWidget();
-			dateField.setDateFormat(new qx.util.format.DateFormat(initOptions["dateFormat"]));
-		},
-
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
 			widget.addListener("changeValue", function(event) {
@@ -56,6 +50,11 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 			}
 			value = this.__convertFromString(value);
 			dateField.setValue(value);
+		},
+		
+		_applyFormat: function(value) {
+			this.base(arguments, value);
+			this.getMainWidget().setDateFormat(this.getFormatter().getFormat());
 		},
 		
 		__convertFromString: function(dateString) {

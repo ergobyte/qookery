@@ -34,13 +34,12 @@ qx.Class.define("qookery.internal.validators.RegularExpressionValidator", {
 			var message = options['message'];
 			if(!message || message.length == 0 || !regex)
 				throw new Error("Validation message and regular expression is required for regular-expression validator");
-			return function(validator, value) {
-				window.setTimeout(function() {
-					if(regex.test(value) == false)
-						validator.setValid(false, message);
-					else 
-						validator.setValid(true);
-				}, 100);
+			return function(value, item) {
+				if(regex.test(value) == false) {
+					item.setInvalidMessage(message);
+					return false;
+				}
+				return true;
 			};
 		}
 	}

@@ -18,22 +18,29 @@
 	$Id$
 */
 
-qx.Class.define("qookery.impl.SimpleResourceLoader", {
+qx.Class.define("qookery.internal.components.HtmlComponent", {
 
-	implement: [ qookery.IResourceLoader ],
-	type: "singleton",
-	extend: qx.core.Object,
+	extend: qookery.internal.components.BaseComponent,
+
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
+	},
 
 	members: {
+		
+		create: function(createOptions) {
+			var html = createOptions['html'] || null;
+			this._widgets[0] = new qx.ui.embed.Html(html);
+			this._applyLayoutProperties(this._widgets[0], createOptions);
+			this.base(arguments, createOptions);
+		},
+		
+		getHtml: function() {
+			return this.getMainWidget().getHtml();
+		},
 
-   		loadResource: function(url, successCallback, failCallback, options) { 
-			var req = new qx.bom.request.Xhr();
-			if(successCallback != null)
-				req.onload = function(event) {
-					successCallback(req);
-				};
-			req.open("GET", (url + "?nocache=" + new Date().getTime()));
-			req.send();
-   		}
+		setHtml: function(html) {
+			this.getMainWidget().setHtml(html);
+		}
 	}
 });

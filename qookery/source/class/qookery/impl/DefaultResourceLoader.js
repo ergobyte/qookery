@@ -18,25 +18,23 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.TabHolderComponent", {
+qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
-	extend: qookery.internal.components.ContainerComponent,
-
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
-	},
+	implement: [ qookery.IResourceLoader ],
+	type: "singleton",
+	extend: qx.core.Object,
 
 	members: {
-		
-		create: function(createOptions) {
-			createOptions['column-count'] = 'none';
-			this.base(arguments, createOptions);
-		},
 
-		_createContainerWidget: function(createOptions) {
-			var  tabView = new qx.ui.tabview.TabView();
-			this._applyLayoutProperties(tabView, createOptions);
-			return tabView;
-		}
+   		loadResource: function(url, successCallback, failCallback, options) { 
+   			var resourceUri = qx.util.ResourceManager.getInstance().toUri(url);
+			var xhrRequest = new qx.bom.request.Xhr();
+			if(successCallback != null)
+				xhrRequest.onload = function(event) {
+					successCallback(xhrRequest.responseText);
+				};
+			xhrRequest.open("GET", (resourceUri + "?nocache=" + new Date().getTime()));
+			xhrRequest.send();
+   		}
 	}
 });

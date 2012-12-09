@@ -28,12 +28,14 @@ qx.Class.define("qookery.internal.Registry", {
 		this.base(arguments);
 		this.__initializeValidators();
 		this.__initializeComponents();
+		this.__initializeFormatters();
 	},
 	
 	members: {
 		
 		__validators: { },
 		__components: { },
+		__formatters: { },
 		
 		registerValidator: function(validator, name) { 
 			this.__validators[name] = validator.getInstance();
@@ -51,6 +53,14 @@ qx.Class.define("qookery.internal.Registry", {
 			return this.__components[component];
 		},
 		
+		registerFormatter: function(formatter, name) {
+			this.__formatters[name] = formatter.getInstance();
+		},
+		
+		getFormatter: function(formatter) {
+			return this.__formatters[formatter];
+		},
+		
 		__initializeValidators: function() {
 			this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
 			this.__validators["regularExpression"] = qookery.internal.validators.RegularExpressionValidator.getInstance();
@@ -63,6 +73,7 @@ qx.Class.define("qookery.internal.Registry", {
 			this.__components["date-field"] = qookery.internal.components.DateChooserComponent;
 			this.__components["form"] = qookery.internal.components.FormComponent;
 			this.__components["group-box"] = qookery.internal.components.GroupComponent;
+			this.__components["html"] = qookery.internal.components.HtmlComponent;
 			this.__components["image"] = qookery.internal.components.ImageComponent;
 			this.__components["label"] = qookery.internal.components.LabelComponent;
 			this.__components["list"] = qookery.internal.components.ListComponent;
@@ -77,11 +88,18 @@ qx.Class.define("qookery.internal.Registry", {
 			this.__components["table"] = qookery.internal.components.TableComponent;
 			this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
 			this.__components["text-field"] = qookery.internal.components.TextComponent;
+		},
+		
+		__initializeFormatters: function() {
+			this.__formatters["number"] = qookery.internal.formatters.NumberFormatter;
+			this.__formatters["date"] = qookery.internal.formatters.DateFormatter;
 		}
+		
 	},
 	
 	destruct: function() {
 		this.__validators = null;
 		this.__components = null;
+		this.__formatters = null;
 	}
 });

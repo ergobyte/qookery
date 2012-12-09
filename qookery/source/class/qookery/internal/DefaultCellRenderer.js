@@ -18,25 +18,31 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.TabHolderComponent", {
-
-	extend: qookery.internal.components.ContainerComponent,
-
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
-	},
-
+/**
+ * Extend this class if you want to create a new component that bind a value. 
+ */
+qx.Class.define("qookery.internal.DefaultCellRenderer", {
+	
+	extend: qx.ui.table.cellrenderer.Abstract,
+	
 	members: {
 		
-		create: function(createOptions) {
-			createOptions['column-count'] = 'none';
-			this.base(arguments, createOptions);
+		__formatter: null,
+	
+		_getContentHtml: function(cellInfo) {
+			return qx.bom.String.escape(this._formatValue(cellInfo));
 		},
-
-		_createContainerWidget: function(createOptions) {
-			var  tabView = new qx.ui.tabview.TabView();
-			this._applyLayoutProperties(tabView, createOptions);
-			return tabView;
+	
+		_formatValue: function(cellInfo) {
+			var value = cellInfo.value;
+			if(value == null) return "";
+			if(this.__formatter)
+				return this.__formatter.format(value);
+			return value.toString();
+		},
+		
+		setFormatter: function(formatter) {
+			this.__formatter = formatter;
 		}
 	}
 });

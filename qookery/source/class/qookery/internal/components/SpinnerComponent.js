@@ -22,6 +22,10 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 	
 	extend: qookery.internal.components.EditableComponent,
 	
+	events: {
+		"changeValue" : "qx.event.type.Data"
+	},
+	
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
@@ -52,6 +56,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			grid.setSpacing(5);
 			grid.setRowAlign(0, "left", "middle");
 			this.__container = new qx.ui.container.Composite(grid);
+			this.__container.setAllowStretchY(false);
 			var widget = new qx.ui.form.Spinner();
 			this.__group = this.__createSpinnerGroup(widget);
 			this.__addGroupToContainer(this.__group);
@@ -59,6 +64,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			this.__group.spinner.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
+				this.fireDataEvent("changeValue", event.getData());
 			}, this);
 			return this.__container;
 		},
@@ -85,5 +91,11 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			};
 			return group;
 		}
+	},
+	
+	destruct: function() {
+		this.__group.spinner.destroy();
+		this.__group.minimum.destroy();
+		this.__group.maximum.destroy();
 	}
 });

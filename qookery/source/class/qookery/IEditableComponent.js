@@ -37,7 +37,16 @@ qx.Interface.define("qookery.IEditableComponent", {
 		toolTip: { check: "String", nullable: true },
 
 		/** Whether the component's value is required */
-		required: { check: "Boolean", nullable: false, init: false }
+		required: { check: "Boolean", nullable: false, init: false },
+		
+		/** Whether the component's widget state is valid or not */
+		valid: { check: "Boolean", nullable: false, init: true },
+
+		/** A formatter specification, syntax is {formatterName}[:{option1}={value1}[,{option2}={value2}]*]? */
+		format: { check: "String", nullable: true },
+
+		/** If true, this editor's value cannot be altered by its UI widgets */
+		readOnly: { check: "Boolean", nullable: false, init: false }
 	},
 
 	members: {
@@ -65,6 +74,12 @@ qx.Interface.define("qookery.IEditableComponent", {
 		 * 
 		 * @param {} component
 		 */
-		clearValidations: function() { }
+		clearValidations: function() { },
+		
+		/**
+		 * 
+		 * @param {} message
+		 */
+		setInvalidMessage: function(message) { }
 	}
 });

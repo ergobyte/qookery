@@ -33,13 +33,12 @@ qx.Class.define("qookery.internal.validators.NotNullValidator", {
 			var message = options['message'];
 			if(!message || message.length == 0)
 				throw new Error("Validation message is required for not-null validator");
-			return function(validator, value) {
-				window.setTimeout(function() {
-					if (!value || value.length == 0)
-						validator.setValid(false, message);
-					 else
-						validator.setValid(true);
-				}, 100);
+			return function(value, item) {
+				if(!value || value.length == 0) {
+					item.setInvalidMessage(message);
+					return false;
+				}
+				return true;
 			};
 		}
 	}

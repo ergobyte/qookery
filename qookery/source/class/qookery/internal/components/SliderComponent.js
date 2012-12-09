@@ -89,5 +89,12 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 			};
 			return group;
 		}
+	},
+	
+	destruct: function() {
+		this.__group.slider.destroy();
+		this.__group.minimum.destroy();
+		this.__group.maximum.destroy();
+		this.__group.value.destroy();
 	}
 });

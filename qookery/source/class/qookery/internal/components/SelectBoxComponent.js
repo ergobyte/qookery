@@ -28,8 +28,15 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
+	
+	statics: {
+		nullLabelModel: "emptySelection"
+	},
 
 	members: {
+		
+		__hasNullValue: false,
+		__nullLabel: "",
 		
 		_createMainWidget: function(createOptions) {
 			var selectBox = new qx.ui.form.SelectBox();
@@ -38,6 +45,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;
+				if(model == qookery.internal.components.SelectBoxComponent.nullLabelModel) model = null;
 				this.setValue(model);
 			}, this);
 			return selectBox;
@@ -56,7 +64,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				return;
 			}
 		},
-
+		
 		addItem: function(model, label, icon) {
 			qx.core.Assert.assertNotNull(model);
 			if(!label) label = this._getLabelOf(model);
@@ -67,6 +75,10 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		setItems: function(items) {
 			var selectBox = this.getMainWidget();
 			selectBox.removeAll();
+			if(this.__hasNullValue) {
+				var listItem = new qx.ui.form.ListItem(this.__nullLabel, null, qookery.internal.components.SelectBoxComponent.nullLabelModel);
+				selectBox.add(listItem);
+			}
 			if(qx.lang.Type.isArray(items)) {
 				for(var i = 0; i < items.length; i++) {
 					var model = items.getItem(i);
@@ -86,8 +98,22 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 		
 		initialize: function(initOptions) {
-			if(!initOptions || !initOptions["itemsMap"]) return;
-			this.setItems(initOptions["itemsMap"]);
+			if(!initOptions) return;
+			if(initOptions["format"]) {
+				this.getMainWidget().setFormat(function (item) {
+					if(!item) return "";
+					if (item.getModel() == qookery.internal.components.SelectBoxComponent.nullLabelModel) return item.getLabel();
+					if (item.getModel())
+						return initOptions["format"](item.getModel());
+					return initOptions["format"](item);
+				});
+			}
+			if(initOptions["itemsMap"])
+				this.setItems(initOptions["itemsMap"]);
+			if(initOptions["nullLabel"]) {
+				this.__hasNullValue = true;
+				this.__nullLabel = initOptions["nullLabel"];
+			}
 		}
 	}
 });

@@ -48,13 +48,7 @@
 		<tab-view-page label="Options" column-flexes="1">
 			<composite column-flexes="1">
 				<check-box label="Pearl Paint" connect="pearl"/>
-				<date-field label="Delivery Date" connect="date">
-					<script>
-						this.initialize({
-							dateFormat: "dd/MM/yyyy HH:mm:ss"
-						});
-					</script>
-				</date-field>
+				<date-field label="Delivery Date" connect="date" format="date: format = dd/MM/yyyy HH:mm:ss"/>
 				<group-box label="Loan Percent" column-count="2" column-flexes="0 1">
 					<slider connect="loan">
 						<script>

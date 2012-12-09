@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	A demo displaying the cell counting algorithm of Qookery,
+	freeing the XML author from specifying a row and column
+	number for each cell of the underlying grid layout.
+-->
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
+
+	<composite column-count="5" column-flexes="1 1 1 1 1">
+		<button label="Child Widget 0" />
+		<button label="Child Widget 1" column-span="2"/>
+		<button label="Child Widget 2" row-span="2"/>
+		<button label="Child Widget 3"/>
+		<button label="Child Widget 4" row-span="2" column-span="2"/>
+		<button label="Child Widget 5"/>
+		<button label="Child Widget 6" row-span="2"/>
+		<button label="Child Widget 7" column-span="2"/>
+	</composite>
+	
+</form>

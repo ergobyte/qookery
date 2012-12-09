@@ -29,7 +29,7 @@ qx.Class.define("qookery.Qookery", {
 	construct: function() {
 		this.base(arguments);
 		this.__modelProvider = qookery.impl.DefaultModelProvider.getInstance();
-		this.__resourceLoader = qookery.impl.SimpleResourceLoader.getInstance();
+		this.__resourceLoader = qookery.impl.DefaultResourceLoader.getInstance();
 	},
 
 	members: {

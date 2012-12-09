@@ -51,6 +51,22 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @param {String} component The name of the component
 		 * @return {IComponent} The Component class name or null
 		 */
-		getComponent: function(component) { }
+		getComponent: function(component) { },
+		
+		/**
+		 * 
+		 * @param {String} formatter The IFormat class name
+		 * @param {String} name The name of the component for subsequent access
+		 */
+		registerFormatter: function(formatter, name) { },
+		
+		/**
+		 * 
+		 * @param {String} formatter The name of the formatter
+		 * @return {IFormat} The Formatter class name or null
+		 */
+		getFormatter: function(formatter) { }
+		
+		
 	}
 });

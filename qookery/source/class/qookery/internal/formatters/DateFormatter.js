@@ -18,25 +18,30 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.TabHolderComponent", {
+qx.Class.define("qookery.internal.formatters.DateFormatter", {
 
-	extend: qookery.internal.components.ContainerComponent,
-
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
+	extend: qx.core.Object,
+	implement: [qx.util.format.IFormat],
+	
+	construct: function(options) {
+		this.base(arguments);
+		this.__format = new qx.util.format.DateFormat(options['format'], options['locale']);
 	},
-
+	
 	members: {
 		
-		create: function(createOptions) {
-			createOptions['column-count'] = 'none';
-			this.base(arguments, createOptions);
+		__format: null,
+		
+		format: function(obj) {
+			return this.__format.format(obj);
 		},
-
-		_createContainerWidget: function(createOptions) {
-			var  tabView = new qx.ui.tabview.TabView();
-			this._applyLayoutProperties(tabView, createOptions);
-			return tabView;
+		
+		parse: function(str) {
+			return this.__format.parse(str);
+		},
+		
+		getFormat: function() {
+			return this.__format;
 		}
 	}
 });

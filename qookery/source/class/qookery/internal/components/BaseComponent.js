@@ -42,6 +42,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		this.base(arguments);
 		this.__parentComponent = parentComponent;
 		this._widgets = [ ];
+		this.__actions = { };
 	},
 	
 	members: {
@@ -50,6 +51,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		__parentComponent: null,
 		__createOptions: null,
 		_widgets: null,
+		__actions: null,
 		
 		// Implementations
 
@@ -70,6 +72,14 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			if(createOptions['enabled'] == false) this.setEnabled(false);
 			if(createOptions['visible'] == false) this.setVisible(false);
+		},
+		
+		setAction: function(actionName, clientCode) {
+			this.__actions[actionName] = clientCode;
+		},
+		
+		getAction: function(action) {
+			return this.__actions[action];
 		},
 
 		getId: function() {
@@ -102,7 +112,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			// Subclasses that require additional initialization
 			// should override this method
 		},
-
+		
 		getParent: function() {
 			return this.__parentComponent;
 		},
@@ -173,7 +183,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['max-width']) widget.setMaxWidth(createOptions['max-width']);
 			if(createOptions['max-height']) widget.setMaxHeight(createOptions['max-height']);
 			if(createOptions['alignment-x']) widget.setAlignX(createOptions['alignment-x']);
-			if(createOptions['alignment-y']) widget.setAlignX(createOptions['alignment-y']);
+			if(createOptions['alignment-y']) widget.setAlignY(createOptions['alignment-y']);
 			var stretchX = createOptions['stretch-x'] !== undefined ? createOptions['stretch-x'] : createOptions['stretch'];
 			var stretchY = createOptions['stretch-y'] !== undefined ? createOptions['stretch-y'] : createOptions['stretch'];
 			if(stretchX !== undefined) widget.setAllowStretchX(stretchX);
@@ -190,6 +200,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
 			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
 			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
+			if(createOptions['decorator']) widget.setDecorator(createOptions['decorator']);
+			if(createOptions['font']) widget.setFont(createOptions['font']);
 		},
 		
 		_applyEnabled: function(enabled) {

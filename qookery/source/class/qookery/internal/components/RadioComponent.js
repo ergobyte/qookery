@@ -21,6 +21,10 @@
 qx.Class.define("qookery.internal.components.RadioComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
+	
+	events: {
+		"changeSelection" : "qx.event.type.Data"
+	},
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -63,14 +67,28 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
 		},
 		
 		__emptyManager: function() {
-			for(var radioButton in this.__radioButtonsMap) this.__manager.remove(radioButton);
+			for(var radioButton in this.__radioButtonsMap) {
+				var item = this.__radioButtonsMap[radioButton];
+				this.__manager.remove(radioButton);
+				item.destroy();
+			}
 			this.__radioButtonsMap = { };
 		},
 		
 		__onChangeSelection:function(e) {
-			if(e.getData().length == 0 || this._disableValueEvents) return;
+			if(e.getData().length == 0) {
+				this.fireDataEvent("changeSelection", null);
+				return;
+			}
+			if (this._disableValueEvents) return;
 			var selectedButton = e.getData()[0];
       		this.setValue(qx.lang.Object.getKeyFromValue(this.__radioButtonsMap, selectedButton));
+      		this.fireDataEvent("changeSelection", this.getValue());
 		}
+	},
+	
+	destruct: function() {
+		this.__emptyManager();
+		this._disposeObjects('__manager');
 	}
 });

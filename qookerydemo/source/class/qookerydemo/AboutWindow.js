@@ -46,8 +46,8 @@ qx.Class.define("qookerydemo.AboutWindow", {
 		
 		__xmlInit: function() {
 			var that = this;
-			qookery.impl.QookeryContext.loadResource("resource/qookerydemo/forms/aboutDialog.xml", function(req) {
-				qookery.impl.QookeryContext.createFormComponent(req.responseText, that, { row: 0, column: 0 }, function () {
+			qookery.impl.QookeryContext.loadResource("resource/qookerydemo/forms/aboutDialog.xml", function(data) {
+				qookery.impl.QookeryContext.createFormComponent(data, that, { row: 0, column: 0 }, function () {
 					that.close();
 				});
 				that.center();

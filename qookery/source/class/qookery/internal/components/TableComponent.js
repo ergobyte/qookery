@@ -23,7 +23,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	extend: qookery.internal.components.EditableComponent,
 	
 	events: {
-		"changeSelection" : "qx.event.type.Data"
+		"changeSelection": "qx.event.type.Data",
+		"dataChanged": "qx.event.type.Data"
 	},
 
 	construct: function(parentComponent) {
@@ -43,6 +44,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			if(!options || (!options["model"] && !options["columns"])) return;
 			this.__tableModel = options["model"] || new qookery.impl.SimpleTableModel();
 			this.__tableModel.setTable(this);
+			this.__tableModel.addListener("dataChanged", function(event) {
+				this.fireDataEvent("dataChanged", event.getData());
+			}, this);
 			if(options["columns"]) {
 				var nameArray = new Array();
 				var labelArray = new Array();
@@ -52,7 +56,18 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				}
 				this.__tableModel.setColumns(labelArray, nameArray);
 			}
-			this._widgets[0].setTableModel(this.__tableModel);
+			this.getMainWidget().setTableModel(this.__tableModel);
+			var columnModel = this.getMainWidget().getTableColumnModel();
+			var resizeBehavior = columnModel.getBehavior();
+			for(var i = 0; i < options["columns"].length; i++) {
+				if(options["columns"][i]["width"])
+					resizeBehavior.setWidth(i, options["columns"][i]["width"]);
+				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, new qookery.internal.DefaultCellRenderer());
+				if(options["columns"][i]["formatter"]) {
+						var formatter = this._createFormat(options["columns"][i]["formatter"]);
+						this.getMainWidget().getTableColumnModel().getDataCellRenderer(i).setFormatter(formatter);
+					}
+			}
 		},
 		
 		getRow: function(rowIndex) {
@@ -89,7 +104,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		},
 		
 		_createMainWidget: function(createOptions) {
-			var widget = new qx.ui.table.Table();
+			var widget = new qx.ui.table.Table(null, {tableColumnModel: function(table) {
+				return new qx.ui.table.columnmodel.Resize(table);
+			}});
 			widget.getSelectionModel().addListener('changeSelection', function(e) {
 				var selectionModel = e.getTarget();
 				var selectionRanges = selectionModel.getSelectedRanges();
