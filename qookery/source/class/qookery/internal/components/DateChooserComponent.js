@@ -29,37 +29,39 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	members: {
-		
+
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
 			widget.addListener("changeValue", function(event) {
-				if(event.getData() instanceof Date && !this._disableValueEvents) // convert date to ISO 8601
-					this.setValue(event.getData().toISOString());
+				if(this._disableValueEvents) return;
+				this.setValue(event.getData());
 			}, this);
 			this._applyLayoutProperties(widget, createOptions);
 			return widget;
 		},
-		
+
 		_updateUI: function(value) {
 			var dateField = this.getMainWidget();
 			if(!value) {
 				dateField.resetValue();
 				return;
 			}
-			value = this.__convertFromString(value);
+			if(!qx.lang.Type.isDate(value)) {
+				value = this.__convertFromString(value);
+			}
 			dateField.setValue(value);
 		},
-		
+
 		_applyFormat: function(value) {
 			this.base(arguments, value);
 			this.getMainWidget().setDateFormat(this.getFormatter().getFormat());
 		},
-		
+
 		__convertFromString: function(dateString) {
 			var reggie = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g;
-			var dateArray = reggie.exec(dateString); 
+			var dateArray = reggie.exec(dateString);
 			var dateObject = new Date(
 				(+dateArray[1]),
 				(+dateArray[2])-1,//month starts with 0
