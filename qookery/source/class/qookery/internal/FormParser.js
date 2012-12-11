@@ -73,7 +73,9 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			this.__formComponent.setup();
 			
-			// Phase 5: Going live
+			// Phase 5: Data binding - none for the form component
+
+			// Phase 6: Going live
 
 			var formWidget = this.__formComponent.getMainWidget();
 			parentComposite.add(formWidget, layoutData);
@@ -145,6 +147,9 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Phase 4: Setup
 
 			component.setup();
+
+			// Phase 5: Data binding
+			
 			if(createOptions['connect']) {
 				var connection = this.__resolveQName(createOptions['connect']);
 				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
@@ -153,7 +158,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				modelProvider.handleConnection(component, connection[0], connection[1]);
 			}
 
-			// Phase 5: Going live
+			// Phase 6: Going live
 
 			parentComponent.addChild(component);
 		},
@@ -222,7 +227,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		__parseScript: function(scriptElement, component) {
 			var clientCode = this.__getNodeText(scriptElement);
 			if(clientCode == null) 
-				throw new Error("Encountered empty <script> element");
+				throw new Error("Empty <script> element");
 			var eventName = this.__getAttribute(scriptElement, "event");
 			var actionName = this.__getAttribute(scriptElement, "action");
 			if(eventName)
@@ -233,13 +238,15 @@ qx.Class.define("qookery.internal.FormParser", {
 				component.executeClientCode(clientCode);
 		},
 		
-		__parseSet: function(scriptElement, component) {
-			var clientCode = this.__getNodeText(scriptElement);
-			if(clientCode == null) 
-				throw new Error("Encountered empty <set> element");
-			var propertyName = this.__getAttribute(scriptElement, "attribute") || "value";
-			propertyName = "set" + qx.lang.String.firstUp(propertyName);
-			component[propertyName](clientCode);
+		__parseSet: function(setElement, component) {
+			var text = this.__getNodeText(setElement);
+			if(text == null) 
+				throw new Error("Empty <set> element");
+			var propertyName = this.__getAttribute(setElement, "property");
+			if(propertyName == null) 
+				throw new Error("<set> element is not specifying a property");
+			var setterName = "set" + qx.lang.String.firstUp(propertyName);
+			component[setterName](text);
 		},
 
 		__parseBind: function(bindElement) {

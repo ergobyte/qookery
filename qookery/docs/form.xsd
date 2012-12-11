@@ -281,7 +281,7 @@
 		<complexType>
 			<simpleContent>
 				<extension base="string">
-					<attribute name="attribute" type="token" use="required" />
+					<attribute name="property" type="token" use="required" />
 				</extension>
 			</simpleContent>
 		</complexType>
