@@ -25,9 +25,21 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 	
 	extend: qx.ui.table.cellrenderer.Abstract,
 	
+	construct: function(align, color, style, weight) {
+		this.base(arguments);
+		this.__defaultTextAlign = align || "";
+		this.__defaultColor = color || "";
+		this.__defaultFontStyle = style || "";
+		this.__defaultFontWeight = weight || "";
+	},
+	
 	members: {
 		
 		__formatter: null,
+		__defaultTextAlign: null,
+		__defaultColor: null,
+		__defaultFontStyle: null,
+		__defaultFontWeight: null,
 	
 		_getContentHtml: function(cellInfo) {
 			return qx.bom.String.escape(this._formatValue(cellInfo));
@@ -43,6 +55,23 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 		
 		setFormatter: function(formatter) {
 			this.__formatter = formatter;
+		},
+		
+		
+		_getCellStyle : function(cellInfo) {
+
+			var style = {
+				"text-align": this.__defaultTextAlign,
+				"color": this.__defaultColor,
+				"font-style": this.__defaultFontStyle,
+				"font-weight": this.__defaultFontWeight
+			};
+			var styleString = [];
+			for(var key in style) {
+				if (style[key])
+					styleString.push(key, ":", style[key], ";");
+			}
+			return styleString.join("");
 		}
 	}
 });

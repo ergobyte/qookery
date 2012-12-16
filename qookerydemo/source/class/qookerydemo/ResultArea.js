@@ -30,18 +30,18 @@ qx.Class.define("qookerydemo.ResultArea",
 	members:  {
 
 		__formComponent: null,
-		
+
 		loadForm: function(xmlCode) {
 			if(this.__formComponent) {
 				this.__formComponent.dispose();
 				this._disposeObjects("__formComponent");
 			}
 			var that = this;
-			this.__formComponent = qookery.impl.QookeryContext.createFormComponent(xmlCode, this, null, function () {
+			this.__formComponent = qookery.contexts.Qookery.createFormComponent(xmlCode, this, null, function () {
 				that.remove(that.getChildren()[0]);
 			});
 		},
-		
+
 		getFormComponent: function() {
 			return this.__formComponent;
 		}

@@ -26,7 +26,16 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 		this.base(arguments, parentComponent);
 	},
 	
+	properties: {
+		placeholder: { check: "String", inheritable: true, nullable: false, apply: "_applyPlaceholder" }
+	},
+	
 	members: {
+		
+		create: function(createOptions) {
+			this.base(arguments, createOptions);
+			if(createOptions['placeholder']) this.setPlaceholder(createOptions['placeholder']);
+		},
 	
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.TextArea();
@@ -40,6 +49,12 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 		
 		_applyValue: function(value) {
 			this.getMainWidget().setValue(this._getLabelOf(value));
+		},
+		
+		_applyPlaceholder: function(placeholder) {
+			var mainWidget = this.getMainWidget();
+			if(!mainWidget) return;
+			mainWidget.setPlaceholder(placeholder);
 		},
 		
 		_applyReadOnly: function(readOnly) {

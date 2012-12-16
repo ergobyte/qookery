@@ -187,8 +187,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!value) return "";
 			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
 			if(!modelProvider) return value.toString();
-			var humanFriendlyField = modelProvider.getLabel(value);
-			return humanFriendlyField;
+			if(!this.getFormatter())
+				return modelProvider.getLabel(value);
+			return this.getFormatter().format(value);
 		},
 
 		/**

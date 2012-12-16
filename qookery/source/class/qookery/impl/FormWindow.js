@@ -13,10 +13,10 @@ qx.Class.define("qookery.impl.FormWindow", {
 
 	/**
 	 * Create a new Qookery form window
-	 * 
+	 *
 	 * @param title { String } title of the window
 	 * @param icon { uri } icon of the window
-	 * 
+	 *
 	 * @returns the newly created Qookery window instance
 	 */
 	construct: function(title, icon) {
@@ -24,7 +24,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 		this.set({ modal: true, showMinimize: false, showMaximize: false, caption: title, icon: icon });
 		this.setLayout(new qx.ui.layout.VBox());
 	},
-	
+
 	members: {
 
 		__formComponent: null,
@@ -32,24 +32,24 @@ qx.Class.define("qookery.impl.FormWindow", {
 
 		/**
 		 * Create and open Qookery window
-		 * 
+		 *
 		 * @param formUrl {String} the URL of the form XML
 		 * @param model {Object} an initial model to set, or <code>null</code> if not needed
 		 */
 		createAndOpen: function(xmlCode, model) {
-			
+
 			var that = this;
-			this.__formComponent = qookery.impl.QookeryContext.createFormComponent(xmlCode, this, { flex: 1 }, function(event) {
+			this.__formComponent = qookery.contexts.Qookery.createFormComponent(xmlCode, this, { flex: 1 }, function(event) {
 				that.destroy();
 			}, this);
-			
+
 			if(!this.__formComponent) return;
 			if(model) this.__formComponent.setModel(model);
 			this.add(this._getButtonsContainer());
 			this.center();
 			this.open();
 		},
-		
+
 		_getButtonsContainer: function() {
 			if(this.__buttonsContainer == null) {
 				var buttonsLayout = new qx.ui.layout.HBox();
@@ -61,11 +61,11 @@ qx.Class.define("qookery.impl.FormWindow", {
 			}
 			return this.__buttonsContainer;
 		},
-		
+
 		_createButtons: function(buttonsContainer) {
 			// Override to add button to the window
 		},
-		
+
 	    _onCloseButtonClick: function(event) {
 	    	this.__formComponent.dispose();
 	    },

@@ -18,7 +18,7 @@
 	$Id$
 */
 
-qx.Class.define("qookerydemo.DemoContext", {
+qx.Class.define("qookerydemo.contexts.QookeryDemo", {
 	
 	type: "static",
 	

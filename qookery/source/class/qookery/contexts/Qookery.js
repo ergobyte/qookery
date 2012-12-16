@@ -1,20 +1,20 @@
 
-qx.Class.define("qookery.impl.QookeryContext", {
-	
+qx.Class.define("qookery.contexts.Qookery", {
+
 	type: "static",
-	
+
 	statics: {
-		
+
 		/**
 		 * Use resource loader to load a resource
-		 * 
+		 *
 		 * @param {} resourceUrl the URL of the resource to load
 		 * @param {} callback a callback to call on successful loading
 		 */
 		loadResource: function(resourceUrl, callback) {
 			qookery.Qookery.getInstance().getResourceLoader().loadResource(resourceUrl, callback);
 		},
-		
+
 		createFormComponent: function(xmlCode, parentComposite, layoutData, formCloseHandler) {
 			var xmlDocument = qx.xml.Document.fromString(xmlCode);
 			var parser = qookery.Qookery.getInstance().createNewParser();
@@ -37,7 +37,7 @@ qx.Class.define("qookery.impl.QookeryContext", {
 			}
 			return null;
 		},
-		
+
 		openWindow: function(formUrl, model, resultCallback, title, icon) {
 			icon = icon || null;
 			title = title || null;

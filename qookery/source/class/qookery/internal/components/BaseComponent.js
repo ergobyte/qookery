@@ -19,7 +19,7 @@
 */
 
 /**
- * Base class for all Qookery components. 
+ * Base class for all Qookery components.
  */
 qx.Class.define("qookery.internal.components.BaseComponent", {
 
@@ -27,24 +27,18 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	extend: qx.core.Object,
 	implement: [ qookery.IComponent ],
 
-	statics: {
-		QOOKERY_FUNCTION: function(selector) {
-			
-		}
-	},
-
 	properties: {
 	    enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
 	    visible: { init: true, check: "Boolean", inheritable: true, apply: "_applyVisible" }
 	},
-	
+
 	construct: function(parentComponent) {
 		this.base(arguments);
 		this.__parentComponent = parentComponent;
 		this._widgets = [ ];
 		this.__actions = { };
 	},
-	
+
 	members: {
 
 		__id: null,
@@ -52,12 +46,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		__createOptions: null,
 		_widgets: null,
 		__actions: null,
-		
+
 		// Implementations
 
 		/**
 		 * Create Qooxdoo widget(s)
-		 * 
+		 *
 		 * @param createOptions {keyValuePairList} an object with any number of setup options
 		 */
 		create: function(createOptions) {
@@ -73,11 +67,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['enabled'] == false) this.setEnabled(false);
 			if(createOptions['visible'] == false) this.setVisible(false);
 		},
-		
+
 		setAction: function(actionName, clientCode) {
 			this.__actions[actionName] = clientCode;
 		},
-		
+
 		getAction: function(action) {
 			return this.__actions[action];
 		},
@@ -96,23 +90,23 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		/**
 		 * Perform setup operations after all children have been created
 		 */
-		setup: function() { 
+		setup: function() {
 			// Nothing to do here, override if needed
 		},
 
-		listWidgets: function(filterName) { 
+		listWidgets: function(filterName) {
 			return this._widgets;
 		},
-		
+
 		getMainWidget: function() {
 			return this.listWidgets('main')[0];
 		},
-		
+
 		initialize: function(initOptions) {
 			// Subclasses that require additional initialization
 			// should override this method
 		},
-		
+
 		getParent: function() {
 			return this.__parentComponent;
 		},
@@ -125,24 +119,24 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		focus: function() {
 			this.getMainWidget().focus();
 		},
-		
+
 		/**
 		 * Add a listener to this component
-		 * 
+		 *
 		 * @param {String} eventName The name of the event to listen to
 		 * @param {String} clientCode The JavaScript source code to execute when the event is triggered
 		 */
 		addEventHandler: function(eventName, clientCode) {
 			if(qx.Class.supportsEvent(this.constructor, eventName)) {
 				this.addListener(eventName, function(event) {
-					this.executeClientCode(clientCode, event);
+					this.executeClientCode(clientCode, { "event": event });
 				}, this);
 				return;
 			}
 			var mainWidget = this.getMainWidget();
 			if(mainWidget != null && qx.Class.supportsEvent(mainWidget.constructor, eventName)) {
 				mainWidget.addListener(eventName, function(event) {
-					this.executeClientCode(clientCode, event);
+					this.executeClientCode(clientCode, { "event": event });
 				}, this);
 				return;
 			}
@@ -152,14 +146,19 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		/**
 		 * ExecuteClientCode will be called whenever a setup or an handler need to be executed
-		 * 
+		 *
 		 * @param clientCode {String} The Code to execute
 		 * @param event {qx.event.type.Event} optional Qooxdoo event to set into context
 		 */
-		executeClientCode: function(clientCode, event) {
+		executeClientCode: function(clientCode, options) {
 			try {
-				var clientFunction = new Function("$", "event", clientCode);
-				clientFunction.call(this, this.getForm().getClientCodeContext(), event);
+				options = options || { };
+				var keys = Object.keys(options);
+				var values = qx.lang.Object.getValues(options);
+				qx.lang.Array.insertAt(keys, "$", 0);
+				qx.lang.Array.insertAt(values, this.getForm().getClientCodeContext(), 0);
+				var clientFunction = new Function(keys, clientCode);
+				return clientFunction.apply(this, values);
 			}
 			catch(error) {
 				qx.log.Logger.error(this, qx.lang.String.format(
@@ -171,7 +170,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		/**
 		 * Apply layout properties to a widget
-		 * 
+		 *
 		 * @param widget {qx.ui.core.Widget} Widget to receive layout properties
 		 * @param createOptions {Object} Layouting instructions as provided by the XML parser
 		 */
@@ -203,7 +202,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['decorator']) widget.setDecorator(createOptions['decorator']);
 			if(createOptions['font']) widget.setFont(createOptions['font']);
 		},
-		
+
 		_applyEnabled: function(enabled) {
 			var widgets = this.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {

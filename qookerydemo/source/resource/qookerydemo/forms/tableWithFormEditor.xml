@@ -4,8 +4,8 @@
 -->
 <form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="1 0" row-flexes="0 1">
 
-	<bind type="scripting-context" key="demo" uri="qookerydemo.DemoContext" required="true" />
-	<bind type="scripting-context" key="qookery" uri="qookery.impl.QookeryContext" required="true" />
+	<import class="qookery.contexts.Qookery" />
+	<import class="qookerydemo.contexts.QookeryDemo" />
 
 	<label label="Hacker-Proof® Password Manager" column-span="2" />
 
@@ -27,8 +27,8 @@
 	<composite alignment-x="right">
 		<button label="Add Password">
 			<script event="execute">
-				var newModel = $.demo.createModel({ username: "", password: "", serial: "de ad be ef" });
-				$.qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", newModel, function(result) {
+				var newModel = $.QookeryDemo.createModel({ username: "", password: "", serial: "de ad be ef" });
+				$.Qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", newModel, function(result) {
 					if(result == "OK") $("#passwordsTable").addRow(newModel);
 				}, "Add Password");
 			</script>
@@ -38,8 +38,8 @@
 				var table = $("#passwordsTable");
 				if(table.getSelectedRowIndex() == undefined) return;
 				var currentModel = table.getRow(table.getSelectedRowIndex());
-				var clonedModel = $.demo.cloneModel(currentModel);
-				$.qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", clonedModel, function(result) {
+				var clonedModel = $.QookeryDemo.cloneModel(currentModel);
+				$.Qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", clonedModel, function(result) {
 					if(result == "OK") table.replaceRow(table.getSelectedRowIndex(), clonedModel);
 				}, "Edit Password");
 			</script>

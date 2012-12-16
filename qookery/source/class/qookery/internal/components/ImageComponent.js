@@ -25,20 +25,20 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	members: {
-		
+
 		create: function(createOptions) {
-			this._widgets[0] = new qx.ui.basic.Image();
+			this._widgets[0] = new qx.ui.basic.Image(createOptions['source']);
 			this.base(arguments, createOptions);
 		},
-		
+
 		getSource: function() {
 			return this._widgets[0].getSource();
 		},
-		
+
 		setSource: function(source) {
-			this._widgets[0].setSource(source);	
+			this._widgets[0].setSource(source);
 		}
 	}
 });

@@ -21,7 +21,7 @@
 qx.Class.define("qookerydemo.AboutWindow", {
 
 	extend: qx.ui.window.Window,
-	
+
 	statics: {
 		open: function() {
 			var window = new qookerydemo.AboutWindow();
@@ -30,8 +30,8 @@ qx.Class.define("qookerydemo.AboutWindow", {
 				window = null;
 			});
 		}
-	}, 
-	
+	},
+
 	construct: function() {
 		this.base(arguments, "Qookery Demo", "resource/qookerydemo/icons/24/about.png");
 		this.set({ modal: true, showMinimize: false, showMaximize: false});
@@ -41,13 +41,13 @@ qx.Class.define("qookerydemo.AboutWindow", {
 		this.setLayout(grid);
 		this.__xmlInit();
 	},
-	
+
 	members: {
-		
+
 		__xmlInit: function() {
 			var that = this;
-			qookery.impl.QookeryContext.loadResource("resource/qookerydemo/forms/aboutDialog.xml", function(data) {
-				qookery.impl.QookeryContext.createFormComponent(data, that, { row: 0, column: 0 }, function () {
+			qookery.contexts.Qookery.loadResource("resource/qookerydemo/forms/aboutDialog.xml", function(data) {
+				qookery.contexts.Qookery.createFormComponent(data, that, { row: 0, column: 0 }, function () {
 					that.close();
 				});
 				that.center();

@@ -65,8 +65,20 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @param {String} formatter The name of the formatter
 		 * @return {IFormat} The Formatter class name or null
 		 */
-		getFormatter: function(formatter) { }
+		getFormatter: function(formatter) { },
 		
+		/**
+		 * 
+		 * @param {Object} map The map object
+		 * @param {String} name The name of the map for subsequent access
+		 */
+		registerMap: function(map, name) { },
 		
+		/**
+		 * 
+		 * @param {String} map The name of the mao
+		 * @return {Object} The map object or null
+		 */
+		getMap: function(map) { }
 	}
 });

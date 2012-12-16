@@ -40,12 +40,12 @@ qx.Class.define("qookerydemo.Toolbar", {
 		runAgainButton.addListener("execute", function() {
 			qx.core.Init.getApplication().runCode();
 		}, this);
-		
+
 		var aboutButton = new qx.ui.toolbar.Button("About", "resource/qookerydemo/icons/24/about_gs.png");
 		aboutButton.addListener("execute", function () {
 			qookerydemo.AboutWindow.open();
 		}, this);
-		
+
 		var demoListMenu = new qx.ui.menu.Menu();
 		qookerydemo.Toolbar.DEMOS.forEach(function(demoArguments, index) {
 			var button = new qx.ui.menu.Button(demoArguments['label']);
@@ -54,7 +54,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 			}, this);
 			demoListMenu.add(button);
 		}, this);
-		
+
 		var demoMenu = new qx.ui.toolbar.MenuButton("Demo Selection", "resource/qookerydemo/icons/24/samples.png");
 		demoMenu.setMenu(demoListMenu);
 		this.add(demoMenu);
@@ -63,16 +63,16 @@ qx.Class.define("qookerydemo.Toolbar", {
 	},
 
 	members: {
-		
+
 		__loadDemo: function(demoArguments) {
 			var formUrl = "resource/qookerydemo/forms/" + demoArguments['formFile'];
-			qookery.impl.QookeryContext.loadResource(formUrl, function(data) {
+			qookery.contexts.Qookery.loadResource(formUrl, function(data) {
 				qx.core.Init.getApplication().setXmlEditorCode(data);
 				qx.core.Init.getApplication().runCode();
 			});
 			if(demoArguments['modelFile']) {
 				var modelUrl = "resource/qookerydemo/models/" + demoArguments['modelFile'];
-				qookery.impl.QookeryContext.loadResource(modelUrl, function(data) {
+				qookery.contexts.Qookery.loadResource(modelUrl, function(data) {
 					qx.core.Init.getApplication().setModelAreaCode(data);
 				});
 			}

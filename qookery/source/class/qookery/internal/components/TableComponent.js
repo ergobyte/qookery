@@ -60,13 +60,15 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			var columnModel = this.getMainWidget().getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < options["columns"].length; i++) {
-				if(options["columns"][i]["width"])
-					resizeBehavior.setWidth(i, options["columns"][i]["width"]);
-				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, new qookery.internal.DefaultCellRenderer());
-				if(options["columns"][i]["formatter"]) {
-						var formatter = this._createFormat(options["columns"][i]["formatter"]);
+				var column = options["columns"][i];
+				if(column["width"])
+					resizeBehavior.setWidth(i, column["width"]);
+				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, new qookery.internal.DefaultCellRenderer(
+				column["align"], column["color"], column["font-style"], column["font-weight"]));
+				if(column["formatter"]) {
+						var formatter = this._createFormatter(column["formatter"]);
 						this.getMainWidget().getTableColumnModel().getDataCellRenderer(i).setFormatter(formatter);
-					}
+				}
 			}
 		},
 		

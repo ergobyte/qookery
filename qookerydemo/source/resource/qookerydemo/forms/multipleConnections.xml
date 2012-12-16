@@ -64,11 +64,7 @@
 			</composite>
 		</tab-view-page>
 		<tab-view-page label="Photo" column-flexes="1">
-			<image>
-				<script>
-					this.setSource("resource/qookerydemo/images/ascona.jpg");
-				</script>
-			</image>
+			<image source="resource/qookerydemo/images/ascona.jpg" />
 		</tab-view-page>
 	</tab-view>
 	

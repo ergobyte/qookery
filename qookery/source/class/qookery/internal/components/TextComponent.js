@@ -26,10 +26,23 @@ qx.Class.define("qookery.internal.components.TextComponent", {
 		this.base(arguments, parentComponent);
 	},
 	
+	properties: {
+		placeholder: { check: "String", inheritable: true, nullable: false, apply: "_applyPlaceholder" }
+	},
+	
 	members: {
+		
+		create: function(createOptions) {
+			this.base(arguments, createOptions);
+			if(createOptions['placeholder']) this.setPlaceholder(createOptions['placeholder']);
+		},
 
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.TextField();
+			return this._setupTextField(widget, createOptions);
+		},
+		
+		_setupTextField: function(widget, createOptions) {
 			widget.setLiveUpdate(true);
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
@@ -39,11 +52,14 @@ qx.Class.define("qookery.internal.components.TextComponent", {
 			return widget;
 		},
 		
+		_applyPlaceholder: function(placeholder) {
+			var mainWidget = this.getMainWidget();
+			if(!mainWidget) return;
+			mainWidget.setPlaceholder(placeholder);
+		},
+		
 		_updateUI: function(value) {
-			if (!this.getFormatter())
-				this.getMainWidget().setValue(this._getLabelOf(value));
-			else
-				this.getMainWidget().setValue(this.getFormatter().format(value));
+			this.getMainWidget().setValue(this._getLabelOf(value));
 		},
 		
 		_applyReadOnly: function(readOnly) {

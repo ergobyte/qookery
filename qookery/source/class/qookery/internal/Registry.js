@@ -26,6 +26,10 @@ qx.Class.define("qookery.internal.Registry", {
 	
 	construct: function() {
 		this.base(arguments);
+		this.__validators = { };
+		this.__components = { };
+		this.__formatters = { };
+		this.__maps = { };
 		this.__initializeValidators();
 		this.__initializeComponents();
 		this.__initializeFormatters();
@@ -33,9 +37,10 @@ qx.Class.define("qookery.internal.Registry", {
 	
 	members: {
 		
-		__validators: { },
-		__components: { },
-		__formatters: { },
+		__validators: null,
+		__components: null,
+		__formatters: null,
+		__maps: null,
 		
 		registerValidator: function(validator, name) { 
 			this.__validators[name] = validator.getInstance();
@@ -61,9 +66,17 @@ qx.Class.define("qookery.internal.Registry", {
 			return this.__formatters[formatter];
 		},
 		
+		registerMap: function(map, name) {
+			this.__maps[name] = map;
+		},
+		
+		getMap: function(map) {
+			return this.__maps[map];
+		},
+		
 		__initializeValidators: function() {
 			this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
-			this.__validators["regularExpression"] = qookery.internal.validators.RegularExpressionValidator.getInstance();
+			this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
 		},
 		
 		__initializeComponents: function() {
@@ -93,6 +106,7 @@ qx.Class.define("qookery.internal.Registry", {
 		__initializeFormatters: function() {
 			this.__formatters["number"] = qookery.internal.formatters.NumberFormatter;
 			this.__formatters["date"] = qookery.internal.formatters.DateFormatter;
+			this.__formatters["map"] = qookery.internal.formatters.MapFormatter;
 		}
 		
 	},

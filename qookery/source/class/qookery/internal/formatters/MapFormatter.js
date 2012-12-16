@@ -15,22 +15,32 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id$
+	$Id: NumberFormatter.js 25 2012-12-09 18:00:48Z geonik@ergobyte.gr $
 */
 
-qx.Class.define("qookery.internal.components.PasswordComponent", {
+qx.Class.define("qookery.internal.formatters.MapFormatter", {
 
-	extend: qookery.internal.components.TextComponent,
+	extend: qx.core.Object,
+	implement: [qx.util.format.IFormat],
 	
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
+	construct: function(options) {
+		this.base(arguments);
+		this.__map = qookery.Qookery.getInstance().getRegistry().getMap(options["mapName"]) || null;
 	},
 	
 	members: {
 		
-		_createMainWidget: function(createOptions) {
-			var widget = new qx.ui.form.PasswordField();
-			return this._setupTextField(widget, createOptions);
-		}
+		__map: null,
+		
+		format: function(obj) {
+			if(this.__map && this.__map[obj]) {
+				return this.__map[obj];
+			}
+			return obj;
+		},
+		
+		parse: function(str) {
+			return str;
+		}	
 	}
 });

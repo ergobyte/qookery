@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
-	A master-details form
+	A "master-details" layout
 -->
 <form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" row-flexes="0 1 0">
 

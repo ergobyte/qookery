@@ -18,7 +18,7 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.validators.RegularExpressionValidator", {
+qx.Class.define("qookery.internal.validators.StringValidator", {
 
 	extend: qx.core.Object,
 	implement: [ qookery.IValidator ],
@@ -30,12 +30,15 @@ qx.Class.define("qookery.internal.validators.RegularExpressionValidator", {
 
 	members: {
 		createValidatorFunction: function(options) { 
-			var regex = options['regularExpression'];
+			var regex = options['regularExpression'] || null;
+			var minimumLength = (Number(options['minimumLength'])) || 0;
+			var maximumLength = (Number(options['maximumLength'])) || 100;
 			var message = options['message'];
-			if(!message || message.length == 0 || !regex)
-				throw new Error("Validation message and regular expression is required for regular-expression validator");
+			if(!message || message.length == 0)
+				throw new Error("Validation message is required for string validator");
 			return function(value, item) {
-				if(regex.test(value) == false) {
+				if(!value || value.length < minimumLength || value.length > maximumLength 
+				|| (regex != null && (regex.test(value) == false))) {
 					item.setInvalidMessage(message);
 					return false;
 				}

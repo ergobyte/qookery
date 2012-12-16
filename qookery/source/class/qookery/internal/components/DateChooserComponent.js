@@ -29,8 +29,17 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
+	
+	properties: {
+		placeholder: { check: "String", inheritable: true, nullable: false, apply: "_applyPlaceholder" }
+	},
 
 	members: {
+		
+		create: function(createOptions) {
+			this.base(arguments, createOptions);
+			if(createOptions['placeholder']) this.setPlaceholder(createOptions['placeholder']);
+		},
 
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
@@ -52,6 +61,12 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 				value = this.__convertFromString(value);
 			}
 			dateField.setValue(value);
+		},
+		
+		_applyPlaceholder: function(placeholder) {
+			var mainWidget = this.getMainWidget();
+			if(!mainWidget) return;
+			mainWidget.setPlaceholder(placeholder);
 		},
 
 		_applyFormat: function(value) {

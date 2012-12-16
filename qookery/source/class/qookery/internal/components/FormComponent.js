@@ -20,8 +20,8 @@
 
 /**
  * Form components are the topmost components in a Qookery form's component hierarchy,
- * 
- * They are responsible, among others, for managing children components, maintaining bindings, 
+ *
+ * They are responsible, among others, for managing children components, maintaining bindings,
  * handling data validation and providing scripting contexts to event handlers.
  */
 qx.Class.define("qookery.internal.components.FormComponent", {
@@ -49,7 +49,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__validationManager: null,
 		__clientCodeContext: null,
 		__result: null,
-		
+
 		getModel: function() {
 			return this.__controller.getModel();
 		},
@@ -72,24 +72,24 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__componentMap[id] = component;
 		},
 
-		registerUserContext: function(id, userContext) {
+		registerUserContext: function(key, userContext) {
 			var clientCodeContext = this.getClientCodeContext();
-			clientCodeContext[id] = userContext;
+			clientCodeContext[key] = userContext;
 		},
 
 		getForm: function() {
 			return this;
 		},
-		
+
 		addEventHandler: function(eventName, clientCode) {
 			switch(eventName) {
 			case "changeValid":
-				this.__validationManager.addListener(eventName, function(event) { this.executeClientCode(clientCode, event); }, this);
+				this.__validationManager.addListener(eventName, function(event) { this.executeClientCode(clientCode, { "event": event }); }, this);
 				return;
 			case "openForm":
 			case "closeForm":
 			case "changeModel":
-				this.addListener(eventName, function(event) { this.executeClientCode(clientCode, event); }, this);
+				this.addListener(eventName, function(event) { this.executeClientCode(clientCode, { "event": event }); }, this);
 				return;
 			}
 			this.base(arguments, eventName, clientCode);
@@ -115,24 +115,24 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.fireEvent("closeForm", qx.event.type.Event, null);
 			this.base(arguments);
 		},
-		
+
 		/**
 		 * Disposes the form.
-		 * 
+		 *
 		 * @param {} result The exit value of the component
 		 */
 		close: function(result) {
 			if(result) this.__result = result;
 			this.dispose();
 		},
-		
+
 		getResult: function() {
 			return this.__result;
 		},
 
 		/**
-		 * Generate a JavaScript context to be used by Qookery client code 
-		 * 
+		 * Generate a JavaScript context to be used by Qookery client code
+		 *
 		 * @return {Object} a suitable JavaScript context
 		 */
 		getClientCodeContext: function() {
@@ -151,9 +151,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		
+
 		// Remove all bindings
-		this.__controller.removeAllBindings(); 
+		this.__controller.removeAllBindings();
 
 		this._disposeObjects("__validationManager", "__controller", "__validationManager");
 		this.__componentMap = null;

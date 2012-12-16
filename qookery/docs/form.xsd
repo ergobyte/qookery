@@ -30,13 +30,6 @@
 
 	<!-- Simple types -->
 
-	<simpleType name='binding-type' >
-		<restriction base="token">
-			<enumeration value='scripting-context' />
-			<enumeration value='namespace' />
-		</restriction>
-	</simpleType>
-
 	<simpleType name='x-alignment' >
 		<restriction base="token">
 			<enumeration value='left' />
@@ -85,24 +78,43 @@
 	<complexType name="component-attributes">
 		<!-- Identity -->
 		<attribute name="id" type="ID" />
-
-		<!-- Type and variant -->
-		<attribute name="variant" type="string" />
-
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="icon" type="anyURI" />
 		<attribute name="enabled" type="boolean" default="true" />
 		<attribute name="visible" type="boolean" default="true" />
 		<attribute name="text-color" type="string" default="black"/>
-
 		<!-- Layout item -->
-		<attribute name="width" type="tns:widget-size" />
-		<attribute name="height" type="tns:widget-size" />
-		<attribute name="min-width" type="tns:widget-size" />
-		<attribute name="min-height" type="tns:widget-size" />
-		<attribute name="max-width" type="tns:widget-size" />
-		<attribute name="max-height" type="tns:widget-size" />
+		<attribute name="width" type="tns:widget-size">
+			<annotation><documentation>
+				Component preferred width in pixels or as one of the named sizes.
+			</documentation></annotation>
+		</attribute>
+		<attribute name="height" type="tns:widget-size">
+			<annotation><documentation>
+				Component preferred height in pixels or as one of the named sizes.
+			</documentation></annotation>
+		</attribute>
+		<attribute name="min-width" type="tns:widget-size">
+			<annotation><documentation>
+				Component minimum width in pixels or one of the named sizes.
+			</documentation></annotation>
+		</attribute>
+		<attribute name="min-height" type="tns:widget-size">
+			<annotation><documentation>
+				Component minimum height in pixels or one of the named sizes.
+			</documentation></annotation>
+		</attribute>
+		<attribute name="max-width" type="tns:widget-size">
+			<annotation><documentation>
+				Component maximum width in pixels or one of the named sizes.
+			</documentation></annotation>
+		</attribute>
+		<attribute name="max-height" type="tns:widget-size">
+			<annotation><documentation>
+				Component maximum height in pixels or one of the named sizes.
+			</documentation></annotation>
+		</attribute>
 		<attribute name="margin-top" type="integer" default="0" />
 		<attribute name="margin-right" type="integer" default="0" />
 		<attribute name="margin-bottom" type="integer" default="0" />
@@ -111,9 +123,16 @@
 		<attribute name="stretch-x" type="boolean" default="true" />
 		<attribute name="stretch-y" type="boolean" default="true" />
 		<attribute name="stretch" type="boolean" default="true" />
-		<attribute name="alignment-x" type="tns:x-alignment" />
-		<attribute name="alignment-y" type="tns:y-alignment" />
-
+		<attribute name="alignment-x" type="tns:x-alignment">
+			<annotation><documentation>
+				Horizontal alignment for component positioning purposes
+			</documentation></annotation>
+		</attribute>
+		<attribute name="alignment-y" type="tns:y-alignment">
+			<annotation><documentation>
+				Vertical alignment for component positioning purposes
+			</documentation></annotation>
+		</attribute>
 		<!-- Widget -->
 		<attribute name="decorator" type="string" />
 		<attribute name="font" type="string" />
@@ -122,7 +141,6 @@
 		<attribute name="padding-bottom" type="integer" default="0" />
 		<attribute name="padding-left" type="integer" default="0" />
 		<attribute name="padding"><simpleType><list itemType="integer" /></simpleType></attribute>
-
 		<!-- Grid layout data -->
 		<attribute name="row-span" type="integer" default="1" />
 		<attribute name="column-span" type="integer" default="1" />
@@ -185,6 +203,14 @@
 			</extension>
 		</complexContent>
 	</complexType>
+	
+	<complexType name="abstract-field-component">
+		<complexContent>
+			<extension base="tns:editable-component">
+				<attribute name="placeholder" type="string" />
+			</extension>
+		</complexContent>
+	</complexType>
 
 	<complexType name="label-component">
 		<complexContent>
@@ -203,6 +229,14 @@
 		</complexContent>
 	</complexType>
 
+	<complexType name="image-component">
+		<complexContent>
+			<extension base="tns:component">
+				<attribute name="source" type="anyURI" />
+			</extension>
+		</complexContent>
+	</complexType>
+
 	<!-- Groups -->
 
 	<group name="statement-elements">
@@ -217,14 +251,14 @@
 			<element name="button" type="tns:component" />
 			<element name="check-box" type="tns:editable-component" />
 			<element name="composite" type="tns:container-component" />
-			<element name="date-field" type="tns:editable-component" />
+			<element name="date-field" type="tns:abstract-field-component" />
 			<element ref="tns:form" />
 			<element name="group-box" type="tns:container-component" />
 			<element name="html" type="tns:html-component" />
-			<element name="image" type="tns:component" />
+			<element name="image" type="tns:image-component" />
 			<element name="label" type="tns:label-component" />
 			<element name="list" type="tns:editable-component" />
-			<element name="password-field" type="tns:editable-component" />
+			<element name="password-field" type="tns:abstract-field-component" />
 			<element name="radio-group" type="tns:editable-component" />
 			<element name="select-box" type="tns:editable-component" />
 			<element name="separator" type="tns:component" />
@@ -233,8 +267,8 @@
 			<element name="tab-view" type="tns:container-component" />
 			<element name="tab-view-page" type="tns:container-component" />
 			<element name="table" type="tns:editable-component" />
-			<element name="text-area" type="tns:editable-component" />
-			<element name="text-field" type="tns:editable-component" />
+			<element name="text-area" type="tns:abstract-field-component" />
+			<element name="text-field" type="tns:abstract-field-component" />
 		</choice>
 	</group>
 
@@ -245,6 +279,7 @@
 			<complexContent>
 				<extension base="tns:container-component-attributes">
 					<sequence>
+						<element ref="tns:import" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="tns:bind" minOccurs="0" maxOccurs="unbounded" />
 						<choice minOccurs="0" maxOccurs="unbounded">
 							<group ref="tns:statement-elements" />
@@ -257,31 +292,70 @@
 		</complexType>
 	</element>
 
-	<element name="bind">
+	<element name="import">
+		<annotation><documentation>
+			Import a Qooxdoo class within the form's scripting context
+		</documentation></annotation>
 		<complexType>
-			<attribute name="type" type="tns:binding-type" use="required" />
-			<attribute name="key" type="token" use="required" />
+			<attribute name="class" type="token" use="required">
+				<annotation><documentation>
+					The name of the Qooxdoo class to import
+				</documentation></annotation>
+			</attribute>
+			<attribute name="key" type="token">
+				<annotation><documentation>
+					The name of the property to create in the scripting context - 
+					if not set, the part of the class name after the last dot character
+					will be used.
+				</documentation></annotation>
+			</attribute>
+		</complexType>
+	</element>
+
+	<element name="bind">
+		<annotation><documentation>
+			Bind a URI to a prefix for scripting and data binding purposes
+		</documentation></annotation>
+		<complexType>
+			<attribute name="prefix" type="token" use="required" />
 			<attribute name="uri" type="anyURI" use="required" />
-			<attribute name="required" type="boolean" />
 		</complexType>
 	</element>
 
 	<element name="script">
+		<annotation><documentation>
+			Add a JavaScript script to component
+		</documentation></annotation>
 		<complexType>
 			<simpleContent>
 				<extension base="string">
-					<attribute name="event" type="token" />
-					<attribute name="action" type="token" />
+					<attribute name="event" type="token">
+						<annotation><documentation>
+							The name of the component's event the script should be attached to.
+						</documentation></annotation>
+					</attribute>
+					<attribute name="action" type="token">
+						<annotation><documentation>
+							The name of the action the script is a handler for.
+						</documentation></annotation>
+					</attribute>
 				</extension>
 			</simpleContent>
 		</complexType>
 	</element>
 
 	<element name="set">
+		<annotation><documentation>
+			Set a component's property
+		</documentation></annotation>
 		<complexType>
 			<simpleContent>
 				<extension base="string">
-					<attribute name="property" type="token" use="required" />
+					<attribute name="property" type="token" use="required">
+						<annotation><documentation>
+							The name of the property to set
+						</documentation></annotation>
+					</attribute>
 				</extension>
 			</simpleContent>
 		</complexType>

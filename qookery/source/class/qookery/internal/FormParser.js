@@ -26,7 +26,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 	extend: qx.core.Object,
 	implement: [ qookery.IFormParser ],
-	
+
 	statics: {
 		NAMED_SIZES: {
 			"XXS":  28,
@@ -39,7 +39,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		}
 	},
 
-	construct: function() { 
+	construct: function() {
 		this.base(arguments);
 		this.__namespaces = { };
 		this.__formComponent = new qookery.internal.components.FormComponent();
@@ -49,13 +49,13 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__formComponent: null,
 		__namespaces: null,
-		
+
 		create: function(xmlDocument, parentComposite, layoutData) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			if(parentComposite == null) throw new Error("Parent composite must be supplied");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
 			var formElement = elements[0];
-			
+
 			// The form component, like all components, must go through all creation phases
 
 			// Phase 1: New instance - already done in contructor
@@ -64,7 +64,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var createOptions = this.__parseCreateOptions(formElement);
 			this.__formComponent.create(createOptions);
-			
+
 			// Phase 3: Children
 
 			this.__parseStatementBlock(formElement, this.__formComponent);
@@ -72,17 +72,17 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Phase 4: Setup
 
 			this.__formComponent.setup();
-			
+
 			// Phase 5: Data binding - none for the form component
 
 			// Phase 6: Going live
 
 			var formWidget = this.__formComponent.getMainWidget();
 			parentComposite.add(formWidget, layoutData);
-			
+
 			return this.__formComponent;
 		},
-		
+
 		getFormComponent: function() {
 			return this.__formComponent;
 		},
@@ -106,6 +106,8 @@ qx.Class.define("qookery.internal.FormParser", {
 					this.__parseScript(statementElement, parentComponent);
 				else if(elementName == 'set')
 					this.__parseSet(statementElement, parentComponent);
+				else if(elementName == 'import')
+					this.__parseImport(statementElement, parentComponent);
 				else if(elementName == 'bind')
 					this.__parseBind(statementElement, parentComponent);
 				else if(elementName == 'parsererror')
@@ -118,14 +120,14 @@ qx.Class.define("qookery.internal.FormParser", {
 		/**
 		 * Private parseStatement
 		 * Parse tags and create new instance of the appropriate class to continue
-		 * 
+		 *
 		 * @param	statementElement	{String}	The xml code block
 		 * @param 	parentComponet	{qookery.internal.components.*}	The parent where the new component will delivered
 		 */
-		__parseStatement: function(statementElement, parentComponent) { 
+		__parseStatement: function(statementElement, parentComponent) {
 			var componentType = qx.dom.Node.getName(statementElement);
 			var componentClass = qookery.Qookery.getInstance().getRegistry().getComponent(componentType);
-			if(!componentClass) 
+			if(!componentClass)
 				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
 
 			// Phase 1: New Instance
@@ -134,7 +136,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			var componentId = this.__getAttribute(statementElement, "id");
 			if(componentId)
 				this.__formComponent.registerComponent(component, componentId);
-			
+
 			// Phase 2: Creation
 
 			var createOptions = this.__parseCreateOptions(statementElement);
@@ -143,17 +145,17 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Phase 3: Children
 
 			this.__parseStatementBlock(statementElement, component);
-			
+
 			// Phase 4: Setup
 
 			component.setup();
 
 			// Phase 5: Data binding
-			
+
 			if(createOptions['connect']) {
 				var connection = this.__resolveQName(createOptions['connect']);
 				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
-				if(modelProvider == null) 
+				if(modelProvider == null)
 					throw new Error("Install a model provider to handle connections in XML forms");
 				modelProvider.handleConnection(component, connection[0], connection[1]);
 			}
@@ -162,7 +164,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			parentComponent.addChild(component);
 		},
-		
+
 		/**
 		 * Parse create options from a statement element
 		 */
@@ -178,17 +180,12 @@ qx.Class.define("qookery.internal.FormParser", {
 				if(text.length == 0) continue;
 				var value = null;
 				switch(key) {
-				case "width": 
-				case "height":
-				case "min-width": 
-				case "min-height":
-				case "max-width": 
-				case "max-height":
-					value = qookery.internal.FormParser.NAMED_SIZES[text] || parseInt(text); break;
-				case "margin": 
-				case "margin-top": 
+
+				// Integer attributes
+				case "margin":
+				case "margin-top":
 				case "margin-right":
-				case "margin-bottom": 
+				case "margin-bottom":
 				case "margin-left":
 				case "padding":
 				case "padding-top":
@@ -200,7 +197,10 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "spacing-x":
 				case "spacing-y":
 				case "spacing":
-					value = parseInt(text); break;
+					value = parseInt(text);
+					break;
+
+				// Boolean attributes
 				case "enabled":
 				case "read-only":
 				case "required":
@@ -208,8 +208,28 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "stretch":
 				case "stretch-x":
 				case "stretch-y":
+				case "visible":
 				case "wrap":
-					value = text == "true"; break;
+					value = text == "true";
+					break;
+
+				// Size attributes
+				case "width":
+				case "height":
+				case "min-width":
+				case "min-height":
+				case "max-width":
+				case "max-height":
+					value = qookery.internal.FormParser.NAMED_SIZES[text] || parseInt(text);
+					break;
+
+				// Resource URI attributes
+				case "icon":
+				case "source":
+					value = qx.util.ResourceManager.getInstance().toUri(text);
+					break;
+
+				// Fallback for unknown attributes
 				default:
 					value = text;
 				}
@@ -220,13 +240,13 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		/**
 		 * Create a script on given component
-		 * 
+		 *
 		 * @param scriptElement {String} The code block and the type of the event
 		 * @param component {qookery.internal.components.*}	The control Component that the handler will be applied
 		 */
 		__parseScript: function(scriptElement, component) {
 			var clientCode = this.__getNodeText(scriptElement);
-			if(clientCode == null) 
+			if(clientCode == null)
 				throw new Error("Empty <script> element");
 			var eventName = this.__getAttribute(scriptElement, "event");
 			var actionName = this.__getAttribute(scriptElement, "action");
@@ -237,40 +257,31 @@ qx.Class.define("qookery.internal.FormParser", {
 			else
 				component.executeClientCode(clientCode);
 		},
-		
+
 		__parseSet: function(setElement, component) {
 			var text = this.__getNodeText(setElement);
-			if(text == null) 
+			if(text == null)
 				throw new Error("Empty <set> element");
 			var propertyName = this.__getAttribute(setElement, "property");
-			if(propertyName == null) 
+			if(propertyName == null)
 				throw new Error("<set> element is not specifying a property");
 			var setterName = "set" + qx.lang.String.firstUp(propertyName);
 			component[setterName](text);
 		},
 
+		__parseImport: function(importElement) {
+			var className = this.__getAttribute(importElement, "class");
+			var clazz = qx.Class.getByName(className);
+			if(!clazz) throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
+			var key = this.__getAttribute(importElement, "key");
+			if(!key) key = className.substring(className.lastIndexOf(".") + 1);
+			this.__formComponent.registerUserContext(key, clazz);
+		},
+
 		__parseBind: function(bindElement) {
-			var type = this.__getAttribute(bindElement, "type");
-			var key = this.__getAttribute(bindElement, "key");
+			var prefix = this.__getAttribute(bindElement, "prefix");
 			var uri = this.__getAttribute(bindElement, "uri");
-			switch(type) {
-			case "namespace":
-				this.__namespaces[key] = uri;
-				break;
-			case "scripting-context":
-				var clazz = qx.Class.getByName(uri);
-				if(clazz) {
-					this.__formComponent.registerUserContext(key, clazz);
-				}
-				else {
-					var required = this.__getAttribute(bindElement, "required");
-					if(required == "true")
-						throw new Error(qx.lang.String.format("Required scripting context %1 missing", [ uri ]));
-				}
-				break;
-			default:
-				throw new Error(qx.lang.String.format("Unable to process binding of unknown type '%1'", [ type ]));
-			}
+			this.__namespaces[prefix] = uri;
 		},
 
 		__getAttribute: function(element, attributeName) {
@@ -280,7 +291,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(text.length == 0) return null;
 			return text;
 		},
-		
+
 		__getNodeText: function(node) {
 			var text = qx.dom.Node.getText(node);
 			if(text == null || text.length == 0) return null;
@@ -288,7 +299,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(text.length == 0) return null;
 			return text;
 		},
-		
+
 		__resolveQName: function(qname) {
 			var parts = qname.split(":");
 			if(parts.length == 1) return [ "", qname ];
