@@ -28,6 +28,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.base(arguments);
 		this.__validators = { };
 		this.__components = { };
+		this.__componentConstructorArguments = { };
 		this.__formatters = { };
 		this.__maps = { };
 		this.__initializeValidators();
@@ -39,8 +40,31 @@ qx.Class.define("qookery.internal.Registry", {
 		
 		__validators: null,
 		__components: null,
+		__componentConstructorArguments: null,
 		__formatters: null,
 		__maps: null,
+
+		// Components
+		
+		isComponentAvailable: function(type) {
+			return this.__components[type] !== undefined;
+		},
+		
+		registerComponent: function(type, component, constructorArgument) { 
+			this.__components[type] = component;
+			if(constructorArgument)
+				this.__componentConstructorArguments[type] = constructorArgument;
+		},
+		
+		createComponent: function(parent, type) { 
+			var componentClass = this.__components[type];
+			if(!componentClass)
+				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ type]));
+			var constructorArgument = this.__componentConstructorArguments[type];
+			return new componentClass(parent, constructorArgument);
+		},
+
+		// Validators
 		
 		registerValidator: function(validator, name) { 
 			this.__validators[name] = validator.getInstance();
@@ -49,14 +73,8 @@ qx.Class.define("qookery.internal.Registry", {
 		getValidator: function(validator) {
 			return this.__validators[validator];
 		},
-		
-		registerComponent: function(component, name) { 
-			this.__components[name] = component;
-		},
-		
-		getComponent: function(component) { 
-			return this.__components[component];
-		},
+
+		// Formatters
 		
 		registerFormatter: function(formatter, name) {
 			this.__formatters[name] = formatter.getInstance();
@@ -65,6 +83,8 @@ qx.Class.define("qookery.internal.Registry", {
 		getFormatter: function(formatter) {
 			return this.__formatters[formatter];
 		},
+
+		// Maps
 		
 		registerMap: function(map, name) {
 			this.__maps[name] = map;

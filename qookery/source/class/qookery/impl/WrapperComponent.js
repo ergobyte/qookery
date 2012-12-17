@@ -18,28 +18,23 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.ImageComponent", {
-
+qx.Class.define("qookery.impl.WrapperComponent", {
+	
 	extend: qookery.internal.components.BaseComponent,
-
-	construct: function(parentComponent) {
+	
+	construct: function(parentComponent, widgetClass) {
 		this.base(arguments, parentComponent);
+		this.__widgetClass = widgetClass;
 	},
 
 	members: {
-
+		
+		__widgetClass: null,
+		
 		create: function(createOptions) {
-			this._widgets[0] = new qx.ui.basic.Image(createOptions['source']);
+			this._widgets[0] = new this.__widgetClass();
 			this._applyLayoutProperties(this._widgets[0], createOptions);
 			this.base(arguments, createOptions);
-		},
-
-		getSource: function() {
-			return this._widgets[0].getSource();
-		},
-
-		setSource: function(source) {
-			this._widgets[0].setSource(source);
 		}
 	}
 });

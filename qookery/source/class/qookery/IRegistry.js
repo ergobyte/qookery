@@ -25,6 +25,36 @@ qx.Interface.define("qookery.IRegistry", {
 
 	members: {
 
+		// Components
+		
+		/**
+		 * Check if a component type is available
+		 * 
+		 * @return {boolean} <code>true</code> in case the component is available
+		 */
+		isComponentAvailable: function(type) { },
+		
+		/**
+		 * Register a new component type
+		 * 
+		 * @param {String} type The name of the component type for subsequent access
+		 * @param {String} component The IComponent class name
+		 * @param {any} optional constructor argument
+		 */
+		registerComponent: function(type, component, constructorArgument) { },
+		
+		/**
+		 * Create a new component of given type
+		 * 
+		 * @param {IComponent} parent Component that will contain new component, may be null
+		 * @param {String} type The type of the component
+		 * 
+		 * @return {IComponent} Newly created component, an exception is thrown on error
+		 */
+		createComponent: function(parent, type) { },
+		
+		// Validators
+		
 		/**
 		 * 
 		 * @param {String} validator The IValidator class name
@@ -39,19 +69,7 @@ qx.Interface.define("qookery.IRegistry", {
 		 */
 		getValidator: function(validator) { },
 		
-		/**
-		 * 
-		 * @param {String} component The IComponent class name
-		 * @param {String} name The name of the component for subsequent access
-		 */
-		registerComponent: function(component, name) { },
-		
-		/**
-		 * 
-		 * @param {String} component The name of the component
-		 * @return {IComponent} The Component class name or null
-		 */
-		getComponent: function(component) { },
+		// Formatters
 		
 		/**
 		 * 
@@ -66,6 +84,8 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @return {IFormat} The Formatter class name or null
 		 */
 		getFormatter: function(formatter) { },
+		
+		// Maps
 		
 		/**
 		 * 

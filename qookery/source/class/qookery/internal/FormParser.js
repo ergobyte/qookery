@@ -94,7 +94,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
-				if(this.constructor.registry.getComponent(elementName))
+				if(this.constructor.registry.isComponentAvailable(elementName))
 					this.__parseComponent(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
@@ -113,14 +113,12 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseComponent: function(componentElement, parentComponent) {
 			var componentType = qx.dom.Node.getName(componentElement);
-			if(componentType == "component") componentType = this.__getAttribute(componentElement, "type");
-			var componentClass = this.constructor.registry.getComponent(componentType);
-			if(!componentClass)
-				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ componentType ]));
+			if(componentType == "component") 
+				componentType = this.__getAttribute(componentElement, "type");
 
 			// Phase 1: New Instance
 
-			var component = new componentClass(parentComponent);
+			var component = this.constructor.registry.createComponent(parentComponent, componentType);
 			var componentId = this.__getAttribute(componentElement, "id");
 			if(componentId)
 				this.__formComponent.registerComponent(component, componentId);
