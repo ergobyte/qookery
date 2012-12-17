@@ -73,11 +73,23 @@
 		</union>
 	</simpleType>
 
-	<!-- Complex types -->
+	<!-- Base component -->
+
+	<complexType name="component">
+		<complexContent>
+			<extension base="tns:component-attributes">
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<group ref="tns:statement-elements" />
+				</choice>
+			</extension>
+		</complexContent>
+	</complexType>
 
 	<complexType name="component-attributes">
 		<!-- Identity -->
 		<attribute name="id" type="ID" />
+		<!-- Implementation -->
+		<attribute name="type" type="token" />
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="icon" type="anyURI" />
@@ -146,16 +158,26 @@
 		<attribute name="column-span" type="integer" default="1" />
 	</complexType>
 
-	<complexType name="component">
+	<group name="statement-elements">
+		<choice>
+			<element ref="tns:set" />
+			<element ref="tns:script" />
+		</choice>
+	</group>
+
+	<!-- Container component type -->
+
+	<complexType name="container-component">
 		<complexContent>
-			<extension base="tns:component-attributes">
+			<extension base="tns:container-component-attributes">
 				<choice minOccurs="0" maxOccurs="unbounded">
 					<group ref="tns:statement-elements" />
+					<group ref="tns:component-elements" />
 				</choice>
 			</extension>
 		</complexContent>
 	</complexType>
-
+	
 	<complexType name="container-component-attributes">
 		<complexContent>
 			<extension base="tns:component-attributes">
@@ -172,12 +194,13 @@
 		</complexContent>
 	</complexType>
 
-	<complexType name="container-component">
+	<!-- Editable component type -->
+
+	<complexType name="editable-component">
 		<complexContent>
-			<extension base="tns:container-component-attributes">
+			<extension base="tns:editable-component-attributes">
 				<choice minOccurs="0" maxOccurs="unbounded">
 					<group ref="tns:statement-elements" />
-					<group ref="tns:component-elements" />
 				</choice>
 			</extension>
 		</complexContent>
@@ -194,23 +217,17 @@
 		</complexContent>
 	</complexType>
 
-	<complexType name="editable-component">
-		<complexContent>
-			<extension base="tns:editable-component-attributes">
-				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="tns:statement-elements" />
-				</choice>
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<complexType name="abstract-field-component">
+	<!-- Field component type -->
+
+	<complexType name="field-component">
 		<complexContent>
 			<extension base="tns:editable-component">
 				<attribute name="placeholder" type="string" />
 			</extension>
 		</complexContent>
 	</complexType>
+
+	<!-- Specialized compenent types -->
 
 	<complexType name="label-component">
 		<complexContent>
@@ -239,26 +256,19 @@
 
 	<!-- Groups -->
 
-	<group name="statement-elements">
-		<choice>
-			<element ref="tns:set" />
-			<element ref="tns:script" />
-		</choice>
-	</group>
-
 	<group name="component-elements">
 		<choice>
 			<element name="button" type="tns:component" />
 			<element name="check-box" type="tns:editable-component" />
 			<element name="composite" type="tns:container-component" />
-			<element name="date-field" type="tns:abstract-field-component" />
+			<element name="date-field" type="tns:field-component" />
 			<element ref="tns:form" />
 			<element name="group-box" type="tns:container-component" />
 			<element name="html" type="tns:html-component" />
 			<element name="image" type="tns:image-component" />
 			<element name="label" type="tns:label-component" />
 			<element name="list" type="tns:editable-component" />
-			<element name="password-field" type="tns:abstract-field-component" />
+			<element name="password-field" type="tns:field-component" />
 			<element name="radio-group" type="tns:editable-component" />
 			<element name="select-box" type="tns:editable-component" />
 			<element name="separator" type="tns:component" />
@@ -267,8 +277,8 @@
 			<element name="tab-view" type="tns:container-component" />
 			<element name="tab-view-page" type="tns:container-component" />
 			<element name="table" type="tns:editable-component" />
-			<element name="text-area" type="tns:abstract-field-component" />
-			<element name="text-field" type="tns:abstract-field-component" />
+			<element name="text-area" type="tns:field-component" />
+			<element name="text-field" type="tns:field-component" />
 		</choice>
 	</group>
 

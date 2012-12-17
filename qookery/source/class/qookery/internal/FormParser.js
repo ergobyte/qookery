@@ -28,7 +28,8 @@ qx.Class.define("qookery.internal.FormParser", {
 	implement: [ qookery.IFormParser ],
 
 	statics: {
-		NAMED_SIZES: {
+		registry: qookery.internal.Registry.getInstance(),
+		namedSizes: {
 			"XXS":  28,
 			"XS" :  46,
 			"S"  :  74,
@@ -49,6 +50,8 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__formComponent: null,
 		__namespaces: null,
+		
+		// IFormParser implementation
 
 		create: function(xmlDocument, parentComposite, layoutData) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
@@ -82,26 +85,17 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			return this.__formComponent;
 		},
+		
+		// Internal methods
 
-		getFormComponent: function() {
-			return this.__formComponent;
-		},
-
-		/**
-		 * Private parseStatementBlock
-		 * Parse tags and call the appropriate parser to continue
-		 *
-		 * @param	blockElement	{String} The xml code block
-		 * @param	parentComponent	{qookery.internal.components.*}	 The parent where the new component will delivered
-		 */
 		__parseStatementBlock: function(blockElement, parentComponent) {
 			if(!qx.dom.Element.hasChildren(blockElement)) return;
 			var children = qx.dom.Hierarchy.getChildElements(blockElement);
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
-				if(qookery.Qookery.getInstance().getRegistry().getComponent(elementName))
-					this.__parseStatement(statementElement, parentComponent);
+				if(this.constructor.registry.getComponent(elementName))
+					this.__parseComponent(statementElement, parentComponent);
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
 				else if(elementName == 'set')
@@ -113,38 +107,32 @@ qx.Class.define("qookery.internal.FormParser", {
 				else if(elementName == 'parsererror')
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				else
-					throw new Error(qx.lang.String.format("Encountered unexpected element <%1>", [ elementName ]));
+					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementName ]));
 			}
 		},
 
-		/**
-		 * Private parseStatement
-		 * Parse tags and create new instance of the appropriate class to continue
-		 *
-		 * @param	statementElement	{String}	The xml code block
-		 * @param 	parentComponet	{qookery.internal.components.*}	The parent where the new component will delivered
-		 */
-		__parseStatement: function(statementElement, parentComponent) {
-			var componentType = qx.dom.Node.getName(statementElement);
-			var componentClass = qookery.Qookery.getInstance().getRegistry().getComponent(componentType);
+		__parseComponent: function(componentElement, parentComponent) {
+			var componentType = this.__getAttribute(componentElement, "type");
+			if(!componentType) componentType = qx.dom.Node.getName(componentElement);
+			var componentClass = this.constructor.registry.getComponent(componentType);
 			if(!componentClass)
-				throw new Error(qx.lang.String.format("Form references unresolvable component type %1", [ componentType ]));
+				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ componentType ]));
 
 			// Phase 1: New Instance
 
 			var component = new componentClass(parentComponent);
-			var componentId = this.__getAttribute(statementElement, "id");
+			var componentId = this.__getAttribute(componentElement, "id");
 			if(componentId)
 				this.__formComponent.registerComponent(component, componentId);
 
 			// Phase 2: Creation
 
-			var createOptions = this.__parseCreateOptions(statementElement);
+			var createOptions = this.__parseCreateOptions(componentElement);
 			component.create(createOptions);
 
 			// Phase 3: Children
 
-			this.__parseStatementBlock(statementElement, component);
+			this.__parseStatementBlock(componentElement, component);
 
 			// Phase 4: Setup
 
@@ -165,12 +153,9 @@ qx.Class.define("qookery.internal.FormParser", {
 			parentComponent.addChild(component);
 		},
 
-		/**
-		 * Parse create options from a statement element
-		 */
-		__parseCreateOptions: function(statementElement) {
+		__parseCreateOptions: function(componentElement) {
 			var createOptions = { };
-			var attributes = statementElement.attributes;
+			var attributes = componentElement.attributes;
 			for(var i = 0; i < attributes.length; i++) {
 				var attribute = attributes.item(i);
 				var key = attribute.nodeName;
@@ -220,7 +205,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "min-height":
 				case "max-width":
 				case "max-height":
-					value = qookery.internal.FormParser.NAMED_SIZES[text] || parseInt(text);
+					value = this.constructor.namedSizes[text] || parseInt(text);
 					break;
 
 				// Resource URI attributes
@@ -238,12 +223,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			return createOptions;
 		},
 
-		/**
-		 * Create a script on given component
-		 *
-		 * @param scriptElement {String} The code block and the type of the event
-		 * @param component {qookery.internal.components.*}	The control Component that the handler will be applied
-		 */
 		__parseScript: function(scriptElement, component) {
 			var clientCode = this.__getNodeText(scriptElement);
 			if(clientCode == null)

@@ -23,11 +23,13 @@ qx.Interface.define("qookery.IFormParser", {
 	members: {
 		
 		/**
-		 * Create a Qookery form from an XML document
-		 *
-		 * @param xmlDocument {Document} The xml document to parse
-		 * @param parentComposite {qx.ui.container.Composite} The composite that will host the newly created UI
-		 * @param layoutData {Object} Layout data to set on the outermost widget of the new UI
+		 * Parse and interpret a Qookery form
+		 * 
+		 * @param xmlDocument input DOM XML document structured according to the form.xsd schema
+		 * @param parentComposite the Composite that will received any produced UI artifacts
+		 * @param layoutData optional layout data to set to created top-level widget
+		 * 
+		 * @returns the newly created IFormComponent
 		 */
 		create: function(xmlDocument, parentComposite, layoutData) { }
 	}
