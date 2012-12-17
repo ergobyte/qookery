@@ -19,7 +19,7 @@
 	$Id$
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
-		xmlns:tns="http://www.qookery.org/ns/Form"
+		xmlns:q="http://www.qookery.org/ns/Form"
 		xmlns:xi="http://www.w3.org/2001/XInclude"
 		xmlns:xml="http://www.w3.org/XML/1998/namespace"
 		targetNamespace="http://www.qookery.org/ns/Form"
@@ -73,13 +73,50 @@
 		</union>
 	</simpleType>
 
-	<!-- Base component -->
+	<!-- Element groups -->
+
+	<group name="statements">
+		<choice>
+			<element ref="q:set" />
+			<element ref="q:script" />
+		</choice>
+	</group>
+
+	<group name="components">
+		<choice>
+			<element name="button" type="q:component" />
+			<element name="check-box" type="q:editable-component" />
+			<element ref="q:component" />
+			<element name="composite" type="q:container-component" />
+			<element name="date-field" type="q:field-component" />
+			<element ref="q:form" />
+			<element name="group-box" type="q:container-component" />
+			<element ref="q:html" />
+			<element ref="q:image" />
+			<element ref="q:label" />
+			<element name="list" type="q:editable-component" />
+			<element name="password-field" type="q:field-component" />
+			<element name="radio-group" type="q:editable-component" />
+			<element name="select-box" type="q:editable-component" />
+			<element name="separator" type="q:component" />
+			<element name="slider" type="q:editable-component" />
+			<element name="spinner" type="q:editable-component" />
+			<element name="tab-view" type="q:container-component" />
+			<element name="tab-view-page" type="q:container-component" />
+			<element name="table" type="q:editable-component" />
+			<element name="text-area" type="q:field-component" />
+			<element name="text-field" type="q:field-component" />
+			<any namespace="##other" />
+		</choice>
+	</group>
+
+	<!-- Base component type -->
 
 	<complexType name="component">
 		<complexContent>
-			<extension base="tns:component-attributes">
+			<extension base="q:component-attributes">
 				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="tns:statement-elements" />
+					<group ref="q:statements" />
 				</choice>
 			</extension>
 		</complexContent>
@@ -88,8 +125,6 @@
 	<complexType name="component-attributes">
 		<!-- Identity -->
 		<attribute name="id" type="ID" />
-		<!-- Implementation -->
-		<attribute name="type" type="token" />
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="icon" type="anyURI" />
@@ -97,32 +132,32 @@
 		<attribute name="visible" type="boolean" default="true" />
 		<attribute name="text-color" type="string" default="black"/>
 		<!-- Layout item -->
-		<attribute name="width" type="tns:widget-size">
+		<attribute name="width" type="q:widget-size">
 			<annotation><documentation>
 				Component preferred width in pixels or as one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="height" type="tns:widget-size">
+		<attribute name="height" type="q:widget-size">
 			<annotation><documentation>
 				Component preferred height in pixels or as one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="min-width" type="tns:widget-size">
+		<attribute name="min-width" type="q:widget-size">
 			<annotation><documentation>
 				Component minimum width in pixels or one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="min-height" type="tns:widget-size">
+		<attribute name="min-height" type="q:widget-size">
 			<annotation><documentation>
 				Component minimum height in pixels or one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="max-width" type="tns:widget-size">
+		<attribute name="max-width" type="q:widget-size">
 			<annotation><documentation>
 				Component maximum width in pixels or one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="max-height" type="tns:widget-size">
+		<attribute name="max-height" type="q:widget-size">
 			<annotation><documentation>
 				Component maximum height in pixels or one of the named sizes.
 			</documentation></annotation>
@@ -135,12 +170,12 @@
 		<attribute name="stretch-x" type="boolean" default="true" />
 		<attribute name="stretch-y" type="boolean" default="true" />
 		<attribute name="stretch" type="boolean" default="true" />
-		<attribute name="alignment-x" type="tns:x-alignment">
+		<attribute name="alignment-x" type="q:x-alignment">
 			<annotation><documentation>
 				Horizontal alignment for component positioning purposes
 			</documentation></annotation>
 		</attribute>
-		<attribute name="alignment-y" type="tns:y-alignment">
+		<attribute name="alignment-y" type="q:y-alignment">
 			<annotation><documentation>
 				Vertical alignment for component positioning purposes
 			</documentation></annotation>
@@ -158,21 +193,14 @@
 		<attribute name="column-span" type="integer" default="1" />
 	</complexType>
 
-	<group name="statement-elements">
-		<choice>
-			<element ref="tns:set" />
-			<element ref="tns:script" />
-		</choice>
-	</group>
-
 	<!-- Container component type -->
 
 	<complexType name="container-component">
 		<complexContent>
-			<extension base="tns:container-component-attributes">
+			<extension base="q:container-component-attributes">
 				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="tns:statement-elements" />
-					<group ref="tns:component-elements" />
+					<group ref="q:statements" />
+					<group ref="q:components" />
 				</choice>
 			</extension>
 		</complexContent>
@@ -180,16 +208,16 @@
 	
 	<complexType name="container-component-attributes">
 		<complexContent>
-			<extension base="tns:component-attributes">
-				<attribute name="row-count" type="tns:row-and-column-count" default="auto" />
-				<attribute name="column-count" type="tns:row-and-column-count" default="1" />
+			<extension base="q:component-attributes">
+				<attribute name="row-count" type="q:row-and-column-count" default="auto" />
+				<attribute name="column-count" type="q:row-and-column-count" default="1" />
 				<attribute name="spacing-x" type="integer" default="10" />
 				<attribute name="spacing-y" type="integer" default="10" />
 				<attribute name="spacing" type="integer" default="10" />
 				<attribute name="row-flexes"><simpleType><list itemType="integer" /></simpleType></attribute>
 				<attribute name="column-flexes"><simpleType><list itemType="integer" /></simpleType></attribute>
-				<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="tns:x-alignment tns:y-alignment" /></simpleType></list></simpleType></attribute>
-				<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="tns:x-alignment tns:y-alignment" /></simpleType></list></simpleType></attribute>
+				<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="q:x-alignment q:y-alignment" /></simpleType></list></simpleType></attribute>
+				<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="q:x-alignment q:y-alignment" /></simpleType></list></simpleType></attribute>
 			</extension>
 		</complexContent>
 	</complexType>
@@ -198,9 +226,9 @@
 
 	<complexType name="editable-component">
 		<complexContent>
-			<extension base="tns:editable-component-attributes">
+			<extension base="q:editable-component-attributes">
 				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="tns:statement-elements" />
+					<group ref="q:statements" />
 				</choice>
 			</extension>
 		</complexContent>
@@ -208,7 +236,7 @@
 	
 	<complexType name="editable-component-attributes">
 		<complexContent>
-			<extension base="tns:component-attributes">
+			<extension base="q:component-attributes">
 				<attribute name="connect" type="string" />
 				<attribute name="format" type="string" />
 				<attribute name="read-only" type="boolean" default="false" />
@@ -221,87 +249,14 @@
 
 	<complexType name="field-component">
 		<complexContent>
-			<extension base="tns:editable-component">
+			<extension base="q:editable-component">
 				<attribute name="placeholder" type="string" />
 			</extension>
 		</complexContent>
 	</complexType>
 
-	<!-- Specialized compenent types -->
-
-	<complexType name="label-component">
-		<complexContent>
-			<extension base="tns:component">
-				<attribute name="wrap" type="boolean" />
-				<attribute name="rich" type="boolean" />
-			</extension>
-		</complexContent>
-	</complexType>
+	<!-- Statement elements -->
 	
-	<complexType name="html-component">
-		<complexContent>
-			<extension base="tns:component">
-				<attribute name="html" type="string" />
-			</extension>
-		</complexContent>
-	</complexType>
-
-	<complexType name="image-component">
-		<complexContent>
-			<extension base="tns:component">
-				<attribute name="source" type="anyURI" />
-			</extension>
-		</complexContent>
-	</complexType>
-
-	<!-- Groups -->
-
-	<group name="component-elements">
-		<choice>
-			<element name="button" type="tns:component" />
-			<element name="check-box" type="tns:editable-component" />
-			<element name="composite" type="tns:container-component" />
-			<element name="date-field" type="tns:field-component" />
-			<element ref="tns:form" />
-			<element name="group-box" type="tns:container-component" />
-			<element name="html" type="tns:html-component" />
-			<element name="image" type="tns:image-component" />
-			<element name="label" type="tns:label-component" />
-			<element name="list" type="tns:editable-component" />
-			<element name="password-field" type="tns:field-component" />
-			<element name="radio-group" type="tns:editable-component" />
-			<element name="select-box" type="tns:editable-component" />
-			<element name="separator" type="tns:component" />
-			<element name="slider" type="tns:editable-component" />
-			<element name="spinner" type="tns:editable-component" />
-			<element name="tab-view" type="tns:container-component" />
-			<element name="tab-view-page" type="tns:container-component" />
-			<element name="table" type="tns:editable-component" />
-			<element name="text-area" type="tns:field-component" />
-			<element name="text-field" type="tns:field-component" />
-		</choice>
-	</group>
-
-	<!-- Elements -->
-	
-	<element name="form">
-		<complexType>
-			<complexContent>
-				<extension base="tns:container-component-attributes">
-					<sequence>
-						<element ref="tns:import" minOccurs="0" maxOccurs="unbounded" />
-						<element ref="tns:bind" minOccurs="0" maxOccurs="unbounded" />
-						<choice minOccurs="0" maxOccurs="unbounded">
-							<group ref="tns:statement-elements" />
-							<group ref="tns:component-elements" />
-						</choice>
-					</sequence>
-					<attribute ref="xml:base" use="optional" />
-				</extension>
-			</complexContent>
-		</complexType>
-	</element>
-
 	<element name="import">
 		<annotation><documentation>
 			Import a Qooxdoo class within the form's scripting context
@@ -371,4 +326,66 @@
 		</complexType>
 	</element>
 
+	<!-- Specialized component elements -->
+
+	<element name="component">
+		<complexType>
+			<complexContent>
+				<extension base="q:component">
+					<attribute name="type" type="string" use="required" />
+					<anyAttribute namespace="##any" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<element name="form">
+		<complexType>
+			<complexContent>
+				<extension base="q:container-component-attributes">
+					<sequence>
+						<element ref="q:import" minOccurs="0" maxOccurs="unbounded" />
+						<element ref="q:bind" minOccurs="0" maxOccurs="unbounded" />
+						<choice minOccurs="0" maxOccurs="unbounded">
+							<group ref="q:statements" />
+							<group ref="q:components" />
+						</choice>
+					</sequence>
+					<attribute ref="xml:base" use="optional" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<element name="image">
+		<complexType>
+			<complexContent>
+				<extension base="q:component">
+					<attribute name="source" type="anyURI" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<element name="html">
+		<complexType>
+			<complexContent>
+				<extension base="q:component">
+					<attribute name="html" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<element name="label">
+		<complexType>
+			<complexContent>
+				<extension base="q:component">
+					<attribute name="wrap" type="boolean" />
+					<attribute name="rich" type="boolean" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
 </schema>

@@ -112,8 +112,8 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseComponent: function(componentElement, parentComponent) {
-			var componentType = this.__getAttribute(componentElement, "type");
-			if(!componentType) componentType = qx.dom.Node.getName(componentElement);
+			var componentType = qx.dom.Node.getName(componentElement);
+			if(componentType == "component") componentType = this.__getAttribute(componentElement, "type");
 			var componentClass = this.constructor.registry.getComponent(componentType);
 			if(!componentClass)
 				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ componentType ]));
