@@ -99,7 +99,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				else if(elementName == 'script')
 					this.__parseScript(statementElement, parentComponent);
 				else if(elementName == 'set')
-					this.__parseSet(statementElement, parentComponent);
+					continue;
 				else if(elementName == 'import')
 					this.__parseImport(statementElement, parentComponent);
 				else if(elementName == 'bind')
@@ -126,6 +126,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Phase 2: Creation
 
 			var createOptions = this.__parseCreateOptions(componentElement);
+			this.__parseSetupBlock(componentElement, createOptions);
 			component.create(createOptions);
 
 			// Phase 3: Children
@@ -156,69 +157,26 @@ qx.Class.define("qookery.internal.FormParser", {
 			var attributes = componentElement.attributes;
 			for(var i = 0; i < attributes.length; i++) {
 				var attribute = attributes.item(i);
-				var key = attribute.nodeName;
+				var attributeName = attribute.nodeName;
 				var text = attribute.nodeValue;
 				if(text == null || text.length == 0) continue;
 				text = text.trim();
 				if(text.length == 0) continue;
-				var value = null;
-				switch(key) {
-
-				// Integer attributes
-				case "margin":
-				case "margin-top":
-				case "margin-right":
-				case "margin-bottom":
-				case "margin-left":
-				case "padding":
-				case "padding-top":
-				case "padding-right":
-				case "padding-bottom":
-				case "padding-left":
-				case "row-span":
-				case "column-span":
-				case "spacing-x":
-				case "spacing-y":
-				case "spacing":
-					value = parseInt(text);
-					break;
-
-				// Boolean attributes
-				case "enabled":
-				case "read-only":
-				case "required":
-				case "rich":
-				case "stretch":
-				case "stretch-x":
-				case "stretch-y":
-				case "visible":
-				case "wrap":
-					value = text == "true";
-					break;
-
-				// Size attributes
-				case "width":
-				case "height":
-				case "min-width":
-				case "min-height":
-				case "max-width":
-				case "max-height":
-					value = this.constructor.namedSizes[text] || parseInt(text);
-					break;
-
-				// Resource URI attributes
-				case "icon":
-				case "source":
-					value = qx.util.ResourceManager.getInstance().toUri(text);
-					break;
-
-				// Fallback for unknown attributes
-				default:
-					value = text;
-				}
-				createOptions[key] = value;
+				var value = this.__convertAttributeValue(attributeName, text);
+				createOptions[attributeName] = value;
 			}
 			return createOptions;
+		},
+
+		__parseSetupBlock: function(blockElement, createOptions) {
+			if(!qx.dom.Element.hasChildren(blockElement)) return;
+			var children = qx.dom.Hierarchy.getChildElements(blockElement);
+			for(var i = 0; i < children.length; i++) {
+				var statementElement = children[i];
+				var elementName = qx.dom.Node.getName(statementElement);
+				if(elementName == 'set')
+					this.__parseSet(statementElement, createOptions);
+			}
 		},
 
 		__parseScript: function(scriptElement, component) {
@@ -235,15 +193,18 @@ qx.Class.define("qookery.internal.FormParser", {
 				component.executeClientCode(clientCode);
 		},
 
-		__parseSet: function(setElement, component) {
+		__parseSet: function(setElement, createOptions) {
 			var text = this.__getNodeText(setElement);
 			if(text == null)
 				throw new Error("Empty <set> element");
-			var propertyName = this.__getAttribute(setElement, "property");
-			if(propertyName == null)
-				throw new Error("<set> element is not specifying a property");
-			var setterName = "set" + qx.lang.String.firstUp(propertyName);
-			component[setterName](text);
+			text = text.trim();
+			if(text.length == 0)
+				throw new Error("Empty <set> element");
+			var attributeName = this.__getAttribute(setElement, "attribute");
+			if(attributeName == null)
+				throw new Error("<set> element is not specifying an attribute name");
+			var value = this.__convertAttributeValue(attributeName, text);
+			createOptions[attributeName] = value;
 		},
 
 		__parseImport: function(importElement) {
@@ -285,6 +246,64 @@ qx.Class.define("qookery.internal.FormParser", {
 			var namespaceUri = this.__namespaces[prefix];
 			if(!namespaceUri) throw new Error(qx.lang.String.format("Unable to resolve unknown namespace prefix '%1'", [ prefix ]));
 			return [ namespaceUri, localPart ];
+		},
+		
+		__convertAttributeValue: function(key, text) {
+			switch(key) {
+
+			// Integer attributes
+			case "margin-top":
+			case "margin-right":
+			case "margin-bottom":
+			case "margin-left":
+			case "padding-top":
+			case "padding-right":
+			case "padding-bottom":
+			case "padding-left":
+			case "row-span":
+			case "column-span":
+			case "spacing":
+			case "spacing-x":
+			case "spacing-y":
+				return parseInt(text);
+
+			// Boolean attributes
+			case "enabled":
+			case "read-only":
+			case "required":
+			case "rich":
+			case "stretch":
+			case "stretch-x":
+			case "stretch-y":
+			case "visible":
+			case "wrap":
+				return text == "true";
+
+			// Size attributes
+			case "width":
+			case "height":
+			case "min-width":
+			case "min-height":
+			case "max-width":
+			case "max-height":
+				return this.constructor.namedSizes[text] || parseInt(text);
+
+			// Resource URI attributes
+			case "icon":
+			case "source":
+				return qx.util.ResourceManager.getInstance().toUri(text);
+				
+			// Shorthand properties
+			case "margin":
+			case "padding":
+				var value = text.split(/\W+/);
+				value.forEach(function(element, index) { value[index] = parseInt(element); });
+				return value;
+
+			default:
+				// Fallback for unknown attributes
+				return  text;
+			}
 		}
 	},
 

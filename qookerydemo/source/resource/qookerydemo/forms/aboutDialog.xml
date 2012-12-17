@@ -6,7 +6,7 @@
 	<image source="qookerydemo/icons/66/loading-66.gif" />
 
 	<label rich="true" wrap="true">
-		<set property="value"><![CDATA[
+		<set attribute="label"><![CDATA[
 			<h3>Qookery Demo and Playground application</h3>
 			<p>	
 				Discover Qookery and experiment with its features, thanks to this interactive demo. 

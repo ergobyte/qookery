@@ -175,6 +175,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 * @param createOptions {Object} Layouting instructions as provided by the XML parser
 		 */
 		_applyLayoutProperties: function(widget, createOptions) {
+			// Layout
+			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
+			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
+			// Size and position
 			if(createOptions['width']) widget.setWidth(createOptions['width']);
 			if(createOptions['height']) widget.setHeight(createOptions['height']);
 			if(createOptions['min-width']) widget.setMinWidth(createOptions['min-width']);
@@ -197,10 +201,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['padding-right']) widget.setPaddingRight(createOptions['padding-right']);
 			if(createOptions['padding-bottom']) widget.setPaddingBottom(createOptions['padding-bottom']);
 			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
-			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
-			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
+			// Appearance
 			if(createOptions['decorator']) widget.setDecorator(createOptions['decorator']);
 			if(createOptions['font']) widget.setFont(createOptions['font']);
+			if(createOptions['text-color']) widget.setTextColor(createOptions['text-color']);
+			if(createOptions['background-color']) widget.setBackgroundColor(createOptions['background-color']);
 		},
 
 		_applyEnabled: function(enabled) {

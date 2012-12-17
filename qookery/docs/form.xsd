@@ -130,7 +130,8 @@
 		<attribute name="icon" type="anyURI" />
 		<attribute name="enabled" type="boolean" default="true" />
 		<attribute name="visible" type="boolean" default="true" />
-		<attribute name="text-color" type="string" default="black"/>
+		<attribute name="text-color" type="string" default="black" />
+		<attribute name="background-color" type="string" default="white" />
 		<!-- Layout item -->
 		<attribute name="width" type="q:widget-size">
 			<annotation><documentation>
@@ -311,14 +312,14 @@
 
 	<element name="set">
 		<annotation><documentation>
-			Set a component's property
+			Set a component's attribute
 		</documentation></annotation>
 		<complexType>
 			<simpleContent>
 				<extension base="string">
-					<attribute name="property" type="token" use="required">
+					<attribute name="attribute" type="token" use="required">
 						<annotation><documentation>
-							The name of the property to set
+							The name of the attribute to set
 						</documentation></annotation>
 					</attribute>
 				</extension>

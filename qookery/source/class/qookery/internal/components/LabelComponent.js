@@ -31,8 +31,6 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 		create: function(createOptions) {
 			var labelText = createOptions['label'] || "";
 			this._widgets[0] = new qx.ui.basic.Label(labelText);
-			if(qx.util.ColorUtil.isValidPropertyValue(createOptions['text-color'])) 
-				this._widgets[0].setTextColor(createOptions['text-color']);
 			if(createOptions['rich'])
 				this._widgets[0].setRich(true);
 			if(createOptions['wrap'])
