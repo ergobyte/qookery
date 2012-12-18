@@ -30,7 +30,7 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 
 		create: function(createOptions) {
 			this._widgets[0] = new qx.ui.form.Button(
-				createOptions['label'], 
+				this._translate(createOptions['label']), 
 				createOptions['icon']
 			);
 			this._applyLayoutProperties(this._widgets[0], createOptions);

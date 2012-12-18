@@ -29,12 +29,10 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 	members: {
 		
 		create: function(createOptions) {
-			var labelText = createOptions['label'] || "";
+			var labelText = this._translate(createOptions['label']) || "";
 			this._widgets[0] = new qx.ui.basic.Label(labelText);
-			if(createOptions['rich'])
-				this._widgets[0].setRich(true);
-			if(createOptions['wrap'])
-				this._widgets[0].setWrap(true);
+			if(createOptions['rich']) this._widgets[0].setRich(true);
+			if(createOptions['wrap']) this._widgets[0].setWrap(true);
 			this._applyLayoutProperties(this._widgets[0], createOptions);
 			this.base(arguments, createOptions);
 		},

@@ -288,6 +288,27 @@
 		</complexType>
 	</element>
 
+	<element name="translation">
+		<annotation><documentation>
+			Provide an addition translation to the Qooxdoo locale manager
+		</documentation></annotation>
+		<complexType>
+			<sequence>
+				<element ref="q:message" minOccurs="1" maxOccurs="unbounded" />
+			</sequence>
+			<attribute ref="xml:lang" use="required" />
+		</complexType>
+	</element>
+
+	<element name="message">
+		<annotation><documentation>
+			A translated message
+		</documentation></annotation>
+		<complexType mixed="true">
+			<attribute name="id" use="required" />
+		</complexType>
+	</element>
+
 	<element name="script">
 		<annotation><documentation>
 			Add a JavaScript script to component
@@ -347,12 +368,14 @@
 					<sequence>
 						<element ref="q:import" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="q:bind" minOccurs="0" maxOccurs="unbounded" />
+						<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
 						<choice minOccurs="0" maxOccurs="unbounded">
 							<group ref="q:statements" />
 							<group ref="q:components" />
 						</choice>
 					</sequence>
 					<attribute ref="xml:base" use="optional" />
+					<attribute name="translation-prefix" use="optional" />
 				</extension>
 			</complexContent>
 		</complexType>

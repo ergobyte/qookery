@@ -104,6 +104,8 @@ qx.Class.define("qookery.internal.FormParser", {
 					this.__parseImport(statementElement, parentComponent);
 				else if(elementName == 'bind')
 					this.__parseBind(statementElement, parentComponent);
+				else if(elementName == 'translation')
+					this.__parseTranslation(statementElement);
 				else if(elementName == 'parsererror')
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				else
@@ -222,6 +224,26 @@ qx.Class.define("qookery.internal.FormParser", {
 			this.__namespaces[prefix] = uri;
 		},
 
+		__parseTranslation: function(translationElement) {
+			if(!qx.dom.Element.hasChildren(translationElement)) return;
+			var languageCode = qx.xml.Element.getAttributeNS(translationElement, 'http://www.w3.org/XML/1998/namespace', 'lang');
+			if(!languageCode) throw new Error("Language code missing");
+			var messages = { };
+			var prefix = this.__formComponent.getTranslationPrefix();
+			var children = qx.dom.Hierarchy.getChildElements(translationElement);
+			for(var i = 0; i < children.length; i++) {
+				var messageElement = children[i];
+				var elementName = qx.dom.Node.getName(messageElement);
+				if(elementName != 'message')
+					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementName ]));
+				var messageId = this.__getAttribute(messageElement, "id");
+				if(!messageId) throw new Error("Message identifier missing");
+				if(prefix) messageId = prefix + '.' + messageId;
+				messages[messageId] = this.__getNodeText(messageElement);
+			}
+			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
+		},
+		
 		__getAttribute: function(element, attributeName) {
 			var text = qx.xml.Element.getAttributeNS(element, null, attributeName);
 			if(text == null || text.length == 0) return null;

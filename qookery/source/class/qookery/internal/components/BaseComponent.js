@@ -222,6 +222,21 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				var widget = widgets[i];
 				if(visible) widget.show(); else widget.hide();
 			}
+		},
+		
+		_translate: function(text) {
+			if(text == null || text.length < 2) return text;
+			if(text.charAt(0) != '%') return text;
+			var messageId = text.substring(1);
+			return this['tr'](messageId);
+		},
+
+		tr: function(messageId) {
+			var translationManager = qx.locale.Manager;
+			if(!translationManager) return messageId;
+			if(messageId != null && messageId.charAt(0) == '.') 
+				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
+			return translationManager['tr'](messageId);
 		}
 	},
 

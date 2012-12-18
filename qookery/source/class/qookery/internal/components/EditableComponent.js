@@ -51,7 +51,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(createOptions['label'] != '%none') {
 				this._widgets[1] = new qx.ui.basic.Label();
 				this._setupLabelAppearance(this._widgets[1], createOptions);
-				this.setLabel(createOptions['label'] || "");
+				this.setLabel(this._translate(createOptions['label'] || ""));
 			}
 			if(createOptions['required']) this.setRequired(true);
 			if(createOptions['read-only']) this.setReadOnly(true);

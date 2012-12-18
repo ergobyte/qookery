@@ -48,7 +48,13 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__componentMap: null,
 		__validationManager: null,
 		__clientCodeContext: null,
+		__translationPrefix: null,
 		__result: null,
+
+		create: function(createOptions) {
+			this.__translationPrefix = createOptions['translation-prefix'];
+			this.base(arguments, createOptions);
+		},
 
 		getModel: function() {
 			return this.__controller.getModel();
@@ -125,7 +131,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(result) this.__result = result;
 			this.dispose();
 		},
-
+		
+		getTranslationPrefix: function() {
+			return this.__translationPrefix;
+		},
+		
 		getResult: function() {
 			return this.__result;
 		},
