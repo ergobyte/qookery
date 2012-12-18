@@ -31,34 +31,41 @@ qx.Interface.define("qookery.IComponent", {
 		/** Whether the component is visible */
 		visible: { init: true, check: "Boolean" }
 	},
-	
+
 	members: {
 
 		/**
 		 * Return the component identifier, if any
-		 * 
+		 *
 		 * <p>
 		 * The identifier must by unique for each component within a form
 		 * </p>
-		 * 
+		 *
 		 * @return {String} unique identifier or <code>null</code>
 		 */
 		getId: function() { },
 
 		/**
 		 * Return the form containing this component
-		 * 
+		 *
 		 * @return {qookery.IFormComponent} the form containing this component
 		 */
 		getForm: function() { },
 
 		/**
 		 * Return the parent component or <code>null</cide> if this is the root component
-		 * 
+		 *
 		 * @return {qookery.IComponent} parent component or <code>null</code>
 		 */
 		getParent: function() { },
-		
+
+		/**
+		 * Perform additional component initialization
+		 *
+		 * <p>This method is intended to be called by XML authors</p>
+		 */
+		initialize: function(initOptions) { },
+
 		/**
 		 * Set the focus to this component
 		 */
@@ -66,32 +73,33 @@ qx.Interface.define("qookery.IComponent", {
 
 		/**
 		 * Return a list of widgets that are handled by this component
-		 * 
+		 *
 		 * @param filterName {String} If set, one of 'topMost', 'main' to restrict resulting list
-		 * 
+		 *
 		 * @return {qx.ui.core.Widget[]} widget list - an empty array if none found
 		 */
 		listWidgets: function(filterName) { },
-		
+
 		/**
-		 * Return the first main widget
-		 * 
+		 * Return the main widget
+		 *
 		 * <p>This method a shorthand for #listWidgets('main')[0]</p>
-		 * 
-		 * @return {qx.ui.core.Widget} the first main widget
+		 *
+		 * @return {qx.ui.core.Widget} the main widget
 		 */
 		getMainWidget: function() { },
-		
+
 		/**
-		 * Perform additional component initialization
-		 * 
-		 * <p>This method is intended to be called by XML authors</p>
+		 * Execute an action provided by this component
+		 *
+		 * <p>It is safe to call this method for undefined actions,
+		 * in which case <code>null</code> is returned.</p>
+		 *
+		 * @param actionName one the actions provided by component
+		 * @param argumentMap optional name-value map to be passed as call arguments
+		 *
+		 * @return the action's execution result
 		 */
-		initialize: function(initOptions) { },
-		
-		/**
-		 * TODO
-		 */
-		getAction: function(action) {}
+		executeAction: function(actionName, argumentMap) { }
 	}
 });

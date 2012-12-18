@@ -72,24 +72,14 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			this.__actions[actionName] = clientCode;
 		},
 
-		getAction: function(action) {
-			return this.__actions[action];
-		},
-
 		getId: function() {
 			return this.__id;
 		},
 
-		/**
-		 * @return the keyValuePairList that contains the parameters that the component has been created
-		 */
 		getCreateOptions: function() {
 			return this.__createOptions;
 		},
 
-		/**
-		 * Perform setup operations after all children have been created
-		 */
 		setup: function() {
 			// Nothing to do here, override if needed
 		},
@@ -121,7 +111,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		/**
-		 * Add a listener to this component
+		 * Add an event handler to this component
 		 *
 		 * @param {String} eventName The name of the event to listen to
 		 * @param {String} clientCode The JavaScript source code to execute when the event is triggered
@@ -140,21 +130,14 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				}, this);
 				return;
 			}
-			throw new Error(qx.lang.String.format(
-					"Event %1 not supported", eventName));
+			throw new Error(qx.lang.String.format("Event '%1' not supported", eventName));
 		},
 
-		/**
-		 * ExecuteClientCode will be called whenever a setup or an handler need to be executed
-		 *
-		 * @param clientCode {String} The Code to execute
-		 * @param event {qx.event.type.Event} optional Qooxdoo event to set into context
-		 */
-		executeClientCode: function(clientCode, options) {
+		executeClientCode: function(clientCode, argumentMap) {
 			try {
-				options = options || { };
-				var keys = Object.keys(options);
-				var values = qx.lang.Object.getValues(options);
+				argumentMap = argumentMap || { };
+				var keys = Object.keys(argumentMap);
+				var values = qx.lang.Object.getValues(argumentMap);
 				qx.lang.Array.insertAt(keys, "$", 0);
 				qx.lang.Array.insertAt(values, this.getForm().getClientCodeContext(), 0);
 				var clientFunction = new Function(keys, clientCode);
@@ -164,6 +147,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				qx.log.Logger.error(this, qx.lang.String.format(
 						"Error executing client code: %1\n\n%2", [ error, clientCode ]));
 			}
+		},
+
+		executeAction: function(actionName, argumentMap) {
+			var clientCode = this.__actions[actionName];
+			if(!clientCode) return null;
+			return this.executeClientCode(clientCode, argumentMap);
 		},
 
 		// Private methods for internal use
@@ -223,7 +212,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				if(visible) widget.show(); else widget.hide();
 			}
 		},
-		
+
 		_translate: function(text) {
 			if(text == null || text.length < 2) return text;
 			if(text.charAt(0) != '%') return text;
@@ -234,7 +223,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		tr: function(messageId) {
 			var translationManager = qx.locale.Manager;
 			if(!translationManager) return messageId;
-			if(messageId != null && messageId.charAt(0) == '.') 
+			if(messageId != null && messageId.charAt(0) == '.')
 				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
 			return translationManager['tr'](messageId);
 		}

@@ -131,11 +131,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(result) this.__result = result;
 			this.dispose();
 		},
-		
+
 		getTranslationPrefix: function() {
 			return this.__translationPrefix;
 		},
-		
+
 		getResult: function() {
 			return this.__result;
 		},
@@ -161,14 +161,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-
-		// Remove all bindings
 		this.__controller.removeAllBindings();
-
 		this._disposeObjects("__validationManager", "__controller", "__validationManager");
 		this.__componentMap = null;
 		this.__userContextMap = null;
 		this.__registration = null;
 		this.__clientCodeContext = null;
+		this.__translationPrefix = null;
 	}
 });
