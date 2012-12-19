@@ -25,12 +25,13 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 	
 	extend: qx.ui.table.cellrenderer.Abstract,
 	
-	construct: function(align, color, style, weight) {
+	construct: function(align, color, style, weight, wrap) {
 		this.base(arguments);
 		this.__defaultTextAlign = align || "";
 		this.__defaultColor = color || "";
 		this.__defaultFontStyle = style || "";
 		this.__defaultFontWeight = weight || "";
+		this.__wrap = wrap ? "normal" : "nowrap";
 	},
 	
 	members: {
@@ -40,6 +41,9 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 		__defaultColor: null,
 		__defaultFontStyle: null,
 		__defaultFontWeight: null,
+		__wrap: null,
+		__verticalAlign: null,
+		__lineHeight: null,
 	
 		_getContentHtml: function(cellInfo) {
 			return qx.bom.String.escape(this._formatValue(cellInfo));
@@ -56,15 +60,15 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 		setFormatter: function(formatter) {
 			this.__formatter = formatter;
 		},
-		
-		
+			
 		_getCellStyle : function(cellInfo) {
 
 			var style = {
 				"text-align": this.__defaultTextAlign,
 				"color": this.__defaultColor,
 				"font-style": this.__defaultFontStyle,
-				"font-weight": this.__defaultFontWeight
+				"font-weight": this.__defaultFontWeight,
+				"white-space": this.__wrap
 			};
 			var styleString = [];
 			for(var key in style) {

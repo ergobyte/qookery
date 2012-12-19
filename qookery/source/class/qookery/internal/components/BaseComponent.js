@@ -191,6 +191,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(createOptions['padding-bottom']) widget.setPaddingBottom(createOptions['padding-bottom']);
 			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
 			// Appearance
+			if(createOptions['appearance']) widget.setAppearance(createOptions['appearance']);
 			if(createOptions['decorator']) widget.setDecorator(createOptions['decorator']);
 			if(createOptions['font']) widget.setFont(createOptions['font']);
 			if(createOptions['text-color']) widget.setTextColor(createOptions['text-color']);

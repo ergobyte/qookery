@@ -59,15 +59,20 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.getMainWidget().setTableModel(this.__tableModel);
 			var columnModel = this.getMainWidget().getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
+			var rowHeight = options["rowHeight"] || 20;
+			this.getMainWidget().setRowHeight(rowHeight);
 			for(var i = 0; i < options["columns"].length; i++) {
 				var column = options["columns"][i];
 				if(column["width"])
 					resizeBehavior.setWidth(i, column["width"]);
-				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, new qookery.internal.DefaultCellRenderer(
-				column["align"], column["color"], column["font-style"], column["font-weight"]));
+				var cellRenderer = new qookery.internal.DefaultCellRenderer(
+					column["align"], column["color"], column["fontStyle"], 
+					column["fontWeight"], column["wrap"]
+				);
+				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, cellRenderer);
 				if(column["formatter"]) {
-						var formatter = this._createFormatter(column["formatter"]);
-						this.getMainWidget().getTableColumnModel().getDataCellRenderer(i).setFormatter(formatter);
+					var formatter = this._createFormatter(column["formatter"]);
+					cellRenderer.setFormatter(formatter);
 				}
 			}
 		},

@@ -44,6 +44,8 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 		_createMainWidget: function(createOptions) {
 			var widget = new qx.ui.form.DateField();
 			widget.addListener("changeValue", function(event) {
+				if(!event.getData())
+					this.getMainWidget().resetValue();
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);

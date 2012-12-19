@@ -29,6 +29,17 @@
 	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
 
 	<!-- Simple types -->
+	
+	<simpleType name='position-icon' >
+		<restriction base="token">
+			<enumeration value='left' />
+			<enumeration value='top' />
+			<enumeration value='top-left' />
+			<enumeration value='right' />
+			<enumeration value='bottom' />
+			<enumeration value='bottom-left' />
+		</restriction>
+	</simpleType>
 
 	<simpleType name='x-alignment' >
 		<restriction base="token">
@@ -84,7 +95,7 @@
 
 	<group name="components">
 		<choice>
-			<element name="button" type="q:component" />
+			<element ref="q:button" />
 			<element name="check-box" type="q:editable-component" />
 			<element ref="q:component" />
 			<element name="composite" type="q:container-component" />
@@ -111,7 +122,7 @@
 	</group>
 
 	<!-- Base component type -->
-
+	
 	<complexType name="component">
 		<complexContent>
 			<extension base="q:component-attributes">
@@ -182,6 +193,7 @@
 			</documentation></annotation>
 		</attribute>
 		<!-- Widget -->
+		<attribute name="appearance" type="string" />
 		<attribute name="decorator" type="string" />
 		<attribute name="font" type="string" />
 		<attribute name="padding-top" type="integer" default="0" />
@@ -222,7 +234,7 @@
 			</extension>
 		</complexContent>
 	</complexType>
-
+	
 	<!-- Editable component type -->
 
 	<complexType name="editable-component">
@@ -406,6 +418,17 @@
 			<complexContent>
 				<extension base="q:component">
 					<attribute name="wrap" type="boolean" />
+					<attribute name="rich" type="boolean" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="button">
+		<complexType>
+			<complexContent>
+				<extension base="q:component">
+					<attribute name="icon-position" type="q:position-icon" />
 					<attribute name="rich" type="boolean" />
 				</extension>
 			</complexContent>

@@ -34,6 +34,10 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 				createOptions['icon']
 			);
 			this._applyLayoutProperties(this._widgets[0], createOptions);
+			if(createOptions["icon-position"])
+				this._widgets[0].setIconPosition(createOptions["icon-position"]);
+			if(createOptions["rich"])
+				this._widgets[0].setRich(createOptions["rich"]);
 			this.base(arguments, createOptions);
 		},
 
