@@ -57,14 +57,24 @@ qx.Class.define("qookery.contexts.Qookery", {
 			return null;
 		},
 
+		/**
+		 * Load a form and open it as a top-level modal window
+		 * 
+		 * @param formUrl {String} the URL of the XML form resource to load
+		 * @param model {var?null} an optional model to load into the form
+		 * @param resultCallback {Function?null} a callback that will receive the form's result property on close
+		 * @param title {String?null} a title for the created Window instance
+		 * @param icon {String?null} an icon for the created Window instance
+		 */
 		openWindow: function(formUrl, model, resultCallback, title, icon) {
 			icon = icon || null;
 			title = title || null;
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(formUrl, function(data) {
+			this.loadResource(formUrl, function(data) {
 				var window = new qookery.impl.FormWindow(title, icon);
 				window.createAndOpen(data, model);
 				window.addListener("disappear", function() {
-					if(resultCallback) resultCallback(window.getFormComponent().getResult());
+					var result = window.getFormComponent().getResult();
+					if(resultCallback) resultCallback(result);
 					window = null;
 				});
 			});

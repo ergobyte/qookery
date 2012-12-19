@@ -27,7 +27,8 @@ qx.Class.define("qookerydemo.Toolbar", {
 			{ label: "Hello, World!", formFile: "helloWorld.xml", modelFile: "null.json" },
 			{ label: "About Dialog", formFile: "aboutDialog.xml", modelFile: "null.json" },
 			{ label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
-			{ label: "Layout Demo", formFile: "layoutDemo.xml", modelFile: "null.json" },
+			{ label: "Layouts", formFile: "layouts.xml", modelFile: "null.json" },
+			{ label: "Translations", formFile: "translations.xml", modelFile: "null.json" },
 			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
 			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
 			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" }

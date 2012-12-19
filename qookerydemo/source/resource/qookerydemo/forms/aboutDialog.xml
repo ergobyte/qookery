@@ -3,7 +3,7 @@
 
 	<!-- Form fields -->
 	
-	<image source="qookerydemo/icons/66/loading-66.gif" />
+	<image source="qookerydemo/icons/66/loading-66.gif" alignment-y="middle" />
 
 	<label rich="true" wrap="true">
 		<set attribute="label"><![CDATA[

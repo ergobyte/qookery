@@ -105,6 +105,11 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return this.__selectedRowIndex;
 		},
 		
+		getSelectedRowModel: function() {
+			if(this.__selectedRowIndex == null) return null;
+			return this.__tableModel.getItem(this.__selectedRowIndex);
+		},
+		
 		reloadData: function() {
 			this.__tableModel.reloadData();
 			this.getMainWidget().getSelectionModel().resetSelection();

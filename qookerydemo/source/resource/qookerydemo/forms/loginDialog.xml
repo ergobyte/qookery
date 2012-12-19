@@ -14,7 +14,7 @@
 	<!-- Buttons -->
 
 	<composite column-count="auto" max-width="100" alignment-x="right" column-flexes="1">
-		<button label="Login">
+		<button id="loginButton" label="Login">
 			<script event="execute">
 				if(!$.form.validate()) return;
 				var username = $("#username").getValue();
