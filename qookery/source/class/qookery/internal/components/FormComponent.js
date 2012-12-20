@@ -28,6 +28,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	extend: qookery.internal.components.CompositeComponent,
 	implement: [ qookery.IFormComponent ],
+	include: [ qookery.util.MFuturesHandling ],
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);

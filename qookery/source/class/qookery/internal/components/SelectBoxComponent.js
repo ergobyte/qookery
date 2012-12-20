@@ -114,11 +114,13 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		
 		initialize: function(initOptions) {
 			if(initOptions["format"]) {
-				this.getMainWidget().setFormat(function (item) {
+				this.getMainWidget().setFormat(function(item) {
 					if(!item) return "";
-					if(item.getModel() === this.constructor.nullModel) return item.getLabel();
-					if(item.getModel())
-						return initOptions["format"](item.getModel());
+					var model = item.getModel();
+					if(model === qookery.internal.components.SelectBoxComponent.nullModel) 
+						return item.getLabel();
+					if(model)
+						return initOptions["format"](model);
 					return initOptions["format"](item);
 				});
 			}
