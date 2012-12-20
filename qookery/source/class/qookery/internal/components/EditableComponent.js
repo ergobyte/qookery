@@ -48,12 +48,12 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		
 		create: function(createOptions) {
 			this._widgets[0] = this._createMainWidget(createOptions);
+			if(createOptions['required']) this.setRequired(true);
 			if(createOptions['label'] != '%none') {
 				this._widgets[1] = new qx.ui.basic.Label();
 				this._setupLabelAppearance(this._widgets[1], createOptions);
 				this.setLabel(this._translate(createOptions['label'] || ""));
 			}
-			if(createOptions['required']) this.setRequired(true);
 			if(createOptions['read-only']) this.setReadOnly(true);
 			if(createOptions['format']) this.setFormat(createOptions['format']);
 			this.base(arguments, createOptions);
@@ -156,7 +156,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_applyLabel: function(label) {
 			var labelWidget = this.getLabelWidget();
-			if(labelWidget) labelWidget.setValue(label);
+			if(!labelWidget) return;
+			if(this.getRequired()) label += " (*)";
+			labelWidget.setValue(label);
 		},
 
 		_applyToolTip: function(toolTip) {

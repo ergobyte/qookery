@@ -38,7 +38,7 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 		
 		create: function(createOptions) {
 			this.base(arguments, createOptions);
-			if(createOptions['placeholder']) this.setPlaceholder(createOptions['placeholder']);
+			if(createOptions['placeholder']) this.setPlaceholder(this._translate(createOptions['placeholder']));
 		},
 
 		_createMainWidget: function(createOptions) {

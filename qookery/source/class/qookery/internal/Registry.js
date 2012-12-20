@@ -116,6 +116,7 @@ qx.Class.define("qookery.internal.Registry", {
 			this.__components["separator"] = qookery.internal.components.SeparatorComponent;
 			this.__components["slider"] = qookery.internal.components.SliderComponent;
 			this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
+			this.__components["stack"] = qookery.internal.components.StackComponent;
 			this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;
 			this.__components["tab-view-page"] = qookery.internal.components.TabPageComponent;
 			this.__components["table"] = qookery.internal.components.TableComponent;

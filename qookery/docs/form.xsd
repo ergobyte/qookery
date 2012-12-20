@@ -112,6 +112,7 @@
 			<element name="separator" type="q:component" />
 			<element name="slider" type="q:editable-component" />
 			<element name="spinner" type="q:editable-component" />
+			<element ref="q:stack" />
 			<element name="tab-view" type="q:container-component" />
 			<element name="tab-view-page" type="q:container-component" />
 			<element name="table" type="q:editable-component" />
@@ -430,6 +431,16 @@
 				<extension base="q:component">
 					<attribute name="icon-position" type="q:position-icon" />
 					<attribute name="rich" type="boolean" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="stack">
+		<complexType>
+			<complexContent>
+				<extension base="q:container-component">
+					<attribute name="dynamic" type="boolean" />
 				</extension>
 			</complexContent>
 		</complexType>
