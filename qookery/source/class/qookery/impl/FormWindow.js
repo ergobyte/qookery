@@ -59,6 +59,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			this.add(this._getButtonsContainer());
 			this.center();
 			this.open();
+			this.__formComponent.executeAction("appear");
 		},
 
 		_getButtonsContainer: function() {

@@ -39,11 +39,13 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		__tableModel: null,
 		__selectedRowIndex: null,
+		__userOptions: null,
 		
 		initialize: function(options) {
 			if(!options || (!options["model"] && !options["columns"])) return;
 			this.__tableModel = options["model"] || new qookery.impl.SimpleTableModel();
 			this.__tableModel.setTable(this);
+			this.__userOptions = options;
 			this.__tableModel.addListener("dataChanged", function(event) {
 				this.fireDataEvent("dataChanged", event.getData());
 			}, this);
@@ -57,6 +59,10 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				this.__tableModel.setColumns(labelArray, nameArray);
 			}
 			this.getMainWidget().setTableModel(this.__tableModel);
+			var columnVisibilityButtonVisible = options["columnVisibilityButtonVisible"];
+			if(columnVisibilityButtonVisible == false) this.getMainWidget().setColumnVisibilityButtonVisible(columnVisibilityButtonVisible);
+			var statusBarVisible = options["statusBarVisible"];
+			if(statusBarVisible == false) this.getMainWidget().setStatusBarVisible(statusBarVisible);
 			var columnModel = this.getMainWidget().getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			var rowHeight = options["rowHeight"] || 20;
@@ -65,10 +71,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				var column = options["columns"][i];
 				if(column["width"])
 					resizeBehavior.setWidth(i, column["width"]);
-				var cellRenderer = new qookery.internal.DefaultCellRenderer(
-					column["align"], column["color"], column["fontStyle"], 
-					column["fontWeight"], column["wrap"]
-				);
+				var cellRenderer = new qookery.internal.DefaultCellRenderer(this.getColumnOptions(i));
 				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, cellRenderer);
 				if(column["formatter"]) {
 					var formatter = this._createFormatter(column["formatter"]);
@@ -108,6 +111,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		getSelectedRowModel: function() {
 			if(this.__selectedRowIndex == null) return null;
 			return this.__tableModel.getItem(this.__selectedRowIndex);
+		},
+		
+		getColumnOptions: function(columnIndex) {
+			if(this.__userOptions['columns'])
+				return this.__userOptions['columns'][columnIndex];
+			return null;
 		},
 		
 		reloadData: function() {

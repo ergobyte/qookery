@@ -25,13 +25,13 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 	
 	extend: qx.ui.table.cellrenderer.Abstract,
 	
-	construct: function(align, color, style, weight, wrap) {
+	construct: function(columnOptions) {
 		this.base(arguments);
-		this.__defaultTextAlign = align || "";
-		this.__defaultColor = color || "";
-		this.__defaultFontStyle = style || "";
-		this.__defaultFontWeight = weight || "";
-		this.__wrap = wrap ? "normal" : "nowrap";
+		this.__defaultTextAlign = columnOptions["align"] || "";
+		this.__defaultColor = columnOptions["color"] || "";
+		this.__defaultFontStyle = columnOptions["fontStyle"] || "";
+		this.__defaultFontWeight = columnOptions["fontWeight"] || "";
+		this.__wrap = columnOptions["wrap"] ? "normal" : "nowrap";
 	},
 	
 	members: {
