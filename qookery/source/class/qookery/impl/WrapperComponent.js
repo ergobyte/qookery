@@ -32,7 +32,7 @@ qx.Class.define("qookery.impl.WrapperComponent", {
 		__widgetClass: null,
 		
 		create: function(createOptions) {
-			this._widgets[0] = new this.__widgetClass();
+			this._widgets[0] = new this.__widgetClass(createOptions);
 			this._applyLayoutProperties(this._widgets[0], createOptions);
 			this.base(arguments, createOptions);
 		}

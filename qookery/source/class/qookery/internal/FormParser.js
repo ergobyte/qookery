@@ -114,11 +114,20 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseComponent: function(componentElement, parentComponent) {
+			
+			// Check condition
+
+			var conditionClientCode = this.__getAttribute(componentElement, "check-condition");
+			if(conditionClientCode) {
+				var result = parentComponent.executeClientCode(qx.lang.String.format("return (%1);", [ conditionClientCode ]));
+				if(!result) return;
+			}
+
+			// Phase 1: New Instance
+
 			var componentType = qx.dom.Node.getName(componentElement);
 			if(componentType == "component") 
 				componentType = this.__getAttribute(componentElement, "type");
-
-			// Phase 1: New Instance
 
 			var component = this.constructor.registry.createComponent(parentComponent, componentType);
 			var componentId = this.__getAttribute(componentElement, "id");

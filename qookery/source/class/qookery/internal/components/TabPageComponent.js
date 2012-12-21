@@ -29,7 +29,7 @@ qx.Class.define("qookery.internal.components.TabPageComponent", {
 	members: {
 	
 		_createContainerWidget: function(createOptions) {
-			var widget = new qx.ui.tabview.Page(createOptions['label']);
+			var widget = new qx.ui.tabview.Page(this._translate(createOptions['label']));
       		var layout = new qx.ui.layout.Grid();
       		widget.setLayout(layout);
 			this._applyLayoutProperties(widget, createOptions);

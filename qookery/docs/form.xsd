@@ -205,6 +205,8 @@
 		<!-- Grid layout data -->
 		<attribute name="row-span" type="integer" default="1" />
 		<attribute name="column-span" type="integer" default="1" />
+		<!-- Conditional evaluation -->
+		<attribute name="check-condition" type="string" />
 	</complexType>
 
 	<!-- Container component type -->
