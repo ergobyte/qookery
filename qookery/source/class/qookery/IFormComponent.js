@@ -24,7 +24,7 @@
 qx.Interface.define("qookery.IFormComponent", {
 
 	extend: qookery.IContainerComponent,
-	
+
 	events: {
 
 		/**
@@ -39,7 +39,21 @@ qx.Interface.define("qookery.IFormComponent", {
 	},
 
 	members: {
-		
+
+		/**
+		 * Return the title assigned by the XML author to this form
+		 *
+		 * @return {String} title or <code>null</code> if not available
+		 */
+		getTitle: function() { },
+
+		/**
+		 * Return the icon assigned by the XML author to this form
+		 *
+		 * @return {String} icon URI or <code>null</code> if not available
+		 */
+		getIcon: function() { },
+
 		/**
 		 * Validate the form's state
 		 *
@@ -59,16 +73,16 @@ qx.Interface.define("qookery.IFormComponent", {
 
 		/**
 		 * Return the form's underlying object controller
-		 * 
+		 *
 		 * @return {qx.data.controller.Object} The form's controller
 		 */
 		getController: function() { },
 
 		/**
 		 * Return a component registered within this form
-		 * 
+		 *
 		 * @param componentId {String} the unique identifier of the requested component
-		 * 
+		 *
 		 * @return {qookery.IComponent} The component or <code>null</cide> if not found
 		 */
 		getComponent: function(componentId) { }

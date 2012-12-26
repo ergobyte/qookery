@@ -24,40 +24,44 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__list = new qx.ui.form.List();
 	},
-	
+
 	members: {
-		
-		__list: null,
+
 		__listItemsMap: { },
-		
+
 		initialize: function(options) {
-			if(!options || !options["itemsMap"]) return;
-			this.__list.removeAll();
+			if(!options || !options["items"]) return;
+			var list = this.getMainWidget();
+			list.removeAll();
 			this.__listItemsMap = {};
-			for(var property in options["itemsMap"]) {
-				var item = new qx.ui.form.ListItem(options["itemsMap"][property]);
+			for(var property in options["items"]) {
+				var item = new qx.ui.form.ListItem(options["items"][property]);
 				this.__listItemsMap[property] = item;
-				this.__list.add(item);
+				list.add(item);
 			}
-			this.__list.addListener("changeSelection", this.__onChangeSelection, this);
 		},
-		
-		_createMainWidget: function(createOptions) {
-			this.__list.setScrollbarY("on");
-			this._applyLayoutProperties(this.__list, createOptions);
-			return this.__list;
+
+		_createMainWidget: function(attributes) {
+			var list = new qx.ui.form.List();
+			list.setScrollbarY("on");
+			list.addListener("changeSelection", this.__onChangeSelection, this);
+			this._applyLayoutAttributes(list, attributes);
+			return list;
 		},
-		
+
 		_updateUI: function(value) {
-			if(!value || !this.__listItemsMap[value]) {
-				this.__list.resetSelection();
-				return;
-			}
-			this.__list.setSelection([this.__listItemsMap[value]]);
+			var selectedItem = this.__listItemsMap[value];
+			if(selectedItem)
+				this.getMainWidget().setSelection([ selectedItem ]);
+			else
+				this.getMainWidget().resetSelection();
 		},
-		
+
+		select: function(value) {
+			this._updateUI(value);
+		},
+
 		__onChangeSelection:function(e) {
 			if(e.getData().length == 0 || this._disableValueEvents) return;
 			var selectedItem = e.getData()[0];

@@ -25,22 +25,22 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	members: {
 
-		create: function(createOptions) {
-			this.base(arguments, createOptions);
+		create: function(attributes) {
+			this.base(arguments, attributes);
 			this.setLabel(""); // The label is used in the main widget
 		},
-		
-		_createMainWidget: function(createOptions) {
-			var widget = new qx.ui.form.CheckBox(createOptions['label']);
+
+		_createMainWidget: function(attributes) {
+			var widget = new qx.ui.form.CheckBox(attributes['label']);
 			widget.addListener("changeValue", function(event) {
 				this.setValue(event.getData());
 			}, this);
 			return widget;
 		},
-		
+
 		_applyValue: function(value) {
 			this.getMainWidget().setValue(value);
 		}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Stack demo
+-->
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
+
+	<stack id="stack">
+		<composite id="page1">
+			<label label="First Page"/>
+		</composite>
+		<composite id="page2">
+			<label label="Second Page"/>
+		</composite>
+		<composite id="page3">
+			<label label="Third Page"/>
+		</composite>
+	</stack>
+	
+	<composite column-count="auto">
+		<button label="Page 1">
+			<script event="execute">
+				$("#stack").setSelection($("#page1"));
+			</script>
+		</button>
+		<button label="Page 2">
+			<script event="execute">
+				$("#stack").setSelection($("#page2"));
+			</script>
+		</button>
+		<button label="Page 3">
+			<script event="execute">
+				$("#stack").setSelection($("#page3"));
+			</script>
+		</button>
+	</composite>
+
+</form>

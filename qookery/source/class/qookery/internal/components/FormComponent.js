@@ -45,6 +45,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
+		__title: null,
+		__icon: null,
 		__controller: null,
 		__componentMap: null,
 		__validationManager: null,
@@ -52,9 +54,17 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__translationPrefix: null,
 		__result: null,
 
-		create: function(createOptions) {
-			this.__translationPrefix = createOptions['translation-prefix'];
-			this.base(arguments, createOptions);
+		create: function(attributes) {
+			this.__translationPrefix = attributes['translation-prefix'];
+			this.base(arguments, attributes);
+		},
+
+		getTitle: function() {
+			return this._translate(this.getAttribute('title'));
+		},
+
+		getIcon: function() {
+			return this.getAttribute('icon');
 		},
 
 		getModel: function() {

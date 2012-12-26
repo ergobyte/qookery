@@ -27,14 +27,14 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 	},
 
 	members: {
-		
-		create: function(createOptions) {
-			var html = createOptions['html'] || null;
+
+		create: function(attributes) {
+			var html = attributes['html'] || null;
 			this._widgets[0] = new qx.ui.embed.Html(html);
-			this._applyLayoutProperties(this._widgets[0], createOptions);
-			this.base(arguments, createOptions);
+			this._applyLayoutAttributes(this._widgets[0], attributes);
+			this.base(arguments, attributes);
 		},
-		
+
 		getHtml: function() {
 			return this.getMainWidget().getHtml();
 		},

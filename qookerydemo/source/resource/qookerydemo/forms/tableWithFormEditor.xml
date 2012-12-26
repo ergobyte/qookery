@@ -36,8 +36,8 @@
 		<button label="Edit Password" id="editButton">
 			<script event="execute">
 				var table = $("#passwordsTable");
-				if(table.getSelectedRowIndex() == undefined) return;
-				var currentModel = table.getRow(table.getSelectedRowIndex());
+				var currentModel = table.getSelectedRowModel();
+				if(!currentModel) return;
 				var clonedModel = $.QookeryDemo.cloneModel(currentModel);
 				$.Qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", clonedModel, function(result) {
 					if(result == "OK") table.replaceRow(table.getSelectedRowIndex(), clonedModel);

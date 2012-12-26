@@ -27,16 +27,16 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 	},
 
 	members: {
-		
-		create: function(createOptions) {
-			var labelText = this._translate(createOptions['label']) || "";
+
+		create: function(attributes) {
+			var labelText = this._translate(attributes['label']) || "";
 			this._widgets[0] = new qx.ui.basic.Label(labelText);
-			if(createOptions['rich']) this._widgets[0].setRich(true);
-			if(createOptions['wrap']) this._widgets[0].setWrap(true);
-			this._applyLayoutProperties(this._widgets[0], createOptions);
-			this.base(arguments, createOptions);
+			if(attributes['rich']) this._widgets[0].setRich(true);
+			if(attributes['wrap']) this._widgets[0].setWrap(true);
+			this._applyLayoutAttributes(this._widgets[0], attributes);
+			this.base(arguments, attributes);
 		},
-		
+
 		getValue: function() {
 			return this.getMainWidget().getValue();
 		},
@@ -44,7 +44,7 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 		setValue: function(value) {
 			this.getMainWidget().setValue(value);
 		},
-		
+
 		getRich: function() {
 			return this.getMainWidget().getRich();
 		},

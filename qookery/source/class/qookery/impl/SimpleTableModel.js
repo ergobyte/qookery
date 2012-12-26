@@ -54,7 +54,7 @@ qx.Class.define("qookery.impl.SimpleTableModel", {
 			// Implement if you want to reload model data.
 		},
 
-		_mapArray2RowArr : function(mapArr, rememberMaps) {
+		_mapArray2RowArr: function(mapArr, rememberMaps) {
 			var rowCount = mapArr.length;
 			var columnCount = this.getColumnCount();
 			var dataArr = new Array(rowCount);
@@ -62,22 +62,14 @@ qx.Class.define("qookery.impl.SimpleTableModel", {
 				var columnArr = [];
 				if(rememberMaps)
 					columnArr.originalData = mapArr[i];
-				for(var j=0; j<columnCount; ++j)
-					columnArr[j] = this.__readEntity(mapArr[i], this.getColumnId(j));
+				for(var j=0; j<columnCount; ++j) {
+					var model = mapArr[i];
+					var propertyName = this.getColumnId(j);
+					columnArr[j] = model.get(propertyName);
+				}
 				dataArr[i] = columnArr;
 			}
 			return dataArr;
-   		},
-
-   		// Internal stuff
-
-		__getGetterName: function(property) {
-			return "get" + qx.lang.String.firstUp(property);
-		},
-
-		__readEntity: function(entity, property) {
-			var getterName = this.__getGetterName(property);
-			return entity[getterName]();
-		}
+   		}
 	}
 });

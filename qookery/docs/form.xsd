@@ -30,7 +30,7 @@
 
 	<!-- Simple types -->
 	
-	<simpleType name='position-icon' >
+	<simpleType name='icon-position' >
 		<restriction base="token">
 			<enumeration value='left' />
 			<enumeration value='top' />
@@ -95,7 +95,7 @@
 
 	<group name="components">
 		<choice>
-			<element ref="q:button" />
+			<element name="button" type="q:atom-component" />
 			<element name="check-box" type="q:editable-component" />
 			<element ref="q:component" />
 			<element name="composite" type="q:container-component" />
@@ -115,7 +115,7 @@
 			<element ref="q:stack" />
 			<element name="tab-view" type="q:container-component" />
 			<element name="tab-view-page" type="q:container-component" />
-			<element name="table" type="q:editable-component" />
+			<element ref="q:table" />
 			<element name="text-area" type="q:field-component" />
 			<element name="text-field" type="q:field-component" />
 			<any namespace="##other" />
@@ -139,7 +139,6 @@
 		<attribute name="id" type="ID" />
 		<!-- Properties -->
 		<attribute name="label" type="string" />
-		<attribute name="icon" type="anyURI" />
 		<attribute name="enabled" type="boolean" default="true" />
 		<attribute name="visible" type="boolean" default="true" />
 		<attribute name="text-color" type="string" default="black" />
@@ -206,7 +205,7 @@
 		<attribute name="row-span" type="integer" default="1" />
 		<attribute name="column-span" type="integer" default="1" />
 		<!-- Conditional evaluation -->
-		<attribute name="check-condition" type="string" />
+		<attribute name="skip-if" type="string" />
 	</complexType>
 
 	<!-- Container component type -->
@@ -261,6 +260,22 @@
 		</complexContent>
 	</complexType>
 
+	<!-- Atom component type -->
+
+	<complexType name="atom-component">
+		<complexContent>
+			<extension base="q:component-attributes">
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<group ref="q:statements" />
+				</choice>
+				<attribute name="center" type="boolean" default="false" />
+				<attribute name="icon" type="anyURI" />
+				<attribute name="icon-position" type="q:icon-position" default="left" />
+				<attribute name="rich" type="boolean" default="false" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
 	<!-- Field component type -->
 
 	<complexType name="field-component">
@@ -389,18 +404,10 @@
 							<group ref="q:components" />
 						</choice>
 					</sequence>
-					<attribute ref="xml:base" use="optional" />
-					<attribute name="translation-prefix" use="optional" />
-				</extension>
-			</complexContent>
-		</complexType>
-	</element>
-
-	<element name="image">
-		<complexType>
-			<complexContent>
-				<extension base="q:component">
-					<attribute name="source" type="anyURI" />
+					<attribute ref="xml:base" />
+					<attribute name="translation-prefix" />
+					<attribute name="title" />
+					<attribute name="icon" type="anyURI" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -416,23 +423,23 @@
 		</complexType>
 	</element>
 
-	<element name="label">
+	<element name="image">
 		<complexType>
 			<complexContent>
 				<extension base="q:component">
-					<attribute name="wrap" type="boolean" />
-					<attribute name="rich" type="boolean" />
+					<attribute name="source" type="anyURI" />
 				</extension>
 			</complexContent>
 		</complexType>
 	</element>
-	
-	<element name="button">
+
+	<element name="label">
 		<complexType>
 			<complexContent>
 				<extension base="q:component">
-					<attribute name="icon-position" type="q:position-icon" />
-					<attribute name="rich" type="boolean" />
+					<attribute name="icon" type="anyURI" />
+					<attribute name="rich" type="boolean" default="false" />
+					<attribute name="wrap" type="boolean" default="false" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -448,4 +455,14 @@
 		</complexType>
 	</element>
 	
+	<element name="table">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component">
+					<attribute name="row-height" type="integer" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
 </schema>

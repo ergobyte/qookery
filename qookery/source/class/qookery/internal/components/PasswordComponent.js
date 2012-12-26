@@ -21,16 +21,16 @@
 qx.Class.define("qookery.internal.components.PasswordComponent", {
 
 	extend: qookery.internal.components.TextComponent,
-	
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	members: {
-		
-		_createMainWidget: function(createOptions) {
+
+		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.PasswordField();
-			return this._setupTextField(widget, createOptions);
+			return this._setupTextField(widget, attributes);
 		}
 	}
 });

@@ -21,47 +21,45 @@
 	<tab-view column-flexes="1">
 		<tab-view-page label="Car Brand" column-flexes="1">
 			<group-box column-count="2" column-flexes="0 1">
-				<text-field connect="brand"/>
+				<text-field connect="brand" />
 				<select-box connect="brand">
 					<script>
 						this.initialize({
-							itemsMap: $.brands
+							items: $.brands
 						});
 					</script>
 				</select-box>
 				<radio-group connect="brand">
 					<script>
 						this.initialize({
-							itemsMap: $.brands
+							items: $.brands
 						});
 					</script>
 				</radio-group>
 				<list connect="brand">
 					<script>
 						this.initialize({
-							itemsMap: $.brands
+							items: $.brands
 						});
 					</script>
 				</list>
 			</group-box>
 		</tab-view-page>
-		<tab-view-page label="Options" column-flexes="1">
-			<composite column-flexes="1">
-				<check-box label="Pearl Paint" connect="pearl"/>
-				<date-field label="Delivery Date" connect="date" format="date: format = dd/MM/yyyy HH:mm:ss"/>
-				<group-box label="Loan Percent" column-count="2" column-flexes="0 1">
-					<slider connect="loan">
-						<script>
-							this.initialize($.loan);
-						</script>
-					</slider>
-					<spinner connect="loan">
-						<script>
-							this.initialize($.loan);
-						</script>
-					</spinner>
-				</group-box>
-			</composite>
+		<tab-view-page label="Options" column-count="2" column-flexes="0 1">
+			<date-field label="Delivery Date" connect="date" format="date: format = dd/MM/yyyy HH:mm:ss" />
+			<check-box label="Pearl Paint" connect="pearl" />
+			<group-box label="Loan Percent" column-span="2" column-count="2" column-flexes="0 1">
+				<slider connect="loan">
+					<script>
+						this.initialize($.loan);
+					</script>
+				</slider>
+				<spinner connect="loan">
+					<script>
+						this.initialize($.loan);
+					</script>
+				</spinner>
+			</group-box>
 		</tab-view-page>
 		<tab-view-page label="Photo" column-flexes="1">
 			<image source="resource/qookerydemo/images/ascona.jpg" />

@@ -27,15 +27,15 @@ qx.Class.define("qookery.internal.components.SeparatorComponent", {
 	},
 
 	members: {
-		
-		create: function(createOptions) {
+
+		create: function(attributes) {
 			this._widgets[0] = new qx.ui.core.Widget().set({
 				decorator: "separator-horizontal",
 				backgroundColor: "gray",
 				height: 1
 			});
-			this._applyLayoutProperties(this._widgets[0], createOptions);
-			this.base(arguments, createOptions);
+			this._applyLayoutAttributes(this._widgets[0], attributes);
+			this.base(arguments, attributes);
 		}
 	}
 });

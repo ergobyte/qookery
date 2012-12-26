@@ -19,22 +19,22 @@
 */
 
 qx.Class.define("qookery.impl.WrapperComponent", {
-	
+
 	extend: qookery.internal.components.BaseComponent,
-	
+
 	construct: function(parentComponent, widgetClass) {
 		this.base(arguments, parentComponent);
 		this.__widgetClass = widgetClass;
 	},
 
 	members: {
-		
+
 		__widgetClass: null,
-		
-		create: function(createOptions) {
-			this._widgets[0] = new this.__widgetClass(createOptions);
-			this._applyLayoutProperties(this._widgets[0], createOptions);
-			this.base(arguments, createOptions);
+
+		create: function(attributes) {
+			this._widgets[0] = new this.__widgetClass(attributes);
+			this._applyLayoutAttributes(this._widgets[0], attributes);
+			this.base(arguments, attributes);
 		}
 	}
 });

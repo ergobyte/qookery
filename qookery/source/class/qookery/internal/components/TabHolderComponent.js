@@ -27,15 +27,15 @@ qx.Class.define("qookery.internal.components.TabHolderComponent", {
 	},
 
 	members: {
-		
-		create: function(createOptions) {
-			createOptions['column-count'] = 'none';
-			this.base(arguments, createOptions);
+
+		create: function(attributes) {
+			attributes['column-count'] = 'none';
+			this.base(arguments, attributes);
 		},
 
-		_createContainerWidget: function(createOptions) {
+		_createContainerWidget: function(attributes) {
 			var  tabView = new qx.ui.tabview.TabView();
-			this._applyLayoutProperties(tabView, createOptions);
+			this._applyLayoutAttributes(tabView, attributes);
 			return tabView;
 		}
 	}

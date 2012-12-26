@@ -27,12 +27,12 @@ qx.Class.define("qookery.internal.components.TabPageComponent", {
 	},
 
 	members: {
-	
-		_createContainerWidget: function(createOptions) {
-			var widget = new qx.ui.tabview.Page(this._translate(createOptions['label']));
+
+		_createContainerWidget: function(attributes) {
+			var widget = new qx.ui.tabview.Page(this._translate(attributes['label']));
       		var layout = new qx.ui.layout.Grid();
       		widget.setLayout(layout);
-			this._applyLayoutProperties(widget, createOptions);
+			this._applyLayoutAttributes(widget, attributes);
 			return widget;
 		}
 	}

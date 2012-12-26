@@ -22,31 +22,31 @@ qx.Class.define("qookery.internal.formatters.NumberFormatter", {
 
 	extend: qx.core.Object,
 	implement: [qx.util.format.IFormat],
-	
+
 	construct: function(options) {
 		this.base(arguments);
 		this.__format = new qx.util.format.NumberFormat();
-		this.__createOptions(options);
+		this.__setOptions(options);
 	},
-	
+
 	members: {
-		
+
 		__format: null,
-		
+
 		format: function(obj) {
 			return this.__format.format(obj);
 		},
-		
+
 		parse: function(str) {
 			return this.__format.parse(str);
 		},
-		
-		__createOptions: function(options) {
-			for (var key in options)
-				this.__setProperty(key, options[key]);
+
+		__setOptions: function(options) {
+			for(var key in options)
+				this.__setOption(key, options[key]);
 		},
-		
-		__setProperty: function(key, value) {
+
+		__setOption: function(key, value) {
 			switch(key) {
 			case "postfix":
 				this.__format.setPostfix(' ' + value);

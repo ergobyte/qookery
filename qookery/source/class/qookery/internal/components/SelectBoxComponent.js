@@ -28,18 +28,18 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	statics: {
 		nullModel: new String("null")
 	},
 
 	members: {
-		
+
 		__nullLabel: "",
-		
-		_createMainWidget: function(createOptions) {
+
+		_createMainWidget: function(attributes) {
 			var selectBox = new qx.ui.form.SelectBox();
-			this._applyLayoutProperties(selectBox, createOptions);
+			this._applyLayoutAttributes(selectBox, attributes);
 			selectBox.addListener("changeSelection", function(event) {
 				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
@@ -49,7 +49,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			}, this);
 			return selectBox;
 		},
-		
+
 		_updateUI: function(value) {
 			var selectBox = this.getMainWidget();
 			var valueIdentity = this._getIdentityOf(value);
@@ -69,14 +69,14 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				return;
 			}
 		},
-		
+
 		_getIdentityOf: function(value) {
 			var result = this.base(arguments, value);
 			if(this.__nullLabel && result == null)
 				return this.constructor.nullModel;
 			return result;
 		},
-		
+
 		addItem: function(model, label, icon) {
 			qx.core.Assert.assertNotNull(model);
 			if(!label) label = this._getLabelOf(model);
@@ -111,13 +111,13 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				}
 			}
 		},
-		
+
 		initialize: function(initOptions) {
 			if(initOptions["format"]) {
 				this.getMainWidget().setFormat(function(item) {
 					if(!item) return "";
 					var model = item.getModel();
-					if(model === qookery.internal.components.SelectBoxComponent.nullModel) 
+					if(model === qookery.internal.components.SelectBoxComponent.nullModel)
 						return item.getLabel();
 					if(model)
 						return initOptions["format"](model);
@@ -125,7 +125,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				});
 			}
 			if(initOptions["nullLabel"]) this.__nullLabel = initOptions["nullLabel"];
-			if(initOptions["itemsMap"]) this.setItems(initOptions["itemsMap"]);
+			if(initOptions["items"]) this.setItems(initOptions["items"]);
 		}
 	}
 });

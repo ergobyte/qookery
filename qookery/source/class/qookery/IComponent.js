@@ -35,15 +35,40 @@ qx.Interface.define("qookery.IComponent", {
 	members: {
 
 		/**
+		 * Called by the parser soon after the component's constructor
+		 *
+		 * <p>Notice: You must never call this method directly.</p>
+		 *
+		 * @param attributes {Map} preprocessed attributes found in the defining XML document
+		 */
+		create: function(attributes) { },
+
+		/**
+		 * Called by the parser after creation of the component and its children
+		 *
+		 * <p>Notice: You must never call this method directly.</p>
+		 *
+		 * @param attributes {Map} preprocessed attributes found in the defining XML document
+		 */
+		setup: function(attributes) { },
+
+		/**
 		 * Return the component identifier, if any
 		 *
-		 * <p>
-		 * The identifier must by unique for each component within a form
-		 * </p>
+		 * <p>This identifier is guaranteed to be unique within the defining XML document</p>
 		 *
 		 * @return {String} unique identifier or <code>null</code>
 		 */
 		getId: function() { },
+
+		/**
+		 * Return an attribute from the defining XML document
+		 *
+		 * @param attributeName {String} the name of the required attribute
+		 *
+		 * @return attribute's value or <code>null</code> if undefined
+		 */
+		getAttribute: function(attributeName) { },
 
 		/**
 		 * Return the form containing this component
@@ -95,8 +120,8 @@ qx.Interface.define("qookery.IComponent", {
 		 * <p>It is safe to call this method for undefined actions,
 		 * in which case <code>null</code> is returned.</p>
 		 *
-		 * @param actionName one the actions provided by component
-		 * @param argumentMap optional name-value map to be passed as call arguments
+		 * @param actionName {String} one the actions provided by component
+		 * @param argumentMap {Map} optional name-value map to be passed as call arguments
 		 *
 		 * @return the action's execution result
 		 */

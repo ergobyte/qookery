@@ -31,9 +31,9 @@ qx.Class.define("qookery.internal.components.CompositeComponent", {
 
 	members: {
 
-		_createContainerWidget: function(createOptions) {
+		_createContainerWidget: function(attributes) {
 			var container = new qx.ui.container.Composite();
-			this._applyLayoutProperties(container, createOptions);
+			this._applyLayoutAttributes(container, attributes);
 			return container;
 		}
 	}

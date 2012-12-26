@@ -43,20 +43,15 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		__id: null,
 		__parentComponent: null,
-		__createOptions: null,
+		__attributes: null,
 		_widgets: null,
 		__actions: null,
 
 		// Implementations
 
-		/**
-		 * Create Qooxdoo widget(s)
-		 *
-		 * @param createOptions {keyValuePairList} an object with any number of setup options
-		 */
-		create: function(createOptions) {
-			this.__id = createOptions['id'];
-			this.__createOptions = createOptions;
+		create: function(attributes) {
+			this.__id = attributes['id'];
+			this.__attributes = attributes;
 
 			if(this._widgets.length == 0)
 				throw new Error("Component failed to create at least one widget");
@@ -64,8 +59,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			for(var i = 0; i < this._widgets.length; i++)
 				this._widgets[i].setUserData('qookeryComponent', this);
 
-			if(createOptions['enabled'] == false) this.setEnabled(false);
-			if(createOptions['visible'] == false) this.setVisible(false);
+			if(attributes['enabled'] == false) this.setEnabled(false);
+			if(attributes['visible'] == false) this.setVisible(false);
+		},
+
+		setup: function(attributes) {
+			// Nothing to do here, override if needed
 		},
 
 		setAction: function(actionName, clientCode) {
@@ -76,12 +75,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this.__id;
 		},
 
-		getCreateOptions: function() {
-			return this.__createOptions;
-		},
-
-		setup: function() {
-			// Nothing to do here, override if needed
+		getAttribute: function(attributeName) {
+			return this.__attributes[attributeName];
 		},
 
 		listWidgets: function(filterName) {
@@ -161,41 +156,41 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 * Apply layout properties to a widget
 		 *
 		 * @param widget {qx.ui.core.Widget} Widget to receive layout properties
-		 * @param createOptions {Object} Layouting instructions as provided by the XML parser
+		 * @param attributes {Object} Layouting instructions as provided by the XML parser
 		 */
-		_applyLayoutProperties: function(widget, createOptions) {
+		_applyLayoutAttributes: function(widget, attributes) {
 			// Layout
-			if(createOptions['row-span']) widget.setLayoutProperties({ rowSpan: createOptions['row-span'] });
-			if(createOptions['column-span']) widget.setLayoutProperties({ colSpan: createOptions['column-span'] });
+			if(attributes['row-span']) widget.setLayoutProperties({ rowSpan: attributes['row-span'] });
+			if(attributes['column-span']) widget.setLayoutProperties({ colSpan: attributes['column-span'] });
 			// Size and position
-			if(createOptions['width']) widget.setWidth(createOptions['width']);
-			if(createOptions['height']) widget.setHeight(createOptions['height']);
-			if(createOptions['min-width']) widget.setMinWidth(createOptions['min-width']);
-			if(createOptions['min-height']) widget.setMinHeight(createOptions['min-height']);
-			if(createOptions['max-width']) widget.setMaxWidth(createOptions['max-width']);
-			if(createOptions['max-height']) widget.setMaxHeight(createOptions['max-height']);
-			if(createOptions['alignment-x']) widget.setAlignX(createOptions['alignment-x']);
-			if(createOptions['alignment-y']) widget.setAlignY(createOptions['alignment-y']);
-			var stretchX = createOptions['stretch-x'] !== undefined ? createOptions['stretch-x'] : createOptions['stretch'];
-			var stretchY = createOptions['stretch-y'] !== undefined ? createOptions['stretch-y'] : createOptions['stretch'];
+			if(attributes['width']) widget.setWidth(attributes['width']);
+			if(attributes['height']) widget.setHeight(attributes['height']);
+			if(attributes['min-width']) widget.setMinWidth(attributes['min-width']);
+			if(attributes['min-height']) widget.setMinHeight(attributes['min-height']);
+			if(attributes['max-width']) widget.setMaxWidth(attributes['max-width']);
+			if(attributes['max-height']) widget.setMaxHeight(attributes['max-height']);
+			if(attributes['alignment-x']) widget.setAlignX(attributes['alignment-x']);
+			if(attributes['alignment-y']) widget.setAlignY(attributes['alignment-y']);
+			var stretchX = attributes['stretch-x'] !== undefined ? attributes['stretch-x'] : attributes['stretch'];
+			var stretchY = attributes['stretch-y'] !== undefined ? attributes['stretch-y'] : attributes['stretch'];
 			if(stretchX !== undefined) widget.setAllowStretchX(stretchX);
 			if(stretchY !== undefined) widget.setAllowStretchY(stretchY);
-			if(createOptions['margin']) widget.setMargin(createOptions['margin']);
-			if(createOptions['margin-top']) widget.setMarginTop(createOptions['margin-top']);
-			if(createOptions['margin-right']) widget.setMarginRight(createOptions['margin-right']);
-			if(createOptions['margin-bottom']) widget.setMarginBottom(createOptions['margin-bottom']);
-			if(createOptions['margin-left']) widget.setMarginLeft(createOptions['margin-left']);
-			if(createOptions['padding']) widget.setPadding(createOptions['padding']);
-			if(createOptions['padding-top']) widget.setPaddingTop(createOptions['padding-top']);
-			if(createOptions['padding-right']) widget.setPaddingRight(createOptions['padding-right']);
-			if(createOptions['padding-bottom']) widget.setPaddingBottom(createOptions['padding-bottom']);
-			if(createOptions['padding-left']) widget.setPaddingLeft(createOptions['padding-left']);
+			if(attributes['margin']) widget.setMargin(attributes['margin']);
+			if(attributes['margin-top']) widget.setMarginTop(attributes['margin-top']);
+			if(attributes['margin-right']) widget.setMarginRight(attributes['margin-right']);
+			if(attributes['margin-bottom']) widget.setMarginBottom(attributes['margin-bottom']);
+			if(attributes['margin-left']) widget.setMarginLeft(attributes['margin-left']);
+			if(attributes['padding']) widget.setPadding(attributes['padding']);
+			if(attributes['padding-top']) widget.setPaddingTop(attributes['padding-top']);
+			if(attributes['padding-right']) widget.setPaddingRight(attributes['padding-right']);
+			if(attributes['padding-bottom']) widget.setPaddingBottom(attributes['padding-bottom']);
+			if(attributes['padding-left']) widget.setPaddingLeft(attributes['padding-left']);
 			// Appearance
-			if(createOptions['appearance']) widget.setAppearance(createOptions['appearance']);
-			if(createOptions['decorator']) widget.setDecorator(createOptions['decorator']);
-			if(createOptions['font']) widget.setFont(createOptions['font']);
-			if(createOptions['text-color']) widget.setTextColor(createOptions['text-color']);
-			if(createOptions['background-color']) widget.setBackgroundColor(createOptions['background-color']);
+			if(attributes['appearance']) widget.setAppearance(attributes['appearance']);
+			if(attributes['decorator']) widget.setDecorator(attributes['decorator']);
+			if(attributes['font']) widget.setFont(attributes['font']);
+			if(attributes['text-color']) widget.setTextColor(attributes['text-color']);
+			if(attributes['background-color']) widget.setBackgroundColor(attributes['background-color']);
 		},
 
 		_applyEnabled: function(enabled) {
@@ -221,12 +216,13 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this['tr'](messageId);
 		},
 
-		tr: function(messageId) {
-			var translationManager = qx.locale.Manager;
-			if(!translationManager) return messageId;
-			if(messageId != null && messageId.charAt(0) == '.')
+		tr: function(messageId, varArgs) {
+			if(!messageId) return null;
+			var manager = qx.locale.Manager;
+			if(!manager) return messageId;
+			if(messageId.charAt(0) == '.')
 				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
-			return translationManager['tr'](messageId);
+			return manager.tr.apply(manager, arguments);
 		}
 	},
 
@@ -236,6 +232,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			widgets[i].destroy();
 		}
 		this.__parentComponent = null;
-		this.__createOptions = null;
+		this.__attributes = null;
 	}
 });

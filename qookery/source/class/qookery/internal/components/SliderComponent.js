@@ -19,18 +19,18 @@
 */
 
 qx.Class.define("qookery.internal.components.SliderComponent", {
-	
+
 	extend: qookery.internal.components.EditableComponent,
-	
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	members: {
-		
+
 		__container: null,
 		__group: null,
-		
+
 		initialize: function(initOptions) {
 			if (!this.__group) return;
 			var minimum = initOptions["minimum"] || 0;
@@ -46,8 +46,8 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 				pageStep: pageStep
 			});
 		},
-		
-		_createMainWidget: function(createOptions) {
+
+		_createMainWidget: function(attributes) {
 			var grid = new qx.ui.layout.Grid();
 			grid.setSpacing(5);
 			grid.setColumnFlex(1, 1);
@@ -56,7 +56,7 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 			var widget = new qx.ui.form.Slider();
 			this.__group = this.__createSliderGroup(widget);
 			this.__addGroupToContainer(this.__group);
-			this._applyLayoutProperties(this.__container, createOptions);
+			this._applyLayoutAttributes(this.__container, attributes);
 			this.__group.slider.addListener("changeValue", function(event) {
 				this.__group.value.setValue(this.__group.slider.getValue().toString());
 				if(this._disableValueEvents) return;
@@ -64,7 +64,7 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 			}, this);
 			return this.__container;
 		},
-		
+
 		_updateUI: function(value) {
 			if(!value) {
 				this.__group.slider.resetValue();
@@ -72,14 +72,14 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 			}
 			this.__group.slider.setValue(value);
 		},
-		
+
 		__addGroupToContainer: function(group) {
 			this.__container.add(group.minimum, { row: 0, column: 0 });
 			this.__container.add(group.slider, { row: 0, column: 1 });
 			this.__container.add(group.maximum, { row: 0, column: 2 });
 			this.__container.add(group.value, { row: 0, column: 3 });
 		},
-		
+
 		__createSliderGroup: function(slider) {
 			var group = {
 				slider: slider,
@@ -90,7 +90,7 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 			return group;
 		}
 	},
-	
+
 	destruct: function() {
 		this.__group.slider.destroy();
 		this.__group.minimum.destroy();

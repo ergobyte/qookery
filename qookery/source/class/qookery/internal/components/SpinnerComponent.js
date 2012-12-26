@@ -19,22 +19,22 @@
 */
 
 qx.Class.define("qookery.internal.components.SpinnerComponent", {
-	
+
 	extend: qookery.internal.components.EditableComponent,
-	
+
 	events: {
 		"changeValue" : "qx.event.type.Data"
 	},
-	
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	members: {
-		
+
 		__container: null,
 		__group: null,
-		
+
 		initialize: function(initOptions) {
 			if (!this.__group) return;
 			var minimum = initOptions["minimum"] || 0;
@@ -50,8 +50,8 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 				pageStep: pageStep
 			});
 		},
-		
-		_createMainWidget: function(createOptions) {
+
+		_createMainWidget: function(attributes) {
 			var grid = new qx.ui.layout.Grid();
 			grid.setSpacing(5);
 			grid.setRowAlign(0, "left", "middle");
@@ -60,7 +60,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			var widget = new qx.ui.form.Spinner();
 			this.__group = this.__createSpinnerGroup(widget);
 			this.__addGroupToContainer(this.__group);
-			this._applyLayoutProperties(this.__container, createOptions);
+			this._applyLayoutAttributes(this.__container, attributes);
 			this.__group.spinner.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
@@ -68,7 +68,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			}, this);
 			return this.__container;
 		},
-		
+
 		_updateUI: function(value) {
 			if(!value) {
 				this.__group.spinner.resetValue();
@@ -76,13 +76,13 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			}
 			this.__group.spinner.setValue(value);
 		},
-		
+
 		__addGroupToContainer: function(group) {
 			this.__container.add(group.minimum, { row: 0, column: 0 });
 			this.__container.add(group.spinner, { row: 0, column: 1 });
 			this.__container.add(group.maximum, { row: 0, column: 2 });
 		},
-		
+
 		__createSpinnerGroup: function(spinner) {
 			var group = {
 				spinner: spinner,
@@ -92,7 +92,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			return group;
 		}
 	},
-	
+
 	destruct: function() {
 		this.__group.spinner.destroy();
 		this.__group.minimum.destroy();

@@ -30,10 +30,10 @@ qx.Class.define("qookery.impl.FormWindow", {
 	 *
 	 * @returns the newly created Qookery window instance
 	 */
-	construct: function(title, icon) {
-		this.base(arguments);
-		this.set({ modal: true, showMinimize: false, showMaximize: false, caption: title, icon: icon });
+	construct: function(caption, icon) {
+		this.base(arguments, caption, icon);
 		this.setLayout(new qx.ui.layout.VBox());
+		this.set({ modal: true, showMinimize: false, showMaximize: false });
 	},
 
 	members: {
@@ -48,12 +48,13 @@ qx.Class.define("qookery.impl.FormWindow", {
 		 * @param model {Object} an initial model to set, or <code>null</code> if not needed
 		 */
 		createAndOpen: function(xmlCode, model) {
-
-			var that = this;
 			this.__formComponent = qookery.contexts.Qookery.createFormComponent(xmlCode, this, { flex: 1 }, function(event) {
-				that.destroy();
+				this.destroy();
 			}, this);
-
+			var formTitle = this.__formComponent.getTitle();
+			if(formTitle && !this.getCaption()) this.setCaption(formTitle);
+			var formIcon = this.__formComponent.getIcon();
+			if(formIcon && !this.getIcon()) this.setIcon(formIcon);
 			if(!this.__formComponent) return;
 			if(model) this.__formComponent.setModel(model);
 			this.add(this._getButtonsContainer());

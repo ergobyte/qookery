@@ -19,7 +19,7 @@
 */
 
 /**
- * Extend this class if you want to create a new component that bind a value. 
+ * Extend this class if you want to create a new component that bind a value.
  */
 qx.Class.define("qookery.internal.components.EditableComponent", {
 
@@ -30,7 +30,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	properties: {
 		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", event: "valueChanged" },
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
@@ -40,28 +40,28 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		format: { check: "String", inheritable: true, nullable: false, apply: "_applyFormat" },
 		valid: { check: "Boolean", nullable: false, apply: "_applyValid" }
 	},
-	
+
 	members: {
-	
+
 		__formatter: null,
 		_disableValueEvents: false,
-		
-		create: function(createOptions) {
-			this._widgets[0] = this._createMainWidget(createOptions);
-			if(createOptions['required']) this.setRequired(true);
-			if(createOptions['label'] != '%none') {
+
+		create: function(attributes) {
+			this._widgets[0] = this._createMainWidget(attributes);
+			if(attributes['required']) this.setRequired(true);
+			if(attributes['label'] != '%none') {
 				this._widgets[1] = new qx.ui.basic.Label();
-				this._setupLabelAppearance(this._widgets[1], createOptions);
-				this.setLabel(this._translate(createOptions['label'] || ""));
+				this._setupLabelAppearance(this._widgets[1], attributes);
+				this.setLabel(this._translate(attributes['label'] || ""));
 			}
-			if(createOptions['read-only']) this.setReadOnly(true);
-			if(createOptions['format']) this.setFormat(createOptions['format']);
-			this.base(arguments, createOptions);
+			if(attributes['read-only']) this.setReadOnly(true);
+			if(attributes['format']) this.setFormat(attributes['format']);
+			this.base(arguments, attributes);
 		},
-		
+
 		/**
 		 * Create a two way binding between controller and component's value
-		 *	
+		 *
 		 * @param controller {qx.data.controller.Object} The form controller that the bindings
 		 * @param path {String} The protocol path
 		 */
@@ -76,8 +76,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			var validatorFunction = validator.createValidatorFunction(validationOptions);
 			this.getForm().getValidationManager().add(this, validatorFunction);
 		},
-		
-		setInvalidMessage: function(message) { 
+
+		setInvalidMessage: function(message) {
 			this.getMainWidget().setInvalidMessage(message);
 		},
 
@@ -86,7 +86,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.getForm().getValidationManager().remove(mainWidget);
 		},
 
-		_createMainWidget: function(createOptions) {
+		_createMainWidget: function(attributes) {
 			throw new Error("Override _createMainWidget() to provide implementation specific code");
 		},
 
@@ -99,42 +99,42 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(filterName == "main") return [ mainWidget ];
 			var labelWidget = this._widgets[1];
 			if(!labelWidget) return [ mainWidget ];
-			// Reverse order of main and label widget since 
+			// Reverse order of main and label widget since
 			// we want to present the label in front of the editor
 			return [ labelWidget, mainWidget ];
 		},
-		
+
 		getFormatter: function() {
 			return this.__formatter;
 		},
 
 		// Properties
-		
+
 		_applyValid: function(value) {
 			this.getMainWidget().setValid(value);
 		},
-		
+
 		_applyFormat: function(formatterSpecification) {
 			this.__formatter = this._createFormatter(formatterSpecification);
 		},
-		
+
 		_createFormatter: function(formatterSpecification) {
 			var formatterName = formatterSpecification;
-			var createOptions = {};  
+			var attributes = {};
 			var colonCharacterPos = formatterSpecification.indexOf(":");
 			if(colonCharacterPos != -1) {
 				formatterName = formatterSpecification.slice(0, colonCharacterPos);
 				var optionsStr = formatterSpecification.slice(colonCharacterPos + 1);
-				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {     
+				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
 					key = qx.lang.String.clean(key);
 					value = qx.lang.String.clean(value);
-					createOptions[key] = value; 
+					attributes[key] = value;
 				});
 			}
 			var formatterClass = qookery.Qookery.getInstance().getRegistry().getFormatter(formatterName);
 			if(!formatterClass)
 				throw new Error("Unknown formatter requested");
-			return new formatterClass(createOptions);
+			return new formatterClass(attributes);
 		},
 
 		_applyValue: function(value) {
@@ -171,7 +171,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!mainWidget || !required) return;
 			this.addValidation({ type: "notNull", message: "Not null value is required" });
 		},
-		
+
 		_applyReadOnly: function(readOnly) {
 			// Subclasses should override to implement the read only property
 		},
@@ -184,7 +184,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!modelProvider) return value;
 			return modelProvider.getIdentity(value);
 		},
-		
+
 		_getLabelOf: function(value) {
 			if(!value) return "";
 			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
@@ -196,11 +196,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		/**
 		 * Perform all operation about align, width and height for a label
-		 * 
+		 *
 		 * @param widget {qx.ui.basic.Label} A label widget
-		 * @param createOptions {keyValuePairList} The instruction about the label apperance
+		 * @param attributes {keyValuePairList} The instruction about the label apperance
 		 */
-		_setupLabelAppearance: function(labelWidget, createOptions) {
+		_setupLabelAppearance: function(labelWidget, attributes) {
 			var currentWidth = labelWidget.getWidth();
 			labelWidget.setMinWidth(currentWidth);
 			labelWidget.setAllowStretchX(false);

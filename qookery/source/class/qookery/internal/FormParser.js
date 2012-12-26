@@ -50,7 +50,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__formComponent: null,
 		__namespaces: null,
-		
+
 		// IFormParser implementation
 
 		create: function(xmlDocument, parentComposite, layoutData) {
@@ -65,8 +65,8 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Phase 2: Creation
 
-			var createOptions = this.__parseCreateOptions(formElement);
-			this.__formComponent.create(createOptions);
+			var attributes = this.__parseAttributes(formElement);
+			this.__formComponent.create(attributes);
 
 			// Phase 3: Children
 
@@ -74,7 +74,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Phase 4: Setup
 
-			this.__formComponent.setup();
+			this.__formComponent.setup(attributes);
 
 			// Phase 5: Data binding - none for the form component
 
@@ -85,7 +85,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			return this.__formComponent;
 		},
-		
+
 		// Internal methods
 
 		__parseStatementBlock: function(blockElement, parentComponent) {
@@ -114,19 +114,19 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseComponent: function(componentElement, parentComponent) {
-			
-			// Check condition
 
-			var conditionClientCode = this.__getAttribute(componentElement, "check-condition");
-			if(conditionClientCode) {
-				var result = parentComponent.executeClientCode(qx.lang.String.format("return (%1);", [ conditionClientCode ]));
-				if(!result) return;
+			// Check conditionals
+
+			var skipIfClientCode = this.__getAttribute(componentElement, "skip-if");
+			if(skipIfClientCode) {
+				var skip = parentComponent.executeClientCode(qx.lang.String.format("return (%1);", [ skipIfClientCode ]));
+				if(skip) return;
 			}
 
 			// Phase 1: New Instance
 
 			var componentType = qx.dom.Node.getName(componentElement);
-			if(componentType == "component") 
+			if(componentType == "component")
 				componentType = this.__getAttribute(componentElement, "type");
 
 			var component = this.constructor.registry.createComponent(parentComponent, componentType);
@@ -136,9 +136,9 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Phase 2: Creation
 
-			var createOptions = this.__parseCreateOptions(componentElement);
-			this.__parseSetupBlock(componentElement, createOptions);
-			component.create(createOptions);
+			var attributes = this.__parseAttributes(componentElement);
+			this.__parseSetupBlock(componentElement, attributes);
+			component.create(attributes);
 
 			// Phase 3: Children
 
@@ -146,12 +146,12 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Phase 4: Setup
 
-			component.setup();
+			component.setup(attributes);
 
 			// Phase 5: Data binding
 
-			if(createOptions['connect']) {
-				var connection = this.__resolveQName(createOptions['connect']);
+			if(attributes['connect']) {
+				var connection = this.__resolveQName(attributes['connect']);
 				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
 				if(modelProvider == null)
 					throw new Error("Install a model provider to handle connections in XML forms");
@@ -163,30 +163,30 @@ qx.Class.define("qookery.internal.FormParser", {
 			parentComponent.addChild(component);
 		},
 
-		__parseCreateOptions: function(componentElement) {
-			var createOptions = { };
-			var attributes = componentElement.attributes;
-			for(var i = 0; i < attributes.length; i++) {
-				var attribute = attributes.item(i);
-				var attributeName = attribute.nodeName;
-				var text = attribute.nodeValue;
+		__parseAttributes: function(componentElement) {
+			var attributes = { };
+			var xmlAttributes = componentElement.attributes;
+			for(var i = 0; i < xmlAttributes.length; i++) {
+				var xmlAttribute = xmlAttributes.item(i);
+				var attributeName = xmlAttribute.nodeName;
+				var text = xmlAttribute.nodeValue;
 				if(text == null || text.length == 0) continue;
 				text = text.trim();
 				if(text.length == 0) continue;
 				var value = this.__convertAttributeValue(attributeName, text);
-				createOptions[attributeName] = value;
+				attributes[attributeName] = value;
 			}
-			return createOptions;
+			return attributes;
 		},
 
-		__parseSetupBlock: function(blockElement, createOptions) {
+		__parseSetupBlock: function(blockElement, attributes) {
 			if(!qx.dom.Element.hasChildren(blockElement)) return;
 			var children = qx.dom.Hierarchy.getChildElements(blockElement);
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
 				if(elementName == 'set')
-					this.__parseSet(statementElement, createOptions);
+					this.__parseSet(statementElement, attributes);
 			}
 		},
 
@@ -204,7 +204,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				component.executeClientCode(clientCode);
 		},
 
-		__parseSet: function(setElement, createOptions) {
+		__parseSet: function(setElement, attributes) {
 			var text = this.__getNodeText(setElement);
 			if(text == null)
 				throw new Error("Empty <set> element");
@@ -215,7 +215,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(attributeName == null)
 				throw new Error("<set> element is not specifying an attribute name");
 			var value = this.__convertAttributeValue(attributeName, text);
-			createOptions[attributeName] = value;
+			attributes[attributeName] = value;
 		},
 
 		__parseImport: function(importElement) {
@@ -252,7 +252,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			}
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		},
-		
+
 		__getAttribute: function(element, attributeName) {
 			var text = qx.xml.Element.getAttributeNS(element, null, attributeName);
 			if(text == null || text.length == 0) return null;
@@ -278,7 +278,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(!namespaceUri) throw new Error(qx.lang.String.format("Unable to resolve unknown namespace prefix '%1'", [ prefix ]));
 			return [ namespaceUri, localPart ];
 		},
-		
+
 		__convertAttributeValue: function(key, text) {
 			switch(key) {
 
@@ -291,6 +291,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			case "padding-right":
 			case "padding-bottom":
 			case "padding-left":
+			case "row-height":
 			case "row-span":
 			case "column-span":
 			case "spacing":
@@ -299,6 +300,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				return parseInt(text);
 
 			// Boolean attributes
+			case "center":
 			case "enabled":
 			case "read-only":
 			case "required":
@@ -323,7 +325,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			case "icon":
 			case "source":
 				return qx.util.ResourceManager.getInstance().toUri(text);
-				
+
 			// Shorthand properties
 			case "margin":
 			case "padding":

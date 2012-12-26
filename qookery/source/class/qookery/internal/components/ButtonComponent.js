@@ -23,26 +23,27 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 	extend: qookery.internal.components.BaseComponent,
 
 	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);	
+		this.base(arguments, parentComponent);
 	},
 
 	members: {
 
-		create: function(createOptions) {
-			this._widgets[0] = new qx.ui.form.Button(
-				this._translate(createOptions['label']), 
-				createOptions['icon']
-			);
-			this._applyLayoutProperties(this._widgets[0], createOptions);
-			if(createOptions["icon-position"])
-				this._widgets[0].setIconPosition(createOptions["icon-position"]);
-			if(createOptions["rich"])
-				this._widgets[0].setRich(createOptions["rich"]);
-			this.base(arguments, createOptions);
+		create: function(attributes) {
+			var label = this._translate(attributes['label']);
+			var icon = attributes['icon'];
+			this._widgets[0] = new qx.ui.form.Button(label, icon);
+			this._applyLayoutAttributes(this._widgets[0], attributes);
+			if(attributes["icon-position"])
+				this._widgets[0].setIconPosition(attributes["icon-position"]);
+			if(attributes["rich"])
+				this._widgets[0].setRich(attributes["rich"]);
+			if(attributes["center"])
+				this._widgets[0].setCenter(attributes["center"]);
+			this.base(arguments, attributes);
 		},
 
 		setValue: function(buttonLabelValue) {
-			this.getMainWidget().setLabel(buttonLabelValue);	
+			this.getMainWidget().setLabel(buttonLabelValue);
 		},
 
 		setCommand: function(codeToExecute){
@@ -53,7 +54,7 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 			this._widgets[0].execute();
 		}
 	},
-	
+
 	destruct: function() {
 		this._widgets[0].removeAllBindings(); // Just to be sure
 	}

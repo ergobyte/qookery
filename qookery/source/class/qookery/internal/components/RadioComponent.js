@@ -21,7 +21,7 @@
 qx.Class.define("qookery.internal.components.RadioComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
-	
+
 	events: {
 		"changeSelection" : "qx.event.type.Data"
 	},
@@ -31,18 +31,18 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
 		this.__manager = new qx.ui.form.RadioGroup();
 		this.__manager.setAllowEmptySelection(true);
 	},
-	
+
 	members: {
-		
+
 		__container: null,
 		__manager: null,
 		__radioButtonsMap: { },
-		
+
 		initialize: function(initOptions) {
-			if(!initOptions || !initOptions["itemsMap"]) return;
+			if(!initOptions || !initOptions["items"]) return;
 			this.__emptyManager();
-			for(var property in initOptions["itemsMap"]) {
-				var radioButton = new qx.ui.form.RadioButton(initOptions["itemsMap"][property]);
+			for(var property in initOptions["items"]) {
+				var radioButton = new qx.ui.form.RadioButton(initOptions["items"][property]);
 				this.__radioButtonsMap[property] = radioButton;
 				this.__container.add(radioButton);
 				this.__manager.add(radioButton);
@@ -50,14 +50,14 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
 			this.__manager.addListener("changeSelection", this.__onChangeSelection, this);
 		},
 
-		_createMainWidget: function(createOptions) {
+		_createMainWidget: function(attributes) {
 			var mainLayout = new qx.ui.layout.HBox();
       		mainLayout.setSpacing(10);
 			this.__container = new qx.ui.container.Composite(mainLayout);
-			this._applyLayoutProperties(this.__container, createOptions);
+			this._applyLayoutAttributes(this.__container, attributes);
 			return this.__container;
 		},
-		
+
 		_updateUI: function(value) {
 			if(!value || !this.__radioButtonsMap[value]) {
 				this.__manager.resetSelection();
@@ -65,7 +65,7 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
 			}
 			this.__manager.setSelection([this.__radioButtonsMap[value]]);
 		},
-		
+
 		__emptyManager: function() {
 			for(var radioButton in this.__radioButtonsMap) {
 				var item = this.__radioButtonsMap[radioButton];
@@ -74,7 +74,7 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
 			}
 			this.__radioButtonsMap = { };
 		},
-		
+
 		__onChangeSelection:function(e) {
 			if(e.getData().length == 0) {
 				this.fireDataEvent("changeSelection", null);
@@ -86,7 +86,7 @@ qx.Class.define("qookery.internal.components.RadioComponent", {
       		this.fireDataEvent("changeSelection", this.getValue());
 		}
 	},
-	
+
 	destruct: function() {
 		this.__emptyManager();
 		this._disposeObjects('__manager');

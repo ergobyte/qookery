@@ -22,7 +22,7 @@
  * Base class for components that are containers of other components
  */
 qx.Class.define("qookery.internal.components.ContainerComponent", {
-	
+
 	type: "abstract",
 	extend: qookery.internal.components.BaseComponent,
 	implement: [ qookery.IContainerComponent ],
@@ -42,33 +42,33 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		__columnCount: 1,
 		__rowArray: null,
 
-		create: function(createOptions) {
-			this._widgets[0] = this._createContainerWidget(createOptions);
-			this.__columnCount = createOptions['column-count'] || 1;
+		create: function(attributes) {
+			this._widgets[0] = this._createContainerWidget(attributes);
+			this.__columnCount = attributes['column-count'] || 1;
 			if(this.__columnCount != "none") {
 				if(this.__columnCount != "auto") {
 					this.__rowArray = [ ];
 					for(var i = 0; i < this.__columnCount; i++) this.__rowArray.push(0);
 				}
 				this.__layout = new qx.ui.layout.Grid();
-				var spacingX = createOptions['spacing-x'] || createOptions['spacing'] || 10;
+				var spacingX = attributes['spacing-x'] || attributes['spacing'] || 10;
 				this.__layout.setSpacingX(spacingX);
-				var spacingY = createOptions['spacing-y'] || createOptions['spacing'] || 10;
+				var spacingY = attributes['spacing-y'] || attributes['spacing'] || 10;
 				this.__layout.setSpacingY(spacingY);
-				var columnFlexes = createOptions['column-flexes'];
+				var columnFlexes = attributes['column-flexes'];
 				if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
 					this.__layout.setColumnFlex(index, parseInt(columnFlex));
 				}, this);
-				var rowFlexes = createOptions['row-flexes'];
+				var rowFlexes = attributes['row-flexes'];
 				if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
 					this.__layout.setRowFlex(index, parseInt(rowFlex));
 				}, this);
 				this._widgets[0].setLayout(this.__layout);
 			}
-			this.base(arguments, createOptions);
+			this.base(arguments, attributes);
 		},
-		
-		_createContainerWidget: function(createOptions) {
+
+		_createContainerWidget: function(attributes) {
 			throw new Error("Override _createContainerWidget() to provide implementation specific code");
 		},
 
@@ -78,9 +78,9 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		/**
 		 * Add a component as a child of this component
-		 * 
+		 *
 		 * @param childComponent {qookery.IComponent} the component to add to this component
-		 * 
+		 *
 		 * @throw an exception is thrown in case this component does not support children
 		 */
 		addChild: function(childComponent) {

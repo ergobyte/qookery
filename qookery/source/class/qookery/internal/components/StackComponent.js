@@ -25,32 +25,32 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	properties: {
 		dynamic: { check: "Boolean", nullable: false, apply: "_applyDynamic" }
 	},
 
 	members: {
-		
-		create: function(createOptions) {
-			this.base(arguments, createOptions);
-			if(createOptions['dynamic']) this.setDynamic(true);
+
+		create: function(attributes) {
+			this.base(arguments, attributes);
+			if(attributes['dynamic']) this.setDynamic(true);
 		},
 
-		_createContainerWidget: function(createOptions) {
+		_createContainerWidget: function(attributes) {
 			var container = new qx.ui.container.Stack();
-			this._applyLayoutProperties(container, createOptions);
-			createOptions['column-count'] = "none";
+			this._applyLayoutAttributes(container, attributes);
+			attributes['column-count'] = "none";
 			return container;
 		},
-		
+
 		setSelection: function(component) {
 			var container = this.getMainWidget();
 			var widget = component.getMainWidget();
 			if(!container || !widget) return;
 			container.setSelection([ widget ]);
 		},
-		
+
 		getSelection: function() {
 			var container = this.getMainWidget();
 			if(!container) return null;
@@ -58,7 +58,7 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 			if(!selection || selection.lenght == 0) return null;
 			return (selection[0]).getUserData("qookeryComponent");
 		},
-		
+
 		_applyDynamic: function(dynamic) {
 			var container = this.getMainWidget();
 			if(!container) return null;

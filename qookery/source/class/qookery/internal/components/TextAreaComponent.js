@@ -19,44 +19,44 @@
 */
 
 qx.Class.define("qookery.internal.components.TextAreaComponent", {
-	
+
 	extend: qookery.internal.components.EditableComponent,
-	
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
-	
+
 	properties: {
 		placeholder: { check: "String", inheritable: true, nullable: false, apply: "_applyPlaceholder" }
 	},
-	
+
 	members: {
-		
-		create: function(createOptions) {
-			this.base(arguments, createOptions);
-			if(createOptions['placeholder']) this.setPlaceholder(this._translate(createOptions['placeholder']));
+
+		create: function(attributes) {
+			this.base(arguments, attributes);
+			if(attributes['placeholder']) this.setPlaceholder(this._translate(attributes['placeholder']));
 		},
-	
-		_createMainWidget: function(createOptions) {
+
+		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.TextArea();
 			widget.setLiveUpdate(true);
-			widget.addListener("changeValue", function(event) { 
-				this.setValue(event.getData()); 
+			widget.addListener("changeValue", function(event) {
+				this.setValue(event.getData());
 			}, this);
-			this._applyLayoutProperties(widget, createOptions);
+			this._applyLayoutAttributes(widget, attributes);
 			return widget;
 		},
-		
+
 		_applyValue: function(value) {
 			this.getMainWidget().setValue(this._getLabelOf(value));
 		},
-		
+
 		_applyPlaceholder: function(placeholder) {
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget) return;
 			mainWidget.setPlaceholder(placeholder);
 		},
-		
+
 		_applyReadOnly: function(readOnly) {
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget) return;
