@@ -99,7 +99,7 @@
 			<element name="check-box" type="q:editable-component" />
 			<element ref="q:component" />
 			<element name="composite" type="q:container-component" />
-			<element name="date-field" type="q:field-component" />
+			<element name="date-field" type="q:editable-component" />
 			<element ref="q:form" />
 			<element name="group-box" type="q:container-component" />
 			<element ref="q:html" />
@@ -281,7 +281,10 @@
 	<complexType name="field-component">
 		<complexContent>
 			<extension base="q:editable-component">
+				<attribute name="filter" type="string" />
+				<attribute name="max-length" type="integer" />
 				<attribute name="placeholder" type="string" />
+				<attribute name="text-align" type="q:x-alignment" />
 			</extension>
 		</complexContent>
 	</complexType>
@@ -459,7 +462,9 @@
 		<complexType>
 			<complexContent>
 				<extension base="q:editable-component">
-					<attribute name="row-height" type="integer" />
+					<attribute name="row-height" type="integer" default="20" />
+					<attribute name="column-visibility-button-visible" type="boolean" default="true" />
+					<attribute name="status-bar-visible" type="boolean" default="true" />
 				</extension>
 			</complexContent>
 		</complexType>

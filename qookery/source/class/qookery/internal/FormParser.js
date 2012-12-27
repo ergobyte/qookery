@@ -283,17 +283,18 @@ qx.Class.define("qookery.internal.FormParser", {
 			switch(key) {
 
 			// Integer attributes
-			case "margin-top":
-			case "margin-right":
+			case "column-span":
 			case "margin-bottom":
 			case "margin-left":
-			case "padding-top":
-			case "padding-right":
+			case "margin-right":
+			case "margin-top":
+			case "max-length":
 			case "padding-bottom":
 			case "padding-left":
+			case "padding-right":
+			case "padding-top":
 			case "row-height":
 			case "row-span":
-			case "column-span":
 			case "spacing":
 			case "spacing-x":
 			case "spacing-y":
@@ -301,10 +302,12 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Boolean attributes
 			case "center":
+			case "column-visibility-button-visible":
 			case "enabled":
 			case "read-only":
 			case "required":
 			case "rich":
+			case "status-bar-visible":
 			case "stretch":
 			case "stretch-x":
 			case "stretch-y":
@@ -333,9 +336,13 @@ qx.Class.define("qookery.internal.FormParser", {
 				value.forEach(function(element, index) { value[index] = parseInt(element); });
 				return value;
 
+			// Regular expressions
+			case "filter":
+				return new RegExp(text);
+				
 			default:
 				// Fallback for unknown attributes
-				return  text;
+				return text;
 			}
 		}
 	},

@@ -41,6 +41,31 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		__selectedRowIndex: null,
 		__userOptions: null,
 
+		_createMainWidget: function(attributes) {
+			var table = new qx.ui.table.Table(null, {
+				tableColumnModel: function(table) {
+					return new qx.ui.table.columnmodel.Resize(table);
+				}
+			});
+			table.getSelectionModel().addListener('changeSelection', function(e) {
+				var selectionModel = e.getTarget();
+				var selectionRanges = selectionModel.getSelectedRanges();
+				if(selectionRanges.length == 0) {
+					this.__selectedRowIndex = null;
+					this.fireDataEvent("changeSelection", null);
+					return;
+				}
+				this.__selectedRowIndex = selectionRanges[0].minIndex;
+				this.fireDataEvent("changeSelection", this.__tableModel.getItem(this.__selectedRowIndex));
+			}, this);
+
+			this._applyLayoutAttributes(table, attributes);
+			if(attributes['row-height']) table.setRowHeight(attributes['row-height']);
+			if(attributes["column-visibility-button-visible"] !== undefined) table.setColumnVisibilityButtonVisible(attributes["column-visibility-button-visible"]);
+			if(attributes["status-bar-visible"] !== undefined) table.setStatusBarVisible(attributes["status-bar-visible"]);
+			return table;
+		},
+
 		initialize: function(options) {
 			if(!options || (!options["model"] && !options["columns"])) return;
 			this.__tableModel = options["model"] || new qookery.impl.SimpleTableModel();
@@ -59,10 +84,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				this.__tableModel.setColumns(labelArray, nameArray);
 			}
 			this.getMainWidget().setTableModel(this.__tableModel);
-			var columnVisibilityButtonVisible = options["columnVisibilityButtonVisible"];
-			if(columnVisibilityButtonVisible == false) this.getMainWidget().setColumnVisibilityButtonVisible(columnVisibilityButtonVisible);
-			var statusBarVisible = options["statusBarVisible"];
-			if(statusBarVisible == false) this.getMainWidget().setStatusBarVisible(statusBarVisible);
 			var columnModel = this.getMainWidget().getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < options["columns"].length; i++) {
@@ -120,29 +141,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		reloadData: function() {
 			this.__tableModel.reloadData();
 			this.getMainWidget().getSelectionModel().resetSelection();
-		},
-
-		_createMainWidget: function(attributes) {
-			var table = new qx.ui.table.Table(null, {
-				tableColumnModel: function(table) {
-					return new qx.ui.table.columnmodel.Resize(table);
-				}
-			});
-			table.getSelectionModel().addListener('changeSelection', function(e) {
-				var selectionModel = e.getTarget();
-				var selectionRanges = selectionModel.getSelectedRanges();
-				if(selectionRanges.length == 0) {
-					this.__selectedRowIndex = null;
-					this.fireDataEvent("changeSelection", null);
-					return;
-				}
-				this.__selectedRowIndex = selectionRanges[0].minIndex;
-				this.fireDataEvent("changeSelection", this.__tableModel.getItem(this.__selectedRowIndex));
-			}, this);
-
-			this._applyLayoutAttributes(table, attributes);
-			if(attributes['row-height']) table.setRowHeight(attributes['row-height']);
-			return table;
 		},
 
 		_applyValue: function(value) {

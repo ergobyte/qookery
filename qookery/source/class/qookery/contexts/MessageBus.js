@@ -33,8 +33,7 @@ qx.Class.define("qookery.contexts.MessageBus", {
 		},
 
 		dispatch: function(name, data) {
-			var msg = new qx.event.message.Message(name, data);
-			qx.event.message.Bus.getInstance().dispatch(msg);
+			qx.event.message.Bus.getInstance().dispatchByName(name, data);
 		}
 	}
 });

@@ -49,6 +49,9 @@ qx.Class.define("qookery.internal.components.TextComponent", {
 				this.setValue(event.getData());
 			}, this);
 			this._applyLayoutAttributes(widget, attributes);
+			if(attributes['text-align']) widget.setTextAlign(attributes['text-align']);
+			if(attributes['filter']) widget.setFilter(attributes['filter']);
+			if(attributes['max-length']) widget.setMaxLength(attributes['max-length']);
 			return widget;
 		},
 
