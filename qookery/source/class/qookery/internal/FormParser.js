@@ -288,13 +288,17 @@ qx.Class.define("qookery.internal.FormParser", {
 			case "margin-left":
 			case "margin-right":
 			case "margin-top":
+			case "maximum":
 			case "max-length":
+			case "minimum":
 			case "padding-bottom":
 			case "padding-left":
 			case "padding-right":
 			case "padding-top":
+			case "page-step":
 			case "row-height":
 			case "row-span":
+			case "single-step":
 			case "spacing":
 			case "spacing-x":
 			case "spacing-y":
@@ -339,7 +343,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Regular expressions
 			case "filter":
 				return new RegExp(text);
-				
+
 			default:
 				// Fallback for unknown attributes
 				return text;

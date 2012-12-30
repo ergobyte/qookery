@@ -18,9 +18,9 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.PasswordComponent", {
+qx.Class.define("qookery.internal.components.PasswordFieldComponent", {
 
-	extend: qookery.internal.components.TextComponent,
+	extend: qookery.internal.components.TextFieldComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);

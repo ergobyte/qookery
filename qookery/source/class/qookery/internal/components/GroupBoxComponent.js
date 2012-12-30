@@ -18,7 +18,7 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.GroupComponent", {
+qx.Class.define("qookery.internal.components.GroupBoxComponent", {
 
 	extend: qookery.internal.components.ContainerComponent,
 
@@ -29,9 +29,10 @@ qx.Class.define("qookery.internal.components.GroupComponent", {
 	members: {
 
 		_createContainerWidget: function(attributes) {
-			var container = new qx.ui.groupbox.GroupBox(this._translate(attributes['label']));
-			this._applyLayoutAttributes(container, attributes);
-			return container;
+			var widget = new qx.ui.groupbox.GroupBox(this._translate(attributes['label']));
+			this._applyLayoutAttributes(widget, attributes);
+			if(attributes['legend-position']) widget.setLegendPosition(attributes['legend-position']);
+			return widget;
 		}
 	}
 });

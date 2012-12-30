@@ -99,19 +99,19 @@
 			<element name="check-box" type="q:editable-component" />
 			<element ref="q:component" />
 			<element name="composite" type="q:container-component" />
-			<element name="date-field" type="q:editable-component" />
+			<element ref="q:date-field" />
 			<element ref="q:form" />
-			<element name="group-box" type="q:container-component" />
+			<element ref="q:group-box" />
 			<element ref="q:html" />
 			<element ref="q:image" />
 			<element ref="q:label" />
 			<element name="list" type="q:editable-component" />
 			<element name="password-field" type="q:field-component" />
-			<element name="radio-group" type="q:editable-component" />
+			<element name="radio-button-group" type="q:editable-component" />
 			<element name="select-box" type="q:editable-component" />
 			<element name="separator" type="q:component" />
 			<element name="slider" type="q:editable-component" />
-			<element name="spinner" type="q:editable-component" />
+			<element ref="q:spinner" />
 			<element ref="q:stack" />
 			<element name="tab-view" type="q:container-component" />
 			<element name="tab-view-page" type="q:container-component" />
@@ -394,6 +394,16 @@
 		</complexType>
 	</element>
 
+	<element name="date-field">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component">
+					<attribute name="placeholder" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
 	<element name="form">
 		<complexType>
 			<complexContent>
@@ -411,6 +421,16 @@
 					<attribute name="translation-prefix" />
 					<attribute name="title" />
 					<attribute name="icon" type="anyURI" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<element name="group-box">
+		<complexType>
+			<complexContent>
+				<extension base="q:container-component">
+					<attribute name="legend-position" type="string" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -448,6 +468,19 @@
 		</complexType>
 	</element>
 	
+	<element name="spinner">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component">
+					<attribute name="maximum" type="integer" default="100" />
+					<attribute name="minimum" type="integer" default="0" />
+					<attribute name="page-step" type="integer" default="10" />
+					<attribute name="single-step" type="integer" default="1" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
 	<element name="stack">
 		<complexType>
 			<complexContent>

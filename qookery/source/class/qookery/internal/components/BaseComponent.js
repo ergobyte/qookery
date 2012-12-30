@@ -125,7 +125,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				}, this);
 				return;
 			}
-			throw new Error(qx.lang.String.format("Event '%1' not supported", eventName));
+			throw new Error(qx.lang.String.format("Event '%1' not supported", [ eventName ]));
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {

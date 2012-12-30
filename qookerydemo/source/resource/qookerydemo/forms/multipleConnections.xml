@@ -29,13 +29,13 @@
 						});
 					</script>
 				</select-box>
-				<radio-group connect="brand">
+				<radio-button-group connect="brand">
 					<script>
 						this.initialize({
 							items: $.brands
 						});
 					</script>
-				</radio-group>
+				</radio-button-group>
 				<list connect="brand">
 					<script>
 						this.initialize({

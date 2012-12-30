@@ -25,21 +25,18 @@ qx.Class.define("qookery.contexts.History", {
 	statics: {
 
 		getValue: function(name) {
-			var fragmentIdentifier = qx.bom.History.getInstance().getState();
-			if(!fragmentIdentifier) return null;
-			fragmentIdentifier.replace(/([^~!]+)~([^!]*)/g, function(m, fragmentName, fragmentValue) {
-				if(fragmentName == name) return fragmentValue;
-			});
-			return null;
+			var state = this.readState();
+			if(!state) return null;
+			return state[name];
 		},
 
 		setValue: function(name, value, title) {
-			var state = this.__readState() || { };
+			var state = this.readState() || { };
 			state[name] = value;
-			this.__writeState(state, title);
+			this.writeState(state, title);
 		},
 
-		__readState: function() {
+		readState: function() {
 			var fragmentIdentifier = qx.bom.History.getInstance().getState();
 			if(!fragmentIdentifier) return null;
 			var state = { };
@@ -49,7 +46,7 @@ qx.Class.define("qookery.contexts.History", {
 			return state;
 		},
 
-		__writeState: function(state, title) {
+		writeState: function(state, title) {
 			var fragmentIdentifier = "";
 			for(var name in state) {
 				if(fragmentIdentifier.length > 0) fragmentIdentifier += "!";

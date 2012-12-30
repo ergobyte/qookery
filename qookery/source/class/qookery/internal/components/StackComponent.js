@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: GroupComponent.js 33 2012-12-18 14:44:08Z geonik@ergobyte.gr $
+	$Id$
 */
 
 qx.Class.define("qookery.internal.components.StackComponent", {

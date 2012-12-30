@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	},
 
 	properties: {
-		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", event: "valueChanged" },
+		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", event: "changeValue" },
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
 	    toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },

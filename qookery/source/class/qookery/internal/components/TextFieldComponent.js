@@ -18,7 +18,7 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.components.TextComponent", {
+qx.Class.define("qookery.internal.components.TextFieldComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 

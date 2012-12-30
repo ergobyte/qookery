@@ -18,11 +18,7 @@
 	$Id$
 */
 
-/**
- * A date chooser component that understand ISO 8601.
- * In the near feauture will be implemented more types of date.
- */
-qx.Class.define("qookery.internal.components.DateChooserComponent", {
+qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
@@ -81,7 +77,7 @@ qx.Class.define("qookery.internal.components.DateChooserComponent", {
 			var dateArray = reggie.exec(dateString);
 			var dateObject = new Date(
 				(+dateArray[1]),
-				(+dateArray[2])-1,//month starts with 0
+				(+dateArray[2])-1,
 				(+dateArray[3]),
 				(+dateArray[4]),
 				(+dateArray[5]),
