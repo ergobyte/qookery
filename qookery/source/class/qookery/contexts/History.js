@@ -32,7 +32,8 @@ qx.Class.define("qookery.contexts.History", {
 
 		setValue: function(name, value, title) {
 			var state = this.readState() || { };
-			state[name] = value;
+			if(value) state[name] = value;
+			else delete state[name];
 			this.writeState(state, title);
 		},
 
