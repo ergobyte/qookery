@@ -29,7 +29,7 @@
 		</button>
 	</composite>
 
-	<script event="openForm">
+	<script event="appear">
 		$("#username").focus();
 	</script>
 

@@ -39,9 +39,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	events: {
-		"openForm": "qx.event.type.Event",
-		"closeForm": "qx.event.type.Event",
-		"changeModel": "qx.event.type.Event"
+		"close": "qx.event.type.Event",
+		"dispose": "qx.event.type.Event"
 	},
 
 	members: {
@@ -57,6 +56,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
+			this.info("Form created");
 		},
 
 		getTitle: function() {
@@ -72,9 +72,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		setModel: function(model) {
-			qx.log.Logger.debug(this, "Setting model");
 			this.__controller.setModel(model);
-			this.fireEvent("changeModel", qx.event.type.Event, null);
 		},
 
 		getController: function() {
@@ -101,12 +99,14 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		addEventHandler: function(eventName, clientCode) {
 			switch(eventName) {
 			case "changeValid":
-				this.__validationManager.addListener(eventName, function(event) { this.executeClientCode(clientCode, { "event": event }); }, this);
+				this.__validationManager.addListener("changeValid", function(event) { 
+					this.executeClientCode(clientCode, { "event": event }); 
+				}, this);
 				return;
-			case "openForm":
-			case "closeForm":
 			case "changeModel":
-				this.addListener(eventName, function(event) { this.executeClientCode(clientCode, { "event": event }); }, this);
+				this.__controller.addListener("changeModel", function(event) { 
+					this.executeClientCode(clientCode, { "event": event }); 
+				}, this);
 				return;
 			}
 			this.base(arguments, eventName, clientCode);
@@ -128,11 +128,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 		},
 
-		dispose: function() {
-			this.fireEvent("closeForm", qx.event.type.Event, null);
-			this.base(arguments);
-		},
-
 		/**
 		 * Disposes the form.
 		 *
@@ -140,7 +135,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		 */
 		close: function(result) {
 			if(result) this.__result = result;
-			this.dispose();
+			this.fireEvent("close", qx.event.type.Event, null);
 		},
 
 		getTranslationPrefix: function() {
@@ -172,6 +167,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
+		this.fireEvent("dispose", qx.event.type.Event, null);
 		this.__controller.removeAllBindings();
 		this._disposeObjects("__validationManager", "__controller", "__validationManager");
 		this.__componentMap = null;
@@ -179,5 +175,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__registration = null;
 		this.__clientCodeContext = null;
 		this.__translationPrefix = null;
+		this.debug("Form disposed");
 	}
 });

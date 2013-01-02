@@ -27,54 +27,34 @@ qx.Class.define("qookery.contexts.Qookery", {
 		/**
 		 * Use resource loader to load a resource
 		 *
-		 * @param {} resourceUrl the URL of the resource to load
-		 * @param {} callback a callback to call on successful loading
+		 * @param resourceUri {String} the URI of the resource to load
+		 * @param callback {Function} a callback to call after successful load
 		 */
-		loadResource: function(resourceUrl, callback) {
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(resourceUrl, callback);
-		},
-
-		createFormComponent: function(xmlCode, parentComposite, layoutData, formCloseHandler, self) {
-			var xmlDocument = qx.xml.Document.fromString(xmlCode);
-			var parser = qookery.Qookery.getInstance().createNewParser();
-			try {
-				var formComponent = parser.create(xmlDocument, parentComposite, layoutData);
-				formComponent.addListener("closeForm", function(event) {
-					if(formCloseHandler) qx.lang.Function.bind(formCloseHandler, self, event)();
-					qx.log.Logger.debug(parentComposite, qx.lang.String.format("Form window destroyed", [ ]));
-				});
-				formComponent.fireEvent("openForm", qx.event.type.Event, null);
-				qx.log.Logger.debug(parentComposite, qx.lang.String.format("Form window created", [ ]));
-				return formComponent;
-			}
-			catch(e) {
-				qx.log.Logger.error(parentComposite, qx.lang.String.format("Error creating form window: %1", [ e ]));
-				if(e.stack) qx.log.Logger.error(e.stack);
-			}
-			finally {
-				parser.dispose();
-			}
-			return null;
+		loadResource: function(resourceUri, callback) {
+			qookery.Qookery.getInstance().getResourceLoader().loadResource(resourceUri, callback);
 		},
 
 		/**
-		 * Load a form and open it as a top-level modal window
+		 * Open a window with a form as content
 		 *
-		 * @param formUrl {String} the URL of the XML form resource to load
+		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
 		 * @param model {var?null} an optional model to load into the form
 		 * @param resultCallback {Function?null} a callback that will receive the form's result property on close
 		 * @param caption {String?null} a caption for the created Window instance
 		 * @param icon {String?null} an icon for the created Window instance
 		 */
-		openWindow: function(formUrl, model, resultCallback, caption, icon) {
-			this.loadResource(formUrl, function(formXml) {
-				var window = new qookery.impl.FormWindow(caption, icon);
+		openWindow: function(form, model, resultCallback, caption, icon) {
+			var window = new qookery.impl.FormWindow(caption, icon);
+			window.addListener("disappear", function() {
+				var result = window.getFormComponent().getResult();
+				if(resultCallback) resultCallback(result);
+				window = null;
+			});
+			if(qx.Class.implementsInterface(form, qookery.IFormComponent)) {
+				window.openForm(form, model);
+			}
+			else this.loadResource(form, function(formXml) {
 				window.createAndOpen(formXml, model);
-				window.addListener("disappear", function() {
-					var result = window.getFormComponent().getResult();
-					if(resultCallback) resultCallback(result);
-					window = null;
-				});
 			});
 		}
 	}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
-	A table with row addition, removal and editing in a separate form
+	Demonstration of translation support in Qookery
 -->
 <form xmlns="http://www.qookery.org/ns/Form" translation-prefix="qookerydemo.forms.translations" column-flexes="1">
 
@@ -47,7 +47,9 @@
 	</translation>
 
 	<label label="%.header" font="bold" alignment-x="center" />
+
 	<label label="%.intro" alignment-x="center" wrap="true" rich="true" />
+
 	<select-box label="%.selectAGod">
 		<script>
 			this.setItems([
@@ -61,15 +63,15 @@
 
 	<separator />
 	
-	<composite column-count="auto" alignment-x="center" stretch-x="false">
-		<button label="English" appearance="menubar-button">
-			<script event="execute">
-				qx.locale.Manager.getInstance().setLocale("en");
-			</script>
-		</button>
-		<button label="Ελληνικά" appearance="menubar-button">
+	<composite column-count="auto" alignment-x="center" max-width="300" column-flexes="1 1">
+		<button label="Switch to EL" width="1">
 			<script event="execute">
 				qx.locale.Manager.getInstance().setLocale("el");
+			</script>
+		</button>
+		<button label="Switch to EN" width="1">
+			<script event="execute">
+				qx.locale.Manager.getInstance().setLocale("en");
 			</script>
 		</button>
 	</composite>

@@ -31,15 +31,24 @@ qx.Class.define("qookerydemo.ResultArea",
 
 		__formComponent: null,
 
-		loadForm: function(xmlCode) {
-			if(this.__formComponent) {
-				this.__formComponent.dispose();
-				this._disposeObjects("__formComponent");
+		loadForm: function(formXml) {
+			this._disposeObjects("__formComponent");
+			var xmlDocument = qx.xml.Document.fromString(formXml);
+			var parser = qookery.Qookery.getInstance().createNewParser();
+			try {
+				this.__formComponent = parser.create(xmlDocument);
+				this.__formComponent.addListenerOnce("close", function() {
+					this._disposeObjects("__formComponent");
+				}, this);
+				this.add(this.__formComponent.getMainWidget());
 			}
-			var that = this;
-			this.__formComponent = qookery.contexts.Qookery.createFormComponent(xmlCode, this, null, function () {
-				that.remove(that.getChildren()[0]);
-			});
+			catch(e) {
+				this.error(qx.lang.String.format("Error creating form window: %1", [ e ]));
+				if(e.stack) qx.log.Logger.error(e.stack);
+			}
+			finally {
+				parser.dispose();
+			}
 		},
 
 		getFormComponent: function() {

@@ -30,11 +30,12 @@ qx.Interface.define("qookery.IContainerComponent", {
 		/**
 		 * Add a component as a child of this component
 		 * 
-		 * @param childComponent {qookery.IComponent} the component to add to this component
+		 * @param component {qookery.IComponent} the component to add to this component
+		 * @param display {String?null} optional argument refining the container's handling of the new child
 		 * 
 		 * @throw an exception is thrown in case this component does not support children
 		 */
-		addChild: function(component) { },
+		addChild: function(component, display) { },
 		
 		listChildren: function() { }
 	}

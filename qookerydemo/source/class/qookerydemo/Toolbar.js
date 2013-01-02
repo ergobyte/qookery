@@ -45,7 +45,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 		var aboutButton = new qx.ui.toolbar.Button("About", "resource/qookerydemo/icons/24/about_gs.png");
 		aboutButton.addListener("execute", function () {
-			qookerydemo.AboutWindow.open();
+			qookery.contexts.Qookery.openWindow("resource/qookerydemo/forms/aboutDialog.xml");
 		}, this);
 
 		var demoListMenu = new qx.ui.menu.Menu();

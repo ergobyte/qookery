@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form xmlns="http://www.qookery.org/ns/Form"
+		title="About Qookery Demo" icon="resource/qookerydemo/icons/24/about.png"
 		translation-prefix="qookerydemo.forms.aboutDialog"
 		column-count="2" column-flexes="0 1" width="300">
 

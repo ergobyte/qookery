@@ -40,27 +40,47 @@ qx.Class.define("qookery.impl.FormWindow", {
 
 		__formComponent: null,
 		__buttonsContainer: null,
+		__disposeForm: false,
 
 		/**
 		 * Create and open Qookery window
 		 *
-		 * @param formUrl {String} the URL of the form XML
+		 * @param formXml {String} the XML source of the form to create
 		 * @param model {Object} an initial model to set, or <code>null</code> if not needed
 		 */
-		createAndOpen: function(xmlCode, model) {
-			this.__formComponent = qookery.contexts.Qookery.createFormComponent(xmlCode, this, { flex: 1 }, function(event) {
+		createAndOpen: function(formXml, model) {
+			var xmlDocument = qx.xml.Document.fromString(formXml);
+			var parser = qookery.Qookery.getInstance().createNewParser();
+			try {
+				this.__formComponent = parser.create(xmlDocument);
+				this.__disposeForm = true;
+				this.openForm(this.__formComponent, model);
+			}
+			catch(e) {
+				this.error(qx.lang.String.format("Error creating form window: %1", [ e ]));
+				if(e.stack) qx.log.Logger.error(e.stack);
+			}
+			finally {
+				parser.dispose();
+			}
+		},
+		
+		openForm: function(formComponent, model) {
+			this.__formComponent = formComponent;
+			formComponent.addListenerOnce("close", function(event) {
+				formComponent.setModel(null);
 				this.destroy();
 			}, this);
-			var formTitle = this.__formComponent.getTitle();
+			var formTitle = formComponent.getTitle();
 			if(formTitle && !this.getCaption()) this.setCaption(formTitle);
-			var formIcon = this.__formComponent.getIcon();
+			var formIcon = formComponent.getIcon();
 			if(formIcon && !this.getIcon()) this.setIcon(formIcon);
-			if(!this.__formComponent) return;
-			if(model) this.__formComponent.setModel(model);
+			if(model) formComponent.setModel(model);
+			this.add(formComponent.getMainWidget(), { flex: 1 });
 			this.add(this._getButtonsContainer());
 			this.center();
 			this.open();
-			this.__formComponent.executeAction("appear");
+			formComponent.executeAction("appear");
 		},
 
 		_getButtonsContainer: function() {
@@ -79,8 +99,8 @@ qx.Class.define("qookery.impl.FormWindow", {
 			// Override to add button to the window
 		},
 
-	    _onCloseButtonClick: function(event) {
-	    	this.__formComponent.dispose();
+		_onCloseButtonClick: function(event) {
+			this.__formComponent.close();
 	    },
 
 	    getFormComponent: function() {
@@ -89,7 +109,9 @@ qx.Class.define("qookery.impl.FormWindow", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__formComponent");
-		this._disposeChildControls();
+		if(this.__disposeForm)
+			this._disposeObjects("__formComponent");
+		else
+			this.remove(this.__formComponent.getMainWidget());
 	}
 });

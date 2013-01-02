@@ -83,8 +83,9 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		 *
 		 * @throw an exception is thrown in case this component does not support children
 		 */
-		addChild: function(childComponent) {
+		addChild: function(childComponent, display) {
 			this.__children.push(childComponent);
+			if(display == "none") return;
 			var container = this.getMainWidget();
 			var widgets = childComponent.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {

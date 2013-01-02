@@ -9,13 +9,11 @@
 
 	<label label="Hacker-Proof® Password Manager" column-span="2" />
 
-	<table id="passwordsTable" connect="passwords" label="%none">
-		<table-column connect="serial" label="Serial #" max-width="S" align="center" />
+	<table id="passwords" connect="passwords" label="%none">
+		<table-column connect="serial" label="Serial #" width="S" align="center" />
 		<table-column connect="username" label="Username" width="1*" />
 		<table-column connect="password" label="Password" width="1*" />
-		<script>
-			this.initialize();
-		</script>
+		<table-model class="qookery.impl.DefaultTableModel" />
 		<script event="cellDblclick">
 			$("#editButton").execute();
 		</script>
@@ -25,29 +23,50 @@
 		<button label="Add Password">
 			<script event="execute">
 				var newModel = $.QookeryDemo.createModel({ username: "", password: "", serial: "de ad be ef" });
-				$.Qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", newModel, function(result) {
-					if(result == "OK") $("#passwordsTable").addRow(newModel);
+				$.Qookery.openWindow($("#editor"), newModel, function(result) {
+					if(result == "OK") $("#passwords").addRow(newModel);
 				}, "Add Password");
 			</script>
 		</button>
 		<button label="Edit Password" id="editButton">
 			<script event="execute">
-				var table = $("#passwordsTable");
-				var currentModel = table.getSelectedRowModel();
+				var currentModel = $("#passwords").getSelectedRowModel();
 				if(!currentModel) return;
 				var clonedModel = $.QookeryDemo.cloneModel(currentModel);
-				$.Qookery.openWindow("resource/qookerydemo/forms/newEntryDialog.xml", clonedModel, function(result) {
-					if(result == "OK") table.replaceRow(table.getSelectedRowIndex(), clonedModel);
+				$.Qookery.openWindow($("#editor"), clonedModel, function(result) {
+					if(result == "OK") $("#passwords").replaceRow($("#passwords").getSelectedRowIndex(), clonedModel);
 				}, "Edit Password");
 			</script>
 		</button>
 		<button label="Remove Password">
 			<script event="execute">
-				var table = $("#passwordsTable");
-				if(table.getSelectedRowIndex() == undefined) return;
-				table.removeRow(table.getSelectedRowIndex());
+				if($("#passwords").getSelectedRowIndex() == undefined) return;
+				$("#passwords").removeRow($("#passwords").getSelectedRowIndex());
 			</script>
 		</button>
 	</composite>
 	
+	<form display="none" id="editor" column-flexes="1">
+	
+		<composite column-count="2" column-flexes="0 1"> 
+			<text-field label="User name" required="true" connect="username" />
+			<password-field label="Password" required="true" connect="password" />
+		</composite>
+	
+		<composite column-count="auto" max-width="300" alignment-x="right" column-flexes="1 1">
+			<button label="OK">
+				<script event="execute">
+					if(!$.form.validate()) return;
+					$.form.close("OK");
+				</script>
+			</button>
+			<button label="Cancel">
+				<script event="execute">
+					$.form.close("Cancel");
+				</script>
+			</button>
+		</composite>
+	
+	</form>
+
 </form>

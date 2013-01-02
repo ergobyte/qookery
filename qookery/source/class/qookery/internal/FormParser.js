@@ -111,7 +111,6 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		create: function(xmlDocument, parentComposite, layoutData) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
-			if(parentComposite == null) throw new Error("Parent composite must be supplied");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
 			var formElement = elements[0];
 
@@ -120,9 +119,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			this.__parseFormBlock(formElement, component);
 			this.__parseComponent2(formElement, component);
 
-			var formWidget = component.getMainWidget();
-			parentComposite.add(formWidget, layoutData);
-
+			if(parentComposite) parentComposite.add(component.getMainWidget(), layoutData);
 			return component;
 		},
 
@@ -171,7 +168,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			var component = this.constructor.registry.createComponent(parentComponent, componentType);
 			var componentId = this.getAttribute(componentElement, "id");
 			if(componentId)
-				component.getForm().registerComponent(component, componentId);
+				parentComponent.getForm().registerComponent(component, componentId);
 			
 			// Continue creation process
 
@@ -179,7 +176,9 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Attach to container
 
-			parentComponent.addChild(component);
+			var display = this.getAttribute(componentElement, "display");
+			if(!display) display = 'inline';
+			parentComponent.addChild(component, display);
 		},
 
 		__parseComponent2: function(componentElement, component) {
