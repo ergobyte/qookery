@@ -22,6 +22,18 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
+	statics: {
+
+		columnAttributeTypes: {
+			"label": "TranslatableString",
+			"sortable": "Boolean",
+			"width": "Size",
+			"min-width": "Size",
+			"max-width": "Size",
+			"wrap": "Boolean"
+		}
+	},
+
 	events: {
 		"changeSelection": "qx.event.type.Data",
 		"dataChanged": "qx.event.type.Data"
@@ -29,6 +41,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__columns = [ ];
 	},
 
 	properties: {
@@ -37,9 +50,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 	members: {
 
+		__columns: null,
 		__tableModel: null,
 		__selectedRowIndex: null,
-		__userOptions: null,
 
 		_createMainWidget: function(attributes) {
 			var table = new qx.ui.table.Table(null, {
@@ -65,37 +78,67 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			if(attributes["status-bar-visible"] !== undefined) table.setStatusBarVisible(attributes["status-bar-visible"]);
 			return table;
 		},
+		
+		parseCustomElement: function(formParser, xmlElement) {
+			var elementName = qx.dom.Node.getName(xmlElement);
+			switch(elementName) {
+			case "table-column":
+				this.__columns.push(formParser.parseAttributes(this, this.self(arguments).columnAttributeTypes, xmlElement));
+				return true;
+			case "table-model":
+				var modelClassName = formParser.getAttribute(xmlElement, "class");
+				var modelClass = qx.Class.getByName(modelClassName);
+				this.__tableModel = new modelClass(formParser, this, xmlElement);
+				this.__tableModel.setTable(this);
+				this.__tableModel.addListener("dataChanged", function(event) {
+					this.fireDataEvent("dataChanged", event.getData());
+				}, this);
+				return true;
+			}
+			return false;
+		},
 
 		initialize: function(options) {
-			if(!options || (!options["model"] && !options["columns"])) return;
-			this.__tableModel = options["model"] || new qookery.impl.SimpleTableModel();
-			this.__tableModel.setTable(this);
-			this.__userOptions = options;
-			this.__tableModel.addListener("dataChanged", function(event) {
-				this.fireDataEvent("dataChanged", event.getData());
-			}, this);
-			if(options["columns"]) {
-				var nameArray = new Array();
-				var labelArray = new Array();
-				for(var column in options["columns"]) {
-					nameArray.push(options["columns"][column]["connect"]);
-					labelArray.push(options["columns"][column]["label"]);
-				}
-				this.__tableModel.setColumns(labelArray, nameArray);
+			if(!options) options = { };
+			if(this.__columns.length == 0) {
+				this.__columns = options["columns"];
 			}
+			if(!this.__tableModel) {
+				this.__tableModel = options["model"] || new qookery.impl.DefaultTableModel();
+				this.__tableModel.setTable(this);
+				this.__tableModel.addListener("dataChanged", function(event) {
+					this.fireDataEvent("dataChanged", event.getData());
+				}, this);
+			}
+		},
+		
+		setup: function(attributes) {
+			if(this.__columns.length == 0)
+				throw new Error("Table must have at least one column");
+			if(!this.__tableModel)
+				throw new Error("Table must have a table model set");
+			var nameArray = new Array();
+			var labelArray = new Array();
+			for(var i = 0; i < this.__columns.length; i++) {
+				var column = this.__columns[i];
+				nameArray.push(column["connect"]);
+				labelArray.push(column["label"]);
+			}
+			this.__tableModel.setColumns(labelArray, nameArray);
 			this.getMainWidget().setTableModel(this.__tableModel);
 			var columnModel = this.getMainWidget().getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
-			for(var i = 0; i < options["columns"].length; i++) {
-				var column = options["columns"][i];
-				if(column["width"])
-					resizeBehavior.setWidth(i, column["width"]);
-				var cellRenderer = new qookery.internal.DefaultCellRenderer(this.getColumnOptions(i));
-				this.getMainWidget().getTableColumnModel().setDataCellRenderer(i, cellRenderer);
+			for(var i = 0; i < this.__columns.length; i++) {
+				var column = this.__columns[i];
+				var cellRenderer = new qookery.internal.DefaultCellRenderer(column);
+				if(column["width"]) resizeBehavior.setWidth(i, isNaN(column["width"]) ? column["width"] : parseInt(column["width"]));
+				if(column["min-width"]) resizeBehavior.setMinWidth(i, column["min-width"]);
+				if(column["max-width"]) resizeBehavior.setMaxWidth(i, column["max-width"]);
 				if(column["formatter"]) {
 					var formatter = this._createFormatter(column["formatter"]);
 					cellRenderer.setFormatter(formatter);
 				}
+				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
 		},
 
@@ -133,9 +176,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		},
 
 		getColumnOptions: function(columnIndex) {
-			if(this.__userOptions['columns'])
-				return this.__userOptions['columns'][columnIndex];
-			return null;
+			return this.__columns[columnIndex];
 		},
 
 		reloadData: function() {

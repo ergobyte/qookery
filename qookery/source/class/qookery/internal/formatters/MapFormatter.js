@@ -38,9 +38,9 @@ qx.Class.define("qookery.internal.formatters.MapFormatter", {
 			}
 			return obj;
 		},
-		
+
 		parse: function(str) {
 			return str;
-		}	
+		}
 	}
 });

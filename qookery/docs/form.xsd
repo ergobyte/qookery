@@ -58,7 +58,7 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name='widget-size'>
+	<simpleType name='size'>
 		<union memberTypes="integer">
 			<simpleType>
 				<restriction base="token">
@@ -85,13 +85,6 @@
 	</simpleType>
 
 	<!-- Element groups -->
-
-	<group name="statements">
-		<choice>
-			<element ref="q:set" />
-			<element ref="q:script" />
-		</choice>
-	</group>
 
 	<group name="components">
 		<choice>
@@ -127,9 +120,9 @@
 	<complexType name="component">
 		<complexContent>
 			<extension base="q:component-attributes">
-				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="q:statements" />
-				</choice>
+				<sequence>
+					<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
@@ -144,32 +137,32 @@
 		<attribute name="text-color" type="string" default="black" />
 		<attribute name="background-color" type="string" default="white" />
 		<!-- Layout item -->
-		<attribute name="width" type="q:widget-size">
+		<attribute name="width" type="q:size">
 			<annotation><documentation>
 				Component preferred width in pixels or as one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="height" type="q:widget-size">
+		<attribute name="height" type="q:size">
 			<annotation><documentation>
 				Component preferred height in pixels or as one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="min-width" type="q:widget-size">
+		<attribute name="min-width" type="q:size">
 			<annotation><documentation>
 				Component minimum width in pixels or one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="min-height" type="q:widget-size">
+		<attribute name="min-height" type="q:size">
 			<annotation><documentation>
 				Component minimum height in pixels or one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="max-width" type="q:widget-size">
+		<attribute name="max-width" type="q:size">
 			<annotation><documentation>
 				Component maximum width in pixels or one of the named sizes.
 			</documentation></annotation>
 		</attribute>
-		<attribute name="max-height" type="q:widget-size">
+		<attribute name="max-height" type="q:size">
 			<annotation><documentation>
 				Component maximum height in pixels or one of the named sizes.
 			</documentation></annotation>
@@ -213,10 +206,12 @@
 	<complexType name="container-component">
 		<complexContent>
 			<extension base="q:container-component-attributes">
-				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="q:statements" />
-					<group ref="q:components" />
-				</choice>
+				<sequence>
+					<choice minOccurs="0" maxOccurs="unbounded">
+						<element ref="q:script" />
+						<group ref="q:components" />
+					</choice>
+				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
@@ -242,9 +237,9 @@
 	<complexType name="editable-component">
 		<complexContent>
 			<extension base="q:editable-component-attributes">
-				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="q:statements" />
-				</choice>
+				<sequence>
+					<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
@@ -265,9 +260,9 @@
 	<complexType name="atom-component">
 		<complexContent>
 			<extension base="q:component-attributes">
-				<choice minOccurs="0" maxOccurs="unbounded">
-					<group ref="q:statements" />
-				</choice>
+				<sequence>
+					<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+				</sequence>
 				<attribute name="center" type="boolean" default="false" />
 				<attribute name="icon" type="anyURI" />
 				<attribute name="icon-position" type="q:icon-position" default="left" />
@@ -364,23 +359,6 @@
 		</complexType>
 	</element>
 
-	<element name="set">
-		<annotation><documentation>
-			Set a component's attribute
-		</documentation></annotation>
-		<complexType>
-			<simpleContent>
-				<extension base="string">
-					<attribute name="attribute" type="token" use="required">
-						<annotation><documentation>
-							The name of the attribute to set
-						</documentation></annotation>
-					</attribute>
-				</extension>
-			</simpleContent>
-		</complexType>
-	</element>
-
 	<!-- Specialized component elements -->
 
 	<element name="component">
@@ -413,7 +391,7 @@
 						<element ref="q:bind" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
 						<choice minOccurs="0" maxOccurs="unbounded">
-							<group ref="q:statements" />
+							<element ref="q:script" />
 							<group ref="q:components" />
 						</choice>
 					</sequence>
@@ -494,7 +472,25 @@
 	<element name="table">
 		<complexType>
 			<complexContent>
-				<extension base="q:editable-component">
+				<extension base="q:editable-component-attributes">
+					<sequence>
+						<element name="table-column" minOccurs="0" maxOccurs="unbounded"><complexType>
+							<attribute name="align" type="q:x-alignment" default="left" />
+							<attribute name="connect" type="string" />
+							<attribute name="formatter" />
+							<attribute name="label" type="string" />
+							<attribute name="min-width" type="q:size" />
+							<attribute name="max-width" type="q:size" />
+							<attribute name="sortable" type="boolean" default="true" />
+							<attribute name="width" type="string" />
+							<attribute name="wrap" type="boolean" default="false" />
+						</complexType></element>
+						<element name="table-model" minOccurs="0" maxOccurs="1"><complexType>
+							<attribute name="class" type="string" use="required" />
+							<anyAttribute namespace="##other" />
+						</complexType></element>
+						<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+					</sequence>
 					<attribute name="row-height" type="integer" default="20" />
 					<attribute name="column-visibility-button-visible" type="boolean" default="true" />
 					<attribute name="status-bar-visible" type="boolean" default="true" />

@@ -34,7 +34,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['placeholder']) this.setPlaceholder(this._translate(attributes['placeholder']));
+			if(attributes['placeholder']) this.setPlaceholder(attributes['placeholder']);
 		},
 
 		_createMainWidget: function(attributes) {

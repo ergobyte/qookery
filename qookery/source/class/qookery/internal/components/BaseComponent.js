@@ -62,6 +62,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(attributes['enabled'] == false) this.setEnabled(false);
 			if(attributes['visible'] == false) this.setVisible(false);
 		},
+		
+		parseCustomElement: function(xmlElement) {
+			return false;
+		},
 
 		setup: function(attributes) {
 			// Nothing to do here, override if needed
@@ -207,13 +211,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				var widget = widgets[i];
 				if(visible) widget.show(); else widget.hide();
 			}
-		},
-
-		_translate: function(text) {
-			if(text == null || text.length < 2) return text;
-			if(text.charAt(0) != '%') return text;
-			var messageId = text.substring(1);
-			return this['tr'](messageId);
 		},
 
 		tr: function(messageId, varArgs) {

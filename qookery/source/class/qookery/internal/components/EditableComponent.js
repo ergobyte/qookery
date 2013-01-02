@@ -52,11 +52,21 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(attributes['label'] != '%none') {
 				this._widgets[1] = new qx.ui.basic.Label();
 				this._setupLabelAppearance(this._widgets[1], attributes);
-				this.setLabel(this._translate(attributes['label'] || ""));
+				this.setLabel(attributes['label'] || "");
 			}
 			if(attributes['read-only']) this.setReadOnly(true);
 			if(attributes['format']) this.setFormat(attributes['format']);
 			this.base(arguments, attributes);
+		},
+		
+		setup: function(attributes) {
+			if(attributes['connect']) {
+				var connectionQName = attributes['connect'];
+				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+				if(modelProvider == null)
+					throw new Error("Install a model provider to handle connections in XML forms");
+				modelProvider.handleConnection(this, connectionQName[0], connectionQName[1]);
+			}
 		},
 
 		/**

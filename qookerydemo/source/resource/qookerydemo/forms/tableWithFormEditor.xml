@@ -10,14 +10,11 @@
 	<label label="Hacker-Proof® Password Manager" column-span="2" />
 
 	<table id="passwordsTable" connect="passwords" label="%none">
+		<table-column connect="serial" label="Serial #" max-width="S" align="center" />
+		<table-column connect="username" label="Username" width="1*" />
+		<table-column connect="password" label="Password" width="1*" />
 		<script>
-			this.initialize({
-				columns: [
-					{ connect: "serial", label: "Serial#" },
-					{ connect: "username", label: "Username" },
-					{ connect: "password", label: "Password" }
-				]
-			});
+			this.initialize();
 		</script>
 		<script event="cellDblclick">
 			$("#editButton").execute();

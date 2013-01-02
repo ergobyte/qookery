@@ -30,8 +30,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	implement: [ qookery.IFormComponent ],
 	include: [ qookery.util.MFuturesHandling ],
 
-	construct: function(parentComponent) {
+	construct: function(parentComponent, translationPrefix) {
 		this.base(arguments, parentComponent);
+		this.__translationPrefix = translationPrefix;
 		this.__controller = new qx.data.controller.Object();
 		this.__validationManager = new qookery.internal.ValidatorManager();
 		this.__componentMap = { };
@@ -55,12 +56,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__result: null,
 
 		create: function(attributes) {
-			this.__translationPrefix = attributes['translation-prefix'];
 			this.base(arguments, attributes);
 		},
 
 		getTitle: function() {
-			return this._translate(this.getAttribute('title'));
+			return this.getAttribute('title');
 		},
 
 		getIcon: function() {

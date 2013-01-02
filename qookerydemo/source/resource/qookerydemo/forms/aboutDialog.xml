@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="0 1" width="300">
+<form xmlns="http://www.qookery.org/ns/Form"
+		translation-prefix="qookerydemo.forms.aboutDialog"
+		column-count="2" column-flexes="0 1" width="300">
 
-	<!-- Form fields -->
-	
-	<image source="qookerydemo/icons/66/loading-66.gif" alignment-y="middle" />
-
-	<label rich="true" wrap="true">
-		<set attribute="label"><![CDATA[
+	<translation xml:lang="en">
+		<message id="about"><![CDATA[
 			<h3>Qookery Demo and Playground application</h3>
 			<p>	
 				Discover Qookery and experiment with its features, thanks to this interactive demo. 
@@ -17,8 +15,12 @@
 				Apache License, v2.0. Visit <a href="http://www.qookery.org/" target="_blank">www.qookery.org</a> 
 				for more information.
 			</p>
-		]]></set>
-	</label>
+		]]></message>
+	</translation>
+
+	<image source="qookerydemo/icons/66/loading-66.gif" alignment-y="middle" />
+
+	<label rich="true" wrap="true" label="%.about" />
 
 	<button label="Close" column-span="2" max-width="150" alignment-x="right">
 		<script event="execute">

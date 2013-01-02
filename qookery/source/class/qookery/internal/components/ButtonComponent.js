@@ -29,7 +29,7 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 	members: {
 
 		create: function(attributes) {
-			var label = this._translate(attributes['label']);
+			var label = attributes['label'];
 			var icon = attributes['icon'];
 			this._widgets[0] = new qx.ui.form.Button(label, icon);
 			this._applyLayoutAttributes(this._widgets[0], attributes);

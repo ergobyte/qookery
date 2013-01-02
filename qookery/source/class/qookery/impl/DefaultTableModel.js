@@ -18,7 +18,7 @@
 	$Id$
 */
 
-qx.Class.define("qookery.impl.SimpleTableModel", {
+qx.Class.define("qookery.impl.DefaultTableModel", {
 
 	extend: qx.ui.table.model.Simple,
 

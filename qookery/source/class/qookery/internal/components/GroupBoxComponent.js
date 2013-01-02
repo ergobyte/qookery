@@ -29,7 +29,7 @@ qx.Class.define("qookery.internal.components.GroupBoxComponent", {
 	members: {
 
 		_createContainerWidget: function(attributes) {
-			var widget = new qx.ui.groupbox.GroupBox(this._translate(attributes['label']));
+			var widget = new qx.ui.groupbox.GroupBox(attributes['label']);
 			this._applyLayoutAttributes(widget, attributes);
 			if(attributes['legend-position']) widget.setLegendPosition(attributes['legend-position']);
 			return widget;
