@@ -90,22 +90,24 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			"filter": "RegularExpression",
 			
-			"label": "TranslatableString",
-			"placeholder": "TranslatableString",
-			"title": "TranslatableString",
+			"label": "ReplaceableString",
+			"placeholder": "ReplaceableString",
+			"title": "ReplaceableString",
 			
 			"connect": "QName"
 		}
 	},
 
-	construct: function() {
+	construct: function(variables) {
 		this.base(arguments);
 		this.__namespaces = { };
+		this.__variables = variables;
 	},
 
 	members: {
 
 		__namespaces: null,
+		__variables: null,
 
 		// IFormParser implementation
 
@@ -115,7 +117,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			var formElement = elements[0];
 
 			var translationPrefix = this.getAttribute(formElement, "translation-prefix");
-			var component = new qookery.internal.components.FormComponent(null, translationPrefix);
+			var component = new qookery.internal.components.FormComponent(null, translationPrefix, this.__variables);
 			this.__parseFormBlock(formElement, component);
 			this.__parseComponent2(formElement, component);
 
@@ -324,10 +326,14 @@ qx.Class.define("qookery.internal.FormParser", {
 				return value;
 			case "RegularExpression":
 				return new RegExp(text);
-			case "TranslatableString":
+			case "ReplaceableString":
 				if(text.length < 2) return text;
 				if(text.charAt(0) != '%') return text;
 				if("%none" == text) return text;
+				if(text.charAt(1) == '{' && text.charAt(text.length-1) == '}') {
+					var expression = text.substring(2, text.length-1);
+					return component.executeClientCode(qx.lang.String.format("return (%1);", [ expression ]));
+				}
 				var messageId = text.substring(1);
 				return component['tr'](messageId);
 			case "QName":

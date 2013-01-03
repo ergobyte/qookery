@@ -22,15 +22,16 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 	extend: qx.ui.table.model.Simple,
 
-	construct: function() {
+	construct: function(component, formParser, xmlElement) {
 		this.base(arguments);
+		this.__component = component;
 	},
 
 	members: {
 
    		// Simple model implementations
 
-		__table: null,
+		__component: null,
 
 		setData: function(data) {
 			var newData = (data instanceof qx.data.Array) ? data.toArray() : data;
@@ -43,11 +44,11 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		setTable: function(table) {
-			this.__table = table;
+			this.__component = table;
 		},
 
 		getItem: function(rowIndex) {
-			return this.__table.getValue().getItem(rowIndex);
+			return this.__component.getValue().getItem(rowIndex);
 		},
 
 		reloadData: function() {

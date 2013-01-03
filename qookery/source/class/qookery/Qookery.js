@@ -41,8 +41,15 @@ qx.Class.define("qookery.Qookery", {
 			return qookery.internal.Registry.getInstance();
 		},
 		
-		createNewParser: function() {
-			return new qookery.internal.FormParser();
+		/**
+		 * Create a new form parser
+		 * 
+		 * @param variables {Map?null} optional variables to pass to generated forms
+		 * 
+		 * @returns {qookery.internal.FormParser} new instance of form parser
+		 */
+		createNewParser: function(variables) {
+			return new qookery.internal.FormParser(variables);
 		},
 
 		getModelProvider: function() {

@@ -38,23 +38,27 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * Open a window with a form as content
 		 *
 		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
-		 * @param model {var?null} an optional model to load into the form
-		 * @param resultCallback {Function?null} a callback that will receive the form's result property on close
-		 * @param caption {String?null} a caption for the created Window instance
-		 * @param icon {String?null} an icon for the created Window instance
+		 * @param options {Map?null} any number of options modifying operation
+		 * 
+		 * @option model {var?null} an optional model to load into the form
+		 * @option onClose {Function?null} a callback that will receive the form's result property on close
+		 * @option caption {String?null} a caption for the created Window instance
+		 * @option icon {String?null} an icon for the created Window instance
+		 * @option variables {Map?null} optional variables to pass to the form parser
 		 */
-		openWindow: function(form, model, resultCallback, caption, icon) {
-			var window = new qookery.impl.FormWindow(caption, icon);
+		openWindow: function(form, options) {
+			if(!options) options = {};
+			var window = new qookery.impl.FormWindow(options['caption'], options['icon']);
 			window.addListener("disappear", function() {
 				var result = window.getFormComponent().getResult();
-				if(resultCallback) resultCallback(result);
+				if(options['onClose']) options['onClose'](result);
 				window = null;
 			});
 			if(qx.Class.implementsInterface(form, qookery.IFormComponent)) {
-				window.openForm(form, model);
+				window.openForm(form, options['model']);
 			}
 			else this.loadResource(form, function(formXml) {
-				window.createAndOpen(formXml, model);
+				window.createAndOpen(formXml, options['model'], options['variables']);
 			});
 		}
 	}

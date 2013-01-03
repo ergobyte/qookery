@@ -30,9 +30,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	implement: [ qookery.IFormComponent ],
 	include: [ qookery.util.MFuturesHandling ],
 
-	construct: function(parentComponent, translationPrefix) {
+	construct: function(parentComponent, translationPrefix, variables) {
 		this.base(arguments, parentComponent);
 		this.__translationPrefix = translationPrefix;
+		this.__variables = variables;
 		this.__controller = new qx.data.controller.Object();
 		this.__validationManager = new qookery.internal.ValidatorManager();
 		this.__componentMap = { };
@@ -45,13 +46,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__title: null,
-		__icon: null,
-		__controller: null,
-		__componentMap: null,
-		__validationManager: null,
-		__clientCodeContext: null,
 		__translationPrefix: null,
+		__variables: null,
+		__controller: null,
+		__validationManager: null,
+		__componentMap: null,
+		__clientCodeContext: null,
 		__result: null,
 
 		create: function(attributes) {
@@ -162,6 +162,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				return null;
 			};
 			context.form = this;
+			if(this.__variables)
+				qx.lang.Object.mergeWith(context, this.__variables, false);
 			return this.__clientCodeContext = context;
 		}
 	},

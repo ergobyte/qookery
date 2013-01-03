@@ -483,15 +483,20 @@
 				<extension base="q:editable-component-attributes">
 					<sequence>
 						<element name="table-column" minOccurs="0" maxOccurs="unbounded"><complexType>
-							<attribute name="align" type="q:horizontal-alignment" default="left" />
+							<attribute name="color" type="string" />
 							<attribute name="connect" type="string" />
+							<attribute name="flex" type="integer" />
+							<attribute name="font-style" />
+							<attribute name="font-weight" />
 							<attribute name="formatter" />
 							<attribute name="label" type="string" />
+							<attribute name="line-height" type="string" />
 							<attribute name="min-width" type="q:size" />
 							<attribute name="max-width" type="q:size" />
 							<attribute name="sortable" type="boolean" default="true" />
+							<attribute name="text-align" type="q:horizontal-alignment" default="left" />
 							<attribute name="width" type="string" />
-							<attribute name="wrap" type="boolean" default="false" />
+							<attribute name="white-space" type="string" />
 						</complexType></element>
 						<element name="table-model" minOccurs="0" maxOccurs="1"><complexType>
 							<attribute name="class" type="string" use="required" />

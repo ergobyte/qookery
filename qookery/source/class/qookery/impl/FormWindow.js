@@ -48,9 +48,9 @@ qx.Class.define("qookery.impl.FormWindow", {
 		 * @param formXml {String} the XML source of the form to create
 		 * @param model {Object} an initial model to set, or <code>null</code> if not needed
 		 */
-		createAndOpen: function(formXml, model) {
+		createAndOpen: function(formXml, model, variables) {
 			var xmlDocument = qx.xml.Document.fromString(formXml);
-			var parser = qookery.Qookery.getInstance().createNewParser();
+			var parser = qookery.Qookery.getInstance().createNewParser(variables);
 			try {
 				this.__formComponent = parser.create(xmlDocument);
 				this.__disposeForm = true;

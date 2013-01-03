@@ -25,11 +25,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	statics: {
 
 		columnAttributeTypes: {
-			"label": "TranslatableString",
-			"sortable": "Boolean",
-			"width": "Size",
+			"flex": "Integer",
+			"label": "ReplaceableString",
 			"min-width": "Size",
 			"max-width": "Size",
+			"sortable": "Boolean",
+			"width": "Size",
 			"wrap": "Boolean"
 		}
 	},
@@ -88,8 +89,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			case "table-model":
 				var modelClassName = formParser.getAttribute(xmlElement, "class");
 				var modelClass = qx.Class.getByName(modelClassName);
-				this.__tableModel = new modelClass(formParser, this, xmlElement);
-				this.__tableModel.setTable(this);
+				this.__tableModel = new modelClass(this, formParser, xmlElement);
 				this.__tableModel.addListener("dataChanged", function(event) {
 					this.fireDataEvent("dataChanged", event.getData());
 				}, this);
@@ -130,10 +130,18 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < this.__columns.length; i++) {
 				var column = this.__columns[i];
+				if(column["width"] || column["flex"]) {
+					var width = isNaN(column["width"]) ? column["width"] : parseInt(column["width"]);
+					var flex = column["flex"];
+					resizeBehavior.setWidth(i, width, flex);
+				}
+				if(column["min-width"]) {
+					resizeBehavior.setMinWidth(i, column["min-width"]);
+				}
+				if(column["max-width"]) {
+					resizeBehavior.setMaxWidth(i, column["max-width"]);
+				}
 				var cellRenderer = new qookery.internal.DefaultCellRenderer(column);
-				if(column["width"]) resizeBehavior.setWidth(i, isNaN(column["width"]) ? column["width"] : parseInt(column["width"]));
-				if(column["min-width"]) resizeBehavior.setMinWidth(i, column["min-width"]);
-				if(column["max-width"]) resizeBehavior.setMaxWidth(i, column["max-width"]);
 				if(column["formatter"]) {
 					var formatter = this._createFormatter(column["formatter"]);
 					cellRenderer.setFormatter(formatter);

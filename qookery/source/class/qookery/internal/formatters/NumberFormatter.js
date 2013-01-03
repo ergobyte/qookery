@@ -48,6 +48,9 @@ qx.Class.define("qookery.internal.formatters.NumberFormatter", {
 
 		__setOption: function(key, value) {
 			switch(key) {
+			case "groupingUsed":
+				this.__format.setGroupingUsed("true" == value);
+				return;
 			case "postfix":
 				this.__format.setPostfix(' ' + value);
 				return;
@@ -55,19 +58,16 @@ qx.Class.define("qookery.internal.formatters.NumberFormatter", {
 				this.__format.setPrefix(value + ' ');
 				return;
 			case "maximumFractionDigits":
-				this.__format.setMaximumFractionDigits(Number(value));
+				this.__format.setMaximumFractionDigits(parseInt(value));
 				return;
 			case "minimumFractionDigits":
-				this.__format.setMinimumFractionDigits(Number(value));
+				this.__format.setMinimumFractionDigits(parseInt(value));
 				return;
 			case "maximumIntegerDigits":
-				this.__format.setMaximumIntegerDigits(Number(value));
+				this.__format.setMaximumIntegerDigits(parseInt(value));
 				return;
 			case "minimumIntegerDigits":
-				this.__format.setMinimumIntegerDigits(Number(value));
-				return;
-			default:
-				this.__format.set({ key: value });
+				this.__format.setMinimumIntegerDigits(parseInt(value));
 				return;
 			}
 		}

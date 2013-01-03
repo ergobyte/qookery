@@ -25,57 +25,56 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 	
 	extend: qx.ui.table.cellrenderer.Abstract,
 	
-	construct: function(columnOptions) {
+	statics: {
+		cssKeys: {
+			"text-align": null,
+			"color": null,
+			"font-style": null,
+			"font-weight": null,
+			"line-height": null,
+			"white-space": null
+		}
+	},
+	
+	construct: function(column) {
 		this.base(arguments);
-		this.__defaultTextAlign = columnOptions["align"] || "";
-		this.__defaultColor = columnOptions["color"] || "";
-		this.__defaultFontStyle = columnOptions["fontStyle"] || "";
-		this.__defaultFontWeight = columnOptions["fontWeight"] || "";
-		this.__wrap = columnOptions["wrap"] ? "normal" : "nowrap";
+		this.__column = column;
 	},
 	
 	members: {
-		
+
+		__column: null,
 		__formatter: null,
-		__defaultTextAlign: null,
-		__defaultColor: null,
-		__defaultFontStyle: null,
-		__defaultFontWeight: null,
-		__wrap: null,
-		__verticalAlign: null,
-		__lineHeight: null,
-	
-		_getContentHtml: function(cellInfo) {
-			return qx.bom.String.escape(this._formatValue(cellInfo));
-		},
-	
-		_formatValue: function(cellInfo) {
-			var value = cellInfo.value;
-			if(value == null) return "";
-			if(this.__formatter)
-				return this.__formatter.format(value);
-			return value.toString();
+
+		getFormatter: function() {
+			return this.__formatter;
 		},
 		
 		setFormatter: function(formatter) {
 			this.__formatter = formatter;
 		},
-			
-		_getCellStyle : function(cellInfo) {
 
-			var style = {
-				"text-align": this.__defaultTextAlign,
-				"color": this.__defaultColor,
-				"font-style": this.__defaultFontStyle,
-				"font-weight": this.__defaultFontWeight,
-				"white-space": this.__wrap
-			};
-			var styleString = [];
-			for(var key in style) {
-				if (style[key])
-					styleString.push(key, ":", style[key], ";");
+		_getContentHtml: function(cellInfo) {
+			var text = this._formatValue(cellInfo);
+			return qx.bom.String.escape(text);
+		},
+
+		_formatValue: function(cellInfo) {
+			var value = cellInfo.value;
+			if(value == null) return "";
+			if(this.__formatter) return this.__formatter.format(value);
+			return value.toString();
+		},
+		
+		_getCellStyle: function(cellInfo) {
+			var style = [];
+			for(var key in this.constructor.cssKeys) {
+				var value = this.__column[key];
+				if(!value) value = this.constructor.cssKeys[key];
+				if(!value) continue;
+				style.push(key, ":", value, ";");
 			}
-			return styleString.join("");
+			return style.join("");
 		}
 	}
 });

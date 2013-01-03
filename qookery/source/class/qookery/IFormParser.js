@@ -36,7 +36,7 @@ qx.Interface.define("qookery.IFormParser", {
 		/**
 		 * Parse XML element attributes according to a name-to-type map
 		 * 
-		 * <p>Supported types are Integer, Boolean, Size, URI, IntegerList, RegularExpression, TranslatableString, QName</p>
+		 * <p>Supported types are Integer, Boolean, Size, URI, IntegerList, RegularExpression, ReplaceableString, QName</p>
 		 * 
 		 * @param component {qookery.IComponent} Qookery component to serve as the base of any conversion
 		 * @param attributeTypes {Map} a map from attribute name to attribute type
