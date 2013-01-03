@@ -25,7 +25,7 @@ qx.Class.define("qookery.internal.formatters.MapFormatter", {
 	
 	construct: function(options) {
 		this.base(arguments);
-		this.__map = qookery.Qookery.getInstance().getRegistry().getMap(options["mapName"]) || null;
+		this.__map = qookery.Qookery.getRegistry().getMap(options["mapName"]) || null;
 	},
 	
 	members: {

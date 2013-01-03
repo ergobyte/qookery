@@ -23,15 +23,13 @@ qx.Interface.define("qookery.IFormParser", {
 	members: {
 		
 		/**
-		 * Parse and interpret a Qookery form
+		 * Parse and generate a Qookery form
 		 * 
-		 * @param xmlDocument input DOM XML document structured according to the form.xsd schema
-		 * @param parentComposite the Composite that will received any produced UI artifacts
-		 * @param layoutData optional layout data to set to created top-level widget
+		 * @param xmlDocument {qx.xml.Document} input DOM XML document structured according to the form.xsd schema
 		 * 
-		 * @returns the newly created IFormComponent
+		 * @returns {qookery.IFormComponent} the generated form component
 		 */
-		create: function(xmlDocument, parentComposite, layoutData) { },
+		parseXmlDocument: function(xmlDocument) { },
 		
 		/**
 		 * Parse XML element attributes according to a name-to-type map
@@ -40,7 +38,7 @@ qx.Interface.define("qookery.IFormParser", {
 		 * 
 		 * @param component {qookery.IComponent} Qookery component to serve as the base of any conversion
 		 * @param attributeTypes {Map} a map from attribute name to attribute type
-		 * @param xmlElement {qx.dom.Element} XML element to read attributes from
+		 * @param xmlElement {qx.xml.Element} XML element to read attributes from
 		 * 
 		 * @return {Map} attribute name to converted attribute value map
 		 */

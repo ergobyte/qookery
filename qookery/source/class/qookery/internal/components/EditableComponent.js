@@ -82,7 +82,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		addValidation: function(validationOptions) {
 			var type = validationOptions['type'];
 			if(type == null || type.length == 0) throw new Error("Validation type required");
-			var validator = qookery.Qookery.getInstance().getRegistry().getValidator(type);
+			var validator = qookery.Qookery.getRegistry().getValidator(type);
 			var validatorFunction = validator.createValidatorFunction(validationOptions);
 			this.getForm().getValidationManager().add(this, validatorFunction);
 		},
@@ -141,7 +141,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 					attributes[key] = value;
 				});
 			}
-			var formatterClass = qookery.Qookery.getInstance().getRegistry().getFormatter(formatterName);
+			var formatterClass = qookery.Qookery.getRegistry().getFormatter(formatterName);
 			if(!formatterClass)
 				throw new Error("Unknown formatter requested");
 			return new formatterClass(attributes);

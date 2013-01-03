@@ -95,29 +95,29 @@
 
 	<group name="components">
 		<choice>
-			<element name="button" type="q:atom-component" />
-			<element name="check-box" type="q:editable-component" />
+			<element ref="q:button" />
+			<element ref="q:check-box" />
 			<element ref="q:component" />
-			<element name="composite" type="q:container-component" />
+			<element ref="q:composite" />
 			<element ref="q:date-field" />
 			<element ref="q:form" />
 			<element ref="q:group-box" />
 			<element ref="q:html" />
 			<element ref="q:image" />
 			<element ref="q:label" />
-			<element name="list" type="q:editable-component" />
-			<element name="password-field" type="q:field-component" />
-			<element name="radio-button-group" type="q:editable-component" />
-			<element name="select-box" type="q:editable-component" />
-			<element name="separator" type="q:component" />
-			<element name="slider" type="q:editable-component" />
+			<element ref="q:list" />
+			<element ref="q:password-field" />
+			<element ref="q:radio-button-group" />
+			<element ref="q:select-box" />
+			<element ref="q:separator" />
+			<element ref="q:slider" />
 			<element ref="q:spinner" />
 			<element ref="q:stack" />
-			<element name="tab-view" type="q:container-component" />
-			<element name="tab-view-page" type="q:container-component" />
+			<element ref="q:tab-view" />
+			<element ref="q:tab-view-page" />
 			<element ref="q:table" />
-			<element name="text-area" type="q:field-component" />
-			<element name="text-field" type="q:field-component" />
+			<element ref="q:text-area" />
+			<element ref="q:text-field" />
 			<any namespace="##other" />
 		</choice>
 	</group>
@@ -134,7 +134,7 @@
 		</complexContent>
 	</complexType>
 
-	<complexType name="component-attributes">
+	<complexType name="component-attributes" abstract="true">
 		<!-- Identity -->
 		<attribute name="id" type="ID" />
 		<!-- Properties -->
@@ -224,7 +224,7 @@
 		</complexContent>
 	</complexType>
 	
-	<complexType name="container-component-attributes">
+	<complexType name="container-component-attributes" abstract="true">
 		<complexContent>
 			<extension base="q:component-attributes">
 				<attribute name="row-count" type="q:row-and-column-count" default="auto" />
@@ -252,7 +252,7 @@
 		</complexContent>
 	</complexType>
 	
-	<complexType name="editable-component-attributes">
+	<complexType name="editable-component-attributes" abstract="true">
 		<complexContent>
 			<extension base="q:component-attributes">
 				<attribute name="connect" type="string" />
@@ -285,6 +285,7 @@
 		<complexContent>
 			<extension base="q:editable-component">
 				<attribute name="filter" type="string" />
+				<attribute name="live-update" type="boolean" default="false" />
 				<attribute name="max-length" type="integer" />
 				<attribute name="placeholder" type="string" />
 				<attribute name="text-align" type="q:horizontal-alignment" />
@@ -369,6 +370,10 @@
 
 	<!-- Specialized component elements -->
 
+	<element name="button" type="q:atom-component" />
+
+	<element name="check-box" type="q:editable-component" />
+
 	<element name="component">
 		<complexType>
 			<complexContent>
@@ -379,6 +384,8 @@
 			</complexContent>
 		</complexType>
 	</element>
+
+	<element name="composite" type="q:container-component" />
 
 	<element name="date-field">
 		<complexType>
@@ -454,6 +461,18 @@
 		</complexType>
 	</element>
 	
+	<element name="list" type="q:editable-component" />
+
+	<element name="password-field" type="q:field-component" />
+
+	<element name="radio-button-group" type="q:editable-component" />
+
+	<element name="select-box" type="q:editable-component" />
+
+	<element name="separator" type="q:component" />
+
+	<element name="slider" type="q:editable-component" />
+
 	<element name="spinner">
 		<complexType>
 			<complexContent>
@@ -477,6 +496,10 @@
 		</complexType>
 	</element>
 	
+	<element name="tab-view" type="q:container-component" />
+
+	<element name="tab-view-page" type="q:container-component" />
+
 	<element name="table">
 		<complexType>
 			<complexContent>
@@ -511,5 +534,9 @@
 			</complexContent>
 		</complexType>
 	</element>
+
+	<element name="text-area" type="q:field-component" />
+
+	<element name="text-field" type="q:field-component" />
 
 </schema>

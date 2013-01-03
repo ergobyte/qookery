@@ -20,57 +20,145 @@
 
 qx.Class.define("qookery.impl.DefaultTableModel", {
 
-	extend: qx.ui.table.model.Simple,
+	extend: qx.core.Object,
+	implement: qx.ui.table.ITableModel,
 
 	construct: function(component, formParser, xmlElement) {
 		this.base(arguments);
 		this.__component = component;
+		this.__data = [];
+	},
+
+	events: {
+		"dataChanged": "qx.event.type.Data",
+		"metaDataChanged": "qx.event.type.Event",
+		"sorted": "qx.event.type.Data"
 	},
 
 	members: {
 
-   		// Simple model implementations
-
 		__component: null,
+		__data: null,
 
-		setData: function(data) {
-			var newData = (data instanceof qx.data.Array) ? data.toArray() : data;
-			this.base(arguments, newData);
+		// .	Component
+		
+		updateMetadata: function() {
+			this.fireEvent("metaDataChanged");
 		},
-
-		setDataAsMapArray: function(data) {
-			var newData = (data instanceof qx.data.Array) ? data.toArray() : data;
-			this.base(arguments, newData);
-		},
-
-		setTable: function(table) {
-			this.__component = table;
-		},
-
-		getItem: function(rowIndex) {
-			return this.__component.getValue().getItem(rowIndex);
-		},
-
-		reloadData: function() {
-			// Implement if you want to reload model data.
-		},
-
-		_mapArray2RowArr: function(mapArr, rememberMaps) {
-			var rowCount = mapArr.length;
-			var columnCount = this.getColumnCount();
-			var dataArr = new Array(rowCount);
-			for(var i=0; i<rowCount; ++i) {
-				var columnArr = [];
-				if(rememberMaps)
-					columnArr.originalData = mapArr[i];
-				for(var j=0; j<columnCount; ++j) {
-					var model = mapArr[i];
-					var propertyName = this.getColumnId(j);
-					columnArr[j] = model.get(propertyName);
-				}
-				dataArr[i] = columnArr;
+		
+		updateData: function(data) {
+			this.__data = (data instanceof qx.data.Array) ? data.toArray() : data;
+			if(this.hasListener("dataChanged")) {
+				this.fireDataEvent("dataChanged", {
+					firstColumn: 0,
+					lastColumn: this.getColumnCount(),
+					firstRow: 0,
+					lastRow: -1
+				});
 			}
-			return dataArr;
-   		}
+		},
+
+		// .	Columns
+		
+		getColumn: function(columnIndex) {
+			return this.__component.getColumns()[columnIndex];
+		},
+		
+		getColumns: function() {
+			return this.__component.getColumns();
+		},
+		
+		getColumnCount: function() {
+			return this.getColumns().length;
+		},
+		
+		getColumnId: function(columnIndex) {
+			return columnIndex.toString();
+		},
+		
+		getColumnIndexById: function(columnId) {
+			return parseInt(columnId);
+		},
+		
+		getColumnName: function(columnIndex) {
+			return this.getColumn(columnIndex)['label'];
+		},
+
+		isColumnEditable: function(columnIndex) {
+			return false;
+		},
+
+		isColumnSortable: function(columnIndex) {
+			return false;
+		},
+		
+		// .	Rows
+
+		getRowCount: function() {
+			return this.__data.length;
+		},
+		
+		getRowData: function(rowIndex) {
+			return this.__data[rowIndex];
+		},
+		
+		// .	Cells
+		
+		getValue: function(columnIndex, rowIndex) {
+			var row = this.getRowData(rowIndex);
+			if(!row) return null;
+			var column = this.getColumn(columnIndex);
+			if(!column) return null;
+			var connect = column['connect'];
+			if(!connect) return null;
+			return qx.data.SingleValueBinding.resolvePropertyChain(row, connect);
+		},
+		
+		setValue: function(columnIndex, rowIndex, value) {
+			var row = this.getRowData(rowIndex);
+			if(!row) return null;
+			var column = this.getColumn(columnIndex);
+			if(!column) return null;
+			var connect = column['connect'];
+			if(!connect) return null;
+			// Property paths are not supported yet
+			row.set(connect, value);
+			if(this.hasListener("dataChanged")) {
+				this.fireDataEvent("dataChanged", {
+					firstColumn: columnIndex,
+					lastColumn: columnIndex,
+					firstRow: rowIndex,
+					lastRow: rowIndex
+				});
+			}
+		},
+		
+		getValueById: function(columnId, rowIndex) {
+			return this.getValue(this.getColumnIndexById(columnId), rowIndex);
+		},
+		
+		setValueById: function(columnId, rowIndex, value) {
+			this.setValue(this.getColumnIndexById(columnId), rowIndex, value);
+		},
+		
+		// .	Sorting
+
+		sortByColumn: function(columnIndex, ascending) {
+			// Not implemented yet
+		},
+		
+		getSortColumnIndex : function() {
+			return -1;
+		},
+		
+		isSortAscending: function() {
+			return false;
+		},
+		
+		// .	Misc
+		
+		prefetchRows: function(firstRowIndex, lastRowIndex) {
+			// Nothing to prefetch
+		}
 	}
 });

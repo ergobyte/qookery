@@ -43,7 +43,6 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		},
 
 		_setupTextField: function(widget, attributes) {
-			widget.setLiveUpdate(true);
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
@@ -52,6 +51,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 			if(attributes['text-align']) widget.setTextAlign(attributes['text-align']);
 			if(attributes['filter']) widget.setFilter(attributes['filter']);
 			if(attributes['max-length']) widget.setMaxLength(attributes['max-length']);
+			if(attributes['live-update']) widget.setLiveUpdate(attributes['live-update']);
 			return widget;
 		},
 

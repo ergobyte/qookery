@@ -31,15 +31,8 @@ qx.Class.define("qookery.Qookery", {
 		this.__modelProvider = qookery.impl.DefaultModelProvider.getInstance();
 		this.__resourceLoader = qookery.impl.DefaultResourceLoader.getInstance();
 	},
-
-	members: {
-
-		__modelProvider: null,
-		__resourceLoader: null,
-		
-		getRegistry: function() {
-			return qookery.internal.Registry.getInstance();
-		},
+	
+	statics: {
 		
 		/**
 		 * Create a new form parser
@@ -48,10 +41,25 @@ qx.Class.define("qookery.Qookery", {
 		 * 
 		 * @returns {qookery.internal.FormParser} new instance of form parser
 		 */
-		createNewParser: function(variables) {
+		createFormParser: function(variables) {
 			return new qookery.internal.FormParser(variables);
 		},
 
+		/**
+		 * Get the Qookery registry instance
+		 * 
+		 * @returns {qookery.IRegistry} the registry instance
+		 */
+		getRegistry: function() {
+			return qookery.internal.Registry.getInstance();
+		}
+	},
+
+	members: {
+
+		__modelProvider: null,
+		__resourceLoader: null,
+		
 		getModelProvider: function() {
 			return this.__modelProvider;
 		},

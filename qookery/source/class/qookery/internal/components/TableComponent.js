@@ -36,8 +36,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	},
 
 	events: {
-		"changeSelection": "qx.event.type.Data",
-		"dataChanged": "qx.event.type.Data"
+		"changeSelection": "qx.event.type.Data"
 	},
 
 	construct: function(parentComponent) {
@@ -70,7 +69,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					return;
 				}
 				this.__selectedRowIndex = selectionRanges[0].minIndex;
-				this.fireDataEvent("changeSelection", this.__tableModel.getItem(this.__selectedRowIndex));
+				this.fireDataEvent("changeSelection", this.__tableModel.getRowData(this.__selectedRowIndex));
 			}, this);
 
 			this._applyLayoutAttributes(table, attributes);
@@ -84,47 +83,36 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
 			case "table-column":
-				this.__columns.push(formParser.parseAttributes(this, this.self(arguments).columnAttributeTypes, xmlElement));
+				var column = formParser.parseAttributes(this, this.self(arguments).columnAttributeTypes, xmlElement);
+				this.addColumn(column);
 				return true;
 			case "table-model":
 				var modelClassName = formParser.getAttribute(xmlElement, "class");
 				var modelClass = qx.Class.getByName(modelClassName);
 				this.__tableModel = new modelClass(this, formParser, xmlElement);
-				this.__tableModel.addListener("dataChanged", function(event) {
-					this.fireDataEvent("dataChanged", event.getData());
-				}, this);
 				return true;
 			}
 			return false;
 		},
-
-		initialize: function(options) {
-			if(!options) options = { };
-			if(this.__columns.length == 0) {
-				this.__columns = options["columns"];
-			}
-			if(!this.__tableModel) {
-				this.__tableModel = options["model"] || new qookery.impl.DefaultTableModel();
-				this.__tableModel.setTable(this);
-				this.__tableModel.addListener("dataChanged", function(event) {
-					this.fireDataEvent("dataChanged", event.getData());
-				}, this);
-			}
+		
+		getColumns: function() {
+			return this.__columns;
 		},
 		
+		setColumns: function(columns) {
+			this.__columns = columns;
+		},
+
+		addColumn: function(column) {
+			this.__columns.push(column);
+		},
+
 		setup: function(attributes) {
 			if(this.__columns.length == 0)
 				throw new Error("Table must have at least one column");
 			if(!this.__tableModel)
 				throw new Error("Table must have a table model set");
-			var nameArray = new Array();
-			var labelArray = new Array();
-			for(var i = 0; i < this.__columns.length; i++) {
-				var column = this.__columns[i];
-				nameArray.push(column["connect"]);
-				labelArray.push(column["label"]);
-			}
-			this.__tableModel.setColumns(labelArray, nameArray);
+			this.__tableModel.updateMetadata();
 			this.getMainWidget().setTableModel(this.__tableModel);
 			var columnModel = this.getMainWidget().getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
@@ -152,25 +140,25 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		},
 
 		getRow: function(rowIndex) {
-			return this.__tableModel.getItem(rowIndex);
+			return this.__tableModel.getRowData(rowIndex);
 		},
 
-		addRow: function(newRowModel) {
-			this.getValue().push(newRowModel);
-			this.__tableModel.addRowsAsMapArray([ newRowModel ], this.getValue().length - 1);
-		},
-
-		removeRow: function(rowIndex) {
-			this.__tableModel.removeRows(rowIndex, 1);
-			this.getValue().removeAt(rowIndex);
-		},
-
-		replaceRow: function(rowIndex, newModel) {
-			this.__tableModel.setRowsAsMapArray([ newModel ], rowIndex);
-			this.getValue().setItem(rowIndex, newModel);
-			this.fireDataEvent("changeSelection", newModel);
-		},
-
+//		addRow: function(newRowModel) {
+//			this.getValue().push(newRowModel);
+//			this.__tableModel.addRowsAsMapArray([ newRowModel ], this.getValue().length - 1);
+//		},
+//
+//		removeRow: function(rowIndex) {
+//			this.__tableModel.removeRows(rowIndex, 1);
+//			this.getValue().removeAt(rowIndex);
+//		},
+//
+//		replaceRow: function(rowIndex, newModel) {
+//			this.__tableModel.setRowsAsMapArray([ newModel ], rowIndex);
+//			this.getValue().setItem(rowIndex, newModel);
+//			this.fireDataEvent("changeSelection", newModel);
+//		},
+//
 		getTableModel: function() {
 			return this.__tableModel;
 		},
@@ -184,19 +172,26 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return this.__tableModel.getItem(this.__selectedRowIndex);
 		},
 
-		getColumnOptions: function(columnIndex) {
-			return this.__columns[columnIndex];
-		},
-
 		reloadData: function() {
-			this.__tableModel.reloadData();
+			this.__tableModel.updateData(this.getValue());
 			this.getMainWidget().getSelectionModel().resetSelection();
 		},
 
 		_applyValue: function(value) {
-			this.__tableModel.setDataAsMapArray(value);
+			this.__tableModel.updateData(value);
 			if(this.getValue().length == 0)
 				this.fireDataEvent("changeSelection", null);
+		},
+
+		addEventHandler: function(eventName, clientCode) {
+			switch(eventName) {
+			case "dataChanged":
+				this.__tableModel.addListener("dataChanged", function(event) { 
+					this.executeClientCode(clientCode, { "event": event }); 
+				}, this);
+				return;
+			}
+			this.base(arguments, eventName, clientCode);
 		}
 	},
 

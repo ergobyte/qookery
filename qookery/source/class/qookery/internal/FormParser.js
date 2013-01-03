@@ -65,6 +65,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"center": "Boolean",
 			"column-visibility-button-visible": "Boolean",
 			"enabled": "Boolean",
+			"live-update": "Boolean",
 			"read-only": "Boolean",
 			"required": "Boolean",
 			"rich": "Boolean",
@@ -111,7 +112,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		// IFormParser implementation
 
-		create: function(xmlDocument, parentComposite, layoutData) {
+		parseXmlDocument: function(xmlDocument, parentComposite, layoutData) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
 			var formElement = elements[0];
@@ -164,9 +165,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Instantiate new component
 			
 			var componentType = qx.dom.Node.getName(componentElement);
-			if(componentType == "component")
-				componentType = this.getAttribute(componentElement, "type");
-			
 			var component = this.constructor.registry.createComponent(parentComponent, componentType);
 			var componentId = this.getAttribute(componentElement, "id");
 			if(componentId)

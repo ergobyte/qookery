@@ -50,9 +50,9 @@ qx.Class.define("qookery.impl.FormWindow", {
 		 */
 		createAndOpen: function(formXml, model, variables) {
 			var xmlDocument = qx.xml.Document.fromString(formXml);
-			var parser = qookery.Qookery.getInstance().createNewParser(variables);
+			var parser = qookery.Qookery.createFormParser(variables);
 			try {
-				this.__formComponent = parser.create(xmlDocument);
+				this.__formComponent = parser.parseXmlDocument(xmlDocument);
 				this.__disposeForm = true;
 				this.openForm(this.__formComponent, model);
 			}

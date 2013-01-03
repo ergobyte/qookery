@@ -34,9 +34,9 @@ qx.Class.define("qookerydemo.ResultArea",
 		loadForm: function(formXml) {
 			this._disposeObjects("__formComponent");
 			var xmlDocument = qx.xml.Document.fromString(formXml);
-			var parser = qookery.Qookery.getInstance().createNewParser();
+			var parser = qookery.Qookery.createFormParser();
 			try {
-				this.__formComponent = parser.create(xmlDocument);
+				this.__formComponent = parser.parseXmlDocument(xmlDocument);
 				this.__formComponent.addListenerOnce("close", function() {
 					this._disposeObjects("__formComponent");
 				}, this);
