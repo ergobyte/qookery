@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	A "Hello World" example for Qookery. It presents a button to the
-	user which opens an alert when clicked.
+	A "Hello World" example for Qookery. It presents
+	a button to the user which opens an alert when clicked.
 -->
 <form xmlns="http://www.qookery.org/ns/Form">
 

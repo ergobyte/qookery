@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- 
+	A form with a variety of components, some of them 
+	connected to shared model properties.
+-->
 <form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
 	
 	<script>

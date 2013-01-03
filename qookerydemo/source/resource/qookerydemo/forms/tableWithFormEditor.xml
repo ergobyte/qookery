@@ -26,7 +26,8 @@
 				$.Qookery.openWindow($("#editor"), {
 					model: newModel, 
 					onClose: function(result) {
-						if(result == "OK") $("#passwords").addRow(newModel);
+						if(result != "OK") return;
+						$("#passwords").getTableModel().appendRow(newModel);
 					}, 
 					caption: "Add Password"
 				});
@@ -34,13 +35,15 @@
 		</button>
 		<button label="Edit Password" id="editButton">
 			<script event="execute">
-				var currentModel = $("#passwords").getSelectedRowModel();
+				var currentModel = $("#passwords").getSelectedRowData();
 				if(!currentModel) return;
 				var clonedModel = $.QookeryDemo.cloneModel(currentModel);
 				$.Qookery.openWindow($("#editor"), {
 					model: clonedModel, 
 					onClose: function(result) {
-						if(result == "OK") $("#passwords").replaceRow($("#passwords").getSelectedRowIndex(), clonedModel);
+						if(result != "OK") return;
+						$("#passwords").getTableModel().replaceRow(
+							$("#passwords").getSelectedRowIndex(), clonedModel);
 					}, 
 					caption: "Edit Password"
 				});
@@ -49,7 +52,7 @@
 		<button label="Remove Password">
 			<script event="execute">
 				if($("#passwords").getSelectedRowIndex() == undefined) return;
-				$("#passwords").removeRow($("#passwords").getSelectedRowIndex());
+				$("#passwords").getTableModel().removeRow($("#passwords").getSelectedRowIndex());
 			</script>
 		</button>
 	</composite>

@@ -69,7 +69,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					return;
 				}
 				this.__selectedRowIndex = selectionRanges[0].minIndex;
-				this.fireDataEvent("changeSelection", this.__tableModel.getRowData(this.__selectedRowIndex));
+				this.fireDataEvent("changeSelection", this.getTableModel().getRowData(this.__selectedRowIndex));
 			}, this);
 
 			this._applyLayoutAttributes(table, attributes);
@@ -78,7 +78,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			if(attributes["status-bar-visible"] !== undefined) table.setStatusBarVisible(attributes["status-bar-visible"]);
 			return table;
 		},
-		
+
 		parseCustomElement: function(formParser, xmlElement) {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
@@ -87,34 +87,39 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				this.addColumn(column);
 				return true;
 			case "table-model":
-				var modelClassName = formParser.getAttribute(xmlElement, "class");
-				var modelClass = qx.Class.getByName(modelClassName);
-				this.__tableModel = new modelClass(this, formParser, xmlElement);
+				var tableModelClassName = formParser.getAttribute(xmlElement, "class");
+				var tableModelClass = qx.Class.getByName(tableModelClassName);
+				this.__tableModel = new tableModelClass(this, formParser, xmlElement);
 				return true;
 			}
 			return false;
 		},
-		
-		getColumns: function() {
-			return this.__columns;
-		},
-		
-		setColumns: function(columns) {
-			this.__columns = columns;
+
+		getTableModel: function() {
+			return this.__tableModel;
 		},
 
 		addColumn: function(column) {
 			this.__columns.push(column);
 		},
 
+		getColumns: function() {
+			return this.__columns;
+		},
+
+		setColumns: function(columns) {
+			this.__columns = columns;
+		},
+
 		setup: function(attributes) {
 			if(this.__columns.length == 0)
 				throw new Error("Table must have at least one column");
-			if(!this.__tableModel)
+			var tableModel = this.getTableModel();
+			if(!tableModel)
 				throw new Error("Table must have a table model set");
-			this.__tableModel.updateMetadata();
-			this.getMainWidget().setTableModel(this.__tableModel);
-			var columnModel = this.getMainWidget().getTableColumnModel();
+			var table = this.getMainWidget();
+			table.setTableModel(tableModel);
+			var columnModel = table.getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < this.__columns.length; i++) {
 				var column = this.__columns[i];
@@ -139,55 +144,28 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.base(arguments, attributes);
 		},
 
-		getRow: function(rowIndex) {
-			return this.__tableModel.getRowData(rowIndex);
-		},
-
-//		addRow: function(newRowModel) {
-//			this.getValue().push(newRowModel);
-//			this.__tableModel.addRowsAsMapArray([ newRowModel ], this.getValue().length - 1);
-//		},
-//
-//		removeRow: function(rowIndex) {
-//			this.__tableModel.removeRows(rowIndex, 1);
-//			this.getValue().removeAt(rowIndex);
-//		},
-//
-//		replaceRow: function(rowIndex, newModel) {
-//			this.__tableModel.setRowsAsMapArray([ newModel ], rowIndex);
-//			this.getValue().setItem(rowIndex, newModel);
-//			this.fireDataEvent("changeSelection", newModel);
-//		},
-//
-		getTableModel: function() {
-			return this.__tableModel;
-		},
-
 		getSelectedRowIndex: function() {
 			return this.__selectedRowIndex;
 		},
 
-		getSelectedRowModel: function() {
+		getSelectedRowData: function() {
 			if(this.__selectedRowIndex == null) return null;
-			return this.__tableModel.getItem(this.__selectedRowIndex);
+			return this.getTableModel().getRowData(this.__selectedRowIndex);
 		},
 
 		reloadData: function() {
-			this.__tableModel.updateData(this.getValue());
-			this.getMainWidget().getSelectionModel().resetSelection();
+			this._applyValue(this.getValue());
 		},
 
-		_applyValue: function(value) {
-			this.__tableModel.updateData(value);
-			if(this.getValue().length == 0)
-				this.fireDataEvent("changeSelection", null);
+		_updateUI: function(value) {
+			this.getTableModel().setData(value);
 		},
 
 		addEventHandler: function(eventName, clientCode) {
 			switch(eventName) {
 			case "dataChanged":
-				this.__tableModel.addListener("dataChanged", function(event) { 
-					this.executeClientCode(clientCode, { "event": event }); 
+				this.__tableModel.addListener("dataChanged", function(event) {
+					this.executeClientCode(clientCode, { "event": event });
 				}, this);
 				return;
 			}

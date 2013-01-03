@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	An about window - this same form is opened from the toolbar by calling
+	
+		qookery.contexts.Qookery.openWindow("resource/qookerydemo/forms/aboutDialog.xml");
+-->
 <form xmlns="http://www.qookery.org/ns/Form"
 		title="About Qookery Demo" icon="resource/qookerydemo/icons/24/about.png"
 		translation-prefix="qookerydemo.forms.aboutDialog"
