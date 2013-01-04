@@ -38,6 +38,15 @@ qx.Interface.define("qookery.IFormComponent", {
 		"dispose": "qx.event.type.Event"
 	},
 
+	properties: {
+
+		/** A title for UI elements that present this form */
+		title: { check: "String", nullable: true },
+
+		/** An icon for UI elements that present this form */
+		icon: { nullable: true }
+	},
+
 	members: {
 
 		/**

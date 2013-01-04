@@ -44,6 +44,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		"dispose": "qx.event.type.Event"
 	},
 
+	properties: {
+		title: { check: "String", nullable: true },
+		icon: { nullable: true }
+	},
+
 	members: {
 
 		__translationPrefix: null,
@@ -56,15 +61,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
+			if(this.getAttribute('title')) this.setTitle(this.getAttribute('title'));
+			if(this.getAttribute('icon')) this.setIcon(this.getAttribute('icon'));
 			this.info("Form created");
-		},
-
-		getTitle: function() {
-			return this.getAttribute('title');
-		},
-
-		getIcon: function() {
-			return this.getAttribute('icon');
 		},
 
 		getModel: function() {

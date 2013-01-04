@@ -133,12 +133,13 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {
+			var clientCodeContext = this.getForm().getClientCodeContext();
 			try {
 				argumentMap = argumentMap || { };
 				var keys = Object.keys(argumentMap);
 				var values = qx.lang.Object.getValues(argumentMap);
 				qx.lang.Array.insertAt(keys, "$", 0);
-				qx.lang.Array.insertAt(values, this.getForm().getClientCodeContext(), 0);
+				qx.lang.Array.insertAt(values, clientCodeContext, 0);
 				var clientFunction = new Function(keys, clientCode);
 				return clientFunction.apply(this, values);
 			}

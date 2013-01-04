@@ -25,17 +25,17 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 			this.fireDataEvent("futureFinished", future);
 		},
 		
-		onceAllFuturesHaveFinished: function(callback, self) {
+		onceAllFuturesHaveFinished: function(callback, thisArg) {
 			if(this.__futures.length === 0) {
 				// No futures are pending, so call and return immediately
-				qx.lang.Function.bind(callback, self)();
+				callback.bind(thisArg)();
 				return;
 			}
 			var listener = null;
 			listener = this.addListener("futureFinished", function() {
 				if(this.__futures.length > 0) return;
 				this.removeListenerById(listener);
-				qx.lang.Function.bind(callback, self)();
+				callback.bind(thisArg)();
 			}, this);
 		}
 	}
