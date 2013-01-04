@@ -29,20 +29,20 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 	},
 
 	members: {
-		createValidatorFunction: function(options) { 
-			var regex = options['regularExpression'] || null;
-			var minimumLength = (Number(options['minimumLength'])) || 0;
-			var maximumLength = (Number(options['maximumLength'])) || 100;
-			var message = options['message'];
-			if(!message || message.length == 0)
-				throw new Error("Validation message is required for string validator");
+		createValidatorFunction: function(component, invalidMessage, options) { 
 			return function(value, item) {
-				if(!value || value.length < minimumLength || value.length > maximumLength 
-				|| (regex != null && (regex.test(value) == false))) {
-					item.setInvalidMessage(message);
-					return false;
-				}
-				return true;
+				if(!value) return true;
+				var success = true;
+				if(success && options['regularExpression'])
+					success = options['regularExpression'].test(value);
+				if(success && options['minimumLength'])
+					success = value.length >= parseInt(options['minimumLength']);
+				if(success && options['maximumLength'])
+					success = value.length <= parseInt(options['maximumLength']);
+				if(success) return true;
+				var message = invalidMessage || "String is invalid";
+				item.setInvalidMessage(message);
+				return false;
 			};
 		}
 	}

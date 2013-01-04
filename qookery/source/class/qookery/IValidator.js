@@ -26,8 +26,8 @@ qx.Interface.define("qookery.IValidator", {
 	members: {
 
 		/**
-		 * TODO
+		 * Create a validator function for use by a qx.ui.form.validation.Manager instance
 		 */
-		createValidatorFunction: function(options) { }
+		createValidatorFunction: function(component, invalidMessage, options) { }
 	}
 });

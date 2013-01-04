@@ -62,12 +62,11 @@ qx.Interface.define("qookery.IEditableComponent", {
 		/**
 		 * Add a validation to the component
 		 *
-		 * @param validationOptions {Object} validation options, see below
-		 * 
-		 * @argument type One of <code>notNull</code>, <code>regularExpression</code>
-		 * @argument message Error message in case validator fails
+		 * @param validationType {String} name of a registered Qookery validator
+		 * @param invalidMessage {String?null} error message to use in case of validation failure, <code>null</code> for default one(s) 
+		 * @param options {Map?null} validator specific options
 		 */
-		addValidation: function(validationOptions) { },
+		addValidation: function(validatorType, invalidMessage, options) { },
 
 		/**
 		 * Clear all validators

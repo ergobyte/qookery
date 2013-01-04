@@ -29,12 +29,10 @@ qx.Class.define("qookery.internal.validators.NotNullValidator", {
 	},
 	
 	members: {
-		createValidatorFunction: function(options) {
-			var message = options['message'];
-			if(!message || message.length == 0)
-				throw new Error("Validation message is required for not-null validator");
+		createValidatorFunction: function(component, invalidMessage, options) {
 			return function(value, item) {
 				if(!value || value.length == 0) {
+					var message = invalidMessage || "Required value is missing";
 					item.setInvalidMessage(message);
 					return false;
 				}

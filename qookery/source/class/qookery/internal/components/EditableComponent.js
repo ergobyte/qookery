@@ -79,12 +79,12 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			controller.addTarget(this, "value", propertyPath, true);
 		},
 
-		addValidation: function(validationOptions) {
-			var type = validationOptions['type'];
-			if(type == null || type.length == 0) throw new Error("Validation type required");
-			var validator = qookery.Qookery.getRegistry().getValidator(type);
-			var validatorFunction = validator.createValidatorFunction(validationOptions);
-			this.getForm().getValidationManager().add(this, validatorFunction);
+		addValidation: function(validatorType, invalidMessage, options) {
+			var validator = qookery.Qookery.getRegistry().getValidator(validatorType);
+			if(!validator) throw new Error(qx.lang.String.format("Validator %1 not found", [ validatorType ]));
+			if(!options) options = { };
+			var validatorFunction = validator.createValidatorFunction(this, invalidMessage, options);
+			this.getForm().addValidation(this, validatorFunction);
 		},
 
 		setInvalidMessage: function(message) {
@@ -92,8 +92,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		clearValidations: function() {
-			var mainWidget = this.getMainWidget();
-			this.getForm().getValidationManager().remove(mainWidget);
+			this.getForm().removeValidations(this);
 		},
 
 		_createMainWidget: function(attributes) {
@@ -179,7 +178,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_applyRequired: function(required) {
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget || !required) return;
-			this.addValidation({ type: "notNull", message: "Not null value is required" });
+			this.addValidation("notNull");
 		},
 
 		_applyReadOnly: function(readOnly) {

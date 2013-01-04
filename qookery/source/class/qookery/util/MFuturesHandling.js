@@ -28,14 +28,14 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 		onceAllFuturesHaveFinished: function(callback, thisArg) {
 			if(this.__futures.length === 0) {
 				// No futures are pending, so call and return immediately
-				callback.bind(thisArg)();
+				callback.call(thisArg);
 				return;
 			}
 			var listener = null;
 			listener = this.addListener("futureFinished", function() {
 				if(this.__futures.length > 0) return;
 				this.removeListenerById(listener);
-				callback.bind(thisArg)();
+				callback.call(thisArg);
 			}, this);
 		}
 	}

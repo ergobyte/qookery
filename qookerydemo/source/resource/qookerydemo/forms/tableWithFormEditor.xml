@@ -17,39 +17,36 @@
 		<script event="cellDblclick">
 			$("#editButton").execute();
 		</script>
+		<script event="changeSelection">
+			var enabled = event.getData() !== null;
+			$("#editButton").setEnabled(enabled);
+			$("#removeButton").setEnabled(enabled);
+		</script>
 	</table>
 
 	<composite alignment-x="right">
 		<button label="Add Password">
 			<script event="execute">
-				var newModel = $.QookeryDemo.createModel({ username: "", password: "", serial: "de ad be ef" });
 				$.Qookery.openWindow($("#editor"), {
-					model: newModel, 
+					model: $.QookeryDemo.createModel({ username: "New user", password: "", serial: "de ad be ef" }), 
 					onClose: function(result) {
-						if(result != "OK") return;
-						$("#passwords").getTableModel().appendRow(newModel);
-					}, 
-					caption: "Add Password"
+						if(result) $("#passwords").getTableModel().appendRow(result);
+					}
 				});
 			</script>
 		</button>
-		<button label="Edit Password" id="editButton">
+		<button label="Edit Password" id="editButton" enabled="false">
 			<script event="execute">
-				var currentModel = $("#passwords").getSelectedRowData();
-				if(!currentModel) return;
-				var clonedModel = $.QookeryDemo.cloneModel(currentModel);
 				$.Qookery.openWindow($("#editor"), {
-					model: clonedModel, 
+					model: $.QookeryDemo.cloneModel($("#passwords").getSelectedRowData()), 
 					onClose: function(result) {
-						if(result != "OK") return;
-						$("#passwords").getTableModel().replaceRow(
-							$("#passwords").getSelectedRowIndex(), clonedModel);
-					}, 
-					caption: "Edit Password"
+						if(result) $("#passwords").getTableModel().replaceRow(
+							$("#passwords").getSelectedRowIndex(), result);
+					}
 				});
 			</script>
 		</button>
-		<button label="Remove Password">
+		<button label="Remove Password" id="removeButton" enabled="false">
 			<script event="execute">
 				if($("#passwords").getSelectedRowIndex() == undefined) return;
 				$("#passwords").getTableModel().removeRow($("#passwords").getSelectedRowIndex());
@@ -57,9 +54,10 @@
 		</button>
 	</composite>
 	
-	<form display="none" id="editor" column-flexes="1">
-	
+	<form display="none" id="editor" column-flexes="1" title="Password Editor">
+
 		<composite column-count="2" column-flexes="0 1"> 
+			<text-field label="Serial #" connect="serial" read-only="true" appearance="label" />
 			<text-field label="User name" required="true" connect="username" />
 			<password-field label="Password" required="true" connect="password" />
 		</composite>
@@ -68,12 +66,12 @@
 			<button label="OK">
 				<script event="execute">
 					if(!$.form.validate()) return;
-					$.form.close("OK");
+					$.form.close($.form.getModel());
 				</script>
 			</button>
 			<button label="Cancel">
 				<script event="execute">
-					$.form.close("Cancel");
+					$.form.close(null);
 				</script>
 			</button>
 		</composite>

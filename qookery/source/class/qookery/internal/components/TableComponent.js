@@ -119,6 +119,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				throw new Error("Table must have a table model set");
 			var table = this.getMainWidget();
 			table.setTableModel(tableModel);
+			tableModel.addListener("dataChanged", function(event) {
+				table.getSelectionModel().resetSelection();
+			}, this);
 			var columnModel = table.getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < this.__columns.length; i++) {
@@ -153,12 +156,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return this.getTableModel().getRowData(this.__selectedRowIndex);
 		},
 
-		reloadData: function() {
-			this._applyValue(this.getValue());
-		},
-
 		_updateUI: function(value) {
-			this.getTableModel().setData(value);
+			// Setting the model data requires some cooperation from the model implementation
+			var tableModel = this.getTableModel();
+			if(tableModel && tableModel.setData && typeof(tableModel.setData) == "function") {
+				tableModel.setData(value);
+			}
 		},
 
 		addEventHandler: function(eventName, clientCode) {

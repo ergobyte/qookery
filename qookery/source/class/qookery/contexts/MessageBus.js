@@ -32,7 +32,7 @@ qx.Class.define("qookery.contexts.MessageBus", {
 			qx.event.message.Bus.getInstance().unsubscribe(message, subscriber, context);
 		},
 
-		dispatch: function(name, data) {
+		dispatchByName: function(name, data) {
 			qx.event.message.Bus.getInstance().dispatchByName(name, data);
 		}
 	}

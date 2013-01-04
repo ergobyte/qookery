@@ -40,11 +40,14 @@ qx.Interface.define("qookery.IFormComponent", {
 
 	properties: {
 
+		/** An icon for UI elements that present this form */
+		icon: { nullable: true },
+
 		/** A title for UI elements that present this form */
 		title: { check: "String", nullable: true },
 
-		/** An icon for UI elements that present this form */
-		icon: { nullable: true }
+		/** A boolean value set to <code>false</code> when the most recent validation failed */
+		valid: { check: "Boolean", nullable: false, init: true, event: "changeValid" }
 	},
 
 	members: {

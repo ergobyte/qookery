@@ -52,7 +52,7 @@ qx.Class.define("qookerydemo.JsonEditor", {
     	_createChildControlImpl: function(id, hash) {
 			switch(id) {
 			case "heading":
-		 		var control = new qx.ui.basic.Label("Form Model").set({ font: "bold" });
+		 		var control = new qx.ui.basic.Label("Form JSON").set({ font: "bold" });
 				return control;
 			case "button-bar":
 		 		var control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
@@ -61,7 +61,7 @@ qx.Class.define("qookerydemo.JsonEditor", {
 				control.add(this.getChildControl("clear-form-button"));
 				return control;
 			case "json-to-form-button":
-				var control = new qx.ui.form.Button("JSON to Form");
+				var control = new qx.ui.form.Button("Load Model into Form");
 				control.addListener("execute", function(e) {
 		    		var dataAsJson = this.getCode();
 					var dataAsJsObject = qx.lang.Json.parse(dataAsJson);
@@ -70,14 +70,14 @@ qx.Class.define("qookerydemo.JsonEditor", {
 		    	}, this);
 				return control;
 			case "form-to-json-button":
-				var control = new qx.ui.form.Button("Form to JSON");
+				var control = new qx.ui.form.Button("Recreate JSON");
 		    	control.addListener("execute", function(e) {
 					var dataAsJson = qx.util.Serializer.toJson(this.__dataAsQxObject);
 					this.setCode(dataAsJson);
 		    	}, this);
 				return control;
 			case "clear-form-button":
-				var control = new qx.ui.form.Button("Clear Form");
+				var control = new qx.ui.form.Button("Unload Model from Form");
 		    	control.addListener("execute", function(e) {
 					qx.core.Init.getApplication().setFormModel(null);
 		    	}, this);
