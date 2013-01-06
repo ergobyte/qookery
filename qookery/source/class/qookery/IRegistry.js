@@ -26,79 +26,88 @@ qx.Interface.define("qookery.IRegistry", {
 	members: {
 
 		// Components
-		
-		/**
-		 * Check if a component type is available
-		 * 
-		 * @return {boolean} <code>true</code> in case the component is available
-		 */
-		isComponentAvailable: function(type) { },
-		
+
 		/**
 		 * Register a new component type
-		 * 
-		 * @param {String} type The name of the component type for subsequent access
-		 * @param {String} component The IComponent class name
-		 * @param {any} optional constructor argument
+		 *
+		 * @param typeName {String} The symbolic name of the component type for subsequent access
+		 * @param componentClass {qx.Class} The class that implements (at least) qookery.IComponent
+		 * @param constructorArg {Object} Optional constructor argument
 		 */
-		registerComponent: function(type, component, constructorArgument) { },
-		
+		registerComponentType: function(typeName, componentClass, constructorArg) { },
+
 		/**
-		 * Create a new component of given type
-		 * 
-		 * @param {IComponent} parent Component that will contain new component, may be null
-		 * @param {String} type The type of the component
-		 * 
+		 * Check if a component type is available
+
+		 * @param typeName {String} The symbolic name of the component type to look for
+		 *
+		 * @return {boolean} <code>true</code> in case the component type is available
+		 */
+		isComponentTypeAvailable: function(typeName) { },
+
+		/**
+		 * Create a new component instance
+		 *
+		 * @param typeName {String} Symbolic name of a registered component type
+		 * @param parentComponent {IComponent?null} Component that will contain new component
+		 *
 		 * @return {IComponent} Newly created component, an exception is thrown on error
 		 */
-		createComponent: function(parent, type) { },
-		
+		createComponent: function(typeName, parentComponent) { },
+
 		// Validators
-		
+
 		/**
-		 * 
+		 *
 		 * @param {String} validator The IValidator class name
 		 * @param {String} name The name of the validator for subsequent access
 		 */
 		registerValidator: function(validator, name) { },
-		
+
 		/**
-		 * 
+		 *
 		 * @param {String} validator The name of the validator
 		 * @return {IValidator} The real Validator or null
 		 */
 		getValidator: function(validator) { },
-		
-		// Formatters
-		
+
+		// Formats
+
 		/**
-		 * 
-		 * @param {String} formatter The IFormat class name
-		 * @param {String} name The name of the component for subsequent access
+		 * Register an IFormat class for easy instance creation by XML authors
+		 *
+		 * @param formatName {String} The name of the format class for easy referencing
+		 * @param formatClass {qx.Class} The format class
 		 */
-		registerFormatter: function(formatter, name) { },
-		
+		registerFormatClass: function(formatName, formatClass) { },
+
 		/**
-		 * 
-		 * @param {String} formatter The name of the formatter
-		 * @return {IFormat} The Formatter class name or null
+		 * Create a new instance of a registered format class
+		 *
+		 * @param formatName {String} The name of the format class
+		 * @param options {Map} Options to pass to the format constructor
+		 *
+		 * @return {IFormat} The newly created format instance
 		 */
-		getFormatter: function(formatter) { },
-		
+		createFormat: function(formatName, options) { },
+
 		// Maps
-		
+
 		/**
-		 * 
-		 * @param {Object} map The map object
-		 * @param {String} name The name of the map for subsequent access
+		 * Register a map
+		 *
+		 * @param mapName {String} The symbolic name of the map for subsequent access
+		 * @param map {Map} The map object
 		 */
-		registerMap: function(map, name) { },
-		
+		registerMap: function(mapName, map) { },
+
 		/**
-		 * 
-		 * @param {String} map The name of the mao
-		 * @return {Object} The map object or null
+		 * Return a registered map
+		 *
+		 * @param mapName {String} The name of the map sought
+		 *
+		 * @return {Map} The map object or <code>null</code> if map was not found
 		 */
-		getMap: function(map) { }
+		getMap: function(mapName) { }
 	}
 });

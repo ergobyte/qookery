@@ -100,7 +100,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		getComponent: function(componentId) {
 			return this.__componentMap[componentId];
 		},
-		
+
 		registerComponent: function(component, id) {
 			this.__componentMap[id] = component;
 		},

@@ -138,9 +138,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					resizeBehavior.setMaxWidth(i, column["max-width"]);
 				}
 				var cellRenderer = new qookery.internal.DefaultCellRenderer(column);
-				if(column["formatter"]) {
-					var formatter = this._createFormatter(column["formatter"]);
-					cellRenderer.setFormatter(formatter);
+				if(column["format"]) {
+					var format = this._parseFormatSpecification(column["format"]);
+					cellRenderer.setFormat(format);
 				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}

@@ -18,28 +18,16 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.formatters.NumberFormatter", {
+qx.Class.define("qookery.internal.formats.NumberFormat", {
 
-	extend: qx.core.Object,
-	implement: [qx.util.format.IFormat],
+	extend: qx.util.format.NumberFormat,
 
 	construct: function(options) {
 		this.base(arguments);
-		this.__format = new qx.util.format.NumberFormat();
 		this.__setOptions(options);
 	},
 
 	members: {
-
-		__format: null,
-
-		format: function(obj) {
-			return this.__format.format(obj);
-		},
-
-		parse: function(str) {
-			return this.__format.parse(str);
-		},
 
 		__setOptions: function(options) {
 			for(var key in options)
@@ -49,25 +37,25 @@ qx.Class.define("qookery.internal.formatters.NumberFormatter", {
 		__setOption: function(key, value) {
 			switch(key) {
 			case "groupingUsed":
-				this.__format.setGroupingUsed("true" == value);
+				this.setGroupingUsed("true" == value);
 				return;
 			case "postfix":
-				this.__format.setPostfix(' ' + value);
+				this.setPostfix(' ' + value);
 				return;
 			case "prefix":
-				this.__format.setPrefix(value + ' ');
+				this.setPrefix(value + ' ');
 				return;
 			case "maximumFractionDigits":
-				this.__format.setMaximumFractionDigits(parseInt(value));
+				this.setMaximumFractionDigits(parseInt(value));
 				return;
 			case "minimumFractionDigits":
-				this.__format.setMinimumFractionDigits(parseInt(value));
+				this.setMinimumFractionDigits(parseInt(value));
 				return;
 			case "maximumIntegerDigits":
-				this.__format.setMaximumIntegerDigits(parseInt(value));
+				this.setMaximumIntegerDigits(parseInt(value));
 				return;
 			case "minimumIntegerDigits":
-				this.__format.setMinimumIntegerDigits(parseInt(value));
+				this.setMinimumIntegerDigits(parseInt(value));
 				return;
 			}
 		}

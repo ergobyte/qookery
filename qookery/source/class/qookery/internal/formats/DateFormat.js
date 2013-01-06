@@ -18,30 +18,11 @@
 	$Id$
 */
 
-qx.Class.define("qookery.internal.formatters.DateFormatter", {
+qx.Class.define("qookery.internal.formats.DateFormat", {
 
-	extend: qx.core.Object,
-	implement: [qx.util.format.IFormat],
-	
+	extend: qx.util.format.DateFormat,
+
 	construct: function(options) {
-		this.base(arguments);
-		this.__format = new qx.util.format.DateFormat(options['format'], options['locale']);
-	},
-	
-	members: {
-		
-		__format: null,
-		
-		format: function(obj) {
-			return this.__format.format(obj);
-		},
-		
-		parse: function(str) {
-			return this.__format.parse(str);
-		},
-		
-		getFormat: function() {
-			return this.__format;
-		}
+		this.base(arguments, options['format'], options['locale']);
 	}
 });

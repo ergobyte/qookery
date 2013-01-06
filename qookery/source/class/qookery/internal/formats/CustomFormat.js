@@ -18,29 +18,33 @@
 	$Id: NumberFormatter.js 25 2012-12-09 18:00:48Z geonik@ergobyte.gr $
 */
 
-qx.Class.define("qookery.internal.formatters.MapFormatter", {
+qx.Class.define("qookery.internal.formats.CustomFormat", {
 
 	extend: qx.core.Object,
 	implement: [qx.util.format.IFormat],
-	
+
 	construct: function(options) {
 		this.base(arguments);
-		this.__map = qookery.Qookery.getRegistry().getMap(options["mapName"]) || null;
+		if(!options) return;
+		this.__thisArg = options['thisArg'];
+		this.__format = options['format'];
+		this.__parse = options['parse'];
 	},
-	
+
 	members: {
-		
-		__map: null,
-		
+
+		__thisArg: null,
+		__format: null,
+		__parse: null,
+
 		format: function(obj) {
-			if(this.__map && this.__map[obj]) {
-				return this.__map[obj];
-			}
-			return obj;
+			if(!this.__format) return obj;
+			return this.__format.call(this.__thisArg, obj);
 		},
 
 		parse: function(str) {
-			return str;
+			if(!this.__parse) return str;
+			return this.__parse.call(this.__thisArg, str);
 		}
 	}
 });

@@ -19,12 +19,12 @@
 */
 
 /**
- * Extend this class if you want to create a new component that bind a value. 
+ * Extend this class if you want to create a new component that bind a value.
  */
 qx.Class.define("qookery.internal.DefaultCellRenderer", {
-	
+
 	extend: qx.ui.table.cellrenderer.Abstract,
-	
+
 	statics: {
 		cssKeys: {
 			"text-align": null,
@@ -35,23 +35,23 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 			"white-space": null
 		}
 	},
-	
+
 	construct: function(column) {
 		this.base(arguments);
 		this.__column = column;
 	},
-	
+
 	members: {
 
 		__column: null,
-		__formatter: null,
+		__format: null,
 
-		getFormatter: function() {
-			return this.__formatter;
+		getFormat: function() {
+			return this.__format;
 		},
-		
-		setFormatter: function(formatter) {
-			this.__formatter = formatter;
+
+		setFormat: function(format) {
+			this.__format = format;
 		},
 
 		_getContentHtml: function(cellInfo) {
@@ -62,10 +62,10 @@ qx.Class.define("qookery.internal.DefaultCellRenderer", {
 		_formatValue: function(cellInfo) {
 			var value = cellInfo.value;
 			if(value == null) return "";
-			if(this.__formatter) return this.__formatter.format(value);
+			if(this.__format) return this.__format.format(value);
 			return value.toString();
 		},
-		
+
 		_getCellStyle: function(cellInfo) {
 			var style = [];
 			for(var key in this.constructor.cssKeys) {

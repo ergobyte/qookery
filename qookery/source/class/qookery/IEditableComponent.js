@@ -38,12 +38,12 @@ qx.Interface.define("qookery.IEditableComponent", {
 
 		/** Whether the component's value is required */
 		required: { check: "Boolean", nullable: false, init: false },
-		
+
 		/** Whether the component's widget state is valid or not */
 		valid: { check: "Boolean", nullable: false, init: true },
 
-		/** A formatter specification, syntax is {formatterName}[:{option1}={value1}[,{option2}={value2}]*]? */
-		format: { check: "String", nullable: true },
+		/** A format to be used when displaying values */
+		format: { check: "qx.util.format.IFormat", nullable: true },
 
 		/** If true, this editor's value cannot be altered by its UI widgets */
 		readOnly: { check: "Boolean", nullable: false, init: false }
@@ -53,7 +53,7 @@ qx.Interface.define("qookery.IEditableComponent", {
 
 		/**
 		 * Create a two way binding between controller and component's value
-		 *	
+		 *
 		 * @param controller {qx.data.controller.Object} The form controller that the bindings
 		 * @param path {String} The protocol path
 		 */
@@ -63,20 +63,20 @@ qx.Interface.define("qookery.IEditableComponent", {
 		 * Add a validation to the component
 		 *
 		 * @param validationType {String} name of a registered Qookery validator
-		 * @param invalidMessage {String?null} error message to use in case of validation failure, <code>null</code> for default one(s) 
+		 * @param invalidMessage {String?null} error message to use in case of validation failure, <code>null</code> for default one(s)
 		 * @param options {Map?null} validator specific options
 		 */
 		addValidation: function(validatorType, invalidMessage, options) { },
 
 		/**
 		 * Clear all validators
-		 * 
+		 *
 		 * @param {} component
 		 */
 		clearValidations: function() { },
-		
+
 		/**
-		 * 
+		 *
 		 * @param {} message
 		 */
 		setInvalidMessage: function(message) { }

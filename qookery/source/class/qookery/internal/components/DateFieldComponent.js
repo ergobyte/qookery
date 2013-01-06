@@ -67,9 +67,8 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			mainWidget.setPlaceholder(placeholder);
 		},
 
-		_applyFormat: function(value) {
-			this.base(arguments, value);
-			this.getMainWidget().setDateFormat(this.getFormatter().getFormat());
+		_applyFormat: function(format) {
+			this.getMainWidget().setDateFormat(format);
 		},
 
 		__convertFromString: function(dateString) {

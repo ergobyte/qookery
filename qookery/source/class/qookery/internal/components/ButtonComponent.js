@@ -46,7 +46,7 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 			this.getMainWidget().setLabel(buttonLabelValue);
 		},
 
-		setCommand: function(codeToExecute){
+		setCommand: function(codeToExecute) {
 			this._widgets[0].setCommand(codeToExecute);
 		},
 

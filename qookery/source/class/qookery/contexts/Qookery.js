@@ -39,7 +39,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 *
 		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
 		 * @param options {Map?null} any number of options modifying operation
-		 * 
+		 *
 		 * @option model {var?null} an optional model to load into the form
 		 * @option onClose {Function?null} a callback that will receive the form's result property on close
 		 * @option caption {String?null} a caption for the created Window instance
@@ -60,6 +60,10 @@ qx.Class.define("qookery.contexts.Qookery", {
 			else this.loadResource(form, function(formXml) {
 				window.createAndOpen(formXml, options['model'], options['variables']);
 			});
+		},
+
+		createFormat: function(formatterName, options) {
+			return qookery.Qookery.getRegistry().createFormat(formatterName, options);
 		}
 	}
 });

@@ -30,7 +30,7 @@ qx.Class.define("qookery.internal.FormParser", {
 	statics: {
 
 		registry: qookery.internal.Registry.getInstance(),
-		
+
 		namedSizes: {
 			"XXS":  28,
 			"XS" :  46,
@@ -90,11 +90,12 @@ qx.Class.define("qookery.internal.FormParser", {
 			"padding": "IntegerList",
 
 			"filter": "RegularExpression",
-			
+
 			"label": "ReplaceableString",
+			"null-item-label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
 			"title": "ReplaceableString",
-			
+
 			"connect": "QName"
 		}
 	},
@@ -163,13 +164,13 @@ qx.Class.define("qookery.internal.FormParser", {
 			}
 
 			// Instantiate new component
-			
-			var componentType = qx.dom.Node.getName(componentElement);
-			var component = this.constructor.registry.createComponent(parentComponent, componentType);
+
+			var componentTypeName = qx.dom.Node.getName(componentElement);
+			var component = this.constructor.registry.createComponent(componentTypeName, parentComponent);
 			var componentId = this.getAttribute(componentElement, "id");
 			if(componentId)
 				parentComponent.getForm().registerComponent(component, componentId);
-			
+
 			// Continue creation process
 
 			this.__parseComponent2(componentElement, component);
@@ -182,13 +183,13 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseComponent2: function(componentElement, component) {
-			
+
 			// Attribute parsing
 
 			var attributes = this.parseAttributes(component, this.constructor.componentAttributeTypes, componentElement);
 
 			// Component creation
-			
+
 			component.create(attributes);
 
 			// Children parsing
@@ -231,7 +232,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "parseerror":
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				default:
-					if(this.constructor.registry.isComponentAvailable(elementName))
+					if(this.constructor.registry.isComponentTypeAvailable(elementName))
 						this.__parseComponent(statementElement, component);
 					else if(!component.parseCustomElement(this, statementElement))
 						throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementName ]));
@@ -243,14 +244,25 @@ qx.Class.define("qookery.internal.FormParser", {
 			var clientCode = this.__getNodeText(scriptElement);
 			if(clientCode == null)
 				throw new Error("Empty <script> element");
+			var componentId = this.getAttribute(scriptElement, "component");
+			if(componentId) {
+				component = component.getForm().getComponent(componentId);
+				if(!component)
+					throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
+			}
 			var eventName = this.getAttribute(scriptElement, "event");
-			var actionName = this.getAttribute(scriptElement, "action");
-			if(eventName)
+			if(eventName) {
 				component.addEventHandler(eventName, clientCode);
-			else if(actionName)
-				component.setAction(actionName, clientCode);
-			else
-				component.executeClientCode(clientCode);
+			}
+			else {
+				var actionName = this.getAttribute(scriptElement, "action");
+				if(actionName) {
+					component.setAction(actionName, clientCode);
+				}
+				else {
+					component.executeClientCode(clientCode);
+				}
+			}
 		},
 
 		__parseImport: function(importElement, formComponent) {

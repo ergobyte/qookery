@@ -37,13 +37,12 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	    toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
 		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" },
-		format: { check: "String", inheritable: true, nullable: false, apply: "_applyFormat" },
+		format: { check: "qx.util.format.IFormat", inheritable: true, nullable: true, apply: "_applyFormat" },
 		valid: { check: "Boolean", nullable: false, apply: "_applyValid" }
 	},
 
 	members: {
 
-		__formatter: null,
 		_disableValueEvents: false,
 
 		create: function(attributes) {
@@ -55,10 +54,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				this.setLabel(attributes['label'] || "");
 			}
 			if(attributes['read-only']) this.setReadOnly(true);
-			if(attributes['format']) this.setFormat(attributes['format']);
+			if(attributes['format']) this.setFormat(this._parseFormatSpecification(attributes['format']));
 			this.base(arguments, attributes);
 		},
-		
+
 		setup: function(attributes) {
 			if(attributes['connect']) {
 				var connectionQName = attributes['connect'];
@@ -113,37 +112,18 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			return [ labelWidget, mainWidget ];
 		},
 
-		getFormatter: function() {
-			return this.__formatter;
+		_updateUI: function(value) {
+			// Override to update UI according to new value
 		},
 
-		// Properties
+		// Apply methods
 
 		_applyValid: function(value) {
 			this.getMainWidget().setValid(value);
 		},
 
-		_applyFormat: function(formatterSpecification) {
-			this.__formatter = this._createFormatter(formatterSpecification);
-		},
-
-		_createFormatter: function(formatterSpecification) {
-			var formatterName = formatterSpecification;
-			var attributes = {};
-			var colonCharacterPos = formatterSpecification.indexOf(":");
-			if(colonCharacterPos != -1) {
-				formatterName = formatterSpecification.slice(0, colonCharacterPos);
-				var optionsStr = formatterSpecification.slice(colonCharacterPos + 1);
-				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
-					key = qx.lang.String.clean(key);
-					value = qx.lang.String.clean(value);
-					attributes[key] = value;
-				});
-			}
-			var formatterClass = qookery.Qookery.getRegistry().getFormatter(formatterName);
-			if(!formatterClass)
-				throw new Error("Unknown formatter requested");
-			return new formatterClass(attributes);
+		_applyFormat: function(format) {
+			// Override to handle formats
 		},
 
 		_applyValue: function(value) {
@@ -157,10 +137,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			finally {
 				this._disableValueEvents = false;
 			}
-		},
-
-		_updateUI: function(value) {
-			// Override to update UI according to new value
 		},
 
 		_applyLabel: function(label) {
@@ -187,6 +163,29 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		// Utility methods for subclasses
 
+		/**
+		 * Parse a format specification
+		 *
+		 * <p>Format specification syntax is:</p>
+		 *
+		 * <pre>{formatName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
+		 */
+		_parseFormatSpecification: function(formatSpecification) {
+			var formatName = formatSpecification;
+			var options = {};
+			var colonCharacterPos = formatSpecification.indexOf(":");
+			if(colonCharacterPos != -1) {
+				formatName = formatSpecification.slice(0, colonCharacterPos);
+				var optionsStr = formatSpecification.slice(colonCharacterPos + 1);
+				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
+					key = qx.lang.String.clean(key);
+					value = qx.lang.String.clean(value);
+					options[key] = value;
+				});
+			}
+			return qookery.Qookery.getRegistry().createFormat(formatName, options);
+		},
+
 		_getIdentityOf: function(value) {
 			if(value == null) return null;
 			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
@@ -196,11 +195,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_getLabelOf: function(value) {
 			if(!value) return "";
+			var format = this.getFormat();
+			if(format) return format.format(value);
 			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
-			if(!modelProvider) return value.toString();
-			if(!this.getFormatter())
-				return modelProvider.getLabel(value);
-			return this.getFormatter().format(value);
+			if(modelProvider) return modelProvider.getLabel(value);
+			return value.toString();
 		},
 
 		/**

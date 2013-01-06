@@ -26,42 +26,72 @@ qx.Class.define("qookery.internal.Registry", {
 
 	construct: function() {
 		this.base(arguments);
+
 		this.__validators = { };
+		this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
+		this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
+
 		this.__components = { };
-		this.__componentConstructorArguments = { };
-		this.__formatters = { };
+		this.__components["button"] = qookery.internal.components.ButtonComponent;
+		this.__components["check-box"] = qookery.internal.components.CheckBoxComponent;
+		this.__components["composite"] = qookery.internal.components.CompositeComponent;
+		this.__components["date-field"] = qookery.internal.components.DateFieldComponent;
+		this.__components["form"] = qookery.internal.components.FormComponent;
+		this.__components["group-box"] = qookery.internal.components.GroupBoxComponent;
+		this.__components["html"] = qookery.internal.components.HtmlComponent;
+		this.__components["image"] = qookery.internal.components.ImageComponent;
+		this.__components["label"] = qookery.internal.components.LabelComponent;
+		this.__components["list"] = qookery.internal.components.ListComponent;
+		this.__components["password-field"] = qookery.internal.components.PasswordFieldComponent;
+		this.__components["radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
+		this.__components["select-box"] = qookery.internal.components.SelectBoxComponent;
+		this.__components["separator"] = qookery.internal.components.SeparatorComponent;
+		this.__components["slider"] = qookery.internal.components.SliderComponent;
+		this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
+		this.__components["stack"] = qookery.internal.components.StackComponent;
+		this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;
+		this.__components["tab-view-page"] = qookery.internal.components.TabPageComponent;
+		this.__components["table"] = qookery.internal.components.TableComponent;
+		this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
+		this.__components["text-field"] = qookery.internal.components.TextFieldComponent;
+
+		this.__componentConstructorArgs = { };
+
+		this.__formats = { };
+		this.__formats["custom"] = qookery.internal.formats.CustomFormat;
+		this.__formats["date"] = qookery.internal.formats.DateFormat;
+		this.__formats["map"] = qookery.internal.formats.MapFormat;
+		this.__formats["number"] = qookery.internal.formats.NumberFormat;
+
 		this.__maps = { };
-		this.__initializeValidators();
-		this.__initializeComponents();
-		this.__initializeFormatters();
 	},
 
 	members: {
 
 		__validators: null,
 		__components: null,
-		__componentConstructorArguments: null,
-		__formatters: null,
+		__componentConstructorArgs: null,
+		__formats: null,
 		__maps: null,
 
 		// Components
 
-		isComponentAvailable: function(type) {
-			return this.__components[type] !== undefined;
+		isComponentTypeAvailable: function(typeName) {
+			return this.__components[typeName] !== undefined;
 		},
 
-		registerComponent: function(type, component, constructorArgument) {
-			this.__components[type] = component;
-			if(constructorArgument)
-				this.__componentConstructorArguments[type] = constructorArgument;
+		registerComponentType: function(typeName, componentClass, constructorArg) {
+			this.__components[typeName] = componentClass;
+			if(constructorArg)
+				this.__componentConstructorArgs[typeName] = constructorArg;
 		},
 
-		createComponent: function(parent, type) {
-			var componentClass = this.__components[type];
+		createComponent: function(typeName, parentComponent) {
+			var componentClass = this.__components[typeName];
 			if(!componentClass)
-				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ type]));
-			var constructorArgument = this.__componentConstructorArguments[type];
-			return new componentClass(parent, constructorArgument);
+				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ typeName ]));
+			var constructorArg = this.__componentConstructorArgs[typeName];
+			return new componentClass(parentComponent, constructorArg);
 		},
 
 		// Validators
@@ -74,67 +104,33 @@ qx.Class.define("qookery.internal.Registry", {
 			return this.__validators[validator];
 		},
 
-		// Formatters
+		// Formats
 
-		registerFormatter: function(formatter, name) {
-			this.__formatters[name] = formatter.getInstance();
+		registerFormatClass: function(formatName, formatClass) {
+			this.__formats[formatName] = formatClass;
 		},
 
-		getFormatter: function(formatter) {
-			return this.__formatters[formatter];
+		createFormat: function(formatName, options) {
+			var formatClass = this.__formats[formatName];
+			if(!formatClass)
+				throw new Error(qx.lang.String.format("Unknown format '%1'", [ formatName ]));
+			return new formatClass(options);
 		},
 
 		// Maps
 
-		registerMap: function(map, name) {
-			this.__maps[name] = map;
+		registerMap: function(mapName, map) {
+			this.__maps[mapName] = map;
 		},
 
-		getMap: function(map) {
-			return this.__maps[map];
-		},
-
-		__initializeValidators: function() {
-			this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
-			this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
-		},
-
-		__initializeComponents: function() {
-			this.__components["button"] = qookery.internal.components.ButtonComponent;
-			this.__components["check-box"] = qookery.internal.components.CheckBoxComponent;
-			this.__components["composite"] = qookery.internal.components.CompositeComponent;
-			this.__components["date-field"] = qookery.internal.components.DateFieldComponent;
-			this.__components["form"] = qookery.internal.components.FormComponent;
-			this.__components["group-box"] = qookery.internal.components.GroupBoxComponent;
-			this.__components["html"] = qookery.internal.components.HtmlComponent;
-			this.__components["image"] = qookery.internal.components.ImageComponent;
-			this.__components["label"] = qookery.internal.components.LabelComponent;
-			this.__components["list"] = qookery.internal.components.ListComponent;
-			this.__components["password-field"] = qookery.internal.components.PasswordFieldComponent;
-			this.__components["radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
-			this.__components["select-box"] = qookery.internal.components.SelectBoxComponent;
-			this.__components["separator"] = qookery.internal.components.SeparatorComponent;
-			this.__components["slider"] = qookery.internal.components.SliderComponent;
-			this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
-			this.__components["stack"] = qookery.internal.components.StackComponent;
-			this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;
-			this.__components["tab-view-page"] = qookery.internal.components.TabPageComponent;
-			this.__components["table"] = qookery.internal.components.TableComponent;
-			this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
-			this.__components["text-field"] = qookery.internal.components.TextFieldComponent;
-		},
-
-		__initializeFormatters: function() {
-			this.__formatters["number"] = qookery.internal.formatters.NumberFormatter;
-			this.__formatters["date"] = qookery.internal.formatters.DateFormatter;
-			this.__formatters["map"] = qookery.internal.formatters.MapFormatter;
+		getMap: function(mapName) {
+			return this.__maps[mapName];
 		}
-
 	},
 
 	destruct: function() {
 		this.__validators = null;
 		this.__components = null;
-		this.__formatters = null;
+		this.__formats = null;
 	}
 });
