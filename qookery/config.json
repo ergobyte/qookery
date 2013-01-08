@@ -1,0 +1,21 @@
+{
+	"name": "qookery",
+	"include": [
+		{ "path" : "${QOOXDOO_PATH}/tool/data/config/application.json" }
+	],
+	"export": [
+		"api",
+		"api-data"
+	],
+	"default-job": "api",
+	"let": {
+		"QOOXDOO_PATH": "../../qooxdoo",
+		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
+		"API_INCLUDE": [
+			"qookery.*"
+		],
+		"API_EXCLUDE": [
+			"qookery.internal.*", "qx.*"
+		],
+	}
+}

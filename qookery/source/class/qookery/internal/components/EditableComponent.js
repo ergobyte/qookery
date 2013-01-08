@@ -61,7 +61,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		setup: function(attributes) {
 			if(attributes['connect']) {
 				var connectionQName = attributes['connect'];
-				var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+				var modelProvider = qookery.Qookery.getModelProvider();
 				if(modelProvider == null)
 					throw new Error("Install a model provider to handle connections in XML forms");
 				modelProvider.handleConnection(this, connectionQName[0], connectionQName[1]);
@@ -188,7 +188,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_getIdentityOf: function(value) {
 			if(value == null) return null;
-			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+			var modelProvider = qookery.Qookery.getModelProvider();
 			if(!modelProvider) return value;
 			return modelProvider.getIdentity(value);
 		},
@@ -197,7 +197,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!value) return "";
 			var format = this.getFormat();
 			if(format) return format.format(value);
-			var modelProvider = qookery.Qookery.getInstance().getModelProvider();
+			var modelProvider = qookery.Qookery.getModelProvider();
 			if(modelProvider) return modelProvider.getLabel(value);
 			return value.toString();
 		},

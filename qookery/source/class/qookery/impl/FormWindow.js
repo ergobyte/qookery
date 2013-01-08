@@ -28,7 +28,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 	 * @param title { String } title of the window
 	 * @param icon { uri } icon of the window
 	 *
-	 * @returns the newly created Qookery window instance
+	 * @return the newly created Qookery window instance
 	 */
 	construct: function(caption, icon) {
 		this.base(arguments, caption, icon);

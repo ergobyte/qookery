@@ -21,12 +21,16 @@
 qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
+	implement: [ qookery.IContainerComponent ],
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__children = [ ];
 	},
 
 	members: {
+
+		__children: null,
 
 		_createMainWidget: function(attributes) {
 			var group = new qx.ui.form.RadioButtonGroup(new qx.ui.layout.HBox(10));
@@ -36,9 +40,22 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 				if(selection.length == 0)
 					this.setValue(null);
 				else
-					this.setValue(selection[0].getUserData('value'));
+					this.setValue(selection[0].getModel());
 			}, this);
 			return group;
+		},
+
+		addChild: function(childComponent, display) {
+			var radioButton = childComponent.getMainWidget();
+			if(!qx.Class.hasInterface(radioButton.constructor, qx.ui.form.IRadioItem))
+				throw new Error("<radio-button-group> supports only components with main widgets implementing IRadioItem");
+			this.__children.push(childComponent);
+			var radioButtonGroup = this.getMainWidget();
+			radioButtonGroup.add(radioButton);
+		},
+
+		listChildren: function() {
+			return this.__children;
 		},
 
 		initialize: function(initOptions) {
@@ -48,7 +65,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			for(var itemValue in initOptions["items"]) {
 				var itemLabel = initOptions["items"][itemValue];
 				var radioButton = new qx.ui.form.RadioButton(itemLabel);
-				radioButton.setUserData("value", itemValue);
+				radioButton.setModel(itemValue);
 				radioButtonGroup.add(radioButton);
 			}
 		},
@@ -60,7 +77,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			var buttons = radioButtonGroup.getChildren();
 			for(var i = 0; i < buttons.length; i++) {
 				var button = buttons[i];
-				var buttonValue = button.getUserData('value');
+				var buttonValue = button.getModel();
 				var buttonIdentity = this._getIdentityOf(buttonValue);
 				if(isArray) {
 					if(!qx.lang.Array.equals(valueIdentity, buttonIdentity)) continue;
@@ -72,5 +89,9 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 				return;
 			}
 		}
+	},
+
+	destruct: function() {
+		this._disposeArray("__children");
 	}
 });

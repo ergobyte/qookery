@@ -18,6 +18,9 @@
 	$Id$
 */
 
+/**
+ * Scripting context for easily accessing {@link qx.bom.History} functionality
+ */
 qx.Class.define("qookery.contexts.History", {
 
 	type: "static",

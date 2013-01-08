@@ -15,28 +15,28 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id$
+	$Id: ButtonComponent.js 52 2013-01-06 18:22:47Z geonik@ergobyte.gr $
 */
 
-/**
- * Scripting context for easily accessing {@link qx.event.message.Bus} functionality
- */
-qx.Class.define("qookery.contexts.MessageBus", {
+qx.Class.define("qookery.internal.components.RadioButtonComponent", {
 
-	type: "static",
+	extend: qookery.internal.components.ButtonComponent,
 
-	statics: {
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
+	},
 
-		subscribe: function(message, subscriber, context) {
-			qx.event.message.Bus.getInstance().subscribe(message, subscriber, context);
+	members: {
+
+		_createButtonWidget: function(attributes) {
+			var label = attributes['label'];
+			return new qx.ui.form.RadioButton(label);
 		},
 
-		unsubscribe: function(message, subscriber, context) {
-			qx.event.message.Bus.getInstance().unsubscribe(message, subscriber, context);
-		},
-
-		dispatchByName: function(name, data) {
-			qx.event.message.Bus.getInstance().dispatchByName(name, data);
+		_applyButtonAttributes: function(widget, attributes) {
+			if(attributes['model'] !== undefined) widget.setModel(attributes['model']);
+			return this.base(arguments, widget, attributes);
 		}
+
 	}
 });

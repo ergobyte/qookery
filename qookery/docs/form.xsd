@@ -450,6 +450,7 @@
 			<complexContent>
 				<extension base="q:component">
 					<attribute name="source" type="anyURI" />
+					<attribute name="scale" type="boolean" default="false" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -471,7 +472,28 @@
 
 	<element name="password-field" type="q:field-component" />
 
-	<element name="radio-button-group" type="q:editable-component" />
+	<element name="radio-button">
+		<complexType>
+			<complexContent>
+				<extension base="q:atom-component">
+					<attribute name="model" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
+	<element name="radio-button-group">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component-attributes">
+					<choice minOccurs="0" maxOccurs="unbounded">
+						<element ref="q:script" />
+						<element ref="q:radio-button" />
+					</choice>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 
 	<element name="select-box">
 		<complexType>
@@ -485,7 +507,22 @@
 
 	<element name="separator" type="q:component" />
 
-	<element name="slider" type="q:editable-component" />
+	<element name="slider">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component">
+					<attribute name="maximum" type="integer" default="100" />
+					<attribute name="minimum" type="integer" default="0" />
+					<attribute name="orientation" default="horizontal"><simpleType><restriction base="token">
+						<enumeration value="horizontal" />
+						<enumeration value="vertical" />
+					</restriction></simpleType></attribute>
+					<attribute name="page-step" type="integer" default="10" />
+					<attribute name="single-step" type="integer" default="1" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 
 	<element name="spinner">
 		<complexType>
@@ -549,7 +586,18 @@
 		</complexType>
 	</element>
 
-	<element name="text-area" type="q:field-component" />
+	<element name="text-area">
+		<complexType>
+			<complexContent>
+				<extension base="q:field-component">
+					<attribute name="auto-size" type="boolean" default="false" />
+					<attribute name="minimal-line-height" type="integer" default="4" />
+					<attribute name="single-step" type="integer" default="20" />
+					<attribute name="wrap" type="boolean" default="true" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 
 	<element name="text-field" type="q:field-component" />
 

@@ -29,17 +29,23 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 	members: {
 
 		create: function(attributes) {
+			var widget = this._createButtonWidget(attributes);
+			this._applyButtonAttributes(widget, attributes);
+			this._widgets.push(widget);
+			this.base(arguments, attributes);
+		},
+
+		_createButtonWidget: function(attributes) {
 			var label = attributes['label'];
 			var icon = attributes['icon'];
-			this._widgets[0] = new qx.ui.form.Button(label, icon);
-			this._applyLayoutAttributes(this._widgets[0], attributes);
-			if(attributes["icon-position"])
-				this._widgets[0].setIconPosition(attributes["icon-position"]);
-			if(attributes["rich"])
-				this._widgets[0].setRich(attributes["rich"]);
-			if(attributes["center"])
-				this._widgets[0].setCenter(attributes["center"]);
-			this.base(arguments, attributes);
+			return new qx.ui.form.Button(label, icon);
+		},
+
+		_applyButtonAttributes: function(widget, attributes) {
+			if(attributes["icon-position"] !== undefined) widget.setIconPosition(attributes["icon-position"]);
+			if(attributes["rich"] !== undefined) widget.setRich(attributes["rich"]);
+			if(attributes["center"] !== undefined) widget.setCenter(attributes["center"]);
+			this._applyLayoutAttributes(widget, attributes);
 		},
 
 		setValue: function(buttonLabelValue) {
@@ -53,9 +59,5 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 		execute: function() {
 			this._widgets[0].execute();
 		}
-	},
-
-	destruct: function() {
-		this._widgets[0].removeAllBindings(); // Just to be sure
 	}
 });

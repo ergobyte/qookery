@@ -25,21 +25,43 @@ qx.Class.define("qookery.Qookery", {
 
 	type: "singleton",
 	extend: qx.core.Object,
-	
+
 	construct: function() {
 		this.base(arguments);
 		this.__modelProvider = qookery.impl.DefaultModelProvider.getInstance();
 		this.__resourceLoader = qookery.impl.DefaultResourceLoader.getInstance();
 	},
-	
+
 	statics: {
-		
+
 		/**
-		 * Create a new form parser
-		 * 
-		 * @param variables {Map?null} optional variables to pass to generated forms
-		 * 
-		 * @returns {qookery.internal.FormParser} new instance of form parser
+		 * Create a new Qookery form parser
+		 *
+		 * You can use the parser for parsing XML documents in order to create a new form
+		 * components. Form components may then be displayed at any time by adding their
+		 * main widget (currently always a composite) to the children list
+		 * of widgets implementing the {@link qx.ui.core.MChildrenHandling} mixin.
+		 *
+		 * A complete demonstration of how to correctly use the form parser is:
+		 *
+		 * <pre class="javascript">
+		 * var parser = qookery.Qookery.createNewParser();
+		 * try {
+		 * 	var formComponent = parser.parse(xmlDocument);
+		 * 	var mainWidget = formComponent.getMainWidget();
+		 * 	container.add(mainWidget);
+		 * }
+		 * catch(error) {
+		 * 	// Handle the exception
+		 * }
+		 * finally {
+		 * 	parser.dispose();
+		 * }
+		 * </pre>
+
+		 * @param variables {Map ? null} optional variables to pass to generated forms
+		 *
+		 * @return {qookery.IFormParser} newly created instance of form parser
 		 */
 		createFormParser: function(variables) {
 			return new qookery.internal.FormParser(variables);
@@ -47,11 +69,29 @@ qx.Class.define("qookery.Qookery", {
 
 		/**
 		 * Get the Qookery registry instance
-		 * 
-		 * @returns {qookery.IRegistry} the registry instance
+		 *
+		 * @return {qookery.IRegistry} the registry instance
 		 */
 		getRegistry: function() {
 			return qookery.internal.Registry.getInstance();
+		},
+
+		/**
+		 * Return the currently configured model provider implementation
+		 *
+		 * @return {qookery.IModelProvider} A model provider implementation
+		 */
+		getModelProvider: function() {
+			return this.getInstance().__modelProvider;
+		},
+
+		/**
+		 * Return the currently configured resource loader
+		 *
+		 * @return {qookery.IResourceLoader} Resource loader implementation
+		 */
+		getResourceLoader: function() {
+			return this.getInstance().__resourceLoader;
 		}
 	},
 
@@ -59,24 +99,30 @@ qx.Class.define("qookery.Qookery", {
 
 		__modelProvider: null,
 		__resourceLoader: null,
-		
-		getModelProvider: function() {
-			return this.__modelProvider;
-		},
 
-		setModelProvider: function(provider) {
-			this.__modelProvider = provider;
-		},
-		
-		setResourceLoader: function(loader) {
-			this.__resourceLoader = loader;
-		},
-		
-		getResourceLoader: function() {
-			return this.__resourceLoader;
+		/**
+		 * Configure Qookery by setting a configuration key's value
+		 *
+		 * @param key {String} one of the acceptable configuration keys
+		 * @param value {any} an acceptable value for the configuration key
+		 *
+		 * @return {Boolean} <code>true</code> in case the change was accepted
+		 */
+		configure: function(key, value) {
+			switch(key) {
+			case "model-provider":
+				qx.Interface.assertObject(value, qookery.IModelProvider);
+				this.__modelProvider = value;
+				return true;
+			case "resource-loader":
+				qx.Interface.assertObject(value, qookery.IResourceLoader);
+				this.__resourceLoader = value;
+				return true;
+			}
+			return false;
 		}
 	},
-	
+
 	destruct: function() {
 		this.__modelProvider = null;
 		this.__resourceLoader = null;

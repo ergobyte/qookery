@@ -18,6 +18,10 @@
 	$Id$
 */
 
+/**
+ * The 'Qookery' scripting context is always available to XML authors and provides
+ * a number of commonly used methods.
+ */
 qx.Class.define("qookery.contexts.Qookery", {
 
 	type: "static",
@@ -31,20 +35,20 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param callback {Function} a callback to call after successful load
 		 */
 		loadResource: function(resourceUri, callback) {
-			qookery.Qookery.getInstance().getResourceLoader().loadResource(resourceUri, callback);
+			qookery.Qookery.getResourceLoader().loadResource(resourceUri, callback);
 		},
 
 		/**
 		 * Open a window with a form as content
 		 *
 		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
-		 * @param options {Map?null} any number of options modifying operation
+		 * @param options {Map ? null} any number of options modifying operation
 		 *
-		 * @option model {var?null} an optional model to load into the form
-		 * @option onClose {Function?null} a callback that will receive the form's result property on close
-		 * @option caption {String?null} a caption for the created Window instance
-		 * @option icon {String?null} an icon for the created Window instance
-		 * @option variables {Map?null} optional variables to pass to the form parser
+		 * @option model {var ? null} an optional model to load into the form
+		 * @option onClose {Function ? null} a callback that will receive the form's result property on close
+		 * @option caption {String ? null} a caption for the created Window instance
+		 * @option icon {String ? null} an icon for the created Window instance
+		 * @option variables {Map ? null} optional variables to pass to the form parser
 		 */
 		openWindow: function(form, options) {
 			if(!options) options = {};
@@ -62,6 +66,14 @@ qx.Class.define("qookery.contexts.Qookery", {
 			});
 		},
 
+		/**
+		 * Create a new format instance
+		 *
+		 * @param formatterName {String} the symbolic name of the registered format class
+		 * @param options {Map ? null} any number of options to pass to the format class constructor
+		 *
+		 * @return {qx.util.format.IFormat} new format instance or null if not available
+		 */
 		createFormat: function(formatterName, options) {
 			return qookery.Qookery.getRegistry().createFormat(formatterName, options);
 		}

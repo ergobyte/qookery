@@ -29,8 +29,10 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 	members: {
 
 		create: function(attributes) {
-			this._widgets[0] = new qx.ui.basic.Image(attributes['source']);
-			this._applyLayoutAttributes(this._widgets[0], attributes);
+			var widget = new qx.ui.basic.Image(attributes['source']);
+			if(attributes['scale'] !== undefined) widget.setScale(attributes['scale']);
+			this._applyLayoutAttributes(widget, attributes);
+			this._widgets.push(widget);
 			this.base(arguments, attributes);
 		},
 

@@ -21,7 +21,7 @@
 qx.Class.define("qookerydemo.XmlEditor", {
 
 	extend: qx.ui.container.Composite,
-	
+
 	construct: function() {
 		this.base(arguments);
 		this.setPadding(10);
@@ -29,7 +29,7 @@ qx.Class.define("qookerydemo.XmlEditor", {
 		this.add(this.getChildControl("heading"));
 		this.add(this.getChildControl("editor"), { flex: 1 });
 	},
-	
+
 	members: {
 
 		__ace: null,
@@ -47,6 +47,9 @@ qx.Class.define("qookerydemo.XmlEditor", {
 			this.__ace.selection.moveCursorFileStart();
 		},
 
+		/**
+		 * @ignore(ace)
+		 */
     	_createChildControlImpl: function(id, hash) {
 			switch(id) {
 			case "heading":
@@ -78,7 +81,7 @@ qx.Class.define("qookerydemo.XmlEditor", {
 			return this.base(arguments, id, hash);
 		}
 	},
-	
+
 	destruct: function() {
 		this.__ace = null;
 	}

@@ -28,73 +28,25 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 
 	members: {
 
-		__container: null,
-		__group: null,
-
-		initialize: function(initOptions) {
-			if (!this.__group) return;
-			var minimum = initOptions["minimum"] || 0;
-			var maximum = initOptions["maximum"] || 100;
-			var singleStep = initOptions["singleStep"] || 1;
-			var pageStep = initOptions["pageStep"] || 5;
-			this.__group.minimum.setValue(minimum.toString());
-			this.__group.maximum.setValue(maximum.toString());
-			this.__group.slider.set({
-				minimum: minimum,
-				maximum: maximum,
-				singleStep: singleStep,
-				pageStep: pageStep
-			});
-		},
-
 		_createMainWidget: function(attributes) {
-			var grid = new qx.ui.layout.Grid();
-			grid.setSpacing(5);
-			grid.setColumnFlex(1, 1);
-			grid.setRowAlign(0, "left", "middle");
-			this.__container = new qx.ui.container.Composite(grid);
 			var widget = new qx.ui.form.Slider();
-			this.__group = this.__createSliderGroup(widget);
-			this.__addGroupToContainer(this.__group);
-			this._applyLayoutAttributes(this.__container, attributes);
-			this.__group.slider.addListener("changeValue", function(event) {
-				this.__group.value.setValue(this.__group.slider.getValue().toString());
+			this._applyLayoutAttributes(widget, attributes);
+			if(attributes['minimum']) widget.setMinimum(attributes['minimum']);
+			if(attributes['maximum']) widget.setMaximum(attributes['maximum']);
+			if(attributes['page-step']) widget.setPageStep(attributes['page-step']);
+			if(attributes['single-step']) widget.setSingleStep(attributes['single-step']);
+			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);
-			return this.__container;
+			return widget;
 		},
 
 		_updateUI: function(value) {
-			if(!value) {
-				this.__group.slider.resetValue();
-				return;
-			}
-			this.__group.slider.setValue(value);
-		},
-
-		__addGroupToContainer: function(group) {
-			this.__container.add(group.minimum, { row: 0, column: 0 });
-			this.__container.add(group.slider, { row: 0, column: 1 });
-			this.__container.add(group.maximum, { row: 0, column: 2 });
-			this.__container.add(group.value, { row: 0, column: 3 });
-		},
-
-		__createSliderGroup: function(slider) {
-			var group = {
-				slider: slider,
-				minimum: new qx.ui.basic.Label("Min: " + slider.getMinimum().toString()),
-				maximum: new qx.ui.basic.Label("Max: " + slider.getMaximum().toString()),
-				value: new qx.ui.form.TextField(slider.getValue().toString()).set({ readOnly: true })
-			};
-			return group;
+			if(!value)
+				this.getMainWidget().resetValue();
+			else
+				this.getMainWidget().setValue(value);
 		}
-	},
-
-	destruct: function() {
-		this.__group.slider.destroy();
-		this.__group.minimum.destroy();
-		this.__group.maximum.destroy();
-		this.__group.value.destroy();
 	}
 });

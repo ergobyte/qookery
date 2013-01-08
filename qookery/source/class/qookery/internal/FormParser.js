@@ -50,6 +50,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"maximum": "Integer",
 			"max-length": "Integer",
 			"minimum": "Integer",
+			"minimal-line-height": "Integer",
 			"padding-bottom": "Integer",
 			"padding-left": "Integer",
 			"padding-right": "Integer",
@@ -62,6 +63,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"spacing-x": "Integer",
 			"spacing-y": "Integer",
 
+			"auto-size": "Boolean",
 			"center": "Boolean",
 			"column-visibility-button-visible": "Boolean",
 			"enabled": "Boolean",
@@ -69,6 +71,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"read-only": "Boolean",
 			"required": "Boolean",
 			"rich": "Boolean",
+			"scale": "Boolean",
 			"status-bar-visible": "Boolean",
 			"stretch": "Boolean",
 			"stretch-x": "Boolean",
@@ -179,6 +182,8 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var display = this.getAttribute(componentElement, "display");
 			if(!display) display = 'inline';
+			if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
+				throw new Error("Attempted to add a component to a non-container component");
 			parentComponent.addChild(component, display);
 		},
 

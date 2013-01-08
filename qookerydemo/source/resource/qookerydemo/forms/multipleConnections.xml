@@ -12,13 +12,6 @@
 			"vw": "VW",
 			"opel": "Opel"
 		};
-		
-		$.loan = {
-			"minimum": 0,
-			"maximum": 100,
-			"singleStep": 1,
-			"pageStep": 5
-		};
 	</script>
 	
 	<tab-view column-flexes="1">
@@ -52,16 +45,8 @@
 			<date-field label="Delivery Date" connect="date" format="date: format = dd/MM/yyyy HH:mm:ss" />
 			<check-box label="Pearl Paint" connect="pearl" />
 			<group-box label="Loan Percent" column-span="2" column-count="2" column-flexes="0 1">
-				<slider connect="loan">
-					<script>
-						this.initialize($.loan);
-					</script>
-				</slider>
-				<spinner connect="loan">
-					<script>
-						this.initialize($.loan);
-					</script>
-				</spinner>
+				<slider connect="loan" minimum="0" maximum="100" single-step="1" page-step="5" />
+				<spinner connect="loan" minimum="0" maximum="100" single-step="1" page-step="5" />
 			</group-box>
 		</tab-view-page>
 		<tab-view-page label="Photo" column-flexes="1">
