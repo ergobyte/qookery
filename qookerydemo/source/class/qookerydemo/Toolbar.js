@@ -68,13 +68,13 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 		__loadDemo: function(demoArguments) {
 			var formUrl = "resource/qookerydemo/forms/" + demoArguments['formFile'];
-			qookery.contexts.Qookery.loadResource(formUrl, function(data) {
+			qookery.contexts.Qookery.loadResource(formUrl, null, function(data) {
 				qx.core.Init.getApplication().setXmlEditorCode(data);
 				qx.core.Init.getApplication().runCode();
 			});
 			if(demoArguments['modelFile']) {
 				var modelUrl = "resource/qookerydemo/models/" + demoArguments['modelFile'];
-				qookery.contexts.Qookery.loadResource(modelUrl, function(data) {
+				qookery.contexts.Qookery.loadResource(modelUrl, null, function(data) {
 					qx.core.Init.getApplication().setModelAreaCode(data);
 				});
 			}

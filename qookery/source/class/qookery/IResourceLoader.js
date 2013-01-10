@@ -25,6 +25,6 @@ qx.Interface.define("qookery.IResourceLoader", {
 
 	members: {
 
-		loadResource: function(resourceUrl, successCallback, failCallback, options) { }
+		loadResource: function(resourceUrl, thisArg, successCallback, failCallback) { }
 	}
 });

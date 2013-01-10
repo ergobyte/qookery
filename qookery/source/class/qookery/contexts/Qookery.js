@@ -34,8 +34,8 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param resourceUri {String} the URI of the resource to load
 		 * @param callback {Function} a callback to call after successful load
 		 */
-		loadResource: function(resourceUri, callback) {
-			qookery.Qookery.getResourceLoader().loadResource(resourceUri, callback);
+		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
+			qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
 		},
 
 		/**
@@ -61,7 +61,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 			if(qx.Class.implementsInterface(form, qookery.IFormComponent)) {
 				window.openForm(form, options['model']);
 			}
-			else this.loadResource(form, function(formXml) {
+			else this.loadResource(form, null, function(formXml) {
 				window.createAndOpen(formXml, options['model'], options['variables']);
 			});
 		},
@@ -77,7 +77,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		createFormat: function(formatterName, options) {
 			return qookery.Qookery.getRegistry().createFormat(formatterName, options);
 		},
-		
+
 		createComponent: function(parentComponent, componentClassName, attributes) {
 			var component = qookery.Qookery.getRegistry().createComponent(componentClassName, parentComponent);
 			component.create(attributes);

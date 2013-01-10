@@ -38,7 +38,7 @@
 	"jobs": {
 		"libraries": {
 			"library": [
-				{ "manifest" : "../qookery/Manifest.json" }
+				{ "manifest" : "../org.qookery/Manifest.json" }
 			]
 		},
 		"includes": {

@@ -56,7 +56,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(!item) return "";
 				var model = item.getModel();
 				if(model === this.constructor.nullItemModel) return this.__nullItemLabel;
-				return this._getLabelOf(model);
+				return item.getLabel();
 			}.bind(this));
 			return selectBox;
 		},

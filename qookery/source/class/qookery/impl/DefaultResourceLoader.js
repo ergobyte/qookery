@@ -26,14 +26,20 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
 	members: {
 
-   		loadResource: function(url, successCallback, failCallback, options) { 
+   		loadResource: function(url, thisArg, successCallback, failCallback) {
    			var resourceUri = qx.util.ResourceManager.getInstance().toUri(url);
+   			if(qx.core.Environment.get("qx.debug"))
+   				resourceUri += "?nocache=" + new Date().getTime();
 			var xhrRequest = new qx.bom.request.Xhr();
-			if(successCallback != null)
-				xhrRequest.onload = function(event) {
+			if(successCallback) {
+				if(thisArg) xhrRequest.onload = function(event) {
+					successCallback.call(thisArg, xhrRequest.responseText);
+				};
+				else xhrRequest.onload = function(event) {
 					successCallback(xhrRequest.responseText);
 				};
-			xhrRequest.open("GET", (resourceUri + "?nocache=" + new Date().getTime()));
+			}
+			xhrRequest.open("GET", resourceUri, true);
 			xhrRequest.send();
    		}
 	}
