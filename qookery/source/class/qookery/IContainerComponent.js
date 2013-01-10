@@ -35,7 +35,21 @@ qx.Interface.define("qookery.IContainerComponent", {
 		 * 
 		 * @throw an exception is thrown in case this component does not support children
 		 */
-		addChild: function(component, display) { },
+		add: function(component, display) { },
+		
+		/**
+		 * Remove the given component from the children list.
+		 * 
+		 * @param {} component
+		 */
+		remove: function(component) { },
+		
+		/**
+		 * Returns the index position of the given component if it is a child component. Otherwise it returns -1.
+		 * 
+		 * @param {} component
+		 */
+		contains: function(component) { },
 		
 		listChildren: function() { }
 	}

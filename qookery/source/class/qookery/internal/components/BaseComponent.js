@@ -29,7 +29,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 	properties: {
 	    enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
-	    visible: { init: true, check: "Boolean", inheritable: true, apply: "_applyVisible" }
+	    visibility: { init: "visible", check : [ "visible", "hidden", "excluded" ], inheritable: true, apply: "_applyVisibility" }
 	},
 
 	construct: function(parentComponent) {
@@ -60,7 +60,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				this._widgets[i].setUserData('qookeryComponent', this);
 
 			if(attributes['enabled'] == false) this.setEnabled(false);
-			if(attributes['visible'] == false) this.setVisible(false);
+			if(attributes['visibility']) this.setVisibility(attributes['visibility']);
 		},
 		
 		parseCustomElement: function(xmlElement) {
@@ -206,11 +206,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			}
 		},
 
-		_applyVisible: function(visible) {
+		_applyVisibility: function(visibility) {
 			var widgets = this.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
-				if(visible) widget.show(); else widget.hide();
+				widget.setVisibility(visibility);
 			}
 		},
 

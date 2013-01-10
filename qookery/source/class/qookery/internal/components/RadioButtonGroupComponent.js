@@ -45,7 +45,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			return group;
 		},
 
-		addChild: function(childComponent, display) {
+		add: function(childComponent, display) {
 			var radioButton = childComponent.getMainWidget();
 			if(!qx.Class.hasInterface(radioButton.constructor, qx.ui.form.IRadioItem))
 				throw new Error("<radio-button-group> supports only components with main widgets implementing IRadioItem");
@@ -88,6 +88,14 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 				radioButtonGroup.setSelection([ button ]);
 				return;
 			}
+		},
+		
+		remove: function(component) {
+			//TODO
+		},
+		
+		contains: function(component) { 
+			//TODO
 		}
 	},
 

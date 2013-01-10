@@ -26,6 +26,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		columnAttributeTypes: {
 			"flex": "Integer",
+			"header-click": "ReplaceableString",
+			"header-icon": "String",
 			"label": "ReplaceableString",
 			"min-width": "Size",
 			"max-width": "Size",
@@ -53,11 +55,17 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		__columns: null,
 		__tableModel: null,
 		__selectedRowIndex: null,
+		__paneHeader: null,
 
 		_createMainWidget: function(attributes) {
+			var that = this;
 			var table = new qx.ui.table.Table(null, {
 				tableColumnModel: function(table) {
 					return new qx.ui.table.columnmodel.Resize(table);
+				},
+				tablePaneHeader: function(obj) {
+					that.__paneHeader = new qx.ui.table.pane.Header(obj);
+					return that.__paneHeader;
 				}
 			});
 			table.getSelectionModel().addListener('changeSelection', function(e) {
@@ -110,6 +118,15 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		setColumns: function(columns) {
 			this.__columns = columns;
 		},
+		
+		__uglyPatch: function(tableModel) {
+			var labelArray = [], nameArray = [];
+			tableModel.getColumns().forEach(function(column) {
+				labelArray.push(column["label"]);
+				nameArray.push(column["connect"]);
+			});
+			tableModel.setColumns(labelArray, nameArray);
+		},
 
 		setup: function(attributes) {
 			if(this.__columns.length == 0)
@@ -118,6 +135,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			if(!tableModel)
 				throw new Error("Table must have a table model set");
 			var table = this.getMainWidget();
+			if(tableModel instanceof waffle.ui.internal.RemoteTableModel)
+				this.__uglyPatch(tableModel);
 			table.setTableModel(tableModel);
 			tableModel.addListener("dataChanged", function(event) {
 				table.getSelectionModel().resetSelection();
@@ -142,8 +161,17 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					var format = this._parseFormatSpecification(column["format"]);
 					cellRenderer.setFormat(format);
 				}
+				if(column["header-icon"]) {
+					this.__paneHeader.getHeaderWidgetAtColumn(i).setIcon(column["header-icon"]);
+				}
+				if(column["header-click"]) {
+					this.__paneHeader.getHeaderWidgetAtColumn(i).addListener("click", function(event) {
+						column["header-click"](event);
+					});
+				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
+			
 			this.base(arguments, attributes);
 		},
 

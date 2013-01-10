@@ -30,6 +30,14 @@
 
 	<!-- Simple types -->
 	
+	<simpleType name='visibility' >
+		<restriction base="token">
+			<enumeration value='visible' />
+			<enumeration value='hidden' />
+			<enumeration value='excluded' />
+		</restriction>
+	</simpleType>
+	
 	<simpleType name='icon-position' >
 		<restriction base="token">
 			<enumeration value='left' />
@@ -140,7 +148,7 @@
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="enabled" type="boolean" default="true" />
-		<attribute name="visible" type="boolean" default="true" />
+		<attribute name="visibility" type="q:visibility" default="visible" />
 		<attribute name="text-color" type="string" default="black" />
 		<attribute name="background-color" type="string" default="white" />
 		<attribute name="display" type="q:display" default="inline" />
@@ -531,7 +539,7 @@
 					<attribute name="maximum" type="integer" default="100" />
 					<attribute name="minimum" type="integer" default="0" />
 					<attribute name="page-step" type="integer" default="10" />
-					<attribute name="single-step" type="integer" default="1" />
+					<attribute name="single-step" type="decimal" default="1" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -563,6 +571,8 @@
 							<attribute name="font-style" />
 							<attribute name="font-weight" />
 							<attribute name="format" type="string" />
+							<attribute name="header-icon" type="string" />
+							<attribute name="header-click" type="string" />
 							<attribute name="label" type="string" />
 							<attribute name="line-height" type="string" />
 							<attribute name="min-width" type="q:size" />

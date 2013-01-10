@@ -76,7 +76,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			"stretch": "Boolean",
 			"stretch-x": "Boolean",
 			"stretch-y": "Boolean",
-			"visible": "Boolean",
 			"wrap": "Boolean",
 
 			"width": "Size",
@@ -116,17 +115,15 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		// IFormParser implementation
 
-		parseXmlDocument: function(xmlDocument, parentComposite, layoutData) {
+		parseXmlDocument: function(xmlDocument) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
 			var formElement = elements[0];
 
 			var translationPrefix = this.getAttribute(formElement, "translation-prefix");
-			var component = new qookery.internal.components.FormComponent(null, translationPrefix, this.__variables);
+			var component = new qookery.internal.components.FormComponent(null, this, translationPrefix, this.__variables);
 			this.__parseFormBlock(formElement, component);
 			this.__parseComponent2(formElement, component);
-
-			if(parentComposite) parentComposite.add(component.getMainWidget(), layoutData);
 			return component;
 		},
 
@@ -184,7 +181,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(!display) display = 'inline';
 			if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
 				throw new Error("Attempted to add a component to a non-container component");
-			parentComponent.addChild(component, display);
+			parentComponent.add(component, display);
 		},
 
 		__parseComponent2: function(componentElement, component) {

@@ -83,7 +83,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		 *
 		 * @throw an exception is thrown in case this component does not support children
 		 */
-		addChild: function(childComponent, display) {
+		add: function(childComponent, display) {
 			this.__children.push(childComponent);
 			if(display == "none") return;
 			var container = this.getMainWidget();
@@ -129,6 +129,21 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 				}
 				container.add(widget);
 			}
+		},
+		
+		remove: function(childComponent) {
+			var container = this.getMainWidget();
+			var widgets = childComponent.listWidgets();
+			for(var i = 0; i < widgets.length; i++)
+				container.remove(widgets[i]);
+		},
+		
+		contains: function(childComponent) {
+			var container = this.getMainWidget();
+			var widgets = childComponent.listWidgets();
+			for(var i = 0; i < widgets.length; i++)
+				if(container.indexOf(widgets[i]) != -1) return true;
+			return false;
 		}
 	},
 

@@ -112,7 +112,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			else if(qx.lang.Type.isArray(data))
 				this.__accessor = this.constructor.jsArrayAccessor;
 			else
-				throw new Error("Table model does not support this type of data");
+				this.__accessor = this.constructor.nullAccessor;
 			this.__data = data;
 
 			if(this.hasListener("dataChanged")) {

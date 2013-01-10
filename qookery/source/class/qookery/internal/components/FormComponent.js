@@ -30,8 +30,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	implement: [ qookery.IFormComponent ],
 	include: [ qookery.util.MFuturesHandling ],
 
-	construct: function(parentComponent, translationPrefix, variables) {
+	construct: function(parentComponent, parser, translationPrefix, variables) {
 		this.base(arguments, parentComponent);
+		this.__parser = parser;
 		this.__translationPrefix = translationPrefix;
 		this.__variables = variables;
 		this.__controller = new qx.data.controller.Object();
@@ -52,6 +53,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
+		__parser: null,
 		__translationPrefix: null,
 		__variables: null,
 		__controller: null,
@@ -68,11 +70,20 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(this.getAttribute('icon')) this.setIcon(this.getAttribute('icon'));
 			this.info("Form created");
 		},
+		
+		setup: function(attributes) {
+			this.__parser = null;
+			return this.base(arguments);
+		},
 
 		// Getters and setters
 		
 		getForm: function() {
 			return this;
+		},
+		
+		getParser: function() {
+			return this.__parser;
 		},
 
 		getModel: function() {

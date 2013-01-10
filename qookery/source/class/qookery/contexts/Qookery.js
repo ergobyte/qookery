@@ -76,6 +76,13 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 */
 		createFormat: function(formatterName, options) {
 			return qookery.Qookery.getRegistry().createFormat(formatterName, options);
+		},
+		
+		createComponent: function(parentComponent, componentClassName, attributes) {
+			var component = qookery.Qookery.getRegistry().createComponent(componentClassName, parentComponent);
+			component.create(attributes);
+			component.setup(attributes);
+			return component;
 		}
 	}
 });

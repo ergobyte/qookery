@@ -53,6 +53,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				this.setValue(model);
 			}, this);
 			selectBox.setFormat(function(item) {
+				if(!item) return "";
 				var model = item.getModel();
 				if(model === this.constructor.nullItemModel) return this.__nullItemLabel;
 				return this._getLabelOf(model);

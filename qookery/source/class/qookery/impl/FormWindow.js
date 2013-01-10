@@ -85,12 +85,12 @@ qx.Class.define("qookery.impl.FormWindow", {
 
 		_getButtonsContainer: function() {
 			if(this.__buttonsContainer == null) {
-				var buttonsLayout = new qx.ui.layout.HBox();
-				buttonsLayout.setReversed(true);
+				var buttonsLayout = new qx.ui.layout.Grid();
+				//buttonsLayout.setReversed(true);
 				buttonsLayout.setSpacing(10);
 				this.__buttonsContainer = new qx.ui.container.Composite(buttonsLayout);
 				this.__buttonsContainer.setLayout(buttonsLayout);
-				this._createButtons(this.__buttonsContainer);
+				this._createButtons(this.__buttonsContainer, buttonsLayout);
 			}
 			return this.__buttonsContainer;
 		},

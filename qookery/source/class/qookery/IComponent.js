@@ -29,7 +29,7 @@ qx.Interface.define("qookery.IComponent", {
 		enabled: { init: true, check: "Boolean" },
 
 		/** Whether the component is visible */
-		visible: { init: true, check: "Boolean" }
+		visibility: { init: "visible", check : [ "visible", "hidden", "excluded" ] }
 	},
 
 	members: {
