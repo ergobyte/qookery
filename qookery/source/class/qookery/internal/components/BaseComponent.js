@@ -59,10 +59,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			for(var i = 0; i < this._widgets.length; i++)
 				this._widgets[i].setUserData('qookeryComponent', this);
 
-			if(attributes['enabled'] == false) this.setEnabled(false);
+			if(attributes['enabled'] !== undefined) this.setEnabled(false);
 			if(attributes['visibility']) this.setVisibility(attributes['visibility']);
 		},
-		
+
 		parseCustomElement: function(xmlElement) {
 			return false;
 		},
@@ -196,6 +196,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(attributes['font']) widget.setFont(attributes['font']);
 			if(attributes['text-color']) widget.setTextColor(attributes['text-color']);
 			if(attributes['background-color']) widget.setBackgroundColor(attributes['background-color']);
+			if(attributes['tooltip-text']) widget.setToolTipText(attributes['tooltip-text']);
+			if(attributes['tooltip-icon']) widget.setToolTipIcon(attributes['tooltip-icon']);
 		},
 
 		_applyEnabled: function(enabled) {

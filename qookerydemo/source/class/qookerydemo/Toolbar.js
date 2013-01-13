@@ -38,14 +38,14 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 	construct: function() {
 		this.base(arguments);
-		var runAgainButton = new qx.ui.toolbar.Button("Run Again", "resource/qookerydemo/icons/24/run.png");
+		var runAgainButton = new qx.ui.toolbar.Button("Run Again", "qookerydemo/icons/24/run.png");
 		runAgainButton.addListener("execute", function() {
 			qx.core.Init.getApplication().runCode();
 		}, this);
 
-		var aboutButton = new qx.ui.toolbar.Button("About", "resource/qookerydemo/icons/24/about_gs.png");
+		var aboutButton = new qx.ui.toolbar.Button("About", "qookerydemo/icons/24/about_gs.png");
 		aboutButton.addListener("execute", function () {
-			qookery.contexts.Qookery.openWindow("resource/qookerydemo/forms/aboutDialog.xml");
+			qookery.contexts.Qookery.openWindow("qookerydemo/forms/aboutDialog.xml");
 		}, this);
 
 		var demoListMenu = new qx.ui.menu.Menu();
@@ -57,7 +57,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 			demoListMenu.add(button);
 		}, this);
 
-		var demoMenu = new qx.ui.toolbar.MenuButton("Demo Selection", "resource/qookerydemo/icons/24/samples.png");
+		var demoMenu = new qx.ui.toolbar.MenuButton("Demo Selection", "qookerydemo/icons/24/samples.png");
 		demoMenu.setMenu(demoListMenu);
 		this.add(demoMenu);
 		this.add(runAgainButton);
@@ -67,13 +67,13 @@ qx.Class.define("qookerydemo.Toolbar", {
 	members: {
 
 		__loadDemo: function(demoArguments) {
-			var formUrl = "resource/qookerydemo/forms/" + demoArguments['formFile'];
+			var formUrl = "qookerydemo/forms/" + demoArguments['formFile'];
 			qookery.contexts.Qookery.loadResource(formUrl, null, function(data) {
 				qx.core.Init.getApplication().setXmlEditorCode(data);
 				qx.core.Init.getApplication().runCode();
 			});
 			if(demoArguments['modelFile']) {
-				var modelUrl = "resource/qookerydemo/models/" + demoArguments['modelFile'];
+				var modelUrl = "qookerydemo/models/" + demoArguments['modelFile'];
 				qookery.contexts.Qookery.loadResource(modelUrl, null, function(data) {
 					qx.core.Init.getApplication().setModelAreaCode(data);
 				});

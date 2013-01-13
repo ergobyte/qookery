@@ -19,9 +19,8 @@
 */
 
 /*
-#asset(qookerydemo/*)
-*/
-
+	#asset(qookerydemo/*)
+ */
 qx.Class.define("qookerydemo.Application", {
 
 	extend: qx.application.Standalone,
@@ -32,34 +31,34 @@ qx.Class.define("qookerydemo.Application", {
 		__xmlEditor: null,
 		__resultArea: null,
 		__jsonEditor: null,
-		
+
 		main: function() {
 			this.base(arguments);
 			if(qx.core.Environment.get("qx.debug")) {
 				qx.log.appender.Native;
 				qx.log.appender.Console;
 			}
-			
+
 			this.__toolbar = new qookerydemo.Toolbar();
 			this.__xmlEditor = new qookerydemo.XmlEditor();
 			this.__jsonEditor = new qookerydemo.JsonEditor();
 			this.__resultArea = new qookerydemo.ResultArea();
-					
+
 			var verticalSplitter = new qx.ui.splitpane.Pane("vertical");
 			verticalSplitter.setDecorator(new qx.ui.decoration.Uniform(0));
 			verticalSplitter.setOffset(0);
 			verticalSplitter.add(this.__xmlEditor);
 			verticalSplitter.add(this.__jsonEditor);
-			
+
 			var horizontalSplitter = new qx.ui.splitpane.Pane("horizontal");
 			horizontalSplitter.add(verticalSplitter);
 			horizontalSplitter.add(this.__resultArea);
-			
+
 			var mainContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 			mainContainer.add(this.__toolbar, { flex: 0 });
 			mainContainer.add(horizontalSplitter, { flex: 1 });
 			this.getRoot().add(mainContainer, { edge: 0 });
-			
+
 			qx.dom.Element.remove(document.getElementById('splash'));
 		},
 
@@ -70,13 +69,13 @@ qx.Class.define("qookerydemo.Application", {
 		},
 
 		setModelAreaCode: function(code) {
-			this.__jsonEditor.setCode(code);			
+			this.__jsonEditor.setCode(code);
 		},
 
 		setXmlEditorCode: function(code) {
 			this.__xmlEditor.setCode(code);
 		},
-		
+
 		setFormModel: function(model) {
 			this.__resultArea.getFormComponent().setModel(model);
 		}

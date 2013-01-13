@@ -85,9 +85,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			"max-width": "Size",
 			"max-height": "Size",
 
-			"icon": "Resource",
-			"source": "Resource",
-
 			"margin": "IntegerList",
 			"padding": "IntegerList",
 
@@ -97,6 +94,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"null-item-label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
 			"title": "ReplaceableString",
+			"tooltip-text": "ReplaceableString",
 
 			"connect": "QName"
 		}
@@ -330,8 +328,6 @@ qx.Class.define("qookery.internal.FormParser", {
 				return text == "true";
 			case "Size":
 				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text));
-			case "Resource":
-				return qx.util.ResourceManager.getInstance().toUri(text);
 			case "IntegerList":
 				var value = text.split(/\W+/);
 				value.forEach(function(element, index) { value[index] = parseInt(element); });

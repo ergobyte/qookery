@@ -50,7 +50,7 @@
 			</group-box>
 		</tab-view-page>
 		<tab-view-page label="Photo" column-flexes="1">
-			<image source="resource/qookerydemo/images/ascona.jpg" />
+			<image source="qookerydemo/images/ascona.jpg" />
 		</tab-view-page>
 	</tab-view>
 	

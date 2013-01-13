@@ -30,7 +30,7 @@ qx.Class.define("qookerydemo.JsonEditor", {
 		this.add(this.getChildControl("button-bar"));
 		this.add(this.getChildControl("editor"), { flex: 1 });
 	},
-	
+
 	members: {
 
 		__ace: null,
@@ -108,7 +108,7 @@ qx.Class.define("qookerydemo.JsonEditor", {
 			return this.base(arguments, id, hash);
 		}
 	},
-	
+
 	destruct: function() {
 		this.__ace = null;
 	}

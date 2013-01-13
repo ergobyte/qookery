@@ -210,6 +210,8 @@
 		<attribute name="padding-bottom" type="integer" default="0" />
 		<attribute name="padding-left" type="integer" default="0" />
 		<attribute name="padding"><simpleType><list itemType="integer" /></simpleType></attribute>
+		<attribute name="tooltip-text" type="string" />
+		<attribute name="tooltip-icon" type="anyURI" />
 		<!-- Grid layout data -->
 		<attribute name="row-span" type="integer" default="1" />
 		<attribute name="column-span" type="integer" default="1" />

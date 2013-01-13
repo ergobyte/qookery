@@ -56,7 +56,10 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				return;
 			}
 			if(!qx.lang.Type.isDate(value)) {
-				value = this.__convertFromString(value);
+				if(qx.lang.Type.isString(value))
+					value = new Date(Date.parse(value));
+				else
+					throw new Error("Unsupported value type");
 			}
 			dateField.setValue(value);
 		},
@@ -69,20 +72,6 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 		_applyFormat: function(format) {
 			this.getMainWidget().setDateFormat(format);
-		},
-
-		__convertFromString: function(dateString) {
-			var reggie = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g;
-			var dateArray = reggie.exec(dateString);
-			var dateObject = new Date(
-				(+dateArray[1]),
-				(+dateArray[2])-1,
-				(+dateArray[3]),
-				(+dateArray[4]),
-				(+dateArray[5]),
-				(+dateArray[6])
-			);
-			return dateObject;
 		}
 	}
 });

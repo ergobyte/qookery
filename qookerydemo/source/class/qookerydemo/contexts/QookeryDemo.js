@@ -19,19 +19,19 @@
 */
 
 qx.Class.define("qookerydemo.contexts.QookeryDemo", {
-	
+
 	type: "static",
-	
+
 	statics: {
 
 		openAboutWindow: function() {
-			qookerydemo.AboutWindow.open();
+			qookery.contexts.Qookery.openWindow("qookerydemo/forms/aboutDialog.xml");
 		},
-		
+
 		createModel: function(jsObject) {
 			return qx.data.marshal.Json.createModel(jsObject, true);
 		},
-		
+
 		cloneModel: function(model) {
 			var jsObject = qx.util.Serializer.toNativeObject(model);
 			return qx.data.marshal.Json.createModel(jsObject, true);
