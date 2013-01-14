@@ -142,7 +142,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		getAttribute: function(element, attributeName) {
-			var text = qx.xml.Element.getAttributeNS(element, null, attributeName);
+			var text = qx.xml.Element.getAttributeNS(element, "", attributeName);
 			if(text == null || text.length == 0) return null;
 			text = text.trim();
 			if(text.length == 0) return null;
