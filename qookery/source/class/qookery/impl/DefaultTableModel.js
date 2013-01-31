@@ -114,15 +114,17 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			else
 				this.__accessor = this.constructor.nullAccessor;
 			this.__data = data;
-
-			if(this.hasListener("dataChanged")) {
-				this.fireDataEvent("dataChanged", {
-					firstColumn: 0,
-					lastColumn: this.getColumnCount() - 1,
-					firstRow: 0,
-					lastRow: this.getRowCount() - 1
-				});
-			}
+			this.reloadData();
+		},
+		
+		reloadData: function() {
+			if(!this.hasListener("dataChanged")) return;
+			this.fireDataEvent("dataChanged", {
+				firstColumn: 0,
+				lastColumn: this.getColumnCount() - 1,
+				firstRow: 0,
+				lastRow: this.getRowCount() - 1
+			});
 		},
 
 		// .	Columns

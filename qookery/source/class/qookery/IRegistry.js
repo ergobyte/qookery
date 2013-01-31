@@ -90,6 +90,18 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @return {IFormat} The newly created format instance
 		 */
 		createFormat: function(formatName, options) { },
+		
+		/**
+		 * Parse a format specification
+		 * <p>Format specification syntax is:</p>
+		 *
+		 * <pre>{formatName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
+		 * 
+		 * @param {String} formatSpecification
+		 *  
+		 * @return {IFormat} The newly created format instance
+		 */
+		createFormatSpecification: function(formatSpecification) { },
 
 		// Maps
 

@@ -34,7 +34,7 @@ qx.Class.define("qookery.internal.components.TabHolderComponent", {
 		},
 
 		_createContainerWidget: function(attributes) {
-			var  tabView = new qx.ui.tabview.TabView();
+			var tabView = new qx.ui.tabview.TabView();
 			this._applyLayoutAttributes(tabView, attributes);
 			return tabView;
 		}

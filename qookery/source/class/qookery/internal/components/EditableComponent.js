@@ -54,7 +54,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				this.setLabel(attributes['label'] || "");
 			}
 			if(attributes['read-only']) this.setReadOnly(true);
-			if(attributes['format']) this.setFormat(this._parseFormatSpecification(attributes['format']));
+			if(attributes['format']) this.setFormat(qookery.Qookery.getRegistry().createFormatSpecification(attributes['format']));
 			this.base(arguments, attributes);
 		},
 
@@ -84,10 +84,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!options) options = { };
 			var validatorFunction = validator.createValidatorFunction(this, invalidMessage, options);
 			this.getForm().addValidation(this, validatorFunction);
-		},
-
-		setInvalidMessage: function(message) {
-			this.getMainWidget().setInvalidMessage(message);
 		},
 
 		clearValidations: function() {
@@ -162,29 +158,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		// Utility methods for subclasses
-
-		/**
-		 * Parse a format specification
-		 *
-		 * <p>Format specification syntax is:</p>
-		 *
-		 * <pre>{formatName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
-		 */
-		_parseFormatSpecification: function(formatSpecification) {
-			var formatName = formatSpecification;
-			var options = {};
-			var colonCharacterPos = formatSpecification.indexOf(":");
-			if(colonCharacterPos != -1) {
-				formatName = formatSpecification.slice(0, colonCharacterPos);
-				var optionsStr = formatSpecification.slice(colonCharacterPos + 1);
-				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
-					key = qx.lang.String.clean(key);
-					value = qx.lang.String.clean(value);
-					options[key] = value;
-				});
-			}
-			return qookery.Qookery.getRegistry().createFormat(formatName, options);
-		},
 
 		_getIdentityOf: function(value) {
 			if(value == null) return null;

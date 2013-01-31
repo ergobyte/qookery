@@ -84,14 +84,14 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		parseCustomElement: function(formParser, xmlElement) {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
-			case "table-column":
-				var column = formParser.parseAttributes(this, this.self(arguments).columnAttributeTypes, xmlElement);
-				this.addColumn(column);
-				return true;
 			case "table-model":
 				var tableModelClassName = formParser.getAttribute(xmlElement, "class");
 				var tableModelClass = qx.Class.getByName(tableModelClassName);
 				this.__tableModel = new tableModelClass(this, formParser, xmlElement);
+				return true;
+			case "table-column":
+				var column = formParser.parseAttributes(this, this.self(arguments).columnAttributeTypes, xmlElement);
+				this.addColumn(column);
 				return true;
 			}
 			return false;
@@ -120,8 +120,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			if(!tableModel)
 				throw new Error("Table must have a table model set");
 			var table = this.getMainWidget();
-			if(tableModel && tableModel.setTable && typeof(tableModel.setTable) == "function") {
-				tableModel.setTable(table);
+			if(tableModel && tableModel.setup && typeof(tableModel.setup) == "function") {
+				// Give model a chance to perform last minute changes
+				tableModel.setup(table);
 			}
 			table.setTableModel(tableModel);
 			tableModel.addListener("dataChanged", function(event) {
@@ -144,7 +145,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				}
 				var cellRenderer = new qookery.internal.DefaultCellRenderer(column);
 				if(column["format"]) {
-					var format = this._parseFormatSpecification(column["format"]);
+					var format = qookery.Qookery.getRegistry().createFormatSpecification(column["format"]);
 					cellRenderer.setFormat(format);
 				}
 				if(column["header-icon"]) {
@@ -156,6 +157,10 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					headerWidget.addListener("click", function(event) {
 						column["header-click"](event);
 					});
+				}
+				if(column["sortable"]) {
+					var headerCellRenderer = new medical.SortHeaderCellRenderer();
+					table.getTableColumnModel().setHeaderCellRenderer(i, headerCellRenderer);	
 				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
@@ -193,6 +198,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__tableModel");
+		this._disposeObjects("__tableModel", "__paneHeader");
 	}
 });

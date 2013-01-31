@@ -47,7 +47,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	properties: {
 		"icon": { nullable: true },
-		"title": { check: "String", nullable: true },
+		"title": { check: "String", nullable: true, event: "changeTitle"},
 		"valid": { check: "Boolean", init: true, nullable: false, event: "changeValid" }
 	},
 
@@ -205,36 +205,44 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		 */
 		validate: function() {
 			var invalidComponents = [];
+			var errorMessages = [];
 			for(var i = 0; i < this.__validations.length; i++) {
 				var validation = this.__validations[i];
 				var component = validation.component;
 				var validatorFunction = validation.validatorFunction;
-				var result = null;
+				var invalidMessage = null;
 				try {
 					var value = component.getValue();
-					result = validatorFunction.call(this, value, component);
-					if(result === undefined) result = true;
+					invalidMessage = validatorFunction.call(this, value, component);
+					if(!invalidMessage) continue;
 				}
 				catch(e) {
 					if(e instanceof qx.core.ValidationError) {
-						result = false;
-						var invalidMessage = null;
 						if(e.message && e.message != qx.type.BaseError.DEFAULTMESSAGE)
 							invalidMessage = e.message;
 						else
 							invalidMessage = e.getComment();
-						component.setInvalidMessage(invalidMessage);
 					}
 					else throw e;
 				}
-				if(!result) invalidComponents.push(component);
+				if(!invalidMessage) invalidMessage = "Unknown error";
+				component.getMainWidget().setInvalidMessage(invalidMessage);
+				errorMessages.push({ 'component': component, 'message': invalidMessage });
+				invalidComponents.push(component);
 			}
 			this.__validations.forEach(function(validation) {
 				validation.component.setValid(invalidComponents.indexOf(validation.component) === -1);
 			});
 			var formValid = invalidComponents.length == 0;
+			invalidMessage = this.executeAction("validate");
+			if(invalidMessage) {
+				formValid = false;
+				errorMessages.push({ 'component': null, 'message': invalidMessage });
+			}
 			this.setValid(formValid);
-			return formValid;
+			if(errorMessages.length == 0)
+				return null;
+			return errorMessages;
 		},
 	
 		/**

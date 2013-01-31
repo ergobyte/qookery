@@ -48,6 +48,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["select-box"] = qookery.internal.components.SelectBoxComponent;
 		this.__components["separator"] = qookery.internal.components.SeparatorComponent;
 		this.__components["slider"] = qookery.internal.components.SliderComponent;
+		this.__components["spacer"] = qookery.internal.components.SpacerComponent;
 		this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
 		this.__components["stack"] = qookery.internal.components.StackComponent;
 		this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;
@@ -55,6 +56,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["table"] = qookery.internal.components.TableComponent;
 		this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
 		this.__components["text-field"] = qookery.internal.components.TextFieldComponent;
+		this.__components["tool-bar"] = qookery.internal.components.ToolBarComponent;
 
 		this.__componentConstructorArgs = { };
 
@@ -116,6 +118,22 @@ qx.Class.define("qookery.internal.Registry", {
 			if(!formatClass)
 				throw new Error(qx.lang.String.format("Unknown format '%1'", [ formatName ]));
 			return new formatClass(options);
+		},
+		
+		createFormatSpecification: function(formatSpecification) { 
+			var formatName = formatSpecification;
+			var options = {};
+			var colonCharacterPos = formatSpecification.indexOf(":");
+			if(colonCharacterPos != -1) {
+				formatName = formatSpecification.slice(0, colonCharacterPos);
+				var optionsStr = formatSpecification.slice(colonCharacterPos + 1);
+				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
+					key = qx.lang.String.clean(key);
+					value = qx.lang.String.clean(value);
+					options[key] = value;
+				});
+			}
+			return this.createFormat(formatName, options);
 		},
 
 		// Maps

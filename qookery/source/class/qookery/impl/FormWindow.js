@@ -71,8 +71,15 @@ qx.Class.define("qookery.impl.FormWindow", {
 				formComponent.setModel(null);
 				this.destroy();
 			}, this);
-			var formTitle = formComponent.getTitle();
-			if(formTitle && !this.getCaption()) this.setCaption(formTitle);
+			formComponent.addListener("changeTitle", function(event) {
+				if(event.getData())
+					this.setCaption(event.getData());
+			}, this);
+			if(!this.getCaption()) {
+				var formTitle = formComponent.getTitle();
+				if(formTitle) this.setCaption(formTitle);
+				else this.setCaption(this._getFallbackCaption());
+			}
 			var formIcon = formComponent.getIcon();
 			if(formIcon && !this.getIcon()) this.setIcon(formIcon);
 			if(model) formComponent.setModel(model);
@@ -81,6 +88,11 @@ qx.Class.define("qookery.impl.FormWindow", {
 			this.center();
 			this.open();
 			formComponent.executeAction("appear");
+		},
+		
+		_getFallbackCaption: function() {
+			// Override to provide a fallback caption
+			return "";
 		},
 
 		_getButtonsContainer: function() {

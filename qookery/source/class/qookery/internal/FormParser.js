@@ -76,6 +76,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			"stretch": "Boolean",
 			"stretch-x": "Boolean",
 			"stretch-y": "Boolean",
+			"tri-state": "Boolean",
 			"wrap": "Boolean",
 
 			"width": "Size",

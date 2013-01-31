@@ -119,6 +119,7 @@
 			<element ref="q:select-box" />
 			<element ref="q:separator" />
 			<element ref="q:slider" />
+			<element ref="q:spacer" />
 			<element ref="q:spinner" />
 			<element ref="q:stack" />
 			<element ref="q:tab-view" />
@@ -126,6 +127,7 @@
 			<element ref="q:table" />
 			<element ref="q:text-area" />
 			<element ref="q:text-field" />
+			<element ref="q:tool-bar" />
 			<any namespace="##other" />
 		</choice>
 	</group>
@@ -388,7 +390,15 @@
 
 	<element name="button" type="q:atom-component" />
 
-	<element name="check-box" type="q:editable-component" />
+	<element name="check-box" >
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component">
+					<attribute name="tri-state" type="boolean" default="false" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 
 	<element name="component">
 		<complexType>
@@ -500,6 +510,10 @@
 						<element ref="q:script" />
 						<element ref="q:radio-button" />
 					</choice>
+					<attribute name="orientation" default="horizontal"><simpleType><restriction base="token">
+						<enumeration value="horizontal" />
+						<enumeration value="vertical" />
+					</restriction></simpleType></attribute>
 				</extension>
 			</complexContent>
 		</complexType>
@@ -533,6 +547,8 @@
 			</complexContent>
 		</complexType>
 	</element>
+	
+	<element name="spacer" type="q:component"/>
 
 	<element name="spinner">
 		<complexType>
@@ -566,6 +582,10 @@
 			<complexContent>
 				<extension base="q:editable-component-attributes">
 					<sequence>
+						<element name="table-model" minOccurs="0" maxOccurs="1"><complexType>
+							<attribute name="class" type="string" use="required" />
+							<anyAttribute namespace="##other" />
+						</complexType></element>
 						<element name="table-column" minOccurs="0" maxOccurs="unbounded"><complexType>
 							<attribute name="color" type="string" />
 							<attribute name="connect" type="string" />
@@ -583,10 +603,6 @@
 							<attribute name="text-align" type="q:horizontal-alignment" default="left" />
 							<attribute name="width" type="string" />
 							<attribute name="white-space" type="string" />
-						</complexType></element>
-						<element name="table-model" minOccurs="0" maxOccurs="1"><complexType>
-							<attribute name="class" type="string" use="required" />
-							<anyAttribute namespace="##other" />
 						</complexType></element>
 						<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
 					</sequence>
@@ -612,5 +628,18 @@
 	</element>
 
 	<element name="text-field" type="q:field-component" />
+	
+	<element name="tool-bar">
+		<complexType>
+			<complexContent>
+				<extension base="q:component-attributes">
+					<sequence>
+						<any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+					</sequence>
+					<attribute name="column-flexes"><simpleType><list itemType="integer" /></simpleType></attribute>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 
 </schema>

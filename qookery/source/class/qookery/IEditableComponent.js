@@ -73,12 +73,6 @@ qx.Interface.define("qookery.IEditableComponent", {
 		 *
 		 * @param {} component
 		 */
-		clearValidations: function() { },
-
-		/**
-		 *
-		 * @param {} message
-		 */
-		setInvalidMessage: function(message) { }
+		clearValidations: function() { }
 	}
 });

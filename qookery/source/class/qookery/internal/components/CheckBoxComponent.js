@@ -22,11 +22,20 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
+	properties: {
+		triState: { init: false, inheritable: true, check: "Boolean", nullable: true, apply: "_applyTriState" }
+	},
+	
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
 
 	members: {
+		
+		create: function(attributes) {
+			this.base(arguments, attributes);
+			if(attributes['tri-state']) this.setTriState(attributes['tri-state']);
+		},
 
 		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.CheckBox(attributes['label']);
@@ -41,6 +50,10 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 
 		_updateUI: function(value) {
 			this.getMainWidget().setValue(value);
+		},
+		
+		_applyTriState: function(triState) {
+			this.getMainWidget().setTriState(triState);
 		}
 	}
 });

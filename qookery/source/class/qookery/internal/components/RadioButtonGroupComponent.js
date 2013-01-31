@@ -23,6 +23,10 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 	extend: qookery.internal.components.EditableComponent,
 	implement: [ qookery.IContainerComponent ],
 
+	properties: {
+		orientation: { check: [ "horizontal", "vertical" ], inheritable: true, nullable: false, init: "horizontal", apply: "_applyOrientation" }
+	},
+	
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__children = [ ];
@@ -31,6 +35,11 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 	members: {
 
 		__children: null,
+		
+		create: function(attributes) {
+			this.base(arguments, attributes);
+			if(attributes['layout']) this.setLayout(attributes['layout']);
+		},
 
 		_createMainWidget: function(attributes) {
 			var group = new qx.ui.form.RadioButtonGroup(new qx.ui.layout.HBox(10));
@@ -96,6 +105,13 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		
 		contains: function(component) { 
 			//TODO
+		},
+		
+		_applyOrientation: function(orientation) {
+			var map = { "horizontal": qx.ui.layout.HBox, "vertical": qx.ui.layout.VBox };
+			if(!map[orientation]) return;
+			var layout = new map[orientation](10);
+			this.getMainWidget().setLayout(layout);
 		}
 	},
 
