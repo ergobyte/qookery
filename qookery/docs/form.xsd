@@ -30,6 +30,13 @@
 
 	<!-- Simple types -->
 	
+	<simpleType name="orientation">
+		<restriction base="token">
+			<enumeration value="horizontal" />
+			<enumeration value="vertical" />
+		</restriction>
+	</simpleType>
+	
 	<simpleType name='visibility' >
 		<restriction base="token">
 			<enumeration value='visible' />
@@ -510,15 +517,12 @@
 						<element ref="q:script" />
 						<element ref="q:radio-button" />
 					</choice>
-					<attribute name="orientation" default="horizontal"><simpleType><restriction base="token">
-						<enumeration value="horizontal" />
-						<enumeration value="vertical" />
-					</restriction></simpleType></attribute>
+					<attribute name="orientation" type="q:orientation" default="horizontal"/>
 				</extension>
 			</complexContent>
 		</complexType>
 	</element>
-
+	
 	<element name="select-box">
 		<complexType>
 			<complexContent>
@@ -582,28 +586,8 @@
 			<complexContent>
 				<extension base="q:editable-component-attributes">
 					<sequence>
-						<element name="table-model" minOccurs="0" maxOccurs="1"><complexType>
-							<attribute name="class" type="string" use="required" />
-							<anyAttribute namespace="##other" />
-						</complexType></element>
-						<element name="table-column" minOccurs="0" maxOccurs="unbounded"><complexType>
-							<attribute name="color" type="string" />
-							<attribute name="connect" type="string" />
-							<attribute name="flex" type="integer" />
-							<attribute name="font-style" />
-							<attribute name="font-weight" />
-							<attribute name="format" type="string" />
-							<attribute name="header-icon" type="string" />
-							<attribute name="header-click" type="string" />
-							<attribute name="label" type="string" />
-							<attribute name="line-height" type="string" />
-							<attribute name="min-width" type="q:size" />
-							<attribute name="max-width" type="q:size" />
-							<attribute name="sortable" type="boolean" default="true" />
-							<attribute name="text-align" type="q:horizontal-alignment" default="left" />
-							<attribute name="width" type="string" />
-							<attribute name="white-space" type="string" />
-						</complexType></element>
+						<element ref="q:table-model" minOccurs="0" maxOccurs="1"/>
+						<element ref="q:table-column" minOccurs="0" maxOccurs="unbounded"/>
 						<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
 					</sequence>
 					<attribute name="row-height" type="integer" default="20" />
@@ -613,6 +597,30 @@
 			</complexContent>
 		</complexType>
 	</element>
+
+	<element name="table-model"><complexType>
+		<attribute name="class" type="string" use="required" />
+		<anyAttribute namespace="##other" />
+	</complexType></element>
+
+	<element name="table-column"><complexType>
+		<attribute name="color" type="string" />
+		<attribute name="connect" type="string" />
+		<attribute name="flex" type="integer" />
+		<attribute name="font-style" />
+		<attribute name="font-weight" />
+		<attribute name="format" type="string" />
+		<attribute name="header-icon" type="string" />
+		<attribute name="header-click" type="string" />
+		<attribute name="label" type="string" />
+		<attribute name="line-height" type="string" />
+		<attribute name="min-width" type="q:size" />
+		<attribute name="max-width" type="q:size" />
+		<attribute name="sortable" type="boolean" default="true" />
+		<attribute name="text-align" type="q:horizontal-alignment" default="left" />
+		<attribute name="width" type="string" />
+		<attribute name="white-space" type="string" />
+	</complexType></element>
 
 	<element name="text-area">
 		<complexType>

@@ -96,9 +96,13 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			}
 			return false;
 		},
-
+		
 		getTableModel: function() {
 			return this.__tableModel;
+		},
+
+		setTableModel: function(tableModel) {
+			this.__tableModel = tableModel;
 		},
 
 		addColumn: function(column) {
@@ -125,9 +129,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				tableModel.setup(table);
 			}
 			table.setTableModel(tableModel);
-			tableModel.addListener("dataChanged", function(event) {
-				table.getSelectionModel().resetSelection();
-			}, this);
 			var columnModel = table.getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < this.__columns.length; i++) {
@@ -157,10 +158,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					headerWidget.addListener("click", function(event) {
 						column["header-click"](event);
 					});
-				}
-				if(column["sortable"]) {
-					var headerCellRenderer = new medical.SortHeaderCellRenderer();
-					table.getTableColumnModel().setHeaderCellRenderer(i, headerCellRenderer);	
 				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
