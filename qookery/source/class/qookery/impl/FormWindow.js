@@ -34,6 +34,10 @@ qx.Class.define("qookery.impl.FormWindow", {
 		this.base(arguments, caption, icon);
 		this.setLayout(new qx.ui.layout.VBox());
 		this.set({ modal: true, showMinimize: false, showMaximize: false });
+		this.addListener("keypress", function(event) {
+			if(event.getKeyIdentifier() == "Escape")
+				this.destroy();	
+		}, this);
 	},
 
 	members: {

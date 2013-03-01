@@ -265,6 +265,48 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		close: function(result) {
 			if(result !== undefined) this.__result = result;
 			this.fireEvent("close", qx.event.type.Event, null);
+		},
+		
+		parseCustomElement: function(formParser, xmlElement) {
+			var elementName = qx.dom.Node.getName(xmlElement);
+			switch(elementName) {
+				case "import":
+					this.__parseImport(xmlElement, formParser);
+					return true;
+				case "translation":
+					this.__parseTranslation(xmlElement, formParser);
+					return true;
+			}
+			return false;
+		},
+		
+		__parseImport: function(importElement, formParser) {
+			var className = formParser.getAttribute(importElement, "class");
+			var clazz = qx.Class.getByName(className);
+			if(!clazz) throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
+			var key = this.getAttribute(importElement, "key");
+			if(!key) key = className.substring(className.lastIndexOf(".") + 1);
+			this.registerUserContext(key, clazz);
+		},
+		
+		__parseTranslation: function(translationElement, formParser) {
+			if(!qx.dom.Element.hasChildren(translationElement)) return;
+			var languageCode = qx.xml.Element.getAttributeNS(translationElement, 'http://www.w3.org/XML/1998/namespace', 'lang');
+			if(!languageCode) throw new Error("Language code missing");
+			var messages = { };
+			var prefix = this.getTranslationPrefix();
+			var children = qx.dom.Hierarchy.getChildElements(translationElement);
+			for(var i = 0; i < children.length; i++) {
+				var messageElement = children[i];
+				var elementName = qx.dom.Node.getName(messageElement);
+				if(elementName != 'message')
+					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in translation block", [ elementName ]));
+				var messageId = formParser.getAttribute(messageElement, "id");
+				if(!messageId) throw new Error("Message identifier missing");
+				if(prefix) messageId = prefix + '.' + messageId;
+				messages[messageId] = formParser.__getNodeText(messageElement);
+			}
+			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		}
 	},
 

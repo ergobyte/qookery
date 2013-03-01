@@ -63,7 +63,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 				if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
 					this.__layout.setRowFlex(index, parseInt(rowFlex));
 				}, this);
-				this._widgets[0].setLayout(this.__layout);
+				this.getMainWidget().setLayout(this.__layout);
 			}
 			this.base(arguments, attributes);
 		},

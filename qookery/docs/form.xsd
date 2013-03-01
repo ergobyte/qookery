@@ -123,6 +123,7 @@
 			<element ref="q:list" />
 			<element ref="q:password-field" />
 			<element ref="q:radio-button-group" />
+			<element ref="q:scroll"/>
 			<element ref="q:select-box" />
 			<element ref="q:separator" />
 			<element ref="q:slider" />
@@ -406,7 +407,7 @@
 			</complexContent>
 		</complexType>
 	</element>
-
+	
 	<element name="component">
 		<complexType>
 			<complexContent>
@@ -522,6 +523,8 @@
 			</complexContent>
 		</complexType>
 	</element>
+	
+	<element name="scroll" type="q:container-component" />
 	
 	<element name="select-box">
 		<complexType>
