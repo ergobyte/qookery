@@ -26,36 +26,49 @@ qx.Interface.define("qookery.IModelProvider", {
 	members: {
 
 		/**
-		 * Return a JavaScript primitive (string, integer) that uniquely identifies model object
-		 * 
-		 * <p>
-		 * The result must be such so that a == b <=> getPrimitive(a) == getPrimitive(b)
-		 * </p>
-		 * 
-		 * @param {any} a model object - it can never be <code>null</code>
-		 * 
-		 * @return {String} any JavaScript primitive
+		 * Return a JavaScript primitive or array of primitives that uniquely identifies model object
+		 *
+		 * <p>The result must be such so that if a == b, then identityOf(a) == identityOf(b) and vice-versa.</p>
+		 * <p>The result must be <code>null</code> when no input was passed.</p>
+		 *
+		 * @param {any} a model object - it may be <code>null</code>
+		 *
+		 * @return {any} any JavaScript primitive or array of primitives
 		 */
-		getIdentity: function(object) { },
+		identityOf: function(object) { },
+
+		/**
+		 * Test two model objects for equality
+		 *
+		 * <p>Method must be null-safe:
+		 * 		equals(null, null) -> true and
+		 * 		equals(null, non-null) -> false</p>
+		 *
+		 * @param object1 any model object, may be <code>null</code>
+		 * @param object2 any model object, may be <code>null</code>
+		 *
+		 * @return <code>true</code> if objects are equal or both <code>null</code>
+		 */
+		areEqual: function(object1, object2) { },
 
 		/**
 		 * Return a human-friendly label for a model object
-		 * 
-		 * @param {any} a model object - it can never be <code>null</code>
-		 * 
+		 *
+		 * @param {any} a model object - it may not be <code>null</code>
+		 *
 		 * @return {String} any textual label or <code>null</code> if none available
 		 */
 		getLabel: function(object) { },
 
 		/**
 		 * Handle connection specification of a connectable component
-		 * 
+		 *
 		 * @param connectableComponent {qookery.IComponent} a component that supports data binding
-		 * @param namespaceUri {String} a namespace URI that the provider may use to differentiate connection types
-		 * @param path {String} the path of the property specified by the XML author
+		 * @param connectionUri {String} a namespace URI that the provider may use to differentiate connection types
+		 * @param connectionPath {String} the path of the property specified by the XML author
 		 */
-		handleConnection: function(connectableComponent, connectionUri, path) { },
-		
+		handleConnection: function(connectableComponent, connectionUri, connectionPath) { },
+
 		/**
 		 * Clone an object
 		 */

@@ -35,9 +35,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__parser = parser;
 		this.__translationPrefix = translationPrefix;
 		this.__variables = variables;
-		this.__controller = new qx.data.controller.Object();
-		this.__componentMap = { };
+		this.__components = { };
 		this.__validations = [];
+		this.__bindings = { };
+		this.__targets = [ ];
 	},
 
 	events: {
@@ -47,8 +48,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	properties: {
 		"icon": { nullable: true },
-		"title": { check: "String", nullable: true, event: "changeTitle"},
-		"valid": { check: "Boolean", init: true, nullable: false, event: "changeValid" }
+		"title": { nullable: true, check: "String", event: "changeTitle"},
+		"valid": { nullable: false, check: "Boolean", init: true, event: "changeValid" },
+		"model": { nullable: true, dereference: true, event: "changeModel", apply: "_applyModel" }
 	},
 
 	members: {
@@ -56,46 +58,37 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__parser: null,
 		__translationPrefix: null,
 		__variables: null,
-		__controller: null,
-		__componentMap: null,
+		__components: null,
 		__validations: null,
+		__targets: null,
+		__bindings: null,
 		__clientCodeContext: null,
 		__result: null,
 
 		// Creation
-		
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(this.getAttribute('title')) this.setTitle(this.getAttribute('title'));
 			if(this.getAttribute('icon')) this.setIcon(this.getAttribute('icon'));
+			if(this.getAttribute('title')) this.setTitle(this.getAttribute('title'));
 			this.info("Form created");
 		},
-		
+
 		setup: function(attributes) {
 			this.__parser = null;
+			if(this.getTitle() instanceof qx.locale.LocalizedString)
+				this.setTitle(this.getTitle().translate());
 			return this.base(arguments);
 		},
 
 		// Getters and setters
-		
+
 		getForm: function() {
 			return this;
 		},
-		
+
 		getParser: function() {
 			return this.__parser;
-		},
-
-		getModel: function() {
-			return this.__controller.getModel();
-		},
-
-		setModel: function(model) {
-			this.__controller.setModel(model);
-		},
-
-		getController: function() {
-			return this.__controller;
 		},
 
 		getTranslationPrefix: function() {
@@ -109,15 +102,15 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Component registration
 
 		getComponent: function(componentId) {
-			return this.__componentMap[componentId];
+			return this.__components[componentId];
 		},
 
 		registerComponent: function(component, id) {
-			this.__componentMap[id] = component;
+			this.__components[id] = component;
 		},
 
 		// Client script context
-		
+
 		/**
 		 * Generate a JavaScript context to be used by Qookery client code
 		 *
@@ -146,22 +139,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var clientCodeContext = this.getClientCodeContext();
 			clientCodeContext[key] = userContext;
 		},
-		
-		// Event handlers
-
-		addEventHandler: function(eventName, clientCode) {
-			switch(eventName) {
-			case "changeModel":
-				this.__controller.addListener("changeModel", function(event) { 
-					this.executeClientCode(clientCode, { "event": event }); 
-				}, this);
-				return;
-			}
-			this.base(arguments, eventName, clientCode);
-		},
 
 		// Validation
-		
+
 		/**
 		 * Add a validation to the list of validations performed by this form
 		 *
@@ -174,13 +154,13 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(!validatorFunction) return;
 			if(!qx.Class.hasInterface(component.constructor, qookery.IEditableComponent))
 				throw new Error("Component to validate must be editable");
-			var validation = { 
+			var validation = {
 				component: component,
 				validatorFunction: validatorFunction
 			};
 			this.__validations.push(validation);
 		},
-	
+
 		/**
 		 * Remove component's validations from the form validations
 		 *
@@ -195,10 +175,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				this.__validations.splice(i, 1); i--;
 			}
 		},
-	
+
 		/**
 		 * Invokes the form validation
-		 * 
+		 *
 		 * <p>The result of the validation is also set in the valid property.</p>
 		 *
 		 * @return {Boolean} The validation result
@@ -244,7 +224,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				return null;
 			return errorMessages;
 		},
-	
+
 		/**
 		 * Resets the form validation
 		 */
@@ -266,7 +246,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(result !== undefined) this.__result = result;
 			this.fireEvent("close", qx.event.type.Event, null);
 		},
-		
+
 		parseCustomElement: function(formParser, xmlElement) {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
@@ -279,7 +259,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 			return false;
 		},
-		
+
 		__parseImport: function(importElement, formParser) {
 			var className = formParser.getAttribute(importElement, "class");
 			var clazz = qx.Class.getByName(className);
@@ -288,7 +268,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(!key) key = className.substring(className.lastIndexOf(".") + 1);
 			this.registerUserContext(key, clazz);
 		},
-		
+
 		__parseTranslation: function(translationElement, formParser) {
 			if(!qx.dom.Element.hasChildren(translationElement)) return;
 			var languageCode = qx.xml.Element.getAttributeNS(translationElement, 'http://www.w3.org/XML/1998/namespace', 'lang');
@@ -307,14 +287,98 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				messages[messageId] = formParser.__getNodeText(messageElement);
 			}
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
+		},
+
+		// Controller methods follow, actually copy-pasted from qx.data.controller.Object
+
+		_applyModel: function(newModel, oldModel) {
+			for(var i = 0; i < this.__targets.length; i++) {
+				var targetObject = this.__targets[i][0];
+				var targetProperty = this.__targets[i][1];
+				var sourceProperty = this.__targets[i][2];
+				var bidirectional = this.__targets[i][3];
+				var options = this.__targets[i][4];
+				var reverseOptions = this.__targets[i][5];
+				if(oldModel != undefined) {
+					this.__removeTargetFrom(targetObject, targetProperty, sourceProperty, oldModel);
+				}
+				if(newModel != undefined) {
+					this.__addTarget(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions);
+					continue;
+				}
+				if(targetObject == "undefined" || qx.core.ObjectRegistry.inShutDown) {
+					continue;
+				}
+				if(targetProperty.indexOf("[") == -1) {
+					targetObject["reset" + qx.lang.String.firstUp(targetProperty)]();
+				}
+				else {
+					var open = targetProperty.indexOf("[");
+					var index = parseInt(targetProperty.substring(open + 1, targetProperty.length - 1), 10);
+					targetProperty = targetProperty.substring(0, open);
+					var targetArray = targetObject["get" + qx.lang.String.firstUp(targetProperty)]();
+					if(index == "last") {
+						index = targetArray.length;
+					}
+					if(targetArray) {
+						targetArray.setItem(index, null);
+					}
+				}
+			}
+		},
+
+		addTarget: function(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions) {
+			this.__targets.push([ targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions ]);
+			this.__addTarget(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions);
+		},
+
+		__addTarget: function(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions) {
+			if(this.getModel() == null) return;
+			var id = this.getModel().bind(sourceProperty, targetObject, targetProperty, options);
+			var idReverse = !bidirectional ? null :
+				targetObject.bind(targetProperty, this.getModel(), sourceProperty, reverseOptions);
+			var targetHash = targetObject.toHashCode();
+			if(this.__bindings[targetHash] == undefined) {
+				this.__bindings[targetHash] = [ ];
+			}
+			this.__bindings[targetHash].push(
+					[ id, idReverse, targetProperty, sourceProperty, options, reverseOptions ]);
+		},
+
+		removeTarget: function(targetObject, targetProperty, sourceProperty) {
+			this.__removeTargetFrom(targetObject, targetProperty, sourceProperty, this.getModel());
+			for(var i = 0; i < this.__targets.length; i++) {
+				if(this.__targets[i][0] == targetObject && this.__targets[i][1] == targetProperty && this.__targets[i][2] == sourceProperty)
+					this.__targets.splice(i, 1);
+			}
+		},
+
+		__removeTargetFrom: function(targetObject, targetProperty, sourceProperty, sourceObject) {
+			if(!(targetObject instanceof qx.core.Object)) {
+				return;
+			}
+			var currentListing = this.__bindings[targetObject.toHashCode()];
+			if(currentListing == undefined || currentListing.length == 0) {
+				return;
+			}
+			for(var i = 0; i < currentListing.length; i++) {
+				if(currentListing[i][2] == targetProperty && currentListing[i][3] == sourceProperty) {
+					var id = currentListing[i][0];
+					sourceObject.removeBinding(id);
+					if(currentListing[i][1] != null) {
+						targetObject.removeBinding(currentListing[i][1]);
+					}
+					currentListing.splice(i, 1);
+					return;
+				}
+			}
 		}
 	},
 
 	destruct: function() {
 		this.fireEvent("dispose", qx.event.type.Event, null);
-		this.__controller.removeAllBindings();
-		this._disposeObjects("__controller");
-		this.__componentMap = null;
+		this.removeAllBindings();
+		this.__components = null;
 		this.__validations = null;
 		this.__userContextMap = null;
 		this.__registration = null;

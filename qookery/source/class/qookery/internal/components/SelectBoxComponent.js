@@ -66,30 +66,17 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		_updateUI: function(value) {
+			if(value == null && this.__nullItemLabel)
+				value = this.constructor.nullItemModel;
 			var selectBox = this.getMainWidget();
-			var valueIdentity = this._getIdentityOf(value);
-			var isArray = qx.lang.Type.isArray(valueIdentity);
 			var listItems = selectBox.getChildren();
 			for(var i = 0; i < listItems.length; i++) {
 				var listItem = listItems[i];
 				var item = listItem.getModel();
-				var itemIdentity = this._getIdentityOf(item);
-				if(isArray) {
-					if(!qx.lang.Array.equals(valueIdentity, itemIdentity)) continue;
-				}
-				else {
-					if(valueIdentity != itemIdentity) continue;
-				}
+				if(!qookery.contexts.Model.areEqual(item, value)) continue;
 				selectBox.setSelection([ listItem ]);
 				return;
 			}
-		},
-
-		_getIdentityOf: function(value) {
-			var result = this.base(arguments, value);
-			if(this.__nullItemLabel && result == null)
-				return this.constructor.nullItemModel;
-			return result;
 		},
 
 		addItem: function(model, label, icon) {

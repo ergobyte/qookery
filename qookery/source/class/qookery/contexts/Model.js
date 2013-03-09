@@ -18,35 +18,28 @@
 	$Id$
 */
 
-qx.Class.define("qookery.impl.DefaultModelProvider", {
+/**
+ * The 'Qookery' scripting context is always available to XML authors and provides
+ * a number of commonly used methods.
+ */
+qx.Class.define("qookery.contexts.Model", {
 
-	extend: qx.core.Object,
-	implement: [ qookery.IModelProvider ],
+	type: "static",
 
-	members: {
+	statics: {
 
+		/**
+		 * Access to IModelProvider#identityOf
+		 */
 		identityOf: function(object) {
-			return object != null ? object.toString() : null;
+			return qookery.Qookery.getModelProvider().identityOf(object);
 		},
 
+		/**
+		 * Access to IModelProvider#areEqual
+		 */
 		areEqual: function(object1, object2) {
-			var id1 = this.identityOf(object1);
-			var id2 = this.identityOf(object2);
-			if(qx.lang.Type.isArray(id1) && qx.lang.Type.isArray(id2))
-				return qx.lang.Array.equals(id1, id2);
-			return id1 == id2;
-		},
-
-		getLabel: function(object) {
-			return object;
-		},
-
-		handleConnection: function(component, namespaceUri, propertyPath) {
-			component.connect(component.getForm(), propertyPath);
-		},
-
-		clone: function(object) {
-			return object; // Not supported by this model provider
+			return qookery.Qookery.getModelProvider().areEqual(object1, object2);
 		}
 	}
 });

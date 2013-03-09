@@ -46,7 +46,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			if(!value)
 				this.getMainWidget().resetValue();
 			else
-				this.getMainWidget().setValue(value);
+				this.getMainWidget().setValue(parseInt(value));
 		},
 
 		_applyFormat: function(format) {

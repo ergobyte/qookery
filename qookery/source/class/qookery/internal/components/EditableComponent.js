@@ -68,14 +68,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			}
 		},
 
-		/**
-		 * Create a two way binding between controller and component's value
-		 *
-		 * @param controller {qx.data.controller.Object} The form controller that the bindings
-		 * @param path {String} The protocol path
-		 */
-		connect: function(controller, propertyPath) {
-			controller.addTarget(this, "value", propertyPath, true);
+		connect: function(formComponent, propertyPath) {
+			formComponent.addTarget(this, "value", propertyPath, true);
 		},
 
 		addValidation: function(validatorType, invalidMessage, options) {
@@ -158,13 +152,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		// Utility methods for subclasses
-
-		_getIdentityOf: function(value) {
-			if(value == null) return null;
-			var modelProvider = qookery.Qookery.getModelProvider();
-			if(!modelProvider) return value;
-			return modelProvider.getIdentity(value);
-		},
 
 		_getLabelOf: function(value) {
 			if(!value) return "";

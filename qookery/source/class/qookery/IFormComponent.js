@@ -31,7 +31,7 @@ qx.Interface.define("qookery.IFormComponent", {
 		 * This event is fired when the form has been closed
 		 */
 		"close": "qx.event.type.Event",
-		
+
 		/**
 		 * This event is fired when the form component is about to be disposed
 		 */
@@ -43,6 +43,9 @@ qx.Interface.define("qookery.IFormComponent", {
 		/** An icon for UI elements that present this form */
 		icon: { nullable: true },
 
+		/** The form's model for data binding */
+		model: { nullable: true, dereference: true, event: "changeModel" },
+
 		/** A title for UI elements that present this form */
 		title: { check: "String", nullable: true },
 
@@ -53,42 +56,11 @@ qx.Interface.define("qookery.IFormComponent", {
 	members: {
 
 		/**
-		 * Return the title assigned by the XML author to this form
-		 *
-		 * @return {String} title or <code>null</code> if not available
-		 */
-		getTitle: function() { },
-
-		/**
-		 * Return the icon assigned by the XML author to this form
-		 *
-		 * @return {String} icon URI or <code>null</code> if not available
-		 */
-		getIcon: function() { },
-
-		/**
 		 * Validate the form's state
 		 *
 		 * @return {Boolean} <code>true</code> in case the form's state is valid
 		 */
 		validate: function() { },
-
-		/**
-		 * Get the form's model
-		 */
-		getModel: function() { },
-
-		/**
-		 * Set the form's model
-		 */
-		setModel: function(model) { },
-
-		/**
-		 * Return the form's underlying object controller
-		 *
-		 * @return {qx.data.controller.Object} The form's controller
-		 */
-		getController: function() { },
 
 		/**
 		 * Return a component registered within this form

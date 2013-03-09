@@ -26,7 +26,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 	properties: {
 		orientation: { check: [ "horizontal", "vertical" ], inheritable: true, nullable: false, init: "horizontal", apply: "_applyOrientation" }
 	},
-	
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__children = [ ];
@@ -35,7 +35,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 	members: {
 
 		__children: null,
-		
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes['layout']) this.setLayout(attributes['layout']);
@@ -81,32 +81,24 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		_updateUI: function(value) {
 			var radioButtonGroup = this.getMainWidget();
-			var valueIdentity = this._getIdentityOf(value);
-			var isArray = qx.lang.Type.isArray(valueIdentity);
 			var buttons = radioButtonGroup.getChildren();
 			for(var i = 0; i < buttons.length; i++) {
 				var button = buttons[i];
 				var buttonValue = button.getModel();
-				var buttonIdentity = this._getIdentityOf(buttonValue);
-				if(isArray) {
-					if(!qx.lang.Array.equals(valueIdentity, buttonIdentity)) continue;
-				}
-				else {
-					if(valueIdentity != buttonIdentity) continue;
-				}
+				if(!qookery.contexts.Model.areEqual(buttonValue, value)) continue;
 				radioButtonGroup.setSelection([ button ]);
 				return;
 			}
 		},
-		
+
 		remove: function(component) {
 			//TODO
 		},
-		
-		contains: function(component) { 
+
+		contains: function(component) {
 			//TODO
 		},
-		
+
 		_applyOrientation: function(orientation) {
 			var map = { "horizontal": qx.ui.layout.HBox, "vertical": qx.ui.layout.VBox };
 			if(!map[orientation]) return;
