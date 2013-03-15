@@ -118,6 +118,16 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
 			var formElement = elements[0];
+			var attributes = formElement.attributes;
+			for(var i = 0; i < attributes.length; i++) {
+				var attribute = attributes.item(i);
+				var attributeName = attribute.nodeName;
+				if(attributeName.indexOf("xmlns:") == 0) {
+					var prefix = attributeName.substr(6);
+					var uri  = attribute.nodeValue;
+					this.__namespaces[prefix] = uri;
+				}
+			}
 
 			var translationPrefix = this.getAttribute(formElement, "translation-prefix");
 			var component = new qookery.internal.components.FormComponent(null, this, translationPrefix, this.__variables);
