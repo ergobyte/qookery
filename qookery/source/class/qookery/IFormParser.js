@@ -44,6 +44,8 @@ qx.Interface.define("qookery.IFormParser", {
 		 */
 		parseAttributes: function(component, attributeTypes, xmlElement) { },
 
+		getNodeText: function(xmlNode) { },
+
 		getAttribute: function(xmlElement, attributeName) { }
 	}
 });

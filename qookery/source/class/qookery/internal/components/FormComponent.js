@@ -251,16 +251,16 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
 				case "import":
-					this.__parseImport(xmlElement, formParser);
+					this.__parseImport(formParser, xmlElement);
 					return true;
 				case "translation":
-					this.__parseTranslation(xmlElement, formParser);
+					this.__parseTranslation(formParser, xmlElement);
 					return true;
 			}
 			return false;
 		},
 
-		__parseImport: function(importElement, formParser) {
+		__parseImport: function(formParser, importElement) {
 			var className = formParser.getAttribute(importElement, "class");
 			var clazz = qx.Class.getByName(className);
 			if(!clazz) throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
@@ -269,7 +269,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.registerUserContext(key, clazz);
 		},
 
-		__parseTranslation: function(translationElement, formParser) {
+		__parseTranslation: function(formParser, translationElement) {
 			if(!qx.dom.Element.hasChildren(translationElement)) return;
 			var languageCode = qx.xml.Element.getAttributeNS(translationElement, 'http://www.w3.org/XML/1998/namespace', 'lang');
 			if(!languageCode) throw new Error("Language code missing");
@@ -284,7 +284,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				var messageId = formParser.getAttribute(messageElement, "id");
 				if(!messageId) throw new Error("Message identifier missing");
 				if(prefix) messageId = prefix + '.' + messageId;
-				messages[messageId] = formParser.__getNodeText(messageElement);
+				messages[messageId] = formParser.getNodeText(messageElement);
 			}
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		},

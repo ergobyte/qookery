@@ -152,6 +152,14 @@ qx.Class.define("qookery.internal.FormParser", {
 			return attributes;
 		},
 
+		getNodeText: function(node) {
+			var text = qx.dom.Node.getText(node);
+			if(text == null || text.length == 0) return null;
+			text = text.trim();
+			if(text.length == 0) return null;
+			return text;
+		},
+
 		getAttribute: function(element, attributeName) {
 			var text = qx.xml.Element.getAttributeNS(element, "", attributeName);
 			if(text == null || text.length == 0) return null;
@@ -246,7 +254,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseScript: function(scriptElement, component) {
-			var clientCode = this.__getNodeText(scriptElement);
+			var clientCode = this.getNodeText(scriptElement);
 			if(clientCode == null)
 				throw new Error("Empty <script> element");
 			var componentId = this.getAttribute(scriptElement, "component");
@@ -274,14 +282,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			var prefix = this.getAttribute(bindElement, "prefix");
 			var uri = this.getAttribute(bindElement, "uri");
 			this.__namespaces[prefix] = uri;
-		},
-
-		__getNodeText: function(node) {
-			var text = qx.dom.Node.getText(node);
-			if(text == null || text.length == 0) return null;
-			text = text.trim();
-			if(text.length == 0) return null;
-			return text;
 		},
 
 		__resolveQName: function(qname) {
