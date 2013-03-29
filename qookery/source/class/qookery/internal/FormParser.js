@@ -39,65 +39,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			"L"  : 194,
 			"XL" : 314,
 			"XXL": 508
-		},
-
-		componentAttributeTypes: {
-			"column-span": "Integer",
-			"margin-bottom": "Integer",
-			"margin-left": "Integer",
-			"margin-right": "Integer",
-			"margin-top": "Integer",
-			"maximum": "Integer",
-			"max-length": "Integer",
-			"minimum": "Integer",
-			"minimal-line-height": "Integer",
-			"padding-bottom": "Integer",
-			"padding-left": "Integer",
-			"padding-right": "Integer",
-			"padding-top": "Integer",
-			"page-step": "Integer",
-			"row-height": "Integer",
-			"row-span": "Integer",
-			"single-step": "Integer",
-			"spacing": "Integer",
-			"spacing-x": "Integer",
-			"spacing-y": "Integer",
-
-			"auto-size": "Boolean",
-			"center": "Boolean",
-			"column-visibility-button-visible": "Boolean",
-			"enabled": "Boolean",
-			"live-update": "Boolean",
-			"read-only": "Boolean",
-			"required": "Boolean",
-			"rich": "Boolean",
-			"scale": "Boolean",
-			"status-bar-visible": "Boolean",
-			"stretch": "Boolean",
-			"stretch-x": "Boolean",
-			"stretch-y": "Boolean",
-			"tri-state": "Boolean",
-			"wrap": "Boolean",
-
-			"width": "Size",
-			"height": "Size",
-			"min-width": "Size",
-			"min-height": "Size",
-			"max-width": "Size",
-			"max-height": "Size",
-
-			"margin": "IntegerList",
-			"padding": "IntegerList",
-
-			"filter": "RegularExpression",
-
-			"label": "ReplaceableString",
-			"null-item-label": "ReplaceableString",
-			"placeholder": "ReplaceableString",
-			"title": "ReplaceableString",
-			"tooltip-text": "ReplaceableString",
-
-			"connect": "QName"
 		}
 	},
 
@@ -136,7 +77,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			return component;
 		},
 
-		parseAttributes: function(component, attributeTypes, xmlElement) {
+		parseAttributes: function(component, xmlElement, typeMap) {
 			var attributes = { };
 			var xmlAttributes = xmlElement.attributes;
 			for(var i = 0; i < xmlAttributes.length; i++) {
@@ -146,10 +87,43 @@ qx.Class.define("qookery.internal.FormParser", {
 				if(text == null || text.length == 0) continue;
 				text = text.trim();
 				if(text.length == 0) continue;
-				var value = this.__convertAttributeValue(component, attributeTypes, attributeName, text);
+				var type = typeMap ? typeMap[attributeName] : component.getAttributeType(attributeName);
+				var value = type ? this.parseValue(component, type, text) : text;
 				attributes[attributeName] = value;
 			}
 			return attributes;
+		},
+
+		parseValue: function(component, type, text) {
+			switch(type) {
+			case "Integer":
+				return parseInt(text);
+			case "Boolean":
+				return text == "true";
+			case "Size":
+				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text));
+			case "IntegerList":
+				var value = text.split(/\W+/);
+				value.forEach(function(element, index) { value[index] = parseInt(element); });
+				return value;
+			case "RegularExpression":
+				return new RegExp(text);
+			case "ReplaceableString":
+				if(text.length < 2) return text;
+				if(text.charAt(0) != '%') return text;
+				if("%none" == text) return text;
+				if(text.charAt(1) == '{' && text.charAt(text.length-1) == '}') {
+					var expression = text.substring(2, text.length-1);
+					return component.executeClientCode(qx.lang.String.format("return (%1);", [ expression ]));
+				}
+				var messageId = text.substring(1);
+				return component['tr'](messageId);
+			case "QName":
+				return this.__resolveQName(text);
+			default:
+				// Fallback for unknown types
+				return text;
+			}
 		},
 
 		getNodeText: function(node) {
@@ -205,7 +179,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Attribute parsing
 
-			var attributes = this.parseAttributes(component, this.constructor.componentAttributeTypes, componentElement);
+			var attributes = this.parseAttributes(component, componentElement);
 
 			// Component creation
 
@@ -292,40 +266,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			var namespaceUri = this.__namespaces[prefix];
 			if(!namespaceUri) throw new Error(qx.lang.String.format("Unable to resolve unknown namespace prefix '%1'", [ prefix ]));
 			return [ namespaceUri, localPart ];
-		},
-
-		__convertAttributeValue: function(component, attributeTypes, key, text) {
-			var type = attributeTypes[key];
-			if(!type) return text;
-			switch(type) {
-			case "Integer":
-				return parseInt(text);
-			case "Boolean":
-				return text == "true";
-			case "Size":
-				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text));
-			case "IntegerList":
-				var value = text.split(/\W+/);
-				value.forEach(function(element, index) { value[index] = parseInt(element); });
-				return value;
-			case "RegularExpression":
-				return new RegExp(text);
-			case "ReplaceableString":
-				if(text.length < 2) return text;
-				if(text.charAt(0) != '%') return text;
-				if("%none" == text) return text;
-				if(text.charAt(1) == '{' && text.charAt(text.length-1) == '}') {
-					var expression = text.substring(2, text.length-1);
-					return component.executeClientCode(qx.lang.String.format("return (%1);", [ expression ]));
-				}
-				var messageId = text.substring(1);
-				return component['tr'](messageId);
-			case "QName":
-				return this.__resolveQName(text);
-			default:
-				// Fallback for unknown types
-				return text;
-			}
 		}
 	},
 

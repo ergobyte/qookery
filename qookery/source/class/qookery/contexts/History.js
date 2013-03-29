@@ -59,6 +59,10 @@ qx.Class.define("qookery.contexts.History", {
 			var existingFragmentIdentifier = qx.bom.History.getInstance().getState();
 			if(fragmentIdentifier == existingFragmentIdentifier) return;
 			qx.bom.History.getInstance().addToHistory(fragmentIdentifier, title);
+		},
+		
+		resetState: function() {
+			qx.bom.History.getInstance().resetState();
 		}
 	}
 });

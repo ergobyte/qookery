@@ -52,7 +52,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 */
 		openWindow: function(form, options) {
 			if(!options) options = {};
-			var window = new qookery.impl.FormWindow(options['caption'], options['icon']);
+			var window = new qookery.impl.FormWindow(options['caption'], options['icon'], options['preventEscape']);
 			window.addListener("disappear", function() {
 				var result = window.getFormComponent().getResult();
 				if(options['onClose']) options['onClose'](result);
@@ -64,6 +64,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 			else this.loadResource(form, null, function(formXml) {
 				window.createAndOpen(formXml, options['model'], options['variables']);
 			});
+			return window;
 		},
 
 		/**

@@ -138,6 +138,11 @@ qx.Interface.define("qookery.IComponent", {
 		 * @return the action's execution result
 		 */
 		executeAction: function(actionName, argumentMap) { },
+
+		/**
+		 * Return the type of an attribute, or <code>null</code> if unknown
+		 */
+		getAttributeType: function(attributeName) { },
 		
 		/**
 		 * Return a translated message 

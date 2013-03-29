@@ -27,6 +27,68 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	extend: qx.core.Object,
 	implement: [ qookery.IComponent ],
 
+	statics: {
+		
+		baseAttributeTypes: {
+			"column-span": "Integer",
+			"margin-bottom": "Integer",
+			"margin-left": "Integer",
+			"margin-right": "Integer",
+			"margin-top": "Integer",
+			"maximum": "Integer",
+			"max-length": "Integer",
+			"minimum": "Integer",
+			"minimal-line-height": "Integer",
+			"padding-bottom": "Integer",
+			"padding-left": "Integer",
+			"padding-right": "Integer",
+			"padding-top": "Integer",
+			"page-step": "Integer",
+			"row-height": "Integer",
+			"row-span": "Integer",
+			"single-step": "Integer",
+			"spacing": "Integer",
+			"spacing-x": "Integer",
+			"spacing-y": "Integer",
+
+			"auto-size": "Boolean",
+			"center": "Boolean",
+			"column-visibility-button-visible": "Boolean",
+			"enabled": "Boolean",
+			"live-update": "Boolean",
+			"read-only": "Boolean",
+			"required": "Boolean",
+			"rich": "Boolean",
+			"scale": "Boolean",
+			"status-bar-visible": "Boolean",
+			"stretch": "Boolean",
+			"stretch-x": "Boolean",
+			"stretch-y": "Boolean",
+			"tri-state": "Boolean",
+			"wrap": "Boolean",
+
+			"width": "Size",
+			"height": "Size",
+			"min-width": "Size",
+			"min-height": "Size",
+			"max-width": "Size",
+			"max-height": "Size",
+
+			"margin": "IntegerList",
+			"padding": "IntegerList",
+
+			"filter": "RegularExpression",
+
+			"label": "ReplaceableString",
+			"null-item-label": "ReplaceableString",
+			"placeholder": "ReplaceableString",
+			"title": "ReplaceableString",
+			"tooltip-text": "ReplaceableString",
+
+			"connect": "QName"
+		}
+	},
+	
 	properties: {
 	    enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
 	    visibility: { init: "visible", check : [ "visible", "hidden", "excluded" ], inheritable: true, apply: "_applyVisibility" }
@@ -63,7 +125,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(attributes['visibility']) this.setVisibility(attributes['visibility']);
 		},
 
-		parseCustomElement: function(xmlElement) {
+		parseCustomElement: function(formParser, xmlElement) {
 			return false;
 		},
 
@@ -214,6 +276,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				var widget = widgets[i];
 				widget.setVisibility(visibility);
 			}
+		},
+		
+		getAttributeType: function(attributeName) {
+			return qookery.internal.components.BaseComponent.baseAttributeTypes[attributeName];
 		},
 
 		tr: function(messageId, varArgs) {

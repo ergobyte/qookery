@@ -30,10 +30,11 @@ qx.Class.define("qookery.impl.FormWindow", {
 	 *
 	 * @return the newly created Qookery window instance
 	 */
-	construct: function(caption, icon) {
+	construct: function(caption, icon, preventEscape) {
 		this.base(arguments, caption, icon);
 		this.setLayout(new qx.ui.layout.VBox());
 		this.set({ modal: true, showMinimize: false, showMaximize: false });
+		if(preventEscape) return;
 		this.addListener("keypress", function(event) {
 			if(event.getKeyIdentifier() == "Escape")
 				this.destroy();	

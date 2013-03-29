@@ -22,21 +22,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
-	statics: {
-
-		columnAttributeTypes: {
-			"flex": "Integer",
-			"header-click": "ReplaceableString",
-			"header-icon": "String",
-			"label": "ReplaceableString",
-			"min-width": "Size",
-			"max-width": "Size",
-			"sortable": "Boolean",
-			"width": "Size",
-			"wrap": "Boolean"
-		}
-	},
-
 	events: {
 		"changeSelection": "qx.event.type.Data"
 	},
@@ -90,13 +75,23 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				this.__tableModel = new tableModelClass(this, formParser, xmlElement);
 				return true;
 			case "table-column":
-				var column = formParser.parseAttributes(this, this.self(arguments).columnAttributeTypes, xmlElement);
+				var column = formParser.parseAttributes(this, xmlElement);
 				this.addColumn(column);
 				return true;
 			}
 			return false;
 		},
-		
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "flex": return "Integer";
+			case "header-click": return "ReplaceableString";
+			case "header-icon": return "String";
+			case "sortable": return "Boolean";
+			default: return this.base(arguments, attributeName);
+			}
+		},
+
 		getTableModel: function() {
 			return this.__tableModel;
 		},

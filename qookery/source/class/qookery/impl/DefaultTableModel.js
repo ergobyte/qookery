@@ -210,7 +210,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			var connect = column['connect'];
+			var connect = column['connect'][1];
 			if(!connect) return null;
 			return qx.data.SingleValueBinding.resolvePropertyChain(row, connect);
 		},
@@ -220,7 +220,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			var connect = column['connect'];
+			var connect = column['connect'][1];
 			if(!connect) return null;
 			// Property paths are not supported yet
 			row.set(connect, value);

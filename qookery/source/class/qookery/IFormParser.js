@@ -32,17 +32,19 @@ qx.Interface.define("qookery.IFormParser", {
 		parseXmlDocument: function(xmlDocument) { },
 
 		/**
-		 * Parse XML element attributes according to a name-to-type map
+		 * Parse XML element attributes according to component's attribute type mapping
 		 *
 		 * <p>Supported types are Integer, Boolean, Size, URI, IntegerList, RegularExpression, ReplaceableString, QName</p>
 		 *
 		 * @param component {qookery.IComponent} Qookery component to serve as the base of any conversion
-		 * @param attributeTypes {Map} a map from attribute name to attribute type
 		 * @param xmlElement {qx.xml.Element} XML element to read attributes from
+		 * @param typeMap {Map} custom type mapping; if provided, it overrides the component's type mapping
 		 *
 		 * @return {Map} attribute name to converted attribute value map
 		 */
-		parseAttributes: function(component, attributeTypes, xmlElement) { },
+		parseAttributes: function(component, xmlElement, typeMap) { },
+		
+		parseValue: function(component, type, value) { },
 
 		getNodeText: function(xmlNode) { },
 
