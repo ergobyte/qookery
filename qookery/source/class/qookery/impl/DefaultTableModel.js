@@ -108,11 +108,11 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 		setData: function(data) {
 			if(data instanceof qx.data.Array)
-				this.__accessor = this.constructor.qxDataArrayAccessor;
+				this.__accessor = this.self(arguments).qxDataArrayAccessor;
 			else if(qx.lang.Type.isArray(data))
-				this.__accessor = this.constructor.jsArrayAccessor;
+				this.__accessor = this.self(arguments).jsArrayAccessor;
 			else
-				this.__accessor = this.constructor.nullAccessor;
+				this.__accessor = this.self(arguments).nullAccessor;
 			this.__data = data;
 			this.reloadData();
 		},

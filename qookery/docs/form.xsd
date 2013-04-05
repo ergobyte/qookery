@@ -118,6 +118,7 @@
 			<element ref="q:form" />
 			<element ref="q:group-box" />
 			<element ref="q:html" />
+			<element ref="q:iframe"/>
 			<element ref="q:image" />
 			<element ref="q:label" />
 			<element ref="q:list" />
@@ -468,6 +469,16 @@
 			<complexContent>
 				<extension base="q:component">
 					<attribute name="html" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="iframe">
+		<complexType>
+			<complexContent>
+				<extension base="q:component">
+					<attribute name="source" type="string"/>
 				</extension>
 			</complexContent>
 		</complexType>
