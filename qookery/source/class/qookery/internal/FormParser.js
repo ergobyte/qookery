@@ -168,7 +168,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var componentId = this.getAttribute(componentElement, "id");
 			if(componentId && parentComponent != null)
-				parentComponent.getForm().registerComponent(component, componentId);
+				parentComponent.getForm().putComponent(componentId, component);
 
 			// Attribute parsing
 
@@ -224,12 +224,16 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseXInclude: function(xIncludeElement, parentComponent) {
 			var formUrl = this.getAttribute(xIncludeElement, "href");
+			var xmlIdAttribute = xIncludeElement.attributes['xml:id'];
 			formUrl = this.parseValue(parentComponent, "ReplaceableString", formUrl);
 			var xmlString = qookery.Qookery.getResourceLoader().loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
 			var formParser = new qookery.internal.FormParser(this.__variables);
 			try {
-				return formParser.parseXmlDocument(xmlDocument, parentComponent);
+				var component = formParser.parseXmlDocument(xmlDocument, parentComponent);
+				if(xmlIdAttribute)
+					parentComponent.getForm().putComponent(xmlIdAttribute.value, component);
+				return component;
 			}
 			catch(e) {
 				qx.log.Logger.error(this, qx.lang.String.format("Error creating form editor: %1", [ e ]));

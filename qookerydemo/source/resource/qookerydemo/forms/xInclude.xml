@@ -4,8 +4,16 @@
 -->
 <form xmlns="http://www.qookery.org/ns/Form" xmlns:xi="http://www.w3.org/2001/XInclude" column-flexes="1">
 
-	<group-box label="Layouts - root element of included XML is 'form'">
-		<xi:include href="qookerydemo/forms/layouts.xml" />
+	<import class="qookerydemo.contexts.QookeryDemo" />
+
+	<group-box label="Login dialog - root element of included XML is 'form'">
+		<xi:include xml:id="loginDialog" href="qookerydemo/forms/loginDialog.xml" />
+		<script>
+			$("#loginDialog").setModel($.QookeryDemo.createModel({ 
+				username: 'admin',
+				password: '1234'
+			}));
+		</script>
 	</group-box>
 
 	<group-box label="Some components - root element of included XML  is 'composite'">

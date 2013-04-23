@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<composite xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="0 1"> 
+<composite xmlns="http://www.qookery.org/ns/Form" column-count="5" column-flexes="1 1 1 1 1">
 
-	<text-field id="username" label="User name" required="true" connect="username" />
-	<password-field id="password" label="Password" required="true" connect="password" />
+	<button label="Child Widget 0" />
+	<button label="Child Widget 1" column-span="2"/>
+	<button label="Child Widget 2" row-span="2"/>
+	<button label="Child Widget 3"/>
+	<button label="Child Widget 4" row-span="2" column-span="2"/>
+	<button label="Child Widget 5"/>
+	<button label="Child Widget 6" row-span="2"/>
+	<button label="Child Widget 7" column-span="2"/>
 
 </composite>

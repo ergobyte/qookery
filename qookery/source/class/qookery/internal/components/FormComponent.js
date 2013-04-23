@@ -101,8 +101,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__components[componentId];
 		},
 
-		registerComponent: function(component, id) {
-			this.__components[id] = component;
+		putComponent: function(componentId, component) {
+			this.__components[componentId] = component;
 		},
 
 		// Client script context
