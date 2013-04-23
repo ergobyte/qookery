@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	XInclude example
+-->
+<form xmlns="http://www.qookery.org/ns/Form" xmlns:xi="http://www.w3.org/2001/XInclude" column-flexes="1">
+
+	<group-box label="Layouts - root element of included XML is 'form'">
+		<xi:include href="qookerydemo/forms/layouts.xml" />
+	</group-box>
+
+	<group-box label="Some components - root element of included XML  is 'composite'">
+		<xi:include href="qookerydemo/forms/xInclude_someComponents.xml" />
+	</group-box>
+
+</form>

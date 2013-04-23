@@ -55,11 +55,11 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		// IFormParser implementation
 
-		parseXmlDocument: function(xmlDocument) {
+		parseXmlDocument: function(xmlDocument, parentComponent) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
-			var formElement = elements[0];
-			var attributes = formElement.attributes;
+			var rootElement = elements[0];
+			var attributes = rootElement.attributes;
 			for(var i = 0; i < attributes.length; i++) {
 				var attribute = attributes.item(i);
 				var attributeName = attribute.nodeName;
@@ -69,12 +69,8 @@ qx.Class.define("qookery.internal.FormParser", {
 					this.__namespaces[prefix] = uri;
 				}
 			}
-
-			var translationPrefix = this.getAttribute(formElement, "translation-prefix");
-			var component = new qookery.internal.components.FormComponent(null, this, translationPrefix, this.__variables);
-			this.__parseFormBlock(formElement, component);
-			this.__parseComponent2(formElement, component);
-			return component;
+			var rootComponent = this.__parseComponent(rootElement, parentComponent);
+			return rootComponent;
 		},
 
 		parseAttributes: function(component, xmlElement, typeMap) {
@@ -142,6 +138,10 @@ qx.Class.define("qookery.internal.FormParser", {
 			return text;
 		},
 
+		setNamespacePrefix: function(prefix, namespaceUri) {
+			this.__namespaces[prefix] = namespaceUri;
+		},
+
 		// Internal methods
 
 		__parseComponent: function(componentElement, parentComponent) {
@@ -150,32 +150,25 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var skipIfClientCode = this.getAttribute(componentElement, "skip-if");
 			if(skipIfClientCode) {
+				if(parentComponent == null) throw new Error("skip-if attribute needs a parent component");
 				var skip = parentComponent.executeClientCode(qx.lang.String.format("return (%1);", [ skipIfClientCode ]));
-				if(skip) return;
+				if(skip) return null;
 			}
 
 			// Instantiate new component
 
 			var componentTypeName = qx.dom.Node.getName(componentElement);
 			var component = this.constructor.registry.createComponent(componentTypeName, parentComponent);
+
+			// TODO Find a less ugly way to pass parser variables to form components
+			if(component instanceof qookery.internal.components.FormComponent)
+				component.setVariables(this.__variables);
+
+			// Id registration
+
 			var componentId = this.getAttribute(componentElement, "id");
-			if(componentId)
+			if(componentId && parentComponent != null)
 				parentComponent.getForm().registerComponent(component, componentId);
-
-			// Continue creation process
-
-			this.__parseComponent2(componentElement, component);
-
-			// Attach to container
-
-			var display = this.getAttribute(componentElement, "display");
-			if(!display) display = 'inline';
-			if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
-				throw new Error("Attempted to add a component to a non-container component");
-			parentComponent.add(component, display);
-		},
-
-		__parseComponent2: function(componentElement, component) {
 
 			// Attribute parsing
 
@@ -192,17 +185,19 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Component setup
 
 			component.setup(attributes);
-		},
 
-		__parseFormBlock: function(formElement, formComponent) {
-			if(!qx.dom.Element.hasChildren(formElement)) return;
-			var children = qx.dom.Hierarchy.getChildElements(formElement);
-			for(var i = 0; i < children.length; i++) {
-				var statementElement = children[i];
-				var elementName = qx.dom.Node.getName(statementElement);
-				if(elementName == 'bind')
-					this.__parseBind(statementElement, formComponent);
+			// Attach to container
+
+			if(parentComponent != null) {
+				var display = this.getAttribute(componentElement, "display");
+				if(!display) display = 'inline';
+				if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
+					throw new Error("Attempted to add a component to a non-container component");
+				parentComponent.add(component, display);
 			}
+
+			// Return new component
+			return component;
 		},
 
 		__parseStatementBlock: function(blockElement, component) {
@@ -212,8 +207,8 @@ qx.Class.define("qookery.internal.FormParser", {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
 				switch(elementName) {
-				case "bind":
-					continue; // Parsed elsewhere
+				case "xi:include":
+					this.__parseXInclude(statementElement, component); continue;
 				case "script":
 					this.__parseScript(statementElement, component); continue;
 				case "parseerror":
@@ -224,6 +219,24 @@ qx.Class.define("qookery.internal.FormParser", {
 					else if(!component.parseCustomElement(this, statementElement))
 						throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementName ]));
 				}
+			}
+		},
+
+		__parseXInclude: function(xIncludeElement, parentComponent) {
+			var formUrl = this.getAttribute(xIncludeElement, "href");
+			formUrl = this.parseValue(xIncludeElement, "ReplaceableString", formUrl);
+			var xmlString = qookery.Qookery.getResourceLoader().loadResource(formUrl);
+			var xmlDocument = qx.xml.Document.fromString(xmlString);
+			var formParser = new qookery.internal.FormParser(this.__variables);
+			try {
+				return formParser.parseXmlDocument(xmlDocument, parentComponent);
+			}
+			catch(e) {
+				qx.log.Logger.error(this, qx.lang.String.format("Error creating form editor: %1", [ e ]));
+				qx.log.Logger.error(e.stack);
+			}
+			finally {
+				formParser.dispose();
 			}
 		},
 
@@ -250,12 +263,6 @@ qx.Class.define("qookery.internal.FormParser", {
 					component.executeClientCode(clientCode);
 				}
 			}
-		},
-
-		__parseBind: function(bindElement, formComponent) {
-			var prefix = this.getAttribute(bindElement, "prefix");
-			var uri = this.getAttribute(bindElement, "uri");
-			this.__namespaces[prefix] = uri;
 		},
 
 		__resolveQName: function(qname) {

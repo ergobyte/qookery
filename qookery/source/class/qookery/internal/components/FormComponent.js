@@ -30,11 +30,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	implement: [ qookery.IFormComponent ],
 	include: [ qookery.util.MFuturesHandling ],
 
-	construct: function(parentComponent, parser, translationPrefix, variables) {
+	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__parser = parser;
-		this.__translationPrefix = translationPrefix;
-		this.__variables = variables;
 		this.__components = { };
 		this.__validations = [];
 		this.__bindings = { };
@@ -55,7 +52,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__parser: null,
 		__translationPrefix: null,
 		__variables: null,
 		__components: null,
@@ -69,26 +65,26 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
+			if(attributes['translation-prefix'] !== undefined) this.__translationPrefix = attributes['translation-prefix'];
 			if(this.getAttribute('icon')) this.setIcon(this.getAttribute('icon'));
 			if(this.getAttribute('title')) this.setTitle(this.getAttribute('title'));
 			this.info("Form created");
 		},
 
 		setup: function(attributes) {
-			this.__parser = null;
 			if(this.getTitle() instanceof qx.locale.LocalizedString)
 				this.setTitle(this.getTitle().translate());
 			return this.base(arguments);
+		},
+
+		setVariables: function(variables) {
+			this.__variables = variables;
 		},
 
 		// Getters and setters
 
 		getForm: function() {
 			return this;
-		},
-
-		getParser: function() {
-			return this.__parser;
 		},
 
 		getTranslationPrefix: function() {
@@ -250,6 +246,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		parseCustomElement: function(formParser, xmlElement) {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
+				case "bind":
+					this.__parseBind(formParser, xmlElement);
+					return true;
 				case "import":
 					this.__parseImport(formParser, xmlElement);
 					return true;
@@ -258,6 +257,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					return true;
 			}
 			return false;
+		},
+
+		__parseBind: function(formParser, bindElement) {
+			var prefix = formParser.getAttribute(bindElement, "prefix");
+			var namespaceUri = formParser.getAttribute(bindElement, "uri");
+			formParser.setNamespacePrefix(prefix, namespaceUri);
 		},
 
 		__parseImport: function(formParser, importElement) {

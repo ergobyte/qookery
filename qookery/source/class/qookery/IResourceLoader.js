@@ -19,12 +19,23 @@
 */
 
 /**
- * TODO
+ * Implementations of this interface provide resources requested by Qookery
  */
 qx.Interface.define("qookery.IResourceLoader", {
 
 	members: {
 
+		/**
+		 * Load a remote resource (sync or async)
+		 *
+		 * <p>Calls to this method imply synchronous loading when no success
+		 * callback has been set</p>
+		 *
+		 * @param resourceUrl the URL of the needed resource
+		 * @param thisArg an optional context for callbacks, may be <code>null</code>
+		 * @param successCallback an optional function to be called on asynchronous load success
+		 * @param failCallback an optional function to be called on asynchronous load failure
+		 */
 		loadResource: function(resourceUrl, thisArg, successCallback, failCallback) { }
 	}
 });

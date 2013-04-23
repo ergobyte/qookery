@@ -28,19 +28,33 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
    		loadResource: function(url, thisArg, successCallback, failCallback) {
    			var resourceUri = qx.util.ResourceManager.getInstance().toUri(url);
-   			if(qx.core.Environment.get("qx.debug"))
-   				resourceUri += "?nocache=" + new Date().getTime();
+   			if(qx.core.Environment.get("qx.debug")) resourceUri += "?nocache=" + new Date().getTime();
+   			var result = null, asynchronous;
 			var xhrRequest = new qx.bom.request.Xhr();
-			if(successCallback) {
-				if(thisArg) xhrRequest.onload = function(event) {
+			if(successCallback && thisArg) {
+				asynchronous = true;
+				xhrRequest.onload = function(event) {
 					successCallback.call(thisArg, xhrRequest.responseText);
 				};
-				else xhrRequest.onload = function(event) {
+			}
+			else if(successCallback) {
+				asynchronous = true;
+				xhrRequest.onload = function(event) {
 					successCallback(xhrRequest.responseText);
 				};
 			}
-			xhrRequest.open("GET", resourceUri, true);
+			else {
+				asynchronous = false;
+				xhrRequest.onload = function() {
+					var statusCode = xhrRequest.status;
+					var wasSuccessful = qx.util.Request.isSuccessful(statusCode);
+					if(!wasSuccessful) throw new Error(qx.lang.String.format("Failed to load resource '%1'", [url]));
+					result = xhrRequest.responseText;
+				};
+			}
+			xhrRequest.open("GET", resourceUri, asynchronous);
 			xhrRequest.send();
+			return result;
    		}
-	}
+   	}
 });

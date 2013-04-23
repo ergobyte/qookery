@@ -32,7 +32,8 @@ qx.Class.define("qookerydemo.Toolbar", {
 			{ label: "Stack", formFile: "stack.xml", modelFile: "null.json" },
 			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
 			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
-			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" }
+			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
+			{ label: "XInclude", formFile: "xInclude.xml" }
 		]
 	},
 
