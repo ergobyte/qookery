@@ -56,6 +56,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__variables: null,
 		__components: null,
 		__validations: null,
+		__modelProvider: null,
 		__targets: null,
 		__bindings: null,
 		__clientCodeContext: null,
@@ -66,6 +67,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes['translation-prefix'] !== undefined) this.__translationPrefix = attributes['translation-prefix'];
+			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes['model-provider']);
 			if(this.getAttribute('icon')) this.setIcon(this.getAttribute('icon'));
 			if(this.getAttribute('title')) this.setTitle(this.getAttribute('title'));
 			this.info("Form created");
@@ -89,6 +91,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		getTranslationPrefix: function() {
 			return this.__translationPrefix;
+		},
+
+		getModelProvider: function() {
+			return this.__modelProvider;
 		},
 
 		getResult: function() {

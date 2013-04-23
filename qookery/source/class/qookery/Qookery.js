@@ -28,7 +28,6 @@ qx.Class.define("qookery.Qookery", {
 
 	construct: function() {
 		this.base(arguments);
-		this.__modelProvider = new qookery.impl.DefaultModelProvider();
 		this.__resourceLoader = qookery.impl.DefaultResourceLoader.getInstance();
 	},
 
@@ -77,12 +76,12 @@ qx.Class.define("qookery.Qookery", {
 		},
 
 		/**
-		 * Return the currently configured model provider implementation
+		 * Return the default model provider implementation
 		 *
 		 * @return {qookery.IModelProvider} A model provider implementation
 		 */
 		getModelProvider: function() {
-			return this.getInstance().__modelProvider;
+			return qookery.internal.Registry.getInstance().getModelProvider();
 		},
 
 		/**
@@ -97,7 +96,6 @@ qx.Class.define("qookery.Qookery", {
 
 	members: {
 
-		__modelProvider: null,
 		__resourceLoader: null,
 
 		/**
@@ -110,11 +108,6 @@ qx.Class.define("qookery.Qookery", {
 		 */
 		configure: function(key, value) {
 			switch(key) {
-			case "model-provider":
-				qx.Interface.assertObject(value, qookery.IModelProvider);
-				this._disposeObjects("__modelProvider");
-				this.__modelProvider = value;
-				return true;
 			case "resource-loader":
 				qx.Interface.assertObject(value, qookery.IResourceLoader);
 				this._disposeObjects("__resourceLoader");
@@ -126,6 +119,6 @@ qx.Class.define("qookery.Qookery", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__modelProvider", "__resourceLoader");
+		this._disposeObjects("__resourceLoader");
 	}
 });

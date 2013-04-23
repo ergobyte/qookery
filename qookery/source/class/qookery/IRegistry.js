@@ -71,6 +71,18 @@ qx.Interface.define("qookery.IRegistry", {
 		 */
 		getValidator: function(validator) { },
 
+		// Model providers
+
+		/**
+		 * Register a model provider, optionally setting it as the default one
+		 */
+		registerModelProvider: function(providerName, provider, setDefault) { },
+
+		/**
+		 * Return a registered model provider
+		 */
+		getModelProvider: function(providerName) { },
+
 		// Formats
 
 		/**
@@ -90,15 +102,15 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @return {IFormat} The newly created format instance
 		 */
 		createFormat: function(formatName, options) { },
-		
+
 		/**
 		 * Parse a format specification
 		 * <p>Format specification syntax is:</p>
 		 *
 		 * <pre>{formatName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
-		 * 
+		 *
 		 * @param {String} formatSpecification
-		 *  
+		 *
 		 * @return {IFormat} The newly created format instance
 		 */
 		createFormatSpecification: function(formatSpecification) { },

@@ -61,7 +61,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		setup: function(attributes) {
 			if(attributes['connect']) {
 				var connectionQName = attributes['connect'];
-				var modelProvider = qookery.Qookery.getModelProvider();
+				var modelProvider = this.getForm().getModelProvider();
 				if(modelProvider == null)
 					throw new Error("Install a model provider to handle connections in XML forms");
 				modelProvider.handleConnection(this, connectionQName[0], connectionQName[1]);

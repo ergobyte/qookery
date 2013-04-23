@@ -69,6 +69,11 @@ qx.Interface.define("qookery.IFormComponent", {
 		 *
 		 * @return {qookery.IComponent} The component or <code>null</cide> if not found
 		 */
-		getComponent: function(componentId) { }
+		getComponent: function(componentId) { },
+
+		/**
+		 * Return the form's model provider if set, or the default one otherwise
+		 */
+		getModelProvider: function() { }
 	}
 });

@@ -27,6 +27,10 @@ qx.Class.define("qookery.internal.Registry", {
 	construct: function() {
 		this.base(arguments);
 
+		this.__modelProviders = { };
+		this.__modelProviders["default"] = new qookery.impl.DefaultModelProvider();
+		this.__defaultModelProvider = this.__modelProviders["default"];
+
 		this.__validators = { };
 		this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
 		this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
@@ -73,11 +77,28 @@ qx.Class.define("qookery.internal.Registry", {
 
 	members: {
 
+		__modelProviders: null,
+		__defaultModelProvider: null,
 		__validators: null,
 		__components: null,
 		__componentConstructorArgs: null,
 		__formats: null,
 		__maps: null,
+
+		// Model providers
+
+		getModelProvider: function(providerName) {
+			if(!providerName) return this.__defaultModelProvider;
+			var provider = this.__modelProviders[providerName];
+			if(!provider)
+				throw new Error(qx.lang.String.format("Unknown model provider '%1' requested", [ providerName ]));
+			return provider;
+		},
+
+		registerModelProvider: function(providerName, provider, setDefault) {
+			this.__modelProviders[providerName] = provider;
+			if(setDefault) this.__defaultModelProvider = provider;
+		},
 
 		// Components
 
@@ -121,8 +142,8 @@ qx.Class.define("qookery.internal.Registry", {
 				throw new Error(qx.lang.String.format("Unknown format '%1'", [ formatName ]));
 			return new formatClass(options);
 		},
-		
-		createFormatSpecification: function(formatSpecification) { 
+
+		createFormatSpecification: function(formatSpecification) {
 			var formatName = formatSpecification;
 			var options = {};
 			var colonCharacterPos = formatSpecification.indexOf(":");
@@ -150,6 +171,7 @@ qx.Class.define("qookery.internal.Registry", {
 	},
 
 	destruct: function() {
+		this._disposeArray("__modelProviders");
 		this.__validators = null;
 		this.__components = null;
 		this.__formats = null;

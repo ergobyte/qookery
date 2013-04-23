@@ -449,6 +449,7 @@
 					<attribute name="translation-prefix" />
 					<attribute name="title" />
 					<attribute name="icon" type="anyURI" />
+					<attribute name="model-provider" type="token" />
 				</extension>
 			</complexContent>
 		</complexType>
