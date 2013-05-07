@@ -35,7 +35,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param callback {Function} a callback to call after successful load
 		 */
 		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
-			qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
+			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
 		},
 
 		/**

@@ -15,12 +15,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: ButtonComponent.js 52 2013-01-06 18:22:47Z geonik@ergobyte.gr $
+	$Id: TabHolderComponent.js 58 2013-01-31 09:06:52Z nikoslam@ergobyte.gr $
 */
 
-qx.Class.define("qookery.internal.components.RadioButtonComponent", {
+qx.Class.define("qookery.internal.components.SplitPaneComponent", {
 
-	extend: qookery.internal.components.ButtonComponent,
+	extend: qookery.internal.components.ContainerComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -28,23 +28,16 @@ qx.Class.define("qookery.internal.components.RadioButtonComponent", {
 
 	members: {
 
-		_createButtonWidget: function(attributes) {
-			var label = attributes['label'];
-			return new qx.ui.form.RadioButton(label);
+		create: function(attributes) {
+			attributes['column-count'] = 'none';
+			this.base(arguments, attributes);
 		},
 
-		_applyButtonAttributes: function(widget, attributes) {
-			if(attributes['model'] !== undefined) widget.setModel(attributes['model']);
-			return this.base(arguments, widget, attributes);
-		},
-		
-		getModel: function() {
-			return this.getMainWidget().getModel();
-		},
-		
-		setModel: function(model) {
-			this.getMainWidget().setModel(model);
+		_createContainerWidget: function(attributes) {
+			var orientation = attributes['orientation'] ? attributes['orientation'] : "horizontal";  
+			var pane = new qx.ui.splitpane.Pane(orientation);
+			this._applyLayoutAttributes(pane, attributes);
+			return pane;
 		}
-
 	}
 });

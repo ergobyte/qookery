@@ -48,6 +48,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["label"] = qookery.internal.components.LabelComponent;
 		this.__components["list"] = qookery.internal.components.ListComponent;
 		this.__components["password-field"] = qookery.internal.components.PasswordFieldComponent;
+		this.__components["progress-bar"] = qookery.internal.components.ProgressBarComponent;
 		this.__components["radio-button"] = qookery.internal.components.RadioButtonComponent;
 		this.__components["radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
 		this.__components["scroll"] = qookery.internal.components.ScrollComponent;
@@ -56,12 +57,14 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["slider"] = qookery.internal.components.SliderComponent;
 		this.__components["spacer"] = qookery.internal.components.SpacerComponent;
 		this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
+		this.__components["split-pane"] = qookery.internal.components.SplitPaneComponent;
 		this.__components["stack"] = qookery.internal.components.StackComponent;
 		this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;
 		this.__components["tab-view-page"] = qookery.internal.components.TabPageComponent;
 		this.__components["table"] = qookery.internal.components.TableComponent;
 		this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
 		this.__components["text-field"] = qookery.internal.components.TextFieldComponent;
+		this.__components["toggle-button"] = qookery.internal.components.ToggleButtonComponent;
 		this.__components["tool-bar"] = qookery.internal.components.ToolBarComponent;
 
 		this.__componentConstructorArgs = { };

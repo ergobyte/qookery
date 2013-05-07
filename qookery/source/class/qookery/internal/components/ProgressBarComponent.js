@@ -15,12 +15,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: ButtonComponent.js 52 2013-01-06 18:22:47Z geonik@ergobyte.gr $
+	$Id: LabelComponent.js 45 2013-01-02 16:48:14Z geonik@ergobyte.gr $
 */
 
-qx.Class.define("qookery.internal.components.RadioButtonComponent", {
+qx.Class.define("qookery.internal.components.ProgressBarComponent", {
 
-	extend: qookery.internal.components.ButtonComponent,
+	extend: qookery.internal.components.BaseComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -28,23 +28,26 @@ qx.Class.define("qookery.internal.components.RadioButtonComponent", {
 
 	members: {
 
-		_createButtonWidget: function(attributes) {
-			var label = attributes['label'];
-			return new qx.ui.form.RadioButton(label);
+		create: function(attributes) {
+			this._widgets[0] = new qx.ui.indicator.ProgressBar();
+			this._applyLayoutAttributes(this._widgets[0], attributes);
+			this.base(arguments, attributes);
 		},
 
-		_applyButtonAttributes: function(widget, attributes) {
-			if(attributes['model'] !== undefined) widget.setModel(attributes['model']);
-			return this.base(arguments, widget, attributes);
+		getMaximun: function() {
+			return this.getMainWidget().getMaximum();
 		},
 		
-		getModel: function() {
-			return this.getMainWidget().getModel();
+		setMaximun: function(maximim) {
+			this.getMainWidget().setMaximum(maximim);
 		},
 		
-		setModel: function(model) {
-			this.getMainWidget().setModel(model);
+		getValue: function() {
+			return this.getMainWidget().getValue();
+		},
+		
+		setValue: function(value) {
+			return this.getMainWidget().setValue(value);
 		}
-
 	}
 });

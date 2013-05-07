@@ -39,17 +39,19 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes['layout']) this.setLayout(attributes['layout']);
+			if(attributes['allow-empty-selection'] == "true") this.getMainWidget().getRadioGroup().set({ allowEmptySelection: true });
 		},
 
 		_createMainWidget: function(attributes) {
-			var group = new qx.ui.form.RadioButtonGroup(new qx.ui.layout.HBox(10));
+			var spacing = (attributes['spacing'] != null) ? attributes['spacing'] : 10;
+			var group = new qx.ui.form.RadioButtonGroup(new qx.ui.layout.HBox(spacing));
 			this._applyLayoutAttributes(group, attributes);
 			group.addListener("changeSelection", function(event) {
 				var selection = event.getData();
 				if(selection.length == 0)
 					this.setValue(null);
 				else
-					this.setValue(selection[0].getModel());
+					this.setValue(selection[0].getUserData('qookeryComponent').getModel());
 			}, this);
 			return group;
 		},
@@ -74,7 +76,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			for(var itemValue in initOptions["items"]) {
 				var itemLabel = initOptions["items"][itemValue];
 				var radioButton = new qx.ui.form.RadioButton(itemLabel);
-				radioButton.setModel(itemValue);
+				radioButton.getUserData('qookeryComponent').setModel(itemValue);
 				radioButtonGroup.add(radioButton);
 			}
 		},
@@ -84,7 +86,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			var buttons = radioButtonGroup.getChildren();
 			for(var i = 0; i < buttons.length; i++) {
 				var button = buttons[i];
-				var buttonValue = button.getModel();
+				var buttonValue = button.getUserData('qookeryComponent').getModel();
 				if(!qookery.contexts.Model.areEqual(buttonValue, value)) continue;
 				radioButtonGroup.setSelection([ button ]);
 				return;

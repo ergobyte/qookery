@@ -42,6 +42,14 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 
 		setSource: function(source) {
 			this._widgets[0].setSource(source);
+		},
+		
+		getScale: function() {
+			return this.getMainWidget().getScale();
+		},
+		
+		setScale: function(scale) {
+			this.getMainWidget().setScale(scale);
 		}
 	}
 });

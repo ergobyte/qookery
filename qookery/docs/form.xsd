@@ -123,6 +123,7 @@
 			<element ref="q:label" />
 			<element ref="q:list" />
 			<element ref="q:password-field" />
+			<element ref="q:progress-bar" />
 			<element ref="q:radio-button-group" />
 			<element ref="q:scroll"/>
 			<element ref="q:select-box" />
@@ -130,12 +131,14 @@
 			<element ref="q:slider" />
 			<element ref="q:spacer" />
 			<element ref="q:spinner" />
+			<element ref="q:split-pane"/>
 			<element ref="q:stack" />
 			<element ref="q:tab-view" />
 			<element ref="q:tab-view-page" />
 			<element ref="q:table" />
 			<element ref="q:text-area" />
 			<element ref="q:text-field" />
+			<element ref="q:toggle-button"/>
 			<element ref="q:tool-bar" />
 			<any namespace="##other" />
 		</choice>
@@ -427,6 +430,7 @@
 			<complexContent>
 				<extension base="q:editable-component">
 					<attribute name="placeholder" type="string" />
+					<attribute name="input-specification" type="string" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -521,6 +525,17 @@
 			</complexContent>
 		</complexType>
 	</element>
+	
+	<element name="progress-bar">
+		<complexType>
+			<complexContent>
+				<extension base="q:component-attributes">
+					<attribute name="maximum" type="float"/>
+					<attribute name="value" type="float"/>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 
 	<element name="radio-button-group">
 		<complexType>
@@ -529,8 +544,11 @@
 					<choice minOccurs="0" maxOccurs="unbounded">
 						<element ref="q:script" />
 						<element ref="q:radio-button" />
+						<element ref="q:toggle-button" />
 					</choice>
 					<attribute name="orientation" type="q:orientation" default="horizontal"/>
+					<attribute name="allow-empty-selection" type="boolean" default="false"/>
+					<attribute name="spacing" type="int"/>
 				</extension>
 			</complexContent>
 		</complexType>
@@ -577,6 +595,16 @@
 					<attribute name="minimum" type="integer" default="0" />
 					<attribute name="page-step" type="integer" default="10" />
 					<attribute name="single-step" type="decimal" default="1" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="split-pane">
+		<complexType>
+			<complexContent>
+				<extension base="q:container-component">
+					<attribute name="orientation" type="q:orientation" default="horizontal"/>
 				</extension>
 			</complexContent>
 		</complexType>
@@ -651,6 +679,16 @@
 	</element>
 
 	<element name="text-field" type="q:field-component" />
+	
+	<element name="toggle-button">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component-attributes">
+					<attribute name="model" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
 	
 	<element name="tool-bar">
 		<complexType>
