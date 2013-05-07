@@ -28,7 +28,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	implement: [ qookery.IComponent ],
 
 	statics: {
-		
+
 		baseAttributeTypes: {
 			"column-span": "Integer",
 			"margin-bottom": "Integer",
@@ -88,7 +88,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"connect": "QName"
 		}
 	},
-	
+
 	properties: {
 	    enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
 	    visibility: { init: "visible", check : [ "visible", "hidden", "excluded" ], inheritable: true, apply: "_applyVisibility" }
@@ -110,6 +110,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		__actions: null,
 
 		// Implementations
+
+		prepare: function(formParser, xmlElement) {
+			// Nothing is done here by default, components may override
+		},
 
 		create: function(attributes) {
 			this.__id = attributes['id'];
@@ -277,7 +281,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				widget.setVisibility(visibility);
 			}
 		},
-		
+
 		getAttributeType: function(attributeName) {
 			return qookery.internal.components.BaseComponent.baseAttributeTypes[attributeName];
 		},

@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: LabelComponent.js 45 2013-01-02 16:48:14Z geonik@ergobyte.gr $
+	$Id$
 */
 
 qx.Class.define("qookery.internal.components.IframeComponent", {

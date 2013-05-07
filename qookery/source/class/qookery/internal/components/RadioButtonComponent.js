@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: ButtonComponent.js 52 2013-01-06 18:22:47Z geonik@ergobyte.gr $
+	$Id$
 */
 
 qx.Class.define("qookery.internal.components.RadioButtonComponent", {

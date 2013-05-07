@@ -4,7 +4,7 @@
  * 	This material is proprietary to Ergobyte. The methods and techniques described herein are considered trade secrets
  *	and/or confidential. Reproduction or distribution, in whole or in part, is forbidden except by express written permission.
  *
- *	$Id: MainToolBar.js 95 2013-01-10 23:46:01Z geonik $
+ *	$Id$
  */
 
 qx.Class.define("qookery.internal.components.ToolBarComponent", {

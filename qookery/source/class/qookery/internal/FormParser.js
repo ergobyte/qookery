@@ -55,6 +55,10 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		// IFormParser implementation
 
+		getVariables: function() {
+			return this.__variables;
+		},
+
 		parseXmlDocument: function(xmlDocument, parentComponent) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
@@ -155,14 +159,11 @@ qx.Class.define("qookery.internal.FormParser", {
 				if(skip) return null;
 			}
 
-			// Instantiate new component
+			// Instantiate and initialize new component
 
 			var componentTypeName = qx.dom.Node.getName(componentElement);
 			var component = this.constructor.registry.createComponent(componentTypeName, parentComponent);
-
-			// TODO Find a less ugly way to pass parser variables to form components
-			if(component instanceof qookery.internal.components.FormComponent)
-				component.setVariables(this.__variables);
+			component.prepare(this, componentElement);
 
 			// Id registration
 
@@ -211,7 +212,7 @@ qx.Class.define("qookery.internal.FormParser", {
 					this.__parseXInclude(statementElement, component); continue;
 				case "script":
 					this.__parseScript(statementElement, component); continue;
-				case "parseerror":
+				case "parsererror":
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				default:
 					if(this.constructor.registry.isComponentTypeAvailable(elementName))

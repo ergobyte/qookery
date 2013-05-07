@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: TabHolderComponent.js 58 2013-01-31 09:06:52Z nikoslam@ergobyte.gr $
+	$Id$
 */
 
 qx.Class.define("qookery.internal.components.SplitPaneComponent", {

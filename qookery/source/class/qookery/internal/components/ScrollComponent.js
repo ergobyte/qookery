@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: CompositeComponent.js 41 2012-12-26 22:41:04Z geonik@ergobyte.gr $
+	$Id$
 */
 
 /**

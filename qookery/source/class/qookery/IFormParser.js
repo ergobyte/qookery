@@ -23,6 +23,13 @@ qx.Interface.define("qookery.IFormParser", {
 	members: {
 
 		/**
+		 * Return variables user passed to this parser, if any
+		 *
+		 * @return {Map} any number of user variables
+		 */
+		getVariables: function() { },
+
+		/**
 		 * Parse and generate a Qookery form
 		 *
 		 * @param xmlDocument {qx.xml.Document} input DOM XML document structured according to the form.xsd schema

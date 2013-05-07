@@ -15,7 +15,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
-	$Id: NumberFormatter.js 25 2012-12-09 18:00:48Z geonik@ergobyte.gr $
+	$Id$
 */
 
 qx.Class.define("qookery.internal.formats.MapFormat", {

@@ -35,14 +35,24 @@ qx.Interface.define("qookery.IComponent", {
 	members: {
 
 		/**
-		 * Called by the parser soon after the component's constructor
+		 * Called by the parser immediately after new instance construction
+		 *
+		 * <p>Notice: You must never call this method directly.</p>
+		 *
+		 * @param formParser {qookery.IFormParser} requesting form parser
+		 * @param xmlElement {qx.dom.Element} XML element that initiated component creation
+		 */
+		prepare: function(formParser, xmlElement) { },
+
+		/**
+		 * Called by the form parser soon after initialization and attribute parsing
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
 		 *
 		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
 		create: function(attributes) { },
-		
+
 		/**
 		 * Called by the parser any time an unknown element is encounted within component's XML declaration
 		 *
@@ -50,7 +60,7 @@ qx.Interface.define("qookery.IComponent", {
 		 *
 		 * @param formParser {qookery.IFormParser} requesting form parser
 		 * @param xmlElement {qx.dom.Element} XML element
-		 * 
+		 *
 		 * @retun {Boolean} <code>true</code> in case component understood and parsed element
 		 */
 		parseCustomElement: function(formParser, xmlElement) { },
@@ -143,10 +153,10 @@ qx.Interface.define("qookery.IComponent", {
 		 * Return the type of an attribute, or <code>null</code> if unknown
 		 */
 		getAttributeType: function(attributeName) { },
-		
+
 		/**
-		 * Return a translated message 
-		 * 
+		 * Return a translated message
+		 *
 		 * @param messageId {String} the identifier of the wanted message
 		 */
 		tr: function(messageId) { }

@@ -64,23 +64,23 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Creation
 
+		prepare: function(formParser, xmlElement) {
+			this.__variables = formParser.getVariables();
+			this.__translationPrefix = formParser.getAttribute(xmlElement, 'translation-prefix');
+		},
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['translation-prefix'] !== undefined) this.__translationPrefix = attributes['translation-prefix'];
 			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes['model-provider']);
-			if(this.getAttribute('icon')) this.setIcon(this.getAttribute('icon'));
-			if(this.getAttribute('title')) this.setTitle(this.getAttribute('title'));
+			var icon = this.getAttribute('icon');
+			if(icon) this.setIcon(icon);
 			this.info("Form created");
 		},
 
 		setup: function(attributes) {
-			if(this.getTitle() instanceof qx.locale.LocalizedString)
-				this.setTitle(this.getTitle().translate());
+			var title = this.getAttribute('title');
+			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
 			return this.base(arguments);
-		},
-
-		setVariables: function(variables) {
-			this.__variables = variables;
 		},
 
 		// Getters and setters
