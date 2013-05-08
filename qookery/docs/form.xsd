@@ -217,6 +217,7 @@
 		</attribute>
 		<!-- Widget -->
 		<attribute name="appearance" type="string" />
+		<attribute name="cursor" type="string" />
 		<attribute name="decorator" type="string" />
 		<attribute name="font" type="string" />
 		<attribute name="padding-top" type="integer" default="0" />

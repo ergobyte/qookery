@@ -27,17 +27,30 @@ qx.Class.define("qookery.impl.FormWindow", {
 	 *
 	 * @param title { String } title of the window
 	 * @param icon { uri } icon of the window
+	 * @param options {Map ? null} options as defined below
+	 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
+	 *
+	 * @option caption {String ? null} a caption for the created Window instance
+	 * @option icon {String ? null} an icon for the created Window instance
+	 * @option onDisappear {Function ? null} a callback that will receive the form's result property on disappear
 	 *
 	 * @return the newly created Qookery window instance
 	 */
-	construct: function(caption, icon, preventEscape) {
+	construct: function(caption, icon, options, thisArg) {
 		this.base(arguments, caption, icon);
 		this.setLayout(new qx.ui.layout.VBox());
 		this.set({ modal: true, showMinimize: false, showMaximize: false });
-		if(preventEscape) return;
-		this.addListener("keypress", function(event) {
-			if(event.getKeyIdentifier() == "Escape")
-				this.destroy();	
+		if(options) {
+			if(options['icon'] !== undefined) this.setIcon(options['icon']);
+			if(options['caption'] !== undefined) this.setCaption(options['caption']);
+			if(options['allowClose'] !== undefined) this.setAllowClose(options['allowClose']);
+			if(options['onDisappear'] !== undefined) this.addListener("disappear", function() {
+				var result = this.getFormComponent().getResult();
+				options['onDisappear'].call(thisArg, result);
+			}, this);
+		}
+		if(this.getAllowClose()) this.addListener("keypress", function(event) {
+			if(event.getKeyIdentifier() == "Escape") this.destroy();
 		}, this);
 	},
 
@@ -69,7 +82,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 				parser.dispose();
 			}
 		},
-		
+
 		openForm: function(formComponent, model) {
 			this.__formComponent = formComponent;
 			formComponent.addListenerOnce("close", function(event) {
@@ -94,7 +107,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			this.open();
 			formComponent.executeAction("appear");
 		},
-		
+
 		_getFallbackCaption: function() {
 			// Override to provide a fallback caption
 			return "";

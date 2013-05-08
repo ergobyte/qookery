@@ -29,7 +29,7 @@
 			<script event="execute">
 				$.Qookery.openWindow($("#editor"), {
 					model: $.QookeryDemo.createModel({ username: "New user", password: "", serial: "de ad be ef" }), 
-					onClose: function(result) {
+					onDisappear: function(result) {
 						if(result) $("#passwords").getTableModel().appendRow(result);
 					}
 				});
@@ -39,7 +39,7 @@
 			<script event="execute">
 				$.Qookery.openWindow($("#editor"), {
 					model: $.QookeryDemo.cloneModel($("#passwords").getSelectedRowData()), 
-					onClose: function(result) {
+					onDisappear: function(result) {
 						if(result) $("#passwords").getTableModel().replaceRow(
 							$("#passwords").getSelectedRowIndex(), result);
 					}
