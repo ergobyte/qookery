@@ -52,12 +52,13 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(model === this.constructor.nullItemModel) model = null;
 				this.setValue(model);
 			}, this);
-			selectBox.setFormat(function(item) {
+			var formatFunction = function(item) {
 				if(!item) return "";
 				var model = item.getModel();
 				if(model === this.constructor.nullItemModel) return this.__nullItemLabel;
 				return item.getLabel();
-			}.bind(this));
+			};
+			selectBox.setFormat(formatFunction.bind(this));
 			return selectBox;
 		},
 
