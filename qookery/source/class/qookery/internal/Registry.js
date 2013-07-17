@@ -66,6 +66,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["text-field"] = qookery.internal.components.TextFieldComponent;
 		this.__components["toggle-button"] = qookery.internal.components.ToggleButtonComponent;
 		this.__components["tool-bar"] = qookery.internal.components.ToolBarComponent;
+		this.__components["virtual-tree"] = qookery.internal.components.VirtualTreeComponent;
 
 		this.__componentConstructorArgs = { };
 

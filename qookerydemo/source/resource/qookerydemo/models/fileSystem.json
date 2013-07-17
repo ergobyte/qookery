@@ -1,0 +1,33 @@
+{
+	"filesystem": {
+		"label": "Root",
+		"children": [
+			{
+				"label": "Desktop",
+				"children": [
+					{ "label": "Files" },
+					{ "label": "File System", "children" : [
+						{"label": "bin" },
+						{"label": "boot" }
+					] },
+					{ "label": "Network" },
+					{ "label": "Trash" }
+				]
+			},
+			{
+				"label": "Mail",
+				"children": [
+					{ "label": "Presets" },
+					{ "label": "Sent" },
+					{ "label": "Trash" },
+					{ "label": "Data" },
+					{ "label": "Edit" },
+					{ "label": "Lists" },
+					{ "label": "Personal" },
+					{ "label": "Big" },
+					{ "label": "Spam" }
+				]
+			}
+		]
+	}
+}

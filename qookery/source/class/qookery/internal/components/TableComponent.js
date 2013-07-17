@@ -156,7 +156,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
-
 			this.base(arguments, attributes);
 		},
 

@@ -18,7 +18,7 @@
 		"profiling",
 		"source",
 		"source-all",
-		"source-hybrid",		
+		"source-hybrid",
 		"simulation-build",
 		"simulation-run",
 		"test",
@@ -28,7 +28,7 @@
 	"default-job": "source-hybrid",
 	"let": {
 		"APPLICATION": "qookerydemo",
-		"QOOXDOO_PATH": "../../qooxdoo",
+		"QOOXDOO_PATH": "../../../qooxdoo",
 		"QXTHEME": "qookerydemo.Theme",
 		"API_EXCLUDE": ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*", "${APPLICATION}.simulation.*"],
 		"LOCALES": [ "en" ],
@@ -38,7 +38,7 @@
 	"jobs": {
 		"libraries": {
 			"library": [
-				{ "manifest" : "../org.qookery/Manifest.json" }
+				{ "manifest" : "../qookery/Manifest.json" }
 			]
 		},
 		"includes": {

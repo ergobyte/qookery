@@ -140,6 +140,7 @@
 			<element ref="q:text-field" />
 			<element ref="q:toggle-button"/>
 			<element ref="q:tool-bar" />
+			<element ref="q:virtual-tree" />
 			<any namespace="##other" />
 		</choice>
 	</group>
@@ -517,22 +518,22 @@
 
 	<element name="password-field" type="q:field-component" />
 
-	<element name="radio-button">
-		<complexType>
-			<complexContent>
-				<extension base="q:atom-component">
-					<attribute name="model" type="string" />
-				</extension>
-			</complexContent>
-		</complexType>
-	</element>
-	
 	<element name="progress-bar">
 		<complexType>
 			<complexContent>
 				<extension base="q:component-attributes">
 					<attribute name="maximum" type="float"/>
 					<attribute name="value" type="float"/>
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
+	<element name="radio-button">
+		<complexType>
+			<complexContent>
+				<extension base="q:atom-component">
+					<attribute name="model" type="string" />
 				</extension>
 			</complexContent>
 		</complexType>
@@ -703,5 +704,18 @@
 			</complexContent>
 		</complexType>
 	</element>
-
+	
+	<element name="virtual-tree" >
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component-attributes">
+					<attribute name="child-property" type="string" />
+					<attribute name="hide-root" type="boolean" default="false" />
+					<attribute name="icon-path" type="string" />
+					<attribute name="label-path" type="string" />
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+	
 </schema>

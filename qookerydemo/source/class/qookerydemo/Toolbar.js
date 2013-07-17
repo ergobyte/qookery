@@ -24,14 +24,15 @@ qx.Class.define("qookerydemo.Toolbar", {
 
 	statics: {
 		DEMOS: [
-			{ label: "Hello, World!", formFile: "helloWorld.xml", modelFile: "null.json" },
 			{ label: "About Dialog", formFile: "aboutDialog.xml", modelFile: "null.json" },
+			{ label: "Hello, World!", formFile: "helloWorld.xml", modelFile: "null.json" },
 			{ label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
 			{ label: "Layouts", formFile: "layouts.xml", modelFile: "null.json" },
-			{ label: "Translations", formFile: "translations.xml", modelFile: "null.json" },
 			{ label: "Stack", formFile: "stack.xml", modelFile: "null.json" },
-			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
+			{ label: "Translations", formFile: "translations.xml", modelFile: "null.json" },
 			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
+			{ label: "Virtual Tree", formFile: "virtualTree.xml", modelFile: "fileSystem.json"},
+			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
 			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
 			{ label: "XInclude", formFile: "xInclude.xml" }
 		]
@@ -68,13 +69,13 @@ qx.Class.define("qookerydemo.Toolbar", {
 	members: {
 
 		__loadDemo: function(demoArguments) {
-			var formUrl = "qookerydemo/forms/" + demoArguments['formFile'];
+			var formUrl = "resource/qookerydemo/forms/" + demoArguments['formFile'];
 			qookery.contexts.Qookery.loadResource(formUrl, null, function(data) {
 				qx.core.Init.getApplication().setXmlEditorCode(data);
 				qx.core.Init.getApplication().runCode();
 			});
 			if(demoArguments['modelFile']) {
-				var modelUrl = "qookerydemo/models/" + demoArguments['modelFile'];
+				var modelUrl = "resource/qookerydemo/models/" + demoArguments['modelFile'];
 				qookery.contexts.Qookery.loadResource(modelUrl, null, function(data) {
 					qx.core.Init.getApplication().setModelAreaCode(data);
 				});

@@ -9,7 +9,7 @@
 	],
 	"default-job": "api",
 	"let": {
-		"QOOXDOO_PATH": "../../qooxdoo",
+		"QOOXDOO_PATH": "../../../qooxdoo",
 		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
 		"API_INCLUDE": [
 			"qookery.*"
