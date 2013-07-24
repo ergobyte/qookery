@@ -32,6 +32,7 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 
 	members: {
 		__model: null,
+		__delegate: null,
 
 		_createMainWidget: function(attributes) {
 			var virtualTree = new qx.ui.tree.VirtualTree();
@@ -39,9 +40,31 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 			if(attributes['hide-root']) virtualTree.setHideRoot(true);
 			if(attributes['icon-property']) virtualTree.setIconPath(attributes['icon-property']);
 			if(attributes['label-path']) virtualTree.setLabelPath(attributes['label-path']);
+			
+			virtualTree.getSelection().addListener("change", function(e) {
+				this.fireDataEvent("changeSelection", virtualTree.getSelection().getItem(0));
+			}, this);
+			
 			return virtualTree;
 		},
 
+		setup: function(attributes) {
+			if(this.__delegate !== null) this.getMainWidget().setDelegate(this.__delegate);
+			this.base(arguments, attributes);
+		},
+
+		parseCustomElement: function(formParser, xmlElement) {
+			var elementName = qx.dom.Node.getName(xmlElement);
+			switch(elementName) {
+			case "virtual-tree-delegate":
+				var delegateClassName = formParser.getAttribute(xmlElement, "class");
+				var delegateClass = qx.Class.getByName(delegateClassName);
+				this.__delegate = new delegateClass();
+				return true;
+			}
+			return false;
+		},
+		
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 				case"child-property": return "String";
@@ -63,7 +86,7 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 		setIconOptions: function(func) {
 			this.getMainWidget().setIconOptions(func);
 		},
-		
+
 		_updateUI: function(value) {
 			this.getMainWidget().setModel(this.getValue());
 		}
@@ -71,6 +94,6 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__model");
+		this._disposeObjects("__model","__delegate");
 	}
 });

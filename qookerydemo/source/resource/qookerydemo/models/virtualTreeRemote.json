@@ -1,0 +1,34 @@
+{
+	"filesystem": {
+		"label": "Root", "size" : "1024kb", "date": "2013-07-22", "loaded":true,
+		"children": [
+			{
+				"label": "Desktop", "size" : "19kb", "date": "2013-07-22", "loaded":true,
+				"children": [
+					{ "label": "Files", "size" : "19kb", "date": "2013-07-22" },
+					{ "label": "File System", "size" : "19kb", "date": "2013-07-22", 
+					"children" : [
+						{"label": "bin", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+						{"label": "boot", "size" : "19kb", "date": "2013-07-22", "loaded":true }
+					]},
+					{ "label": "Network", "size" : "19kb", "date": "2013-07-22", "loaded":false, "children" :[{ "label": "Loading"}]},
+					{ "label": "Trash", "size" : "19kb", "date": "2013-07-22", "loaded":false, "children" :[{ "label": "Loading"}]}
+				]
+			},
+			{
+				"label": "Mail", "size" : "19kb", "date": "2013-07-22", "loaded":true,
+				"children": [
+					{ "label": "Presets", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Sent", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Trash", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Data", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Edit", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Lists", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Personal", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Big", "size" : "19kb", "date": "2013-07-22", "loaded":true},
+					{ "label": "Spam", "size" : "19kb", "date": "2013-07-22", "loaded":true}
+				]
+			}
+		]
+	}
+}
