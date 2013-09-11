@@ -13,8 +13,7 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 
 		__futures: null,
 		
-		createFuture: function(title) {
-			qx.log.Logger.debug(this, title);
+		createFuture: function() {
 			var future = qx.event.Manager.getNextUniqueId();
 			this.__futures.push(future);
 			return future;

@@ -85,6 +85,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 
 		openForm: function(formComponent, model) {
 			this.__formComponent = formComponent;
+			this.getContentElement().setAttribute("qkid", formComponent.getId());
 			formComponent.addListenerOnce("close", function(event) {
 				formComponent.setModel(null);
 				this.destroy();
@@ -131,9 +132,9 @@ qx.Class.define("qookery.impl.FormWindow", {
 
 		_onCloseButtonClick: function(event) {
 			this.__formComponent.close();
-	    },
+		},
 
-	    getFormComponent: function() {
+		getFormComponent: function() {
 			return this.__formComponent;
 		}
 	},

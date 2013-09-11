@@ -18,8 +18,8 @@
 	$Id$
 */
 
-/*
-	#asset(qookerydemo/*)
+/**
+ * @asset(qookerydemo/*)
  */
 qx.Class.define("qookerydemo.Application", {
 

@@ -446,7 +446,7 @@
 						<element ref="q:import" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="q:bind" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
-						<choice minOccurs="0" maxOccurs="unbounded">
+						<choice minOccurs="0" minOccurs="unbounded">
 							<element ref="q:script" />
 							<group ref="q:components" />
 						</choice>

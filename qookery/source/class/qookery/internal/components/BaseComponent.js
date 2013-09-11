@@ -90,8 +90,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	},
 
 	properties: {
-	    enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
-	    visibility: { init: "visible", check : [ "visible", "hidden", "excluded" ], inheritable: true, apply: "_applyVisibility" }
+		enabled: { init: true, check: "Boolean", inheritable: true, apply: "_applyEnabled" },
+		visibility: { init: "visible", check : [ "visible", "hidden", "excluded" ], inheritable: true, apply: "_applyVisibility" }
 	},
 
 	construct: function(parentComponent) {
@@ -127,6 +127,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			if(attributes['enabled'] !== undefined) this.setEnabled(false);
 			if(attributes['visibility']) this.setVisibility(attributes['visibility']);
+
+			if(this.getId()) {
+				this.getMainWidget().getContentElement().setAttribute("qkid", this.getId());
+			}
 		},
 
 		parseCustomElement: function(formParser, xmlElement) {
