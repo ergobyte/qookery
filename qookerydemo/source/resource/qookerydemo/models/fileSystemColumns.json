@@ -1,0 +1,34 @@
+{
+	"filesystem": {
+		"label": "Root", "inbound" : 123, "outbound": 123,
+		"children": [
+			{
+				"label": "Desktop", "inbound" : 123, "outbound": 123,
+				"children": [
+					{ "label": "Files", "inbound" : 123, "outbound": 123 },
+					{ "label": "File System", "inbound" : 123, "outbound": 123, 
+					"children" : [
+						{"label": "bin", "inbound" : 123, "outbound": 123 },
+						{"label": "boot", "inbound" : 123, "outbound": 123 }
+					]},
+					{ "label": "Network", "inbound" : 123, "outbound": 123},
+					{ "label": "Trash", "inbound" : 123, "outbound": 123 }
+				]
+			},
+			{
+				"label": "Mail", "inbound" : 123, "outbound": 123,
+				"children": [
+					{ "label": "Presets", "inbound" : 123, "outbound": 123 },
+					{ "label": "Sent", "inbound" : 123, "outbound": 123 },
+					{ "label": "Trash", "inbound" : 123, "outbound": 123 },
+					{ "label": "Data", "inbound" : 123, "outbound": 123 },
+					{ "label": "Edit", "inbound" : 123, "outbound": 123 },
+					{ "label": "Lists", "inbound" : 123, "outbound": 123 },
+					{ "label": "Personal", "inbound" : 123, "outbound": 123 },
+					{ "label": "Big", "inbound" : 123, "outbound": 123 },
+					{ "label": "Spam", "inbound" : 123, "outbound": 123 }
+				]
+			}
+		]
+	}
+}
