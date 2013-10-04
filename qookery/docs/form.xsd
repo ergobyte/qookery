@@ -15,8 +15,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
 		xmlns:q="http://www.qookery.org/ns/Form"
@@ -446,7 +444,7 @@
 						<element ref="q:import" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="q:bind" minOccurs="0" maxOccurs="unbounded" />
 						<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
-						<choice minOccurs="0" minOccurs="unbounded">
+						<choice minOccurs="0" maxOccurs="unbounded">
 							<element ref="q:script" />
 							<group ref="q:components" />
 						</choice>

@@ -86,6 +86,9 @@ qx.Class.define("qookery.impl.FormWindow", {
 		openForm: function(formComponent, model) {
 			this.__formComponent = formComponent;
 			this.getContentElement().setAttribute("qkid", formComponent.getId());
+			this.addListenerOnce("appear", function(event) {
+				formComponent.executeAction("appear");
+			}, this);
 			formComponent.addListenerOnce("close", function(event) {
 				formComponent.setModel(null);
 				this.destroy();
@@ -102,11 +105,11 @@ qx.Class.define("qookery.impl.FormWindow", {
 			var formIcon = formComponent.getIcon();
 			if(formIcon && !this.getIcon()) this.setIcon(formIcon);
 			if(model) formComponent.setModel(model);
+
 			this.add(formComponent.getMainWidget(), { flex: 1 });
 			this.add(this._getButtonsContainer());
 			this.center();
 			this.open();
-			formComponent.executeAction("appear");
 		},
 
 		_getFallbackCaption: function() {

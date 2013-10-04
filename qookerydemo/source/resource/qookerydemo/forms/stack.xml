@@ -4,18 +4,6 @@
 -->
 <form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
 
-	<stack id="stack">
-		<composite id="page1">
-			<label label="First Page"/>
-		</composite>
-		<composite id="page2">
-			<label label="Second Page"/>
-		</composite>
-		<composite id="page3">
-			<label label="Third Page"/>
-		</composite>
-	</stack>
-	
 	<composite column-count="auto">
 		<button label="Page 1">
 			<script event="execute">
@@ -34,4 +22,16 @@
 		</button>
 	</composite>
 
+	<stack id="stack" decorator="group" height="100">
+		<composite id="page1">
+			<label label="First Page" text-color="red" />
+		</composite>
+		<composite id="page2">
+			<label label="Second Page" text-color="blue" />
+		</composite>
+		<composite id="page3">
+			<label label="Third Page" text-color="green" />
+		</composite>
+	</stack>
+	
 </form>

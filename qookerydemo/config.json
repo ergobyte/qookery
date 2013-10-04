@@ -4,36 +4,18 @@
 		{ "path" : "${QOOXDOO_PATH}/tool/data/config/application.json" }
 	],
 	"export": [
-		"api",
-		"api-data",
 		"build",
 		"clean",
-		"distclean",
-		"fix",
-		"info",
-		"inspector",
 		"lint",
-		"migration",
-		"pretty",
-		"profiling",
-		"source",
-		"source-all",
-		"source-hybrid",
-		"simulation-build",
-		"simulation-run",
-		"test",
-		"test-source",
-		"translation"
+		"source"
 	],
-	"default-job": "source-hybrid",
+	"default-job": "source",
 	"let": {
+		"ROOT": ".",
 		"APPLICATION": "qookerydemo",
-		"QOOXDOO_PATH": "../../../qooxdoo",
-		"QXTHEME": "qookerydemo.Theme",
-		"API_EXCLUDE": ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*", "${APPLICATION}.simulation.*"],
+		"QXTHEME": "qookerydemo.thene.Theme",
 		"LOCALES": [ "en" ],
-		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
-		"ROOT": "."
+		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache"
 	},
 	"jobs": {
 		"libraries": {

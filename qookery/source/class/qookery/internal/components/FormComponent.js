@@ -74,7 +74,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes['model-provider']);
 			var icon = this.getAttribute('icon');
 			if(icon) this.setIcon(icon);
-			this.info("Form created");
+			this.info("Created form", this.getId() || "");
 		},
 
 		setup: function(attributes) {
@@ -395,6 +395,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__registration = null;
 		this.__clientCodeContext = null;
 		this.__translationPrefix = null;
-		this.debug("Form disposed");
+		this.info("Destructed form", this.getId() || "");
 	}
 });
