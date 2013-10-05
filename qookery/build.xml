@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
 	Qookery - Declarative UI Building for Qooxdoo
 
 	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
@@ -14,15 +15,16 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-*/
+-->
+<project name="Qookery" basedir="." default="Api">
 
-qx.Theme.define("qookerydemo.theme.Theme", {
+	<property name="build.projectHome" location="." />
+	<property name="build.projectName" value="qookery" />
 
-	meta: {
-		appearance: qx.theme.modern.Appearance,
-		color: qx.theme.modern.Color,
-		decoration: qx.theme.modern.Decoration,
-		font: qx.theme.modern.Font,
-		icon: qookerydemo.theme.Icon
-	}
-});
+	<import file="docs/qookery.ant.xml" as="qookery" />
+
+	<target name="Api" depends="qookery.Api-Run" description="Generate and view the Qookery API" />
+	<target name="Clean" depends="qookery.Clean" description="Clean up any intermediate files produced by build" />
+	<target name="Lint" depends="qookery.Lint" description="Perform syntactic checks on library" />
+
+</project>

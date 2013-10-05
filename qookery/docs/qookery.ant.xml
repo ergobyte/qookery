@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="Qookery Common Build File">
+
+	<property environment="env" />
+
+	<property name="build.root" value="/var/tmp/${user.name}/qookery" />
+	<property name="build.applicationName" value="${build.projectName}" />
+	<property name="build.gitRepositoryName" value="qookery" />
+	<condition property="build.browser" value="${env.BROWSER}" else="/usr/bin/x-www-browser"><isset property="env.BROWSER" /></condition>
+	<condition property="build.serverHost" value="${env.SERVER_HOST}" else="localhost:8000"><isset property="env.SERVER_HOST" /></condition>
+
+	<property name="git.root" location="../.." />
+	<property name="git.repository.qookery" value="${git.root}/${build.gitRepositoryName}" />
+
+	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
+
+	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
+	<condition property="qooxdoo.version" value="3.0.1"><not><isset property="qooxdoo.version" /></not></condition>
+	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
+	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
+
+	<!-- Macros -->
+
+	<macrodef name="call-generator-py">
+		<attribute name="job" default="list-jobs" />
+		<element name="exec-elements" optional="true" />
+		<sequential>
+			<exec executable="${qooxdoo.path}/tool/bin/generator.py" failonerror="true">
+				<env key="TMPDIR" value="${qooxdoo.root}" />
+				<arg line="--no-progress-indicator --stacktrace" />
+				<arg line="-m QOOXDOO_PATH:${qooxdoo.relativePath}" />
+				<arg line="-m APPLICATION:${build.applicationName}" />
+				<arg line="-m CORS_SERVER:${build.serverHost}" />
+				<arg line="-m PROJECT_HOME:${build.projectHome}" />
+				<exec-elements />
+				<arg value="@{job}" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<!-- Initialization -->
+
+	<target name="Init">
+		<!-- Placeholder for common initialization actions -->
+		<echo message="Running Ant task '${ant.project.invoked-targets}' on project '${ant.project.name}'" />
+	</target>
+
+	<!-- Project cleanup -->
+
+	<target name="Clean" depends="Init">
+		<delete failonerror="no" dir="api" />
+		<delete failonerror="no" dir="build" />
+		<delete failonerror="no" dir="source/script" />
+		<delete failonerror="no" dir="test" />
+	</target>
+
+	<!-- Qooxdoo installation -->
+
+	<target name="Qooxdoo-Init" depends="Init">
+		<condition property="build.qooxdooInstalled">
+			<available type="dir" file="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
+		</condition>
+	</target>
+
+	<target name="Qooxdoo-Install" depends="Qooxdoo-Init" unless="build.qooxdooInstalled">
+		<mkdir dir="${qooxdoo.root}" />
+		<get dest="${qooxdoo.root}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="http://downloads.sourceforge.net/qooxdoo/qooxdoo-${qooxdoo.version}-sdk.zip" />
+		</get>
+		<unzip src="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk.zip" dest="${qooxdoo.root}/" />
+		<chmod dir="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk/tool/bin" includes="*.py" perm="+x" />
+		<symlink link="${qooxdoo.relativePath}" resource="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" overwrite="true" />
+		<symlink link="${qooxdoo.path}/component/library/qookery" resource="${git.repository.qookery}/qookery" overwrite="true" />
+	</target>
+
+	<target name="Qooxdoo-DistClean" depends="Init, Qooxdoo-Install">
+		<call-generator-py job="distclean" />
+	</target>
+
+	<!-- Source targets -->
+
+	<target name="Source-Init" depends="Init, Qooxdoo-Install" unless="build.sourceUpToDate">
+		<uptodate property="build.sourceUpToDate" targetfile="source/script/${build.applicationName}.js">
+			<srcfiles dir="source" />
+			<srcfiles file="config.json" />
+		</uptodate>
+	</target>
+	
+	<target name="Source-Generate" depends="Source-Init" unless="build.sourceUpToDate">
+		<call-generator-py job="source" />
+	</target>
+
+	<target name="Source-Run" depends="Source-Generate, PythonHttp-Start">
+		<exec executable="${build.browser}">
+			<arg value="http://${build.serverHost}/local/${build.gitRepositoryName}/${build.projectName}/source/" />
+		</exec>
+	</target>
+
+	<!-- Build targets -->
+
+	<target name="Build-Init" depends="Init, Qooxdoo-Install">
+		<uptodate property="build.sourceUpToDate" targetfile="build/script/${build.applicationName}.js">
+			<srcfiles dir="source" />
+			<srcfiles file="config.json" />
+		</uptodate>
+	</target>
+	
+	<target name="Build-Generate" depends="Build-Init" unless="build.sourceUpToDate">
+		<call-generator-py job="build" />
+	</target>
+
+	<target name="Build-Run" depends="Build-Generate, PythonHttp-Start">
+		<exec executable="${build.browser}">
+			<arg value="http://${build.serverHost}/local/${build.gitRepositoryName}/${build.projectName}/build/" />
+		</exec>
+	</target>
+
+	<!-- Test targets -->
+	
+	<target name="Test-Init" depends="Init, Qooxdoo-Install">
+		<uptodate property="build.sourceUpToDate" targetfile="test/script/tests.js">
+			<srcfiles dir="source" />
+			<srcfiles file="config.json" />
+		</uptodate>
+	</target>
+	
+	<target name="Test-Generate" depends="Test-Init" unless="build.sourceUpToDate">
+		<call-generator-py job="test" />
+	</target>
+
+	<target name="Test-Run" depends="Test-Generate, PythonHttp-Start">
+		<exec executable="${build.browser}">
+			<arg value="http://${build.serverHost}/local/${build.gitRepositoryName}/${build.projectName}/test/" />
+		</exec>
+	</target>
+
+	<!-- API -->
+
+	<target name="Api-Init" depends="Init">
+		<uptodate property="build.sourceUpToDate" targetfile="api/script/apidata.json">
+			<srcfiles dir="source" />
+			<srcfiles file="config.json" />
+		</uptodate>
+		<uptodate property="build.apiUpToDate" targetfile="api/script/apiviewer.js">
+			<srcfiles file="config.json" />
+		</uptodate>
+	</target>
+	
+	<target name="Api-Data" depends="Api-Init, Qooxdoo-Install" unless="build.sourceUpToDate">
+		<call-generator-py job="api-data" />
+	</target>
+	
+	<target name="Api-Application" depends="Api-Init, Qooxdoo-Install" unless="build.apiUpToDate">
+		<call-generator-py job="api" />
+	</target>
+
+	<target name="Api-Run" depends="Api-Data, Api-Application, PythonHttp-Start">
+		<exec executable="${build.browser}">
+			<arg value="http://${build.serverHost}/local/${build.gitRepositoryName}/${build.projectName}/api/" />
+		</exec>
+	</target>
+
+	<!-- Misc generator.py targets -->
+	
+	<target name="Lint" depends="Init, Qooxdoo-Install">
+		<call-generator-py job="lint" />
+	</target>
+
+	<!-- Python HTTP server -->
+
+	<target name="PythonHttp-Init">
+		<condition property="build.pythonHttpIsRunning"><and>
+			<available type="file" file="${pythonhttp.root}/pythonhttp.pid" />
+			<socket server="localhost" port="8000" />
+		</and></condition>
+	</target>
+
+	<target name="PythonHttp-Start" depends="PythonHttp-Init" unless="build.pythonHttpIsRunning">
+		<mkdir dir="${pythonhttp.root}/local" />
+		<symlink link="${pythonhttp.root}/local/qooxdoo" resource="${qooxdoo.path}" overwrite="true" />
+		<symlink link="${pythonhttp.root}/local/qookery" resource="${basedir}/../../qookery" overwrite="true" />
+		<exec executable="/sbin/start-stop-daemon">
+			<arg value="--oknodo" />
+			<arg value="--pidfile" />
+			<arg value="${pythonhttp.root}/pythonhttp.pid" />
+			<arg value="--chdir" />
+			<arg value="${pythonhttp.root}" />
+			<arg value="--startas" />
+			<arg value="/usr/bin/python" />
+			<arg value="--background" />
+			<arg value="--make-pidfile" />
+			<arg value="--verbose" />
+			<arg value="--start" />
+			<arg value="--" />
+			<arg line="-m SimpleHTTPServer" />
+		</exec>
+	</target>
+
+	<target name="PythonHttp-Stop" depends="PythonHttp-Init" if="build.pythonHttpIsRunning">
+		<exec executable="/sbin/start-stop-daemon">
+			<arg value="--oknodo" />
+			<arg value="--pidfile" />
+			<arg value="${pythonhttp.root}/pythonhttp.pid" />
+			<arg value="--verbose" />
+			<arg value="--stop" />
+		</exec>
+		<delete file="${pythonhttp.root}/pythonhttp.pid" />
+	</target>
+
+</project>

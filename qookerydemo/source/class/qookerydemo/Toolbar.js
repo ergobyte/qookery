@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 qx.Class.define("qookerydemo.Toolbar", {
@@ -71,20 +69,7 @@ qx.Class.define("qookerydemo.Toolbar", {
 	members: {
 
 		__loadDemo: function(demoArguments) {
-			var formUrl = "resource/qookerydemo/forms/" + demoArguments['formFile'];
-			qookery.contexts.Qookery.loadResource(formUrl, null, function(data) {
-				qx.core.Init.getApplication().setXmlEditorCode(data);
-				qx.core.Init.getApplication().runCode();
-			});
-			if(demoArguments['modelFile']) {
-				var modelUrl = "resource/qookerydemo/models/" + demoArguments['modelFile'];
-				qookery.contexts.Qookery.loadResource(modelUrl, null, function(data) {
-					qx.core.Init.getApplication().setModelAreaCode(data);
-				});
-			}
-			else {
-				qx.core.Init.getApplication().setModelAreaCode("");
-			}
+			qx.core.Init.getApplication().loadDemo(demoArguments['formFile'], demoArguments['modelFile']);
 		}
 	}
 });

@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 qx.Class.define("qookerydemo.ResultArea",
@@ -44,7 +42,7 @@ qx.Class.define("qookerydemo.ResultArea",
 			}
 			catch(e) {
 				this.error(qx.lang.String.format("Error creating form window: %1", [ e ]));
-				if(e.stack) qx.log.Logger.error(e.stack);
+				if(e.stack) { qx.log.Logger.error(e.stack); }
 			}
 			finally {
 				parser.dispose();

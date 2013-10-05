@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 /**
@@ -88,7 +86,7 @@ qx.Interface.define("qookery.IComponent", {
 		 *
 		 * @param attributeName {String} the name of the required attribute
 		 *
-		 * @return attribute's value or <code>null</code> if undefined
+		 * @return {any} attribute's value or <code>null</code> if undefined
 		 */
 		getAttribute: function(attributeName) { },
 
@@ -110,6 +108,8 @@ qx.Interface.define("qookery.IComponent", {
 		 * Perform additional component initialization
 		 *
 		 * <p>This method is intended to be called by XML authors</p>
+		 * 
+		 * @param initOptions {Map?null} optional map with additional data expected by component's implementation
 		 */
 		initialize: function(initOptions) { },
 
@@ -145,12 +145,16 @@ qx.Interface.define("qookery.IComponent", {
 		 * @param actionName {String} one the actions provided by component
 		 * @param argumentMap {Map} optional name-value map to be passed as call arguments
 		 *
-		 * @return the action's execution result
+		 * @return {any} the action's execution result
 		 */
 		executeAction: function(actionName, argumentMap) { },
 
 		/**
-		 * Return the type of an attribute, or <code>null</code> if unknown
+		 * Return the type of an attribute
+		 * 
+		 * @param attributeName {String} name of the attribute
+		 * 
+		 * @return {String} attribute's type or <code>null</code> if unknown
 		 */
 		getAttributeType: function(attributeName) { },
 

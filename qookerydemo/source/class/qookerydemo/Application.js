@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 /**
@@ -27,7 +25,7 @@ qx.Class.define("qookerydemo.Application", {
 
 	members: {
 
-		__toolBar: null,
+		__toolbar: null,
 		__xmlEditor: null,
 		__resultArea: null,
 		__jsonEditor: null,
@@ -45,7 +43,7 @@ qx.Class.define("qookerydemo.Application", {
 			this.__resultArea = new qookerydemo.ResultArea();
 
 			var verticalSplitter = new qx.ui.splitpane.Pane("vertical");
-			verticalSplitter.setDecorator(new qx.ui.decoration.Uniform(0));
+			verticalSplitter.setDecorator(new qx.ui.decoration.Decorator().set({ width: 0 }));
 			verticalSplitter.setOffset(0);
 			verticalSplitter.add(this.__xmlEditor);
 			verticalSplitter.add(this.__jsonEditor);
@@ -62,10 +60,21 @@ qx.Class.define("qookerydemo.Application", {
 			qx.dom.Element.remove(document.getElementById('splash'));
 		},
 
-		runCode: function() {
-			var xmlCode = this.__xmlEditor.getCode();
-			if(!xmlCode) return;
-			this.__resultArea.loadForm(xmlCode);
+		loadDemo: function(formFile, modelFile) {
+			var formUrl = "resource/qookerydemo/forms/" + formFile;
+			qookery.contexts.Qookery.loadResource(formUrl, this, function(data) {
+				this.setXmlEditorCode(data);
+				this.runCode();
+			});
+			if(modelFile) {
+				var modelUrl = "resource/qookerydemo/models/" + modelFile;
+				qookery.contexts.Qookery.loadResource(modelUrl, this, function(data) {
+					this.setModelAreaCode(data);
+				});
+			}
+			else {
+				this.setModelAreaCode("false");
+			}
 		},
 
 		setModelAreaCode: function(code) {
@@ -74,6 +83,12 @@ qx.Class.define("qookerydemo.Application", {
 
 		setXmlEditorCode: function(code) {
 			this.__xmlEditor.setCode(code);
+		},
+
+		runCode: function() {
+			var xmlCode = this.__xmlEditor.getCode();
+			if(!xmlCode) { return; }
+			this.__resultArea.loadForm(xmlCode);
 		},
 
 		setFormModel: function(model) {

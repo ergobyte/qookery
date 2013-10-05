@@ -5,8 +5,12 @@
 	],
 	"export": [
 		"api",
-		"api-data"
+		"api-data",
+		"lint"
 	],
+	"config-warnings": {
+		"job-shadowing": [ "lint" ]
+	},
 	"default-job": "api",
 	"let": {
 		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",
@@ -16,5 +20,12 @@
 		"API_EXCLUDE": [
 			"qookery.internal.*", "qx.*"
 		],
+	},
+	"jobs": {
+		"lint": {
+			"lint-check": {
+				"ignore-no-loop-block": true
+			}
+		}
 	}
 }

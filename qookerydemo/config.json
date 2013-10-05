@@ -9,18 +9,22 @@
 		"lint",
 		"source"
 	],
+	"config-warnings": {
+		"job-shadowing": [ "libraries", "includes" ]
+	},
 	"default-job": "source",
 	"let": {
 		"ROOT": ".",
 		"APPLICATION": "qookerydemo",
-		"QXTHEME": "qookerydemo.thene.Theme",
-		"LOCALES": [ "en" ],
+		"QXTHEME": "qookerydemo.theme.Theme",
+		"LOCALES": [ "en", "el" ],
 		"CACHE": "${TMPDIR}/qx${QOOXDOO_VERSION}/cache"
 	},
 	"jobs": {
 		"libraries": {
 			"library": [
-				{ "manifest" : "../qookery/Manifest.json" }
+				{ "manifest": "${QOOXDOO_PATH}/framework/Manifest.json" },
+				{ "manifest": "${QOOXDOO_PATH}/component/library/qookery/Manifest.json" }
 			]
 		},
 		"includes": {
