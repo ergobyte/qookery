@@ -14,13 +14,10 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 /**
- * The 'Qookery' scripting context is always available to XML authors and provides
- * a number of commonly used methods.
+ * Scripting context for easily calling common model provider functions
  */
 qx.Class.define("qookery.contexts.Model", {
 
@@ -29,14 +26,14 @@ qx.Class.define("qookery.contexts.Model", {
 	statics: {
 
 		/**
-		 * Access to IModelProvider#identityOf
+		 * Access to {@link qookery.IModelProvider#identityOf}
 		 */
 		identityOf: function(object) {
 			return qookery.Qookery.getModelProvider().identityOf(object);
 		},
 
 		/**
-		 * Access to IModelProvider#areEqual
+		 * Access to {@link qookery.IModelProvider#areEqual}
 		 */
 		areEqual: function(object1, object2) {
 			return qookery.Qookery.getModelProvider().areEqual(object1, object2);

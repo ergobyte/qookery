@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 /**
@@ -38,19 +36,26 @@ qx.Interface.define("qookery.IContainerComponent", {
 		add: function(component, display) { },
 		
 		/**
-		 * Remove the given component from the children list.
+		 * Remove component from the children list
 		 * 
-		 * @param {} component
+		 * @param component {qookery.IComponent} component to remove
 		 */
 		remove: function(component) { },
 		
 		/**
-		 * Returns the index position of the given component if it is a child component. Otherwise it returns -1.
+		 * Return index of component in the children list
 		 * 
-		 * @param {} component
+		 * @param component {qookery.IComponent} component to find index of
+		 * 
+		 * @return component index or <code>-1</code> if no found in children list
 		 */
 		contains: function(component) { },
-		
+
+		/**
+		 * Return a list of all component's registered as children if this component
+		 * 
+		 * @return {Array} children list
+		 */
 		listChildren: function() { }
 	}
 });

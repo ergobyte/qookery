@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 /**
@@ -32,7 +30,11 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * Use resource loader to load a resource
 		 *
 		 * @param resourceUri {String} the URI of the resource to load
-		 * @param callback {Function} a callback to call after successful load
+		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
+		 * @param successCallback {Function} callback to call after successful load
+		 * @param failCallback {Function} callback to call in case load fails
+		 * 
+		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
 		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
 			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
@@ -43,10 +45,13 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 *
 		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
 		 * @param options {Map ? null} any of FormWindow options in addition to any of those below
+		 * 		<ul>
+		 * 		<li>model {any} an optional model to load into the form</li>
+		 * 		<li>variables {Map ? null} optional variables to pass to the form parser</li>
+		 * 		</ul>
 		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
-		 *
-		 * @option model {var ? null} an optional model to load into the form
-		 * @option variables {Map ? null} optional variables to pass to the form parser
+		 * 
+		 * @return {qookery.impl.FormWindow} the newly opened form window
 		 */
 		openWindow: function(form, options, thisArg) {
 			if(!options) options = {};
@@ -72,6 +77,15 @@ qx.Class.define("qookery.contexts.Qookery", {
 			return qookery.Qookery.getRegistry().createFormat(formatterName, options);
 		},
 
+		/**
+		 * Programmatically create a new Qookery component
+		 * 
+		 * @param parentComponent {qookery.IContainerComponent} the parent component to hold new component
+		 * @param componentClassName {String} the name of the new component's implementation class
+		 * @param attributes {Map ? null} any number of attributes understood by new component implementation
+		 * 
+		 * @return {qookery.IComponent} newly created component
+		 */
 		createComponent: function(parentComponent, componentClassName, attributes) {
 			var component = qookery.Qookery.getRegistry().createComponent(componentClassName, parentComponent);
 			component.create(attributes);

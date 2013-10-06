@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 /**
@@ -31,7 +29,7 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * <p>The result must be such so that if a == b, then identityOf(a) == identityOf(b) and vice-versa.</p>
 		 * <p>The result must be <code>null</code> when no input was passed.</p>
 		 *
-		 * @param {any} a model object - it may be <code>null</code>
+		 * @param object {any} model object - it may be <code>null</code>
 		 *
 		 * @return {any} any JavaScript primitive or array of primitives
 		 */
@@ -44,8 +42,8 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * 		equals(null, null) -> true and
 		 * 		equals(null, non-null) -> false</p>
 		 *
-		 * @param object1 any model object, may be <code>null</code>
-		 * @param object2 any model object, may be <code>null</code>
+		 * @param object1 {any} model object, may be <code>null</code>
+		 * @param object2 {any} model object, may be <code>null</code>
 		 *
 		 * @return <code>true</code> if objects are equal or both <code>null</code>
 		 */
@@ -54,7 +52,7 @@ qx.Interface.define("qookery.IModelProvider", {
 		/**
 		 * Return a human-friendly label for a model object
 		 *
-		 * @param {any} a model object - it may not be <code>null</code>
+		 * @param object {any} model object - it may not be <code>null</code>
 		 *
 		 * @return {String} any textual label or <code>null</code> if none available
 		 */
@@ -71,6 +69,8 @@ qx.Interface.define("qookery.IModelProvider", {
 
 		/**
 		 * Clone an object
+		 * 
+		 * @param object {any} model object to clone
 		 */
 		clone: function(object) { }
 	}
