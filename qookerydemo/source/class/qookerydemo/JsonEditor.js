@@ -50,13 +50,13 @@ qx.Class.define("qookerydemo.JsonEditor", {
 			this.__ace.selection.moveCursorFileStart();
 		},
 
-    	_createChildControlImpl: function(id, hash) {
+		_createChildControlImpl: function(id, hash) {
 			switch(id) {
 			case "heading":
-		 		var control = new qx.ui.basic.Label("Model JSON").set({ font: "bold" });
+				var control = new qx.ui.basic.Label("Model JSON").set({ font: "bold" });
 				return control;
 			case "button-bar":
-		 		var control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+				var control = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
 				control.add(this.getChildControl("json-to-form-button"));
 				control.add(this.getChildControl("clear-form-button"));
 				control.add(this.getChildControl("form-to-json-button"));
@@ -64,24 +64,24 @@ qx.Class.define("qookerydemo.JsonEditor", {
 			case "json-to-form-button":
 				var control = new qx.ui.form.Button("Load model into form");
 				control.addListener("execute", function(e) {
-		    		var dataAsJson = this.getCode();
+					var dataAsJson = this.getCode();
 					var dataAsJsObject = qx.lang.Json.parse(dataAsJson);
 					this.__dataAsQxObject = qx.data.marshal.Json.createModel(dataAsJsObject, true);
 					qx.core.Init.getApplication().setFormModel(this.__dataAsQxObject);
-		    	}, this);
+				}, this);
 				return control;
 			case "form-to-json-button":
 				var control = new qx.ui.form.Button("Recreate JSON");
-		    	control.addListener("execute", function(e) {
+				control.addListener("execute", function(e) {
 					var dataAsJson = qx.util.Serializer.toJson(this.__dataAsQxObject);
 					this.setCode(dataAsJson);
-		    	}, this);
+				}, this);
 				return control;
 			case "clear-form-button":
 				var control = new qx.ui.form.Button("Unload model from form");
-		    	control.addListener("execute", function(e) {
+				control.addListener("execute", function(e) {
 					qx.core.Init.getApplication().setFormModel(null);
-		    	}, this);
+				}, this);
 				return control;
 			case "editor":
 				var control = new qx.ui.core.Widget();

@@ -33,11 +33,11 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
 		 * @param successCallback {Function} callback to call after successful load
 		 * @param failCallback {Function} callback to call in case load fails
-		 * 
+		 * @param asynchronous {boolean} determinate if the request are asynchronous or not
 		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
-		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
-			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
+		loadResource: function(resourceUri, thisArg, successCallback, failCallback, asynchronous) {
+			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback, asynchronous);
 		},
 
 		/**
@@ -91,6 +91,35 @@ qx.Class.define("qookery.contexts.Qookery", {
 			component.create(attributes);
 			component.setup(attributes);
 			return component;
+		},
+		
+		/**
+		 * 
+		 * @param url {String} the URI of the resource to load
+		 * @param thisArg {Object} an object to set as <code>this</code> for callbacks
+		 * @param successCallBack {Function} callback to call after successful load
+		 * @param failCallback {Function} callback to call in case load fails
+		 * @param model {Object} the form model
+		 * @param variables {Object ? null} variables that will be available in xml <code> $.variableName</code>
+		 * @param future {String? null} future
+		 * @return {String|null} loaded resource as text in case call is synchronous
+		 */
+		loadForm: function(url, thisArg, successCallBack, failCallback, model, variables, future) {
+			var callBack = function(xmlCode) {
+				var xmlDocument = qx.xml.Document.fromString(xmlCode);
+				var parser = qookery.Qookery.createFormParser(variables);
+				try {
+					var formComponent = parser.parseXmlDocument(xmlDocument);
+					if(successCallBack) successCallBack.call(thisArg, formComponent, model, variables, future);
+				}
+				catch(e) {
+					qx.log.Logger.error(e.stack);
+				}
+				finally {
+					parser.dispose();
+				}
+			};
+			return qookery.Qookery.getResourceLoader().loadResource(url, thisArg, callBack, failCallback);
 		}
 	}
 });

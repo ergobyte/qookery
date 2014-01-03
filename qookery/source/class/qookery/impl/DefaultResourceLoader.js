@@ -24,25 +24,23 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
 	members: {
 
-		loadResource: function(url, thisArg, successCallback, failCallback) {
+		loadResource: function(url, thisArg, successCallback, failCallback, asynchronousRequest) {
 			var resourceUri = qx.util.ResourceManager.getInstance().toUri(url);
 			if(qx.core.Environment.get("qx.debug")) resourceUri += "?nocache=" + new Date().getTime();
 			var result = null, asynchronous;
+			asynchronous = (typeof asynchronousRequest === 'undefined' || asynchronousRequest === true) ? true : false;
 			var xhrRequest = new qx.bom.request.Xhr();
 			if(successCallback && thisArg) {
-				asynchronous = true;
 				xhrRequest.onload = function(event) {
 					successCallback.call(thisArg, xhrRequest.responseText);
 				};
 			}
 			else if(successCallback) {
-				asynchronous = true;
 				xhrRequest.onload = function(event) {
 					successCallback(xhrRequest.responseText);
 				};
 			}
 			else {
-				asynchronous = false;
 				xhrRequest.onload = function() {
 					var statusCode = xhrRequest.status;
 					var wasSuccessful = qx.util.Request.isSuccessful(statusCode);
