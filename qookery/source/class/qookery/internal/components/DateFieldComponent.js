@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 	},
 
 	members: {
-		
+
 		__regularExpression: null,
 		__inputIndexMap: null,
 		__userTyped: null,
@@ -91,7 +91,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 		_applyFormat: function(format) {
 			this.getMainWidget().setDateFormat(format);
 		},
-		
+
 		__parseInput: function() {
 			var textField = this.getMainWidget().getChildControl("textfield");
 			var text = textField.getValue();
@@ -102,7 +102,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			var month = res[this.__inputIndexMap.month] - 1;
 			if(month < 1 || month > 12) return;
 			var date = res[this.__inputIndexMap.date];
-			if(date < 1 || date > 31) return; 
+			if(date < 1 || date > 31) return;
 			var hours = (parseInt(this.__inputIndexMap.hours) != 0) ? res[this.__inputIndexMap.hours] : 0;
 			if(hours < 0 || hours > 23) return;
 			var minutes = (parseInt(this.__inputIndexMap.minutes) != 0) ? res[this.__inputIndexMap.minutes] : 0;
@@ -112,17 +112,17 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			var inputDate = new Date(year, month, date, hours, minutes, seconds);
 			this.setValue(inputDate);
 		},
-		
+
 		__parseSpecification: function(specification) {
 			var result = specification.split(' ', 7);
 			if(!result || result.length != 7) return null;
-			this.__inputIndexMap = { 
-				year: result[0], 
-				month: result[1], 
-				date: result[2], 
-				hours: result[3], 
-				minutes: result[4], 
-				seconds: result[5] 
+			this.__inputIndexMap = {
+				year: result[0],
+				month: result[1],
+				date: result[2],
+				hours: result[3],
+				minutes: result[4],
+				seconds: result[5]
 			};
 			this.__regularExpression = new RegExp(result[6], 'i');
 		}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	Rich text (CKEditor) demo
+-->
+<form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="0 1">
+
+	<rich-text width="200" height="100" label="Description" connect="description" />
+
+	<rich-text width="200" height="200" label="Comments" connect="comments" />
+
+</form>

@@ -49,6 +49,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["progress-bar"] = qookery.internal.components.ProgressBarComponent;
 		this.__components["radio-button"] = qookery.internal.components.RadioButtonComponent;
 		this.__components["radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
+		this.__components["rich-text"] = qookery.internal.components.RichTextComponent;
 		this.__components["scroll"] = qookery.internal.components.ScrollComponent;
 		this.__components["select-box"] = qookery.internal.components.SelectBoxComponent;
 		this.__components["separator"] = qookery.internal.components.SeparatorComponent;

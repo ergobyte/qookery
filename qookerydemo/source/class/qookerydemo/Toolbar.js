@@ -34,7 +34,8 @@ qx.Class.define("qookerydemo.Toolbar", {
 			{ label: "Virtual Tree Remote", formFile: "virtualTreeRemote.xml", modelFile: "virtualTreeRemote.json"},
 			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
 			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
-			{ label: "XInclude", formFile: "xInclude.xml" }
+			{ label: "XInclude", formFile: "xInclude.xml" },
+			{ label: "Rich Text", formFile: "richText.xml", modelFile: "carConfiguration.json" }
 		]
 	},
 
