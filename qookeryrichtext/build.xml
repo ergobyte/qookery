@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="Qookery Rich Text" basedir="." default="Download">
+
+	<property name="ckeditor.version" value="4.3.1" />
+	<property name="ckeditor.package" value="standard" />
+	<property name="ckeditor.zipFilename" value="ckeditor_${ckeditor.version}_${ckeditor.package}.zip" />
+	<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${ckeditor.version}/${ckeditor.zipFilename}" />
+	<property name="ckeditor.target" location="../qookeryrichtext/source/resource/qookery/lib" />
+
+	<target name="Download-Init">
+		<condition property="build.ckeditorAvailable">
+			<available type="file" file="${ckeditor.target}/ckeditor/ckeditor.js" />
+		</condition>
+	</target>
+
+	<target name="Download" depends="Download-Init" unless="build.ckeditorAvailable">
+		<mkdir dir="${ckeditor.target}" />
+		<get dest="${ckeditor.target}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="${ckeditor.downloadUrl}" />
+		</get>
+		<unzip src="${ckeditor.target}/${ckeditor.zipFilename}" dest="${ckeditor.target}/" />
+		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
+	</target>
+
+	<target name="Clean">
+		<delete dir="${ckeditor.target}" />
+	</target>
+
+</project>

@@ -22,10 +22,12 @@
 	<property name="build.projectName" value="qookerydemo" />
 
 	<import file="../qookery/docs/qookery.ant.xml" as="qookery" />
+	<import file="../qookeryrichtext/build.xml" as="richtext" />
 
-	<target name="Build" depends="qookery.Build-Run" description="Generate and run the build version of the demo application" />
-	<target name="Clean" depends="qookery.Clean" description="Clean up any intermediate files produced by build" />
+	<target name="Build" depends="richtext.Download, qookery.Build-Run" description="Generate and run the build version of the demo application" />
+	<target name="Source" depends="richtext.Download, qookery.Source-Run" description="Generate and run the source version of the demo application" />
+
+	<target name="Clean" depends="richtext.Clean, qookery.Clean" description="Clean up any intermediate files produced by build" />
 	<target name="Lint" depends="qookery.Lint" description="Perform syntactic checks on application" />
-	<target name="Source" depends="qookery.Source-Run" description="Generate and run the source version of the demo application" />
 
 </project>
