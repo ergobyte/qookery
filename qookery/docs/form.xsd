@@ -122,7 +122,9 @@
 			<element ref="q:list" />
 			<element ref="q:password-field" />
 			<element ref="q:progress-bar" />
+			<element ref="q:radio-button" />
 			<element ref="q:radio-button-group" />
+			<element ref="q:rich-text" />
 			<element ref="q:scroll"/>
 			<element ref="q:select-box" />
 			<element ref="q:separator" />
@@ -554,6 +556,15 @@
 		</complexType>
 	</element>
 	
+	<element name="rich-text">
+		<complexType>
+			<complexContent>
+				<extension base="q:editable-component">
+				</extension>
+			</complexContent>
+		</complexType>
+	</element>
+
 	<element name="scroll" type="q:container-component" />
 	
 	<element name="select-box">

@@ -1,6 +1,8 @@
 {
+	"description": "A <strong>black</strong> <em>BMW</em>",
 	"brand": "bmw",
 	"pearl": true, 
 	"date": "2013-01-21T13:00:00Z",
-	"loan": 23
+	"loan": 23,
+	"comments": "<ul><li>Brings Me Women!</li><li>Big Money Waste&nbsp;</li></ul><p>source:&nbsp;<a href=\"http://www.jokes4us.com/miscellaneousjokes/corporatejokes/bmwjokes.html\">jokes4us.com</a></p>"
 }
