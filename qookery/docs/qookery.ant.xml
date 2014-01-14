@@ -32,7 +32,7 @@
 	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
 
 	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
-	<condition property="qooxdoo.version" value="3.0.1"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.version" value="3.5"><not><isset property="qooxdoo.version" /></not></condition>
 	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
 
@@ -88,6 +88,7 @@
 		<chmod dir="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk/tool/bin" includes="*.py" perm="+x" />
 		<symlink link="${qooxdoo.relativePath}" resource="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" overwrite="true" />
 		<symlink link="${qooxdoo.path}/component/library/qookery" resource="${git.repository.qookery}/qookery" overwrite="true" />
+		<symlink link="${qooxdoo.path}/component/library/qookeryrichtext" resource="${git.repository.qookery}/qookeryrichtext" overwrite="true" />
 	</target>
 
 	<target name="Qooxdoo-DistClean" depends="Init, Qooxdoo-Install">

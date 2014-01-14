@@ -1,0 +1,21 @@
+{
+	"info": {
+		"name": "qookery.richtext",
+		"summary": "Rich text editor component for Qookery",
+		"description": "Allows easy integration of CKEditor into Qookery forms",
+		"homepage": "http://www.qookery.org/",
+		"license": "Apache License 2.0",
+		"authors": [
+			{ "name": "George Nikolaidis (geonik)", "email": "gnikolaidis@ergobyte.gr" }
+		],
+		"version" : "trunk",
+		"qooxdoo-versions": [ "3.5" ]
+	},
+	"provides": {
+		"namespace": "qookery.richtext",
+		"encoding": "utf-8",
+		"class": "source/class",
+		"resource": "source/resource",
+		"type": "component"
+	}
+}

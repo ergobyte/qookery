@@ -11,7 +11,7 @@
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "stylkarr@gmail.com" }
 		],
 		"version" : "trunk",
-		"qooxdoo-versions": [ "3.0" ]
+		"qooxdoo-versions": [ "3.0", "3.5" ]
 	},
 	"provides": {
 		"namespace": "qookerydemo",

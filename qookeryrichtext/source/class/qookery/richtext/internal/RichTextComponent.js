@@ -17,10 +17,12 @@
 */
 
 /**
+ * @asset(qookery/lib/ckeditor/*)
+ *
  * @ignore(CKEDITOR)
  * @ignore(CKEDITOR.*)
  */
-qx.Class.define("qookery.internal.components.RichTextComponent", {
+qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
@@ -67,15 +69,12 @@ qx.Class.define("qookery.internal.components.RichTextComponent", {
 
 		// Automatic loading of CKEditor on first use
 
-		// TODO Create qookery.ckeditor project that contains this component and has a
-		// build.xml that downloads and extracts a lighter version of CKEditor in below location:
-		// scriptUri = qx.util.ResourceManager.getInstance().toUri("qookery/lib/ckeditor/ckeditor.js");
 		__loadCkEditor: function() {
 			this.debug("Loading CKEditor");
-			var scriptUri = "//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js";
+			var scriptUri = qx.util.ResourceManager.getInstance().toUri("qookery/lib/ckeditor/ckeditor.js");
 			var scriptRequest = new qx.bom.request.Script();
 			scriptRequest.onload = function() {
-				var pending = qookery.internal.components.RichTextComponent.pending;
+				var pending = qookery.richtext.internal.RichTextComponent.pending;
 				pending.forEach(function(createFunction) { createFunction(); });
 				pending = [ ];
 			};
@@ -97,7 +96,9 @@ qx.Class.define("qookery.internal.components.RichTextComponent", {
 		},
 
 		__createCkEditor0: function(widget) {
-			// Make qx.html.Element selectable, other mouse behavior is broken
+			// Method might be called after widget destruction
+			if(widget.isDisposed()) return;
+			// Make qx.html.Element selectable, otherwise mouse behavior is broken
 			var htmlElement = widget.getContentElement();
 			htmlElement.setSelectable(true);
 			// Get underlying DOM element and invoke CKEditor inline()
