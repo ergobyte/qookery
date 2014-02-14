@@ -78,6 +78,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.getForm().addValidation(this, validatorFunction);
 		},
 
+		setInvalidMessage: function(invalidMessage) {
+			this.getMainWidget().setInvalidMessage(invalidMessage);
+		},
+
 		clearValidations: function() {
 			this.getForm().removeValidations(this);
 		},

@@ -95,14 +95,14 @@ qx.Class.define("qookery.internal.FormParser", {
 		parseValue: function(component, type, text) {
 			switch(type) {
 			case "Integer":
-				return parseInt(text);
+				return parseInt(text, 10);
 			case "Boolean":
 				return text == "true";
 			case "Size":
-				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text));
+				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text, 10));
 			case "IntegerList":
 				var value = text.split(/\W+/);
-				value.forEach(function(element, index) { value[index] = parseInt(element); });
+				value.forEach(function(element, index) { value[index] = parseInt(element, 10); });
 				return value;
 			case "RegularExpression":
 				return new RegExp(text);
@@ -174,7 +174,6 @@ qx.Class.define("qookery.internal.FormParser", {
 			var attributes = this.parseAttributes(component, componentElement);
 
 			// Component creation
-
 			component.create(attributes);
 
 			// Children parsing

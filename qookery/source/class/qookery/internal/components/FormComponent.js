@@ -31,7 +31,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__components = { };
-		this.__validations = [];
+		this.__validations = [ ];
 		this.__bindings = { };
 		this.__targets = [ ];
 	},
@@ -206,7 +206,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					else throw e;
 				}
 				if(!invalidMessage) invalidMessage = "Unknown error";
-				component.getMainWidget().setInvalidMessage(invalidMessage);
+				component.setInvalidMessage(invalidMessage);
 				errorMessages.push({ 'component': component, 'message': invalidMessage });
 				invalidComponents.push(component);
 			}

@@ -40,7 +40,7 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 			this.base(arguments, attributes);
 			if(attributes['column-flexes'] !== undefined) {
 				qx.util.StringSplit.split(attributes['column-flexes'], /\s+/).forEach(function(columnFlex) {
-					this.__flexes.push(parseInt(columnFlex));
+					this.__flexes.push(parseInt(columnFlex, 10));
 				}, this);
 			}
 		},

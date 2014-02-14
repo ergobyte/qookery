@@ -127,7 +127,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			for(var i = 0; i < this.__columns.length; i++) {
 				var column = this.__columns[i];
 				if(column["width"] || column["flex"]) {
-					var width = isNaN(column["width"]) ? column["width"] : parseInt(column["width"]);
+					var width = isNaN(column["width"]) ? column["width"] : parseInt(column["width"], 10);
 					var flex = column["flex"];
 					resizeBehavior.setWidth(i, width, flex);
 				}

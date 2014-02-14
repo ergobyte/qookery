@@ -19,7 +19,7 @@
 		],
 		"API_EXCLUDE": [
 			"qookery.internal.*", "qx.*"
-		],
+		]
 	},
 	"jobs": {
 		"lint": {

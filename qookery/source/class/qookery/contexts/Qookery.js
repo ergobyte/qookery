@@ -101,19 +101,19 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param failCallback {Function} callback to call in case load fails
 		 * @param model {Object} the form model
 		 * @param variables {Object ? null} variables that will be available in xml <code> $.variableName</code>
-		 * @param future {String? null} future
 		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
-		loadForm: function(url, thisArg, successCallBack, failCallback, model, variables, future) {
+		loadForm: function(url, thisArg, successCallBack, failCallback, model, variables) {
 			var callBack = function(xmlCode) {
 				var xmlDocument = qx.xml.Document.fromString(xmlCode);
 				var parser = qookery.Qookery.createFormParser(variables);
 				try {
 					var formComponent = parser.parseXmlDocument(xmlDocument);
-					if(successCallBack) successCallBack.call(thisArg, formComponent, model, variables, future);
+					if(successCallBack) successCallBack.call(thisArg, formComponent, model, variables);
 				}
-				catch(e) {
-					qx.log.Logger.error(e.stack);
+				catch(error) {
+					qx.log.Logger.error(this, qx.lang.String.format("Error creating form editor: %1", [ error ]));
+					qx.log.Logger.error(error.stack);
 				}
 				finally {
 					parser.dispose();

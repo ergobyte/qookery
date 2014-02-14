@@ -34,9 +34,9 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 				if(success && options['regularExpression'])
 					success = options['regularExpression'].test(value);
 				if(success && options['minimumLength'])
-					success = value.length >= parseInt(options['minimumLength']);
+					success = value.length >= parseInt(options['minimumLength'], 10);
 				if(success && options['maximumLength'])
-					success = value.length <= parseInt(options['maximumLength']);
+					success = value.length <= parseInt(options['maximumLength'], 10);
 				if(success) return null;
 				var message = invalidMessage || "String is invalid";
 				return message;

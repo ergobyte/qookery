@@ -103,11 +103,11 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			if(month < 1 || month > 12) return;
 			var date = res[this.__inputIndexMap.date];
 			if(date < 1 || date > 31) return;
-			var hours = (parseInt(this.__inputIndexMap.hours) != 0) ? res[this.__inputIndexMap.hours] : 0;
+			var hours = (parseInt(this.__inputIndexMap.hours, 10) != 0) ? res[this.__inputIndexMap.hours] : 0;
 			if(hours < 0 || hours > 23) return;
-			var minutes = (parseInt(this.__inputIndexMap.minutes) != 0) ? res[this.__inputIndexMap.minutes] : 0;
+			var minutes = (parseInt(this.__inputIndexMap.minutes, 10) != 0) ? res[this.__inputIndexMap.minutes] : 0;
 			if(minutes < 0 || minutes > 59) return;
-			var seconds = (parseInt(this.__inputIndexMap.seconds) != 0) ? res[this.__inputIndexMap.seconds] : 0;
+			var seconds = (parseInt(this.__inputIndexMap.seconds, 10) != 0) ? res[this.__inputIndexMap.seconds] : 0;
 			if(seconds < 0 || seconds > 59) return;
 			var inputDate = new Date(year, month, date, hours, minutes, seconds);
 			this.setValue(inputDate);

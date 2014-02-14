@@ -144,7 +144,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		getColumnIndexById: function(columnId) {
-			return parseInt(columnId);
+			return parseInt(columnId, 10);
 		},
 
 		getColumnName: function(columnIndex) {

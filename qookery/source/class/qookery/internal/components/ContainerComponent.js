@@ -55,11 +55,11 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 				this.__layout.setSpacingY(spacingY);
 				var columnFlexes = attributes['column-flexes'];
 				if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
-					this.__layout.setColumnFlex(index, parseInt(columnFlex));
+					this.__layout.setColumnFlex(index, parseInt(columnFlex), 10);
 				}, this);
 				var rowFlexes = attributes['row-flexes'];
 				if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
-					this.__layout.setRowFlex(index, parseInt(rowFlex));
+					this.__layout.setRowFlex(index, parseInt(rowFlex), 10);
 				}, this);
 				this.getMainWidget().setLayout(this.__layout);
 			}
