@@ -108,6 +108,12 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this.__ckEditor = CKEDITOR.inline(domElement, {
 				language: qx.locale.Manager.getInstance().getLanguage()
 			});
+			
+			if(this.getValue() !== null && this.__ckEditor.getData().trim().length === 0) {
+				this.__previousValue = this.getValue();
+				this.__ckEditor.setData(this.getValue());
+			}
+			
 			// Register change listener
 			this.__ckEditor.on("change", this.__onCkEditorChange, this);
 		},
@@ -116,7 +122,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			// If the reason of this event is us, do nothing
 			if(this._disableValueEvents) return;
 			// Check incoming value, if not different from previous one ignore it
-			var value = this.__ckEditor.getData();
+			var data = this.__ckEditor.getData();
+			var value =  ( data.trim().length == 0 ) ? null : data ;
 			if(value === this.__previousValue) return;
 			// Store value for later difference check, according to CKEditor manual
 			this.__previousValue = value;

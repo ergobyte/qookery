@@ -43,7 +43,8 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		_setupTextField: function(widget, attributes) {
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
-				this.setValue(event.getData());
+				var value = (event.getData().trim().length == 0) ? null : event.getData();
+				this.setValue(value);
 			}, this);
 			this._applyLayoutAttributes(widget, attributes);
 			if(attributes['text-align']) widget.setTextAlign(attributes['text-align']);

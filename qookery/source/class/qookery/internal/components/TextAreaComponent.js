@@ -38,7 +38,9 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.TextArea();
 			widget.addListener("changeValue", function(event) {
-				this.setValue(event.getData());
+				if(this._disableValueEvents) return;
+				var value = (event.getData().trim().length == 0)? null: event.getData();
+				this.setValue(value);
 			}, this);
 			this._applyLayoutAttributes(widget, attributes);
 			if(attributes['auto-size'] !== undefined) widget.setAutoSize(attributes['auto-size']);
