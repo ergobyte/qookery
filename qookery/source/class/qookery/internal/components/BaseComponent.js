@@ -267,6 +267,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(attributes['background-color']) widget.setBackgroundColor(attributes['background-color']);
 			if(attributes['tooltip-text']) widget.setToolTipText(attributes['tooltip-text']);
 			if(attributes['tooltip-icon']) widget.setToolTipIcon(attributes['tooltip-icon']);
+			if(attributes['tab-index']) widget.setTabIndex(parseInt(attributes['tab-index'], 10));
 		},
 
 		_applyEnabled: function(enabled) {

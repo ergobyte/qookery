@@ -30,7 +30,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	},
 
 	properties: {
-		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", event: "changeValue" },
+		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", transform: "_transformValue", event: "changeValue" },
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
 		toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
@@ -106,6 +106,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_updateUI: function(value) {
 			// Override to update UI according to new value
+		},
+
+		_transformValue: function(value) {
+			return value;
 		},
 
 		// Apply methods

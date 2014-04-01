@@ -33,11 +33,11 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
 		 * @param successCallback {Function} callback to call after successful load
 		 * @param failCallback {Function} callback to call in case load fails
-		 * @param asynchronous {boolean} determinate if the request are asynchronous or not
+		 * 
 		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
-		loadResource: function(resourceUri, thisArg, successCallback, failCallback, asynchronous) {
-			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback, asynchronous);
+		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
+			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
 		},
 
 		/**

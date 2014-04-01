@@ -20,6 +20,7 @@
 
 	<property name="build.projectHome" location="." />
 	<property name="build.projectName" value="qookerydemo" />
+	<property name="qooxdoo.version" value="3.5" />
 
 	<import file="../qookery/docs/qookery.ant.xml" as="qookery" />
 	<import file="../qookeryrichtext/build.xml" as="richtext" />

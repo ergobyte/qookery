@@ -85,9 +85,10 @@ qx.Class.define("qookery.impl.FormWindow", {
 			this.__formComponent = formComponent;
 			this.getContentElement().setAttribute("qkid", formComponent.getId());
 			this.addListenerOnce("appear", function(event) {
-				formComponent.executeAction("appear");
+				formComponent.executeAction("onFocusReceived");
 			}, this);
 			formComponent.addListenerOnce("close", function(event) {
+				formComponent.executeAction("onFocusLost");
 				formComponent.setModel(null);
 				this.destroy();
 			}, this);

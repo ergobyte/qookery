@@ -167,6 +167,7 @@
 		<attribute name="text-color" type="string" default="black" />
 		<attribute name="background-color" type="string" default="white" />
 		<attribute name="display" type="q:display" default="inline" />
+		<attribute name="tab-index" type="integer" default="0"/>
 		<!-- Layout item -->
 		<attribute name="width" type="q:size">
 			<annotation><documentation>
