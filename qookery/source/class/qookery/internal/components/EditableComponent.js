@@ -109,6 +109,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_transformValue: function(value) {
+			// Override to transform value
 			return value;
 		},
 

@@ -72,6 +72,59 @@ qx.Interface.define("qookery.IFormComponent", {
 		/**
 		 * Return the form's model provider if set, or the default one otherwise
 		 */
-		getModelProvider: function() { }
+		getModelProvider: function() { },
+
+		/**
+		 * Register a value within the client scripting context
+		 * 
+		 * @param key {String} The name of the user context
+		 * @param userContext {Object} A qooxdoo class with the desired functionality
+		 */
+		registerUserContext: function(key, userContext) { },
+
+		/**
+		 * Add a validation to the list of validations performed by this form
+		 *
+		 * The validator can either return a boolean or throw a {@link qx.core.ValidationError}
+		 *
+		 * @param component {qookery.IEditableComponent} editable component to check against
+		 * @param validator {Function} validator function
+		 */
+		addValidation: function(component, validatorFunction) { },
+
+		/**
+		 * Remove component's validations from the form validations
+		 *
+		 * @param component {qookery.IEditableComponent} Component to look for, or <code>null</code> to remove all validations
+		 */
+		removeValidations: function(component) { },
+
+		/**
+		 * Invokes the form validation
+		 *
+		 * <p>The result of the validation is also set in the valid property.</p>
+		 *
+		 * @return {Boolean} The validation result
+		 */
+		validate: function() { },
+
+		/**
+		 * Resets the form validation
+		 */
+		resetValidation: function() { },
+
+		/**
+		 * Close the form.
+		 *
+		 * @param result {Object} Optional result value to set before closing
+		 */
+		close: function() { },
+
+		/**
+		 * Return the form's variables
+		 * 
+		 *  @return {Object} 
+		 */
+		getVariables: function() { }
 	}
 });

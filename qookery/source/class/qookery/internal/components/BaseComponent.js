@@ -223,6 +223,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this.executeClientCode(clientCode, argumentMap);
 		},
 
+		isActionSupported: function(actionName) {
+			return typeof(this.__actions[actionName]) !== "undefined";
+		},
+
 		// Private methods for internal use
 
 		/**
@@ -305,7 +309,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		for(var i = 0; i < widgets.length; i++) {
 			widgets[i].destroy();
 		}
+		delete this.__actions;
 		this.__parentComponent = null;
-		this.__attributes = null;
+		this.__attributes.length = 0;
 	}
 });

@@ -109,6 +109,10 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		_updateUI: function(value) {
 			var radioButtonGroup = this.getMainWidget();
+			if(value === null) {
+				radioButtonGroup.resetSelection();
+				return;
+			}
 			var buttons = radioButtonGroup.getChildren();
 			for(var i = 0; i < buttons.length; i++) {
 				var button = buttons[i];

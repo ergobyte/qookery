@@ -99,6 +99,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__result;
 		},
 
+		getVariables: function() {
+			return this.__variables;
+		},
+
 		// Component registration
 
 		getComponent: function(componentId) {
@@ -188,31 +192,32 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var errorMessages = [];
 			for(var i = 0; i < this.__validations.length; i++) {
 				var validation = this.__validations[i];
-				var component = validation.component;
-				var validatorFunction = validation.validatorFunction;
-				var invalidMessage = null;
-				try {
-					var value = component.getValue();
-					invalidMessage = validatorFunction.call(this, value, component);
-					if(!invalidMessage) continue;
-				}
-				catch(e) {
-					if(e instanceof qx.core.ValidationError) {
-						if(e.message && e.message != qx.type.BaseError.DEFAULTMESSAGE)
-							invalidMessage = e.message;
-						else
-							invalidMessage = e.getComment();
-					}
-					else throw e;
-				}
-				if(!invalidMessage) invalidMessage = "Unknown error";
-				component.setInvalidMessage(invalidMessage);
-				errorMessages.push({ 'component': component, 'message': invalidMessage });
-				invalidComponents.push(component);
+				var invalidMessage = this.__validateComponent(validation);
+				if(!invalidMessage) continue;
+				validation.component.setInvalidMessage(invalidMessage);
+				errorMessages.push({ 'component': validation.component, 'message': invalidMessage });
+				invalidComponents.push(validation.component);
+				validation.component.setUserData("__form.Validator", validation);
 			}
-			this.__validations.forEach(function(validation) {
-				validation.component.setValid(invalidComponents.indexOf(validation.component) === -1);
+			
+			this.__validations.forEach(function(validator) {
+				validator.component.setValid(invalidComponents.indexOf(validator.component) === -1);
 			});
+			
+			invalidComponents.forEach(function(component) {
+				if(!component.getUserData("__form.Validator.listenerId")) {
+					var id = component.addListener("changeValue", function(e) {
+						var validator = component.getUserData("__form.Validator");
+						var invalidMessage = this.__validateComponent(validator);
+						if(!invalidMessage) {
+							component.removeListenerById(component.getUserData("__form.Validator.listenerId"));
+							component.setValid(true);
+						}
+					}, this);
+					component.setUserData("__form.Validator.listenerId", id);
+				}
+			}, this);
+			
 			var formValid = invalidComponents.length == 0;
 			invalidMessage = this.executeAction("validate");
 			if(invalidMessage) {
@@ -223,6 +228,27 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(errorMessages.length == 0)
 				return null;
 			return errorMessages;
+		},
+
+		__validateComponent: function(validation) {
+			var component = validation.component;
+			var validatorFunction = validation.validatorFunction;
+			try {
+				var invalidMessage = null;
+				var value = component.getValue();
+				invalidMessage = validatorFunction.call(this, value, component);
+				if(!invalidMessage) return invalidMessage;
+			}
+			catch(e) {
+				if(e instanceof qx.core.ValidationError) {
+					if(e.message && e.message != qx.type.BaseError.DEFAULTMESSAGE)
+						invalidMessage = e.message;
+					else
+						invalidMessage = e.getComment();
+				}
+				else throw e;
+			}
+			return invalidMessage;
 		},
 
 		/**
@@ -393,6 +419,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__registration = null;
 		this.__clientCodeContext = null;
 		this.__translationPrefix = null;
+		this.__variables = null;
 		this.info("Destructed form", this.getId() || "");
 	}
 });

@@ -43,7 +43,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		_setupTextField: function(widget, attributes) {
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
-				var value = (event.getData().trim().length == 0) ? null : event.getData();
+				var value = (event.getData() !== null && event.getData().trim().length == 0) ? null : event.getData();
 				this.setValue(value);
 			}, this);
 			this._applyLayoutAttributes(widget, attributes);
@@ -61,7 +61,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		},
 
 		_updateUI: function(value) {
-			this.getMainWidget().setValue(this._getLabelOf(value));
+			this.getMainWidget().setValue(this._getLabelOf(value)+"");
 		},
 
 		_applyReadOnly: function(readOnly) {

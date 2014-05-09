@@ -97,7 +97,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			case "Integer":
 				return parseInt(text, 10);
 			case "Boolean":
-				return text == "true";
+				return text.toLowerCase() == "true";
 			case "Size":
 				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text, 10));
 			case "IntegerList":

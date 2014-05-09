@@ -137,6 +137,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				if(column["max-width"]) {
 					resizeBehavior.setMaxWidth(i, column["max-width"]);
 				}
+
 				var cellRenderer = new qookery.internal.DefaultCellRenderer(column);
 				if(column["format"]) {
 					var format = qookery.Qookery.getRegistry().createFormatSpecification(column["format"]);
@@ -187,6 +188,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	},
 
 	destruct: function() {
+		this.__columns.length = 0;
 		this._disposeObjects("__tableModel", "__paneHeader");
 	}
 });

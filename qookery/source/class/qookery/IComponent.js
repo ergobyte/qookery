@@ -150,6 +150,14 @@ qx.Interface.define("qookery.IComponent", {
 		executeAction: function(actionName, argumentMap) { },
 
 		/**
+		 * Check whether the action exist or not.
+		 * 
+		 * @param actionName {String} The name of the action
+		 * @return {Boolean} Whether the action exist 
+		 */
+		isActionSupported: function(actionName) { },
+
+		/**
 		 * Return the type of an attribute
 		 * 
 		 * @param attributeName {String} name of the attribute
