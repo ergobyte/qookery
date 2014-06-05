@@ -45,29 +45,41 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		create: function(attributes) {
 			this._widgets[0] = this._createMainWidget(attributes);
-			if(attributes['required']) this.setRequired(true);
-			if(attributes['label'] != '%none') {
+			if(attributes["required"]) this.setRequired(true);
+			if(attributes["label"] != "%none") {
 				this._widgets[1] = new qx.ui.basic.Label();
 				this._setupLabelAppearance(this._widgets[1], attributes);
-				this.setLabel(attributes['label'] || "");
+				this.setLabel(attributes["label"] || "");
 			}
-			if(attributes['read-only']) this.setReadOnly(true);
-			if(attributes['format']) this.setFormat(qookery.Qookery.getRegistry().createFormatSpecification(attributes['format']));
+			if(attributes["read-only"]) this.setReadOnly(true);
+			if(attributes["format"]) this.setFormat(qookery.Qookery.getRegistry().createFormatSpecification(attributes["format"]));
 			this.base(arguments, attributes);
 		},
 
 		setup: function(attributes) {
-			if(attributes['connect']) {
-				var connectionQName = attributes['connect'];
-				var modelProvider = this.getForm().getModelProvider();
-				if(modelProvider == null)
-					throw new Error("Install a model provider to handle connections in XML forms");
-				modelProvider.handleConnection(this, connectionQName[0], connectionQName[1]);
-			}
+			if(!attributes["connect"]) return;
+			var connectionQName = attributes["connect"];
+			var modelProvider = this.getForm().getModelProvider();
+			if(!modelProvider)
+				throw new Error("Install a model provider to handle connections in XML forms");
+			var connectionHandle = modelProvider.handleConnection(this, connectionQName[0], connectionQName[1]);
+			if(connectionHandle) this._applyConnectionHandle(modelProvider, connectionHandle);
 		},
 
 		connect: function(formComponent, propertyPath) {
 			formComponent.addTarget(this, "value", propertyPath, true);
+		},
+
+		_applyConnectionHandle: function(modelProvider, connectionHandle) {
+			// Subclasses may extend or override below functionality to support more attributes
+			if(!this.getLabel()) {
+				var connectionLabel = modelProvider.getConnectionAttribute(connectionHandle, "label");
+				if(connectionLabel) this.setLabel(connectionLabel);
+			}
+			if(!this.getFormat()) {
+				var connectionFormat = modelProvider.getConnectionAttribute(connectionHandle, "format");
+				if(connectionFormat) this.setFormat(qookery.Qookery.getRegistry().createFormatSpecification(connectionFormat));
+			}
 		},
 
 		addValidation: function(validatorType, invalidMessage, options) {
@@ -89,7 +101,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_createMainWidget: function(attributes) {
 			throw new Error("Override _createMainWidget() to provide implementation specific code");
 		},
-
+		
 		getLabelWidget: function() {
 			return this._widgets[1];
 		},
@@ -124,6 +136,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_applyValue: function(value) {
+			if(this._disableValueEvents) return;
 			this._disableValueEvents = true;
 			try {
 				this._updateUI(value);
@@ -160,6 +173,13 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		// Utility methods for subclasses
 
+		/**
+		 * Ask model provider to return a human friendly label for value
+		 * 
+		 * @param value {any} the value for which a label is needed
+		 * 
+		 * @return {String} produced label for user interface needs
+		 */
 		_getLabelOf: function(value) {
 			if(!value) return "";
 			var format = this.getFormat();
@@ -182,6 +202,19 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			labelWidget.setAllowStretchY(false);
 			labelWidget.setAlignX("left");
 			labelWidget.setAlignY("middle");
+		},
+
+		_setValueSilently: function(value) {
+			this._disableValueEvents = true;
+			try {
+				this.setValue(value);
+			}
+			catch(e) {
+				throw e;
+			}
+			finally {
+				this._disableValueEvents = false;
+			}
 		}
 	}
 });

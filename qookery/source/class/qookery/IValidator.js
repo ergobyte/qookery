@@ -16,9 +16,6 @@
 	limitations under the License.
 */
 
-/**
- * TODO
- */
 qx.Interface.define("qookery.IValidator", {
 
 	members: {

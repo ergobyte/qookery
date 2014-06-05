@@ -45,7 +45,7 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * @param object1 {any} model object, may be <code>null</code>
 		 * @param object2 {any} model object, may be <code>null</code>
 		 *
-		 * @return <code>true</code> if objects are equal or both <code>null</code>
+		 * @return {Boolean} <code>true</code> if objects are equal or both <code>null</code>
 		 */
 		areEqual: function(object1, object2) { },
 
@@ -64,8 +64,20 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * @param connectableComponent {qookery.IComponent} a component that supports data binding
 		 * @param connectionUri {String} a namespace URI that the provider may use to differentiate connection types
 		 * @param connectionPath {String} the path of the property specified by the XML author
+		 * 
+		 * @return {any} implementation specific value that may be used with getConnectionAttribute()
 		 */
 		handleConnection: function(connectableComponent, connectionUri, connectionPath) { },
+
+		/**
+		 * Return the value of a connection's attribute, if available
+		 * 
+		 * @param connectionHandle {any} the opaque value returned by handleConnection()
+		 * @param attributeName {String} name of wanted attribute
+		 * 
+		 * @return {any} attribute's value or <code>undefined
+		 */
+		getConnectionAttribute: function(connectionHandle, attributeName) { },
 
 		/**
 		 * Clone an object

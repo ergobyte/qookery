@@ -21,7 +21,7 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 	extend: qookery.internal.components.EditableComponent,
 
 	properties: {
-		triState: { init: false, inheritable: true, check: "Boolean", nullable: true, apply: "_applyTriState" }
+		triState: { init: false, inheritable: true, check: "Boolean", nullable: true, apply: "__applyTriState" }
 	},
 
 	construct: function(parentComponent) {
@@ -32,19 +32,19 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.setTriState(attributes['tri-state']);
+			if(attributes["tri-state"]) this.setTriState(attributes["tri-state"]);
 		},
 
 		_createMainWidget: function(attributes) {
-			var widget = new qx.ui.form.CheckBox(attributes['label']);
+			var widget = new qx.ui.form.CheckBox(attributes["label"]);
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);
-			attributes['label'] = "%none";
-			
-			//HACK Creating a real triple state check box
-			if(attributes['tri-state']) {
+			attributes["label"] = "%none";
+
+			// HACK CheckBox: Creating a real triple state check box
+			if(attributes["tri-state"]) {
 				widget.__availableStates = [true, false, null];
 				widget.toggleValue = function () {
 					this.__currentState = this.__availableStates.indexOf(this.getValue());
@@ -59,8 +59,8 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 		_updateUI: function(value) {
 			this.getMainWidget().setValue(value);
 		},
-		
-		_applyTriState: function(triState) {
+
+		__applyTriState: function(triState) {
 			this.getMainWidget().setTriState(triState);
 			this.getMainWidget().setValue(null);
 		}

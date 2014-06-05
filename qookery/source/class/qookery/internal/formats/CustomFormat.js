@@ -24,9 +24,9 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 	construct: function(options) {
 		this.base(arguments);
 		if(!options) return;
-		this.__thisArg = options['thisArg'];
-		this.__format = options['format'];
-		this.__parse = options['parse'];
+		this.__thisArg = options["thisArg"];
+		this.__format = options["format"];
+		this.__parse = options["parse"];
 	},
 
 	members: {

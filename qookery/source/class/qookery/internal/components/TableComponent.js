@@ -163,7 +163,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		},
 
 		getSelectedRowData: function() {
-			if(this.__selectedRowIndex == null) return null;
+			if(this.__selectedRowIndex === null) return null;
 			return this.getTableModel().getRowData(this.__selectedRowIndex);
 		},
 

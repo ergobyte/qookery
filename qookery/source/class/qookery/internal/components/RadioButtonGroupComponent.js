@@ -124,11 +124,11 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		},
 
 		remove: function(component) {
-			//TODO
+			// TODO RadioButtonGroup: Implement removal of children
 		},
 
 		contains: function(component) {
-			//TODO
+			// TODO RadioButtonGroup: Implement contains()
 		},
 
 		_applyOrientation: function(orientation) {

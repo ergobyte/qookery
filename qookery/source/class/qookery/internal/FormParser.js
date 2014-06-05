@@ -244,14 +244,22 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseScript: function(scriptElement, component) {
 			var clientCode = this.getNodeText(scriptElement);
+
+			var scriptUrl = this.getAttribute(scriptElement, "source");
+			if(scriptUrl) {
+				clientCode = qookery.Qookery.getResourceLoader().loadResource(scriptUrl);
+			}
+
 			if(clientCode == null)
 				throw new Error("Empty <script> element");
+
 			var componentId = this.getAttribute(scriptElement, "component");
 			if(componentId) {
 				component = component.getForm().getComponent(componentId);
 				if(!component)
 					throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
 			}
+
 			var eventName = this.getAttribute(scriptElement, "event");
 			if(eventName) {
 				component.addEventHandler(eventName, clientCode);

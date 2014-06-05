@@ -38,8 +38,8 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 			this._applyLayoutAttributes(this.__toolbar, attributes);
 			this._widgets[0] = this.__toolbar;
 			this.base(arguments, attributes);
-			if(attributes['column-flexes'] !== undefined) {
-				qx.util.StringSplit.split(attributes['column-flexes'], /\s+/).forEach(function(columnFlex) {
+			if(attributes["column-flexes"] !== undefined) {
+				qx.util.StringSplit.split(attributes["column-flexes"], /\s+/).forEach(function(columnFlex) {
 					this.__flexes.push(parseInt(columnFlex, 10));
 				}, this);
 			}
@@ -58,11 +58,11 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 		},
 
 		remove: function(component) {
-			//TODO
+			// TODO ToolBar: Implement removal of children
 		},
 
 		contains: function(component) {
-			//TODO
+			// TODO ToolBar: Implement contains()
 		}
 	}
 });

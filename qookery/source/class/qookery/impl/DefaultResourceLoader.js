@@ -27,29 +27,28 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 		loadResource: function(url, thisArg, successCallback, failCallback) {
 			var resourceUri = qx.util.ResourceManager.getInstance().toUri(url);
 			if(qx.core.Environment.get("qx.debug")) resourceUri += "?nocache=" + new Date().getTime();
-			var result = null, asynchronous;
-			var xhrRequest = new qx.bom.request.Xhr();
-			if(successCallback && thisArg) {
-				asynchronous = true;
-				xhrRequest.onload = function(event) {
-					successCallback.call(thisArg, xhrRequest.responseText);
-				};
-			}
-			else if(successCallback) {
-				asynchronous = true;
-				xhrRequest.onload = function(event) {
-					successCallback(xhrRequest.responseText);
-				};
-			}
-			else {
-				asynchronous = false;
-				xhrRequest.onload = function() {
-					var statusCode = xhrRequest.status;
-					var wasSuccessful = qx.util.Request.isSuccessful(statusCode);
-					if(!wasSuccessful) throw new Error(qx.lang.String.format("Failed to load resource '%1'", [url]));
-					result = xhrRequest.responseText;
-				};
-			}
+			var xhrRequest = new qx.bom.request.Xhr(), result = null;
+			xhrRequest.onload = function() {
+				var statusCode = xhrRequest.status;
+				if(qx.util.Request.isSuccessful(statusCode)) {
+					if(successCallback && thisArg)
+						successCallback.call(thisArg, xhrRequest.responseText);
+					else if(successCallback)
+						successCallback(xhrRequest.responseText);
+					else
+						result = xhrRequest.responseText;
+				}
+				else {
+					if(failCallback && thisArg)
+						failCallback.call(thisArg, xhrRequest);
+					else if(failCallback)
+						failCallback(xhrRequest);
+					else
+						throw new Error(qx.lang.String.format(
+							"Error %1 loading resource '%2': %3", [ xhrRequest.status, url, xhrRequest.statusText ]));
+				}
+			};
+			var asynchronous = !!successCallback;
 			xhrRequest.open("GET", resourceUri, asynchronous);
 			xhrRequest.send();
 			return result;

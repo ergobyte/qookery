@@ -16,9 +16,6 @@
 	limitations under the License.
 */
 
-/**
- * TODO
- */
 qx.Interface.define("qookery.IRegistry", {
 
 	members: {
@@ -57,14 +54,14 @@ qx.Interface.define("qookery.IRegistry", {
 
 		/**
 		 *
-		 * @param {String} validator The IValidator class name
-		 * @param {String} name The name of the validator for subsequent access
+		 * @param validator {String} The IValidator class name
+		 * @param name {String} The name of the validator for subsequent access
 		 */
 		registerValidator: function(validator, name) { },
 
 		/**
 		 *
-		 * @param {String} validator The name of the validator
+		 * @param validator {String} The name of the validator
 		 * @return {IValidator} The real Validator or null
 		 */
 		getValidator: function(validator) { },
@@ -107,7 +104,7 @@ qx.Interface.define("qookery.IRegistry", {
 		 *
 		 * <pre>{formatName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
 		 *
-		 * @param {String} formatSpecification
+		 * @param formatSpecification {String} a specification according to above syntax
 		 *
 		 * @return {IFormat} The newly created format instance
 		 */

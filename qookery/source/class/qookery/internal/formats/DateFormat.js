@@ -21,6 +21,6 @@ qx.Class.define("qookery.internal.formats.DateFormat", {
 	extend: qx.util.format.DateFormat,
 
 	construct: function(options) {
-		this.base(arguments, options['format'], options['locale']);
+		this.base(arguments, options["format"], options["locale"]);
 	}
 });

@@ -217,7 +217,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					component.setUserData("__form.Validator.listenerId", id);
 				}
 			}, this);
-			
+
 			var formValid = invalidComponents.length == 0;
 			invalidMessage = this.executeAction("validate");
 			if(invalidMessage) {

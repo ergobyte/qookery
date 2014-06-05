@@ -32,7 +32,6 @@ qx.Class.define("qookery.impl.FormWindow", {
 	 * @option icon {String ? null} an icon for the created Window instance
 	 * @option onDisappear {Function ? null} a callback that will receive the form's result property on disappear
 	 *
-	 * @return the newly created Qookery window instance
 	 */
 	construct: function(caption, icon, options, thisArg) {
 		this.base(arguments, caption, icon);

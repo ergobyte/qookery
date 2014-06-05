@@ -41,6 +41,12 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 
 		handleConnection: function(component, namespaceUri, propertyPath) {
 			component.connect(component.getForm(), propertyPath);
+			return null;
+		},
+
+		getConnectionAttribute: function(connectionHandle, attributeName) {
+			// The default model provider does not provide any attributes
+			return;
 		},
 
 		clone: function(object) {
