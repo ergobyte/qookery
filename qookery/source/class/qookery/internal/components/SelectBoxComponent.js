@@ -77,6 +77,13 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				return;
 			}
 		},
+		
+		_applyReadOnly: function(readOnly) {
+			var mainWidget = this.getMainWidget();
+			if(!mainWidget) return;
+			// TODO SelectBox: Add a state, allowing theme to display correctly a read-only checkbox
+			mainWidget.setEnabled(!readOnly);
+		},
 
 		addItem: function(model, label, icon) {
 			qx.core.Assert.assertNotNull(model);

@@ -41,8 +41,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		_createMainWidget: function(attributes) {
 			var table = new qx.ui.table.Table(null, {
-				tableColumnModel: function(table) {
-					return new qx.ui.table.columnmodel.Resize(table);
+				tableColumnModel: function(_table) {
+					return new qx.ui.table.columnmodel.Resize(_table);
 				}
 			});
 			table.getSelectionModel().addListener('changeSelection', function(e) {
@@ -59,8 +59,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 			this._applyLayoutAttributes(table, attributes);
 			if(attributes['row-height']) table.setRowHeight(attributes['row-height']);
-			if(attributes["column-visibility-button-visible"] !== undefined) table.setColumnVisibilityButtonVisible(attributes["column-visibility-button-visible"]);
-			if(attributes["status-bar-visible"] !== undefined) table.setStatusBarVisible(attributes["status-bar-visible"]);
+			if(attributes["column-visibility-button-visible"]) table.setColumnVisibilityButtonVisible(attributes["column-visibility-button-visible"]);
+			if(attributes["status-bar-visible"]) table.setStatusBarVisible(attributes["status-bar-visible"]);
 			return table;
 		},
 
@@ -110,7 +110,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.__columns = columns;
 		},
 
-		setup: function(attributes) {
+		setup: function(formParser, attributes) {
 			if(this.__columns.length == 0)
 				throw new Error("Table must have at least one column");
 			var tableModel = this.getTableModel();
@@ -119,7 +119,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			var table = this.getMainWidget();
 			if(tableModel && tableModel.setup && typeof(tableModel.setup) == "function") {
 				// Give model a chance to perform last minute changes
-				tableModel.setup(table);
+				tableModel.setup(table, this.__columns);
 			}
 			table.setTableModel(tableModel);
 			var columnModel = table.getTableColumnModel();
@@ -155,7 +155,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
-			this.base(arguments, attributes);
+			this.base(arguments, formParser, attributes);
 		},
 
 		getSelectedRowIndex: function() {

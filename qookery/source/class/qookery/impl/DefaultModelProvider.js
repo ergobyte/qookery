@@ -39,8 +39,8 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			return object;
 		},
 
-		handleConnection: function(component, namespaceUri, propertyPath) {
-			component.connect(component.getForm(), propertyPath);
+		handleConnection: function(formParser, component, connectionSpecification) {
+			component.connect(component.getForm(), connectionSpecification);
 			return null;
 		},
 

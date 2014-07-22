@@ -98,9 +98,13 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 	members: {
 
+		// Fields
+
 		__component: null,
 		__data: null,
 		__accessor: null,
+
+		// ITableModel implementation
 
 		// .	Component
 
@@ -208,9 +212,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			var connect = column['connect'][1];
-			if(!connect) return null;
-			return qx.data.SingleValueBinding.resolvePropertyChain(row, connect);
+			var connectionSpecification = column["connect"];
+			if(!connectionSpecification) return null;
+			return qx.data.SingleValueBinding.resolvePropertyChain(row, connectionSpecification);
 		},
 
 		setValue: function(columnIndex, rowIndex, value) {
@@ -218,10 +222,10 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			var connect = column['connect'][1];
-			if(!connect) return null;
+			var connectionSpecification = column["connect"];
+			if(!connectionSpecification) return null;
 			// Property paths are not supported yet
-			row.set(connect, value);
+			row.set(connectionSpecification, value);
 			if(this.hasListener("dataChanged")) {
 				this.fireDataEvent("dataChanged", {
 					firstColumn: columnIndex,

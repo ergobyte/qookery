@@ -46,7 +46,12 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 			this._applyLayoutAttributes(widget, attributes);
 		},
 
+		setLabel: function(label) {
+			this.getMainWidget().setLabel(label);
+		},
+
 		setValue: function(buttonLabelValue) {
+			// BC Qookery: Method kept for compatibilty with former way of setting label
 			this.getMainWidget().setLabel(buttonLabelValue);
 		},
 

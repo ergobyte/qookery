@@ -47,7 +47,7 @@ qx.Interface.define("qookery.IContainerComponent", {
 		 * 
 		 * @param component {qookery.IComponent} component to find index of
 		 * 
-		 * @return component index or <code>-1</code> if no found in children list
+		 * @return {Number} component index or <code>-1</code> if no found in children list
 		 */
 		contains: function(component) { },
 

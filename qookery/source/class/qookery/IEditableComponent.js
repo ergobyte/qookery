@@ -68,7 +68,6 @@ qx.Interface.define("qookery.IEditableComponent", {
 
 		/**
 		 * Clear all validators
-		 *
 		 */
 		clearValidations: function() { }
 	}

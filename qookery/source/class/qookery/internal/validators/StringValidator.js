@@ -28,15 +28,15 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 
 	members: {
 		createValidatorFunction: function(component, invalidMessage, options) { 
-			return function(value, component) {
+			return function(value) {
 				if(!value) return null;
 				var success = true;
-				if(success && options['regularExpression'])
-					success = options['regularExpression'].test(value);
-				if(success && options['minimumLength'])
-					success = value.length >= parseInt(options['minimumLength'], 10);
-				if(success && options['maximumLength'])
-					success = value.length <= parseInt(options['maximumLength'], 10);
+				if(success && options["regularExpression"])
+					success = options["regularExpression"].test(value);
+				if(success && options["minimumLength"])
+					success = value.length >= parseInt(options["minimumLength"], 10);
+				if(success && options["maximumLength"])
+					success = value.length <= parseInt(options["maximumLength"], 10);
 				if(success) return null;
 				var message = invalidMessage || "String is invalid";
 				return message;

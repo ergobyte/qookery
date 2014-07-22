@@ -83,6 +83,14 @@ qx.Interface.define("qookery.IFormParser", {
 		 * 
 		 * @return {String} whitespace trimmed text or <code>null</code> if empty
 		 */
-		getAttribute: function(xmlElement, attributeName) { }
+		getAttribute: function(xmlElement, attributeName) { },
+
+		/**
+		 * Return the namespace URI bound to a prefix, or <code>null</code> if not bound
+		 * 
+		 * @param prefix {String} the prefix to resolve
+		 * @return {String} URI or <code>null</code>
+		 */
+		resolveNamespacePrefix: function(prefix) { }
 	}
 });

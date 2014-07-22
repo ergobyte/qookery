@@ -56,13 +56,13 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.base(arguments, attributes);
 		},
 
-		setup: function(attributes) {
+		setup: function(formParser, attributes) {
 			if(!attributes["connect"]) return;
-			var connectionQName = attributes["connect"];
+			var connectionSpecification = attributes["connect"];
 			var modelProvider = this.getForm().getModelProvider();
 			if(!modelProvider)
 				throw new Error("Install a model provider to handle connections in XML forms");
-			var connectionHandle = modelProvider.handleConnection(this, connectionQName[0], connectionQName[1]);
+			var connectionHandle = modelProvider.handleConnection(formParser, this, connectionSpecification);
 			if(connectionHandle) this._applyConnectionHandle(modelProvider, connectionHandle);
 		},
 
@@ -101,7 +101,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_createMainWidget: function(attributes) {
 			throw new Error("Override _createMainWidget() to provide implementation specific code");
 		},
-		
+
+		getEditableWidget: function() {
+			return this.getMainWidget();
+		},
+
 		getLabelWidget: function() {
 			return this._widgets[1];
 		},
@@ -136,7 +140,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_applyValue: function(value) {
-			if(this._disableValueEvents) return;
+			if(this._disableValueEvents || this.isDisposed()) return;
 			this._disableValueEvents = true;
 			try {
 				this._updateUI(value);
@@ -185,7 +189,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			var format = this.getFormat();
 			if(format) return format.format(value);
 			var modelProvider = qookery.Qookery.getModelProvider();
-			if(modelProvider) return modelProvider.getLabel(value);
+			if(modelProvider) return modelProvider.getLabel(value).toString();
 			return value.toString();
 		},
 

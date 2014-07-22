@@ -20,6 +20,10 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
+	statics: {
+		THRESHOLD: 30
+	},
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__regularExpression = /(\d{1,2})[\.\-\/\\\:](\d{1,2})([\.\-\/\\\:](\d?\d?\d\d))?/;
@@ -54,7 +58,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			widget.addListener("keypress", function(event) {
 				this.__userTyped = true;
 				if(event.getKeyIdentifier() != "Enter" && event.getKeyIdentifier() != "Tab") return;
-				this.__parseInput();
+					this.__parseInput();
 				}, this);
 			widget.addListener("changeValue", function(event) {
 				if(!event.getData())
@@ -95,22 +99,78 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 		__parseInput: function() {
 			var textField = this.getMainWidget().getChildControl("textfield");
 			var text = textField.getValue();
+			text = this.__parseDateTime(text);
 			if(!text || text == "") return;
 			var res = this.__regularExpression.exec(text);
 			if(!res) return;
-			var year = res[this.__inputIndexMap.year];
-			var month = res[this.__inputIndexMap.month] - 1;
-			if(month < 1 || month > 12) return;
-			var date = res[this.__inputIndexMap.date];
+			var year = parseInt(res[this.__inputIndexMap.year], 10);
+			var month = parseInt(res[this.__inputIndexMap.month], 10) - 1;
+			if(month < 0 || month > 11) return;
+			var date = parseInt(res[this.__inputIndexMap.date], 10);
 			if(date < 1 || date > 31) return;
-			var hours = (parseInt(this.__inputIndexMap.hours, 10) != 0) ? res[this.__inputIndexMap.hours] : 0;
+			var hours = (parseInt(this.__inputIndexMap.hours, 10) != 0) ? parseInt(res[this.__inputIndexMap.hours], 10) : 0;
 			if(hours < 0 || hours > 23) return;
-			var minutes = (parseInt(this.__inputIndexMap.minutes, 10) != 0) ? res[this.__inputIndexMap.minutes] : 0;
+			var minutes = (parseInt(this.__inputIndexMap.minutes, 10) != 0) ? parseInt(res[this.__inputIndexMap.minutes], 10) : 0;
 			if(minutes < 0 || minutes > 59) return;
-			var seconds = (parseInt(this.__inputIndexMap.seconds, 10) != 0) ? res[this.__inputIndexMap.seconds] : 0;
+			var seconds = (parseInt(this.__inputIndexMap.seconds, 10) != 0) ? parseInt(res[this.__inputIndexMap.seconds], 10) : 0;
 			if(seconds < 0 || seconds > 59) return;
 			var inputDate = new Date(year, month, date, hours, minutes, seconds);
 			this.setValue(inputDate);
+		},
+
+		__parseDateTime: function(string) {
+			if(string == null) return "";
+			var dateParts = string.split(/ +/);
+			
+			var datePart = "";
+			var timePart = "00:00";
+			
+			//user give only time
+			if(dateParts[0].indexOf(":") != -1) {
+					datePart = qx.lang.String.format("%1/%2/%3", [new Date().getDate(),new Date().getMonth()+1, new Date().getFullYear()]);
+					timePart = dateParts[0];
+			}
+			else {
+				datePart = dateParts.length >= 1 ? this.__parseDate(dateParts[0]) : "";
+				if(dateParts.length == 2 && parseInt(this.__inputIndexMap.minutes, 10) !=0 && parseInt(this.__inputIndexMap.hours, 10) !=0 ) {
+					if(dateParts[1].indexOf(":") != -1) {
+						timePart = dateParts[1];
+					}
+					else if(dateParts[1].indexOf(":") == -1  && dateParts[1]>0) {
+						timePart = qx.lang.String.format("%1:%2", [dateParts[1], "00"]);
+					}
+				}
+			}
+			return qx.lang.String.format("%1 %2", [datePart, timePart]);
+		},
+
+		__parseDate: function(string) {
+			var date = string.split("/");
+			if(date.length == 1)
+				date = string.split("-");
+			
+			switch(date.length) {
+			case 1:
+				string = qx.lang.String.format("01/%1/%2", [string, new Date().getFullYear()]);
+				break;
+			case 2:
+				if(date[1].length == 4)
+					string = qx.lang.String.format("01/%1/%2", [date[0], date[1]]);
+				else
+					string = qx.lang.String.format("%1/%2/%3", [date[0], date[1], new Date().getFullYear()]);
+				break;
+			case 3:
+				if(date[2].length == 2) {
+					date[2] = (parseInt(date[2], 10) < this.constructor.THRESHOLD ? 
+							(date[2].length == 1 ? "200" : "20") + date[2] : (date[2].length == 1 ? "190" : "19") + date[2]);
+				}
+				string = qx.lang.String.format("%1/%2/%3", [date[0], date[1], date[2]]);
+				break;
+			default:
+				string = qx.lang.String.format("%1/%2/%3", [new Date().getDate(),new Date().getMonth()+1, new Date().getFullYear()]);
+				break;
+			}
+			return string;
 		},
 
 		__parseSpecification: function(specification) {

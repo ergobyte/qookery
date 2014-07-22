@@ -14,4 +14,24 @@
 	<natures>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1405766294640</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-true-false-source/script</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1405766294666</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-true-false-build</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

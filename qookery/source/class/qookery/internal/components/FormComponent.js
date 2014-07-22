@@ -72,13 +72,13 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes['model-provider']);
 			var icon = this.getAttribute('icon');
 			if(icon) this.setIcon(icon);
-			this.info("Created form", this.getId() || "");
+			this.debug("Created form", this.getId() || "");
 		},
 
-		setup: function(attributes) {
+		setup: function(formParser, attributes) {
 			var title = this.getAttribute('title');
 			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
-			return this.base(arguments);
+			return this.base(arguments, formParser, attributes);
 		},
 
 		// Getters and setters
@@ -185,11 +185,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		 *
 		 * <p>The result of the validation is also set in the valid property.</p>
 		 *
-		 * @return {Boolean} The validation result
+		 * @return {Array} The validation result
 		 */
 		validate: function() {
-			var invalidComponents = [];
-			var errorMessages = [];
+			var invalidComponents = [ ];
+			var errorMessages = [ ];
 			for(var i = 0; i < this.__validations.length; i++) {
 				var validation = this.__validations[i];
 				var invalidMessage = this.__validateComponent(validation);
@@ -420,6 +420,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__clientCodeContext = null;
 		this.__translationPrefix = null;
 		this.__variables = null;
-		this.info("Destructed form", this.getId() || "");
+		this.debug("Destructed form", this.getId() || "");
 	}
 });

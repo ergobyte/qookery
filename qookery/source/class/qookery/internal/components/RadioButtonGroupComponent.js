@@ -79,29 +79,38 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			}
 		},
 
+		setSelection: function(itemNumber) {
+			var selectablesItems = this.getMainWidget().getSelectables(true);
+			if(selectablesItems.length == 0) return;
+			this.getMainWidget().setSelection([selectablesItems[itemNumber]]);
+		},
+
 		setItems: function(items) {
 			var radioButtonGroup = this.getMainWidget();
 			radioButtonGroup.removeAll();
-			
+
 			if(items instanceof qx.data.Array)
 				items = items.toArray();
-			
+
+			var tabIndex = parseInt(this.getAttribute("tab-index"), 10);
 			if(qx.lang.Type.isArray(items)) {
-				for( var i=0; i< items.length; i++) {
+				for( var i = 0; i < items.length; i++) {
 					var model = items[i];
 					var label = this._getLabelOf(model);
 					var groupItem = new qx.ui.form.RadioButton(label);
 					groupItem.setModel(model);
+					if(tabIndex) groupItem.setTabIndex(tabIndex);
 					radioButtonGroup.add(groupItem);
 				}
 				return;
 			}
-			
+
 			if(qx.lang.Type.isObject(items)) {
 				for(var model in items) {
 					var label = items[model];
 					var groupItem = new qx.ui.form.RadioButton(label);
 					groupItem.setModel(model);
+					if(tabIndex) groupItem.setTabIndex(tabIndex);
 					radioButtonGroup.add(groupItem);
 				}
 			}

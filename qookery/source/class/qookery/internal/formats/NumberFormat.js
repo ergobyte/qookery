@@ -38,10 +38,10 @@ qx.Class.define("qookery.internal.formats.NumberFormat", {
 				this.setGroupingUsed("true" == value);
 				return;
 			case "postfix":
-				this.setPostfix(' ' + value);
+				this.setPostfix(value);
 				return;
 			case "prefix":
-				this.setPrefix(value + ' ');
+				this.setPrefix(value);
 				return;
 			case "maximumFractionDigits":
 				this.setMaximumFractionDigits(parseInt(value));

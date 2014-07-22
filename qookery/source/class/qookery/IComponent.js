@@ -70,7 +70,7 @@ qx.Interface.define("qookery.IComponent", {
 		 *
 		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
-		setup: function(attributes) { },
+		setup: function(formParser, attributes) { },
 
 		/**
 		 * Return the component identifier, if any

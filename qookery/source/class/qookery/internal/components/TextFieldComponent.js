@@ -43,9 +43,25 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		_setupTextField: function(widget, attributes) {
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
-				var value = (event.getData() !== null && event.getData().trim().length == 0) ? null : event.getData();
-				this.setValue(value);
+				var text = event.getData();
+				if(text != null && text.trim().length === 0) text = null;
+				var format = this.getFormat();
+				var value = format ? format.parse(text) : text;
+				this.getMainWidget().setValue(this._getLabelOf(value));
+				this._setValueSilently(value);
 			}, this);
+
+			var liveUpdate = attributes['live-update'];
+			if(liveUpdate) widget.addListener("blur", function(event) {
+				if(this._disableValueEvents) return;
+				var format = this.getFormat();
+				if(!format) return;
+				var text = this.getMainWidget().getValue();
+				var value = format.parse(text);
+				text = format.format(value);
+				this.getMainWidget().setValue(text);
+			}, this);
+
 			this._applyLayoutAttributes(widget, attributes);
 			if(attributes['text-align']) widget.setTextAlign(attributes['text-align']);
 			if(attributes['filter']) widget.setFilter(attributes['filter']);
@@ -61,7 +77,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		},
 
 		_updateUI: function(value) {
-			this.getMainWidget().setValue(this._getLabelOf(value)+"");
+			this.getMainWidget().setValue(this._getLabelOf(value));
 		},
 
 		_applyReadOnly: function(readOnly) {

@@ -19,30 +19,25 @@
 qx.Class.define("qookery.internal.formats.CustomFormat", {
 
 	extend: qx.core.Object,
-	implement: [qx.util.format.IFormat],
+	implement: [ qx.util.format.IFormat ],
 
 	construct: function(options) {
 		this.base(arguments);
 		if(!options) return;
-		this.__thisArg = options["thisArg"];
-		this.__format = options["format"];
-		this.__parse = options["parse"];
+		this.__formatFunction = new Function([ "value" ], options["format"]);
 	},
 
 	members: {
 
-		__thisArg: null,
-		__format: null,
-		__parse: null,
+		__formatFunction: null,
 
 		format: function(obj) {
-			if(!this.__format) return obj;
-			return this.__format.call(this.__thisArg, obj);
+			if(!this.__formatFunction) return obj;
+			return this.__formatFunction.apply(this, [ obj ]);
 		},
 
 		parse: function(str) {
-			if(!this.__parse) return str;
-			return this.__parse.call(this.__thisArg, str);
+			throw new Error("Parsing is not supported");
 		}
 	}
 });

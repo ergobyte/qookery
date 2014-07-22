@@ -61,13 +61,13 @@ qx.Interface.define("qookery.IModelProvider", {
 		/**
 		 * Handle connection specification of a connectable component
 		 *
+		 * @param formParser {qookery.IFormParser} optinal parser requesting connection, may be <code>null</code>
 		 * @param connectableComponent {qookery.IComponent} a component that supports data binding
-		 * @param connectionUri {String} a namespace URI that the provider may use to differentiate connection types
-		 * @param connectionPath {String} the path of the property specified by the XML author
+		 * @param connectionSpecification {String} a specification that may be parsed by the model provider
 		 * 
 		 * @return {any} implementation specific value that may be used with getConnectionAttribute()
 		 */
-		handleConnection: function(connectableComponent, connectionUri, connectionPath) { },
+		handleConnection: function(formParser, connectableComponent, connectionSpecification) { },
 
 		/**
 		 * Return the value of a connection's attribute, if available

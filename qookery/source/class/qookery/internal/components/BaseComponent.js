@@ -81,9 +81,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"null-item-label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
 			"title": "ReplaceableString",
-			"tooltip-text": "ReplaceableString",
-
-			"connect": "QName"
+			"tooltip-text": "ReplaceableString"
 		}
 	},
 
@@ -135,7 +133,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return false;
 		},
 
-		setup: function(attributes) {
+		setup: function(formParser, attributes) {
 			// Nothing to do here, override if needed
 		},
 
@@ -180,8 +178,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		/**
 		 * Add an event handler to this component
 		 *
-		 * @param {String} eventName The name of the event to listen to
-		 * @param {String} clientCode The JavaScript source code to execute when the event is triggered
+		 * @param eventName {String} The name of the event to listen to
+		 * @param clientCode {String} The JavaScript source code to execute when the event is triggered
 		 */
 		addEventHandler: function(eventName, clientCode) {
 			if(qx.Class.supportsEvent(this.constructor, eventName)) {
@@ -213,7 +211,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			}
 			catch(error) {
 				qx.log.Logger.error(this, qx.lang.String.format(
-						"Error executing client code: %1\n\n%2", [ error, clientCode ]));
+						"Error executing client code: %1\n\n%2\n\n%3", [ error, clientCode, error.stack ]));
 			}
 		},
 
@@ -311,6 +309,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		}
 		delete this.__actions;
 		this.__parentComponent = null;
-		this.__attributes.length = 0;
+		this.__attributes = null;
 	}
 });

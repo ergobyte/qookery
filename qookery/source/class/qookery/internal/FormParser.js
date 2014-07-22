@@ -144,6 +144,10 @@ qx.Class.define("qookery.internal.FormParser", {
 			this.__namespaces[prefix] = namespaceUri;
 		},
 
+		resolveNamespacePrefix: function(prefix) {
+			return this.__namespaces[prefix];
+		},
+
 		// Internal methods
 
 		__parseComponent: function(componentElement, parentComponent) {
@@ -182,7 +186,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Component setup
 
-			component.setup(attributes);
+			component.setup(this, attributes);
 
 			// Attach to container
 
@@ -246,9 +250,8 @@ qx.Class.define("qookery.internal.FormParser", {
 			var clientCode = this.getNodeText(scriptElement);
 
 			var scriptUrl = this.getAttribute(scriptElement, "source");
-			if(scriptUrl) {
+			if(scriptUrl)
 				clientCode = qookery.Qookery.getResourceLoader().loadResource(scriptUrl);
-			}
 
 			if(clientCode == null)
 				throw new Error("Empty <script> element");
