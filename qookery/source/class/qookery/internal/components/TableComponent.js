@@ -45,7 +45,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					return new qx.ui.table.columnmodel.Resize(_table);
 				}
 			});
-			table.getSelectionModel().addListener('changeSelection', function(e) {
+			table.getSelectionModel().addListener("changeSelection", function(e) {
 				var selectionModel = e.getTarget();
 				var selectionRanges = selectionModel.getSelectedRanges();
 				if(selectionRanges.length == 0) {
@@ -58,9 +58,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			}, this);
 
 			this._applyLayoutAttributes(table, attributes);
-			if(attributes['row-height']) table.setRowHeight(attributes['row-height']);
-			if(attributes["column-visibility-button-visible"]) table.setColumnVisibilityButtonVisible(attributes["column-visibility-button-visible"]);
-			if(attributes["status-bar-visible"]) table.setStatusBarVisible(attributes["status-bar-visible"]);
+			if(attributes["column-visibility-button-visible"] !== undefined)
+				table.setColumnVisibilityButtonVisible(attributes["column-visibility-button-visible"]);
+			if(attributes["row-height"] !== undefined)
+				table.setRowHeight(attributes["row-height"]);
+			if(attributes["status-bar-visible"] !== undefined)
+				table.setStatusBarVisible(attributes["status-bar-visible"]);
 			return table;
 		},
 
@@ -82,10 +85,13 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
+			case "column-visibility-button-visible": return "Boolean";
 			case "flex": return "Integer";
 			case "header-click": return "ReplaceableString";
 			case "header-icon": return "String";
+			case "row-height": return "Number";
 			case "sortable": return "Boolean";
+			case "status-bar-visible": return "Boolean";
 			default: return this.base(arguments, attributeName);
 			}
 		},

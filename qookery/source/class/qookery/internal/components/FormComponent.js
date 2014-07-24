@@ -81,6 +81,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.base(arguments, formParser, attributes);
 		},
 
+		focus: function() {
+			this.executeAction("onFocusReceived");
+		},
+
 		// Getters and setters
 
 		getForm: function() {
@@ -199,11 +203,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				invalidComponents.push(validation.component);
 				validation.component.setUserData("__form.Validator", validation);
 			}
-			
+
 			this.__validations.forEach(function(validator) {
 				validator.component.setValid(invalidComponents.indexOf(validator.component) === -1);
 			});
-			
+
 			invalidComponents.forEach(function(component) {
 				if(!component.getUserData("__form.Validator.listenerId")) {
 					var id = component.addListener("changeValue", function(e) {

@@ -23,8 +23,9 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 
 	construct: function(options) {
 		this.base(arguments);
-		if(!options) return;
-		this.__formatFunction = new Function([ "value" ], options["format"]);
+		var expression = options["expression"];
+		if(!expression) throw new Error("A JavaScript expression must be provided for custom formatter");
+		this.__formatFunction = new Function([ "value" ], "return(" + expression + ");");
 	},
 
 	members: {

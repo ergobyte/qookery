@@ -94,30 +94,32 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		parseValue: function(component, type, text) {
 			switch(type) {
-			case "Integer":
-				return parseInt(text, 10);
 			case "Boolean":
 				return text.toLowerCase() == "true";
-			case "Size":
-				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text, 10));
+			case "Integer":
+				return parseInt(text, 10);
 			case "IntegerList":
 				var value = text.split(/\W+/);
 				value.forEach(function(element, index) { value[index] = parseInt(element, 10); });
 				return value;
+			case "Number":
+				return qx.data.Conversion.toNumber(text);
 			case "RegularExpression":
 				return new RegExp(text);
 			case "ReplaceableString":
 				if(text.length < 2) return text;
-				if(text.charAt(0) != '%') return text;
+				if(text.charAt(0) != "%") return text;
 				if("%none" == text) return text;
-				if(text.charAt(1) == '{' && text.charAt(text.length-1) == '}') {
+				if(text.charAt(1) == "{" && text.charAt(text.length-1) == "}") {
 					var expression = text.substring(2, text.length-1);
 					return component.executeClientCode(qx.lang.String.format("return (%1);", [ expression ]));
 				}
 				var messageId = text.substring(1);
-				return component['tr'](messageId);
+				return component["tr"](messageId);
 			case "QName":
 				return this.__resolveQName(text);
+			case "Size":
+				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text, 10));
 			default:
 				// Fallback for unknown types
 				return text;
@@ -192,7 +194,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			if(parentComponent != null) {
 				var display = this.getAttribute(componentElement, "display");
-				if(!display) display = 'inline';
+				if(!display) display = "inline";
 				if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
 					throw new Error("Attempted to add a component to a non-container component");
 				parentComponent.add(component, display);
@@ -226,7 +228,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseXInclude: function(xIncludeElement, parentComponent) {
 			var formUrl = this.getAttribute(xIncludeElement, "href");
-			var xmlIdAttribute = xIncludeElement.attributes['xml:id'];
+			var xmlIdAttribute = xIncludeElement.attributes["xml:id"];
 			formUrl = this.parseValue(parentComponent, "ReplaceableString", formUrl);
 			var xmlString = qookery.Qookery.getResourceLoader().loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
