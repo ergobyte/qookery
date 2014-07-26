@@ -28,18 +28,6 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 		__listItemsMap: { },
 
-		initialize: function(options) {
-			if(!options || !options["items"]) return;
-			var list = this.getMainWidget();
-			list.removeAll();
-			this.__listItemsMap = {};
-			for(var property in options["items"]) {
-				var item = new qx.ui.form.ListItem(options["items"][property]);
-				this.__listItemsMap[property] = item;
-				list.add(item);
-			}
-		},
-
 		_createMainWidget: function(attributes) {
 			var list = new qx.ui.form.List();
 			list.setScrollbarY("on");
@@ -54,6 +42,18 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 				this.getMainWidget().setSelection([ selectedItem ]);
 			else
 				this.getMainWidget().resetSelection();
+		},
+
+		initialize: function(options) {
+			if(!options || !options["items"]) return;
+			var list = this.getMainWidget();
+			list.removeAll();
+			this.__listItemsMap = {};
+			for(var property in options["items"]) {
+				var item = new qx.ui.form.ListItem(options["items"][property]);
+				this.__listItemsMap[property] = item;
+				list.add(item);
+			}
 		},
 
 		select: function(value) {

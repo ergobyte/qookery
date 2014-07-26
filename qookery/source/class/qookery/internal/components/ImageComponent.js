@@ -26,12 +26,11 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 
 	members: {
 
-		create: function(attributes) {
-			var widget = new qx.ui.basic.Image(attributes['source']);
-			if(attributes['scale'] !== undefined) widget.setScale(attributes['scale']);
-			this._applyLayoutAttributes(widget, attributes);
-			this._widgets.push(widget);
-			this.base(arguments, attributes);
+		_createWidgets: function(attributes) {
+			var image = new qx.ui.basic.Image(attributes['source']);
+			if(attributes['scale'] !== undefined) image.setScale(attributes['scale']);
+			this._applyLayoutAttributes(image, attributes);
+			return [ image ];
 		},
 
 		getSource: function() {
@@ -41,11 +40,11 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 		setSource: function(source) {
 			this._widgets[0].setSource(source);
 		},
-		
+
 		getScale: function() {
 			return this.getMainWidget().getScale();
 		},
-		
+
 		setScale: function(scale) {
 			this.getMainWidget().setScale(scale);
 		}

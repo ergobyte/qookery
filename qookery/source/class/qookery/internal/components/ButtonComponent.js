@@ -26,11 +26,10 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 
 	members: {
 
-		create: function(attributes) {
+		_createWidgets: function(attributes) {
 			var widget = this._createButtonWidget(attributes);
 			this._applyButtonAttributes(widget, attributes);
-			this._widgets.push(widget);
-			this.base(arguments, attributes);
+			return [ widget ];
 		},
 
 		_createButtonWidget: function(attributes) {

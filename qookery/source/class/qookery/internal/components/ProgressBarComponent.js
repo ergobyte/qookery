@@ -26,24 +26,24 @@ qx.Class.define("qookery.internal.components.ProgressBarComponent", {
 
 	members: {
 
-		create: function(attributes) {
-			this._widgets[0] = new qx.ui.indicator.ProgressBar();
-			this._applyLayoutAttributes(this._widgets[0], attributes);
-			this.base(arguments, attributes);
+		_createWidgets: function(attributes) {
+			var progressBar = new qx.ui.indicator.ProgressBar();
+			this._applyLayoutAttributes(progressBar, attributes);
+			return [ progressBar ];
 		},
 
 		getMaximun: function() {
 			return this.getMainWidget().getMaximum();
 		},
-		
+
 		setMaximun: function(maximim) {
 			this.getMainWidget().setMaximum(maximim);
 		},
-		
+
 		getValue: function() {
 			return this.getMainWidget().getValue();
 		},
-		
+
 		setValue: function(value) {
 			return this.getMainWidget().setValue(value);
 		}

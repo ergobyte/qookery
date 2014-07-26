@@ -14,8 +14,6 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
@@ -40,11 +38,11 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 			if(attributes['hide-root']) virtualTree.setHideRoot(true);
 			if(attributes['icon-property']) virtualTree.setIconPath(attributes['icon-property']);
 			if(attributes['label-path']) virtualTree.setLabelPath(attributes['label-path']);
-			
+
 			virtualTree.getSelection().addListener("change", function(e) {
 				this.fireDataEvent("changeSelection", virtualTree.getSelection().getItem(0));
 			}, this);
-			
+
 			return virtualTree;
 		},
 
@@ -64,7 +62,7 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 			}
 			return false;
 		},
-		
+
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 				case"child-property": return "String";

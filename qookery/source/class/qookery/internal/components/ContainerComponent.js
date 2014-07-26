@@ -41,7 +41,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		__rowArray: null,
 
 		create: function(attributes) {
-			this._widgets[0] = this._createContainerWidget(attributes);
+			this.base(arguments, attributes);
 			this.__columnCount = attributes['column-count'] || 1;
 			if(this.__columnCount != "none") {
 				if(this.__columnCount != "auto") {
@@ -63,7 +63,10 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 				}, this);
 				this.getMainWidget().setLayout(this.__layout);
 			}
-			this.base(arguments, attributes);
+		},
+
+		_createWidgets: function(attributes) {
+			return [ this._createContainerWidget(attributes) ];
 		},
 
 		_createContainerWidget: function(attributes) {

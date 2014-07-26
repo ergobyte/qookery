@@ -26,13 +26,13 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 
 	members: {
 
-		create: function(attributes) {
+		_createWidgets: function(attributes) {
 			var labelText = attributes['label'] || "";
-			this._widgets[0] = new qx.ui.basic.Label(labelText);
-			if(attributes['rich']) this._widgets[0].setRich(true);
-			if(attributes['wrap']) this._widgets[0].setWrap(true);
-			this._applyLayoutAttributes(this._widgets[0], attributes);
-			this.base(arguments, attributes);
+			var label = new qx.ui.basic.Label(labelText);
+			if(attributes['rich'] !== undefined) label.setRich(attributes['rich']);
+			if(attributes['wrap'] !== undefined) label.setWrap(attributes['wrap']);
+			this._applyLayoutAttributes(label, attributes);
+			return [ label ];
 		},
 
 		getValue: function() {

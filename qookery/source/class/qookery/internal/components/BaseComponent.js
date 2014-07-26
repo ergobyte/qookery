@@ -102,31 +102,26 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		__id: null,
 		__parentComponent: null,
 		__attributes: null,
-		_widgets: null,
 		__actions: null,
 
-		// Implementations
+		_widgets: null,
+
+		// IComponent Implementation
 
 		prepare: function(formParser, xmlElement) {
 			// Nothing is done here by default, components may override
 		},
 
 		create: function(attributes) {
+			// Attention: Base method must be called early when overriden
 			this.__id = attributes['id'];
 			this.__attributes = attributes;
 
-			if(this._widgets.length == 0)
-				throw new Error("Component failed to create at least one widget");
+			this._widgets = this._createWidgets(attributes);
+			this._registerWithWidgets();
 
-			for(var i = 0; i < this._widgets.length; i++)
-				this._widgets[i].setUserData('qookeryComponent', this);
-
-			if(attributes['enabled'] !== undefined) this.setEnabled(false);
-			if(attributes['visibility']) this.setVisibility(attributes['visibility']);
-
-			if(this.getId()) {
-				this.getMainWidget().getContentElement().setAttribute("qkid", this.getId());
-			}
+			if(attributes['enabled'] !== undefined) this.setEnabled(attributes['enabled']);
+			if(attributes['visibility'] !== undefined) this.setVisibility(attributes['visibility']);
 		},
 
 		parseCustomElement: function(formParser, xmlElement) {
@@ -145,8 +140,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this.__id;
 		},
 
-		getAttribute: function(attributeName) {
-			return this.__attributes[attributeName];
+		getAttribute: function(attributeName, defaultValue) {
+			var value = this.__attributes[attributeName];
+			if(value !== undefined) return value;
+			if(defaultValue === Error) throw new Error(qx.lang.String.format(
+					"Required attribute '%1' missing for component '%2'", [ attributeName, this ]));
+			return value;
 		},
 
 		listWidgets: function(filterName) {
@@ -225,7 +224,39 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return typeof(this.__actions[actionName]) !== "undefined";
 		},
 
-		// Private methods for internal use
+		getAttributeType: function(attributeName) {
+			return qookery.internal.components.BaseComponent.baseAttributeTypes[attributeName];
+		},
+
+		tr: function(messageId, varArgs) {
+			if(!messageId) return null;
+			var manager = qx.locale.Manager;
+			if(!manager) return messageId;
+			if(messageId.charAt(0) == '.')
+				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
+			return manager.tr.apply(manager, arguments);
+		},
+
+		// Protected methods for internal use
+
+		_createWidgets: function(attributes) {
+			// Subclasses are advised to implement this method instead of overriding create()
+			return this._widgets;
+		},
+
+		/**
+		 * Add component information to its widgets
+		 */
+		_registerWithWidgets: function() {
+			if(this._widgets.length == 0)
+				throw new Error("Component failed to create at least one widget");
+
+			for(var i = 0; i < this._widgets.length; i++)
+				this._widgets[i].setUserData('qookeryComponent', this);
+
+			if(this.getId())
+				this.getMainWidget().getContentElement().setAttribute("qkid", this.getId());
+		},
 
 		/**
 		 * Apply layout properties to a widget
@@ -286,19 +317,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				var widget = widgets[i];
 				widget.setVisibility(visibility);
 			}
-		},
-
-		getAttributeType: function(attributeName) {
-			return qookery.internal.components.BaseComponent.baseAttributeTypes[attributeName];
-		},
-
-		tr: function(messageId, varArgs) {
-			if(!messageId) return null;
-			var manager = qx.locale.Manager;
-			if(!manager) return messageId;
-			if(messageId.charAt(0) == '.')
-				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
-			return manager.tr.apply(manager, arguments);
 		}
 	},
 

@@ -82,13 +82,17 @@ qx.Interface.define("qookery.IComponent", {
 		getId: function() { },
 
 		/**
-		 * Return an attribute from the defining XML document
+		 * Return an attribute value from the defining XML document
 		 *
-		 * @param attributeName {String} the name of the required attribute
+		 * <p>You may supply the <code>Error</code> build-in object as the defaultValue parameter
+		 * in order to request that an exception is thrown when value is missing.</p>
+		 *
+		 * @param attributeName {String} the name of the wanted attribute
+		 * @param defaultValue {any} value to return when attribute is missing
 		 *
 		 * @return {any} attribute's value or <code>null</code> if undefined
 		 */
-		getAttribute: function(attributeName) { },
+		getAttribute: function(attributeName, defaultValue) { },
 
 		/**
 		 * Return the form containing this component
@@ -108,7 +112,7 @@ qx.Interface.define("qookery.IComponent", {
 		 * Perform additional component initialization
 		 *
 		 * <p>This method is intended to be called by XML authors</p>
-		 * 
+		 *
 		 * @param initOptions {Map?null} optional map with additional data expected by component's implementation
 		 */
 		initialize: function(initOptions) { },
@@ -151,17 +155,17 @@ qx.Interface.define("qookery.IComponent", {
 
 		/**
 		 * Check whether the action exist or not.
-		 * 
+		 *
 		 * @param actionName {String} The name of the action
-		 * @return {Boolean} Whether the action exist 
+		 * @return {Boolean} Whether the action exist
 		 */
 		isActionSupported: function(actionName) { },
 
 		/**
 		 * Return the type of an attribute
-		 * 
+		 *
 		 * @param attributeName {String} name of the attribute
-		 * 
+		 *
 		 * @return {String} attribute's type or <code>null</code> if unknown
 		 */
 		getAttributeType: function(attributeName) { },

@@ -32,14 +32,14 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['dynamic']) this.setDynamic(true);
+			if(attributes['dynamic'] !== undefined) this.setDynamic(attributes['dynamic']);
 		},
 
 		_createContainerWidget: function(attributes) {
-			var container = new qx.ui.container.Stack();
-			this._applyLayoutAttributes(container, attributes);
+			var stack = new qx.ui.container.Stack();
+			this._applyLayoutAttributes(stack, attributes);
 			attributes['column-count'] = "none";
-			return container;
+			return stack;
 		},
 
 		setSelection: function(component) {

@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes["tri-state"]) this.setTriState(attributes["tri-state"]);
+			if(attributes["tri-state"] !== undefined) this.setTriState(attributes["tri-state"]);
 		},
 
 		_createMainWidget: function(attributes) {
@@ -43,12 +43,12 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 			}, this);
 			attributes["label"] = "%none";
 
-			// HACK CheckBox: Creating a real triple state check box
+			// Below hack works around chechbox shortcomings with triple state values
 			if(attributes["tri-state"]) {
-				widget.__availableStates = [true, false, null];
+				widget.__availableStates = [ true, false, null ];
 				widget.toggleValue = function () {
 					this.__currentState = this.__availableStates.indexOf(this.getValue());
-					this.__currentState = this.__currentState >= 2 ? 0 : this.__currentState+1;
+					this.__currentState = this.__currentState >= 2 ? 0 : this.__currentState + 1;
 					this.setValue(this.__availableStates[this.__currentState]);
 				}.bind(widget);
 			}

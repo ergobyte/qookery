@@ -44,21 +44,26 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_disableValueEvents: false,
 
 		create: function(attributes) {
-			this._widgets[0] = this._createMainWidget(attributes);
+			this.base(arguments, attributes);
 			if(attributes["required"]) this.setRequired(true);
-			if(attributes["label"] != "%none") {
-				this._widgets[1] = new qx.ui.basic.Label();
-				this._setupLabelAppearance(this._widgets[1], attributes);
-				this.setLabel(attributes["label"] || "");
-			}
 			if(attributes["read-only"]) this.setReadOnly(true);
 			if(attributes["format"]) this.setFormat(qookery.Qookery.getRegistry().createFormatSpecification(attributes["format"]));
-			this.base(arguments, attributes);
+			if(attributes["label"]) this.setLabel(attributes["label"]);
+		},
+
+		_createWidgets: function(attributes) {
+			var mainWidget = this._createMainWidget(attributes);
+			if(attributes["label"] !== "%none") {
+				var label = new qx.ui.basic.Label();
+				this._setupLabelAppearance(label, attributes);
+				return [ mainWidget, label ];
+			}
+			return [ mainWidget ];
 		},
 
 		setup: function(formParser, attributes) {
-			if(!attributes["connect"]) return;
-			var connectionSpecification = attributes["connect"];
+			var connectionSpecification = this.getAttribute("connect");
+			if(!connectionSpecification) return;
 			var modelProvider = this.getForm().getModelProvider();
 			if(!modelProvider)
 				throw new Error("Install a model provider to handle connections in XML forms");
@@ -179,9 +184,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		/**
 		 * Ask model provider to return a human friendly label for value
-		 * 
+		 *
 		 * @param value {any} the value for which a label is needed
-		 * 
+		 *
 		 * @return {String} produced label for user interface needs
 		 */
 		_getLabelOf: function(value) {

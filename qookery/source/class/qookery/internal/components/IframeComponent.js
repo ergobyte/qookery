@@ -26,25 +26,25 @@ qx.Class.define("qookery.internal.components.IframeComponent", {
 
 	members: {
 
-		create: function(attributes) {
+		_createWidgets: function(attributes) {
 			var source = attributes['source'] || "about:blank";
-			this._widgets[0] = new qx.ui.embed.Iframe(source);
-			this._applyLayoutAttributes(this._widgets[0], attributes);
-			this.base(arguments, attributes);
+			var iframe = new qx.ui.embed.Iframe(source);
+			this._applyLayoutAttributes(iframe, attributes);
+			return [ iframe ];
 		},
-		
+
 		setSource: function(source) {
 			this.getMainWidget().setSource(source);
 		},
-		
+
 		getSource: function() {
 			return this.getMainWidget().getSource();
 		},
-		
+
 		getDocument: function() {
 			return this.getMainWidget().getDocument();
 		},
-		
+
 		getWindow: function() {
 			return this.getMainWidget().getWindow();
 		}

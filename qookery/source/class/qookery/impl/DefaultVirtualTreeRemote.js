@@ -14,13 +14,11 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-
-	$Id$
 */
 
 qx.Class.define("qookery.impl.DefaultVirtualTreeRemote", {
 	extend: qx.core.Object,
-	
+
 	members : {
 
 		bindItem : function(controller, item, id) {
