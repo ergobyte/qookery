@@ -267,7 +267,8 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var eventName = this.getAttribute(scriptElement, "event");
 			if(eventName) {
-				component.addEventHandler(eventName, clientCode);
+				var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
+				component.addEventHandler(eventName, clientCode, onlyOnce);
 			}
 			else {
 				var actionName = this.getAttribute(scriptElement, "action");

@@ -177,24 +177,27 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		/**
 		 * Add an event handler to this component
 		 *
-		 * @param eventName {String} The name of the event to listen to
-		 * @param clientCode {String} The JavaScript source code to execute when the event is triggered
+		 * @param eventName {String} the name of the event to listen to
+		 * @param clientCode {String} the JavaScript source code to execute when the event is triggered
+		 * @param onlyOnce {Boolean} if <code>true</code>, the listener will be removed as soon as it triggered for the first time
 		 */
-		addEventHandler: function(eventName, clientCode) {
+		addEventHandler: function(eventName, clientCode, onlyOnce) {
+			var receiver = null;
 			if(qx.Class.supportsEvent(this.constructor, eventName)) {
-				this.addListener(eventName, function(event) {
-					this.executeClientCode(clientCode, { "event": event });
-				}, this);
-				return;
+				receiver = this;
 			}
-			var mainWidget = this.getMainWidget();
-			if(mainWidget != null && qx.Class.supportsEvent(mainWidget.constructor, eventName)) {
-				mainWidget.addListener(eventName, function(event) {
-					this.executeClientCode(clientCode, { "event": event });
-				}, this);
-				return;
+			else {
+				var mainWidget = this.getMainWidget();
+				if(mainWidget != null && qx.Class.supportsEvent(mainWidget.constructor, eventName))
+					receiver = mainWidget;
 			}
-			throw new Error(qx.lang.String.format("Event '%1' not supported", [ eventName ]));
+			if(!receiver)
+				throw new Error(qx.lang.String.format("Event '%1' not supported", [ eventName ]));
+
+			var methodName = onlyOnce ? "addListenerOnce" : "addListener";
+			receiver[methodName](eventName, function(event) {
+				this.executeClientCode(clientCode, { "event": event });
+			}, this);
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {

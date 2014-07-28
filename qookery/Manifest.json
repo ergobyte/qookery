@@ -11,7 +11,7 @@
 			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" }
 		],
 		"version" : "trunk",
-		"qooxdoo-versions": [ "2.1", "3.0", "3.5" ]
+		"qooxdoo-versions": [ "4.0" ]
 	},
 	"provides": {
 		"namespace": "qookery",
