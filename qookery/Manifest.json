@@ -7,8 +7,8 @@
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis (geonik)", "email": "gnikolaidis@ergobyte.gr" },
-			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" },
-			{ "name": "Stelios Joseph Karras (jkarr)", "email": "stylkarr@gmail.com" }
+			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" },
+			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" }
 		],
 		"version" : "trunk",
 		"qooxdoo-versions": [ "2.1", "3.0", "3.5" ]

@@ -145,7 +145,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(value !== undefined) return value;
 			if(defaultValue === Error) throw new Error(qx.lang.String.format(
 					"Required attribute '%1' missing for component '%2'", [ attributeName, this ]));
-			return value;
+			return defaultValue;
 		},
 
 		listWidgets: function(filterName) {
@@ -166,7 +166,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		getForm: function() {
-			if(this.__parentComponent == null) return null;
+			if(!this.__parentComponent) return null;
 			return this.__parentComponent.getForm();
 		},
 
@@ -209,7 +209,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				return clientFunction.apply(this, values);
 			}
 			catch(error) {
-				qx.log.Logger.error(this, qx.lang.String.format(
+				this.error(qx.lang.String.format(
 						"Error executing client code: %1\n\n%2\n\n%3", [ error, clientCode, error.stack ]));
 			}
 		},
