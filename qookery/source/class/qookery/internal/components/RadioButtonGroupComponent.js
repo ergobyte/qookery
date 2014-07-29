@@ -21,62 +21,65 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 	extend: qookery.internal.components.EditableComponent,
 	implement: [ qookery.IContainerComponent ],
 
-	properties: {
-		orientation: { check: [ "horizontal", "vertical" ], inheritable: true, nullable: false, init: "horizontal", apply: "_applyOrientation" }
-	},
-
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__children = [ ];
 	},
 
 	members: {
 
-		__children: null,
+		// Metadata
 
-		create: function(attributes) {
-			this.base(arguments, attributes);
-			if(attributes['layout']) this.setLayout(attributes['layout']);
-			if(attributes['allow-empty-selection'] == "true") this.getMainWidget().getRadioGroup().set({ allowEmptySelection: true });
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "allow-empty-selection": return "Boolean";
+			default: return this.base(arguments, attributeName);
+			}
 		},
+
+		// Creation
 
 		_createMainWidget: function(attributes) {
-			var spacing = (attributes['spacing'] != null) ? attributes['spacing'] : 10;
-			var group = new qx.ui.form.RadioButtonGroup(new qx.ui.layout.HBox(spacing));
-			this._applyLayoutAttributes(group, attributes);
-			group.addListener("changeSelection", function(event) {
+			var orientation = this.getAttribute("orientation", "horizontal");
+			var layoutClass =
+				orientation === "horizontal" ? qx.ui.layout.HBox :
+				orientation === "vertical" ? qx.ui.layout.VBox : null;
+			if(!layoutClass) throw new Error("Orientation must be 'horizontal' or 'vertical'");
+			var layout = new layoutClass(this.getAttribute("spacing", 5));
+
+			var radioButtonGroup = new qx.ui.form.RadioButtonGroup(layout);
+			radioButtonGroup.getRadioGroup().setAllowEmptySelection(this.getAttribute("allow-empty-selection", false));
+			radioButtonGroup.addListener("changeSelection", function(event) {
+				if(this._disableValueEvents) return;
 				var selection = event.getData();
-				if(selection.length == 0)
-					this.setValue(null);
-				else
-					this.setValue(selection[0].getModel());
+				var model = selection.length !== 1 ? null : selection[0].getModel();
+				this.setValue(model);
 			}, this);
-			return group;
+
+			this._applyLayoutAttributes(radioButtonGroup, attributes);
+			return radioButtonGroup;
 		},
 
-		add: function(childComponent, display) {
-			var radioButton = childComponent.getMainWidget();
-			if(!qx.Class.hasInterface(radioButton.constructor, qx.ui.form.IRadioItem))
-				throw new Error("<radio-button-group> supports only components with main widgets implementing IRadioItem");
-			this.__children.push(childComponent);
-			var radioButtonGroup = this.getMainWidget();
-			radioButtonGroup.add(radioButton);
-		},
+		// Public methods
 
-		listChildren: function() {
-			return this.__children;
-		},
-
-		initialize: function(initOptions) {
-			var radioButtonGroup = this.getMainWidget();
-			radioButtonGroup.removeAll();
-			if(!initOptions || !initOptions["items"]) return;
-			for(var itemValue in initOptions["items"]) {
-				var itemLabel = initOptions["items"][itemValue];
-				var radioButton = new qx.ui.form.RadioButton(itemLabel);
-				radioButton.setModel(itemValue);
-				radioButtonGroup.add(radioButton);
+		setItems: function(items) {
+			this.__removeAllGroupItems();
+			if(!items) return;
+			if(items instanceof qx.data.Array) {
+				items = items.toArray();
 			}
+			if(qx.lang.Type.isArray(items)) {
+				items.map(function(model) {
+					var label = this._getLabelOf(model);
+					this.__addGroupItem(model, label);
+				}, this);
+			}
+			else if(qx.lang.Type.isObject(items)) {
+				for(var model in items) {
+					var label = items[model];
+					this.__addGroupItem(model, label);
+				}
+			}
+			else throw new Error("Items are of unsupported type");
 		},
 
 		setSelection: function(itemNumber) {
@@ -85,51 +88,19 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			this.getMainWidget().setSelection([selectablesItems[itemNumber]]);
 		},
 
-		setItems: function(items) {
-			var radioButtonGroup = this.getMainWidget();
-			radioButtonGroup.removeAll();
+		// IContainerComponent implementation
 
-			if(items instanceof qx.data.Array)
-				items = items.toArray();
-
-			var tabIndex = this.getAttribute("tab-index");
-			if(qx.lang.Type.isArray(items)) {
-				for( var i = 0; i < items.length; i++) {
-					var model = items[i];
-					var label = this._getLabelOf(model);
-					var groupItem = new qx.ui.form.RadioButton(label);
-					groupItem.setModel(model);
-					if(tabIndex) groupItem.setTabIndex(tabIndex);
-					radioButtonGroup.add(groupItem);
-				}
-				return;
-			}
-
-			if(qx.lang.Type.isObject(items)) {
-				for(var model in items) {
-					var label = items[model];
-					var groupItem = new qx.ui.form.RadioButton(label);
-					groupItem.setModel(model);
-					if(tabIndex) groupItem.setTabIndex(tabIndex);
-					radioButtonGroup.add(groupItem);
-				}
-			}
+		add: function(childComponent, display) {
+			var radioButton = childComponent.getMainWidget();
+			if(!qx.Class.hasInterface(radioButton.constructor, qx.ui.form.IRadioItem))
+				throw new Error("<radio-button-group> supports only components with main widgets implementing IRadioItem");
+			this.getMainWidget().add(radioButton);
 		},
 
-		_updateUI: function(value) {
-			var radioButtonGroup = this.getMainWidget();
-			if(value === null) {
-				radioButtonGroup.resetSelection();
-				return;
-			}
-			var buttons = radioButtonGroup.getChildren();
-			for(var i = 0; i < buttons.length; i++) {
-				var button = buttons[i];
-				var buttonValue = button.getModel();
-				if(!qookery.contexts.Model.areEqual(buttonValue, value)) continue;
-				radioButtonGroup.setSelection([ button ]);
-				return;
-			}
+		listChildren: function() {
+			return this.getMainWidget().getChildren().map(function(widget) {
+				return widget.getUserData("qookeryComponent");
+			});
 		},
 
 		remove: function(component) {
@@ -140,15 +111,41 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			// TODO RadioButtonGroup: Implement contains()
 		},
 
-		_applyOrientation: function(orientation) {
-			var map = { "horizontal": qx.ui.layout.HBox, "vertical": qx.ui.layout.VBox };
-			if(!map[orientation]) return;
-			var layout = new map[orientation](10);
-			this.getMainWidget().setLayout(layout);
-		}
-	},
+		// Internals
 
-	destruct: function() {
-		this._disposeArray("__children");
+		_updateUI: function(value) {
+			var radioButtonGroup = this.getMainWidget();
+			var selectionFound = false;
+			var buttons = radioButtonGroup.getChildren();
+			for(var i = 0; i < buttons.length; i++) {
+				var button = buttons[i];
+				var model = button.getModel();
+				if(!qookery.contexts.Model.areEqual(model, value)) {
+					button.setFocusable(false);
+				}
+				else {
+					button.setFocusable(true);
+					radioButtonGroup.setSelection([ button ]);
+					selectionFound = true;
+				}
+			}
+			if(selectionFound) return;
+			radioButtonGroup.resetSelection();
+			if(buttons.length > 0) buttons[0].setFocusable(true);
+		},
+
+		__addGroupItem: function(model, label) {
+			var groupItem = new qx.ui.form.RadioButton(label);
+			groupItem.setModel(model);
+			groupItem.setFocusable(false);
+			var tabIndex = this.getAttribute("tab-index");
+			if(tabIndex)
+				groupItem.setTabIndex(tabIndex);
+			this.getMainWidget().add(groupItem);
+		},
+
+		__removeAllGroupItems: function() {
+			this.getMainWidget().removeAll();
+		}
 	}
 });

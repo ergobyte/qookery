@@ -20,23 +20,17 @@
 				<text-field connect="brand" />
 				<select-box connect="brand">
 					<script>
-						this.initialize({
-							items: $.brands
-						});
+						this.setItems($.brands);
 					</script>
 				</select-box>
 				<radio-button-group connect="brand">
 					<script>
-						this.initialize({
-							items: $.brands
-						});
+						this.setItems($.brands);
 					</script>
 				</radio-button-group>
 				<list connect="brand">
 					<script>
-						this.initialize({
-							items: $.brands
-						});
+						this.setItems($.brands);
 					</script>
 				</list>
 			</group-box>

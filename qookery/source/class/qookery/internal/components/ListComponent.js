@@ -44,13 +44,13 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 				this.getMainWidget().resetSelection();
 		},
 
-		initialize: function(options) {
-			if(!options || !options["items"]) return;
+		setItems: function(items) {
+			if(!items) return;
 			var list = this.getMainWidget();
 			list.removeAll();
 			this.__listItemsMap = {};
-			for(var property in options["items"]) {
-				var item = new qx.ui.form.ListItem(options["items"][property]);
+			for(var property in items) {
+				var item = new qx.ui.form.ListItem(items[property]);
 				this.__listItemsMap[property] = item;
 				list.add(item);
 			}

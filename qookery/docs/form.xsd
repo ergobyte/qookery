@@ -97,6 +97,13 @@
 		</union>
 	</simpleType>
 
+	<simpleType name="tab-index">
+		<restriction base="positiveInteger">
+			<minInclusive value="1" />
+			<maxInclusive value="32000" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="vertical-alignment">
 		<restriction base="token">
 			<enumeration value="top" />
@@ -140,7 +147,7 @@
 		<attribute name="text-color" type="string" default="black" />
 		<attribute name="background-color" type="string" default="white" />
 		<attribute name="display" type="q:display" default="inline" />
-		<attribute name="tab-index" type="integer" default="0"/>
+		<attribute name="tab-index" type="q:tab-index" />
 		<!-- Layout item -->
 		<attribute name="width" type="q:size">
 			<annotation><documentation>
@@ -363,7 +370,7 @@
 	</extension></complexContent></complexType></element>
 	
 	<element name="iframe"><complexType><complexContent><extension base="q:component">
-		<attribute name="source" type="string"/>
+		<attribute name="source" type="string" />
 	</extension></complexContent></complexType></element>
 
 	<element name="image"><complexType><complexContent><extension base="q:component">
@@ -382,8 +389,8 @@
 	<element name="password-field" type="q:field-component" />
 
 	<element name="progress-bar"><complexType><complexContent><extension base="q:component">
-		<attribute name="maximum" type="float"/>
-		<attribute name="value" type="float"/>
+		<attribute name="maximum" type="float" />
+		<attribute name="value" type="float" />
 	</extension></complexContent></complexType></element>
 	
 	<element name="radio-button"><complexType><complexContent><extension base="q:atom-component">
@@ -396,9 +403,9 @@
 			<element ref="q:radio-button" />
 			<element ref="q:toggle-button" />
 		</choice>
-		<attribute name="orientation" type="q:orientation" default="horizontal"/>
-		<attribute name="allow-empty-selection" type="boolean" default="false"/>
-		<attribute name="spacing" type="int"/>
+		<attribute name="allow-empty-selection" type="boolean" default="false" />
+		<attribute name="orientation" type="q:orientation" default="horizontal" />
+		<attribute name="spacing" type="nonNegativeInteger" default="5" />
 	</extension></complexContent></complexType></element>
 	
 	<element name="rich-text" type="q:editable-component" />
@@ -422,7 +429,7 @@
 		<attribute name="single-step" type="integer" default="1" />
 	</extension></complexContent></complexType></element>
 	
-	<element name="spacer" type="q:component"/>
+	<element name="spacer" type="q:component" />
 
 	<element name="spinner"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="maximum" type="integer" default="100" />
@@ -432,7 +439,7 @@
 	</extension></complexContent></complexType></element>
 	
 	<element name="split-pane"><complexType><complexContent><extension base="q:container-component">
-		<attribute name="orientation" type="q:orientation" default="horizontal"/>
+		<attribute name="orientation" type="q:orientation" default="horizontal" />
 	</extension></complexContent></complexType></element>
 
 	<element name="stack"><complexType><complexContent><extension base="q:container-component">

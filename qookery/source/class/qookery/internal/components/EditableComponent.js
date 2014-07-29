@@ -35,7 +35,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
 		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" },
-		format: { check: "qx.util.format.IFormat", inheritable: true, nullable: true, apply: "_applyFormat" },
+		format: { check: "qx.util.format.IFormat", inheritable: true, nullable: true, init: null, apply: "_applyFormat", transform: "_transformFormat" },
 		valid: { check: "Boolean", nullable: false, apply: "_applyValid" }
 	},
 
@@ -47,7 +47,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.base(arguments, attributes);
 			if(attributes["required"]) this.setRequired(true);
 			if(attributes["read-only"]) this.setReadOnly(true);
-			if(attributes["format"]) this.setFormat(qookery.Qookery.getRegistry().createFormatSpecification(attributes["format"]));
+			if(attributes["format"]) this.setFormat(attributes["format"]);
 			if(attributes["label"]) this.setLabel(attributes["label"]);
 		},
 
@@ -129,11 +129,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			// Override to update UI according to new value
 		},
 
-		_transformValue: function(value) {
-			// Override to transform value
-			return value;
-		},
-
 		// Apply methods
 
 		_applyValid: function(value) {
@@ -178,6 +173,20 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_applyReadOnly: function(readOnly) {
 			// Subclasses should override to implement the read only property
+		},
+
+		// Transform methods
+
+		_transformValue: function(value) {
+			// Override to transform value
+			return value;
+		},
+
+		_transformFormat: function(value) {
+			if(qx.lang.Type.isString(value)) {
+				return qookery.Qookery.getRegistry().createFormatSpecification(value);
+			}
+			return value;
 		},
 
 		// Utility methods for subclasses

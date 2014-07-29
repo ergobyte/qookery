@@ -37,7 +37,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['null-item-label']) this.__nullItemLabel = attributes['null-item-label'];
+			this.__nullItemLabel = this.getAttribute("null-item-label");
 		},
 
 		_createMainWidget: function(attributes) {
@@ -65,7 +65,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		_updateUI: function(value) {
-			if(value == null && this.__nullItemLabel)
+			if(value == null && this.__nullItemLabel !== undefined)
 				value = this.constructor.nullItemModel;
 			var selectBox = this.getMainWidget();
 			var listItems = selectBox.getChildren();
@@ -77,7 +77,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				return;
 			}
 		},
-		
+
 		_applyReadOnly: function(readOnly) {
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget) return;
@@ -95,7 +95,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		setItems: function(items) {
 			var selectBox = this.getMainWidget();
 			selectBox.removeAll();
-			if(this.__nullItemLabel) {
+			if(this.__nullItemLabel !== undefined) {
 				var listItem = new qx.ui.form.ListItem(this.__nullItemLabel, null, this.constructor.nullItemModel);
 				selectBox.add(listItem);
 			}
