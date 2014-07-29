@@ -92,7 +92,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			if(items instanceof qx.data.Array)
 				items = items.toArray();
 
-			var tabIndex = parseInt(this.getAttribute("tab-index"), 10);
+			var tabIndex = this.getAttribute("tab-index");
 			if(qx.lang.Type.isArray(items)) {
 				for( var i = 0; i < items.length; i++) {
 					var model = items[i];

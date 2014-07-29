@@ -116,9 +116,17 @@
 	
 	<!-- Global attributes -->
 
-	<attribute name="icon" type="anyURI" />
+	<attribute name="icon" type="anyURI"><annotation><documentation>
+		The URI of the icon to use when presenting element
+	</documentation></annotation></attribute>
 
-	<attribute name="format" type="q:format-specification" />
+	<attribute name="format" type="q:format-specification"><annotation><documentation>
+		A specification for creating the formatter to attach to element
+	</documentation></annotation></attribute>
+
+	<attribute name="flex" type="q:flex"><annotation><documentation>
+		The relative weight for computing the size of the user interface holding element's contents
+	</documentation></annotation></attribute>
 
 	<!-- Component attributes -->
 
