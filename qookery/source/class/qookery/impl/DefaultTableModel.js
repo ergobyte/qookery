@@ -84,10 +84,11 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		}
 	},
 
-	construct: function(component, formParser, xmlElement) {
+	construct: function(component) {
 		this.base(arguments);
 		this.__component = component;
 		this.__accessor = this.self(arguments).nullAccessor;
+		this.__sortColumnIndex = -1;
 	},
 
 	events: {
@@ -103,6 +104,8 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		__component: null,
 		__data: null,
 		__accessor: null,
+		__sortColumnIndex: null,
+		__sortAscending: null,
 
 		// ITableModel implementation
 
@@ -118,7 +121,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			this.__data = data;
 			this.reloadData();
 		},
-		
+
 		reloadData: function() {
 			if(!this.hasListener("dataChanged")) return;
 			this.fireDataEvent("dataChanged", {
@@ -152,7 +155,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		getColumnName: function(columnIndex) {
-			return this.getColumn(columnIndex)['label'];
+			return this.getColumn(columnIndex)["label"];
 		},
 
 		isColumnEditable: function(columnIndex) {
@@ -160,7 +163,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		isColumnSortable: function(columnIndex) {
-			return false;
+			return true;
 		},
 
 		// .	Rows
@@ -212,9 +215,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			var connectionSpecification = column["connect"];
-			if(!connectionSpecification) return null;
-			return qx.data.SingleValueBinding.resolvePropertyChain(row, connectionSpecification);
+			return this.__readColumnValue(column, row);
 		},
 
 		setValue: function(columnIndex, rowIndex, value) {
@@ -247,21 +248,45 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		// .	Sorting
 
 		sortByColumn: function(columnIndex, ascending) {
-			// Not implemented yet
+			var column = this.getColumn(columnIndex);
+			if(!column) throw new Error("Column to sort does not exist");
+			this.__data.sort(function(row1, row2) {
+				var value1 = this.__readColumnValue(column, row1);
+				var value2 = this.__readColumnValue(column, row2);
+				var comparison = (value1 > value2) ? 1 : ((value1 == value2) ? 0 : -1);
+				var signum = ascending ? 1 : -1;
+				return signum * comparison;
+			}.bind(this));
+			this.__sortColumnIndex = columnIndex;
+			this.__sortAscending = ascending;
+			var data = {
+				columnIndex: columnIndex,
+				ascending: ascending
+			};
+			this.fireDataEvent("sorted", data);
+			this.fireEvent("metaDataChanged");
 		},
 
 		getSortColumnIndex : function() {
-			return -1;
+			return this.__sortColumnIndex;
 		},
 
 		isSortAscending: function() {
-			return false;
+			return this.__sortAscending;
 		},
 
 		// .	Misc
 
 		prefetchRows: function(firstRowIndex, lastRowIndex) {
 			// Nothing to prefetch
+		},
+
+		// Internals
+
+		__readColumnValue: function(column, row) {
+			var connectionSpecification = column["connect"];
+			if(!connectionSpecification) return null;
+			return qx.data.SingleValueBinding.resolvePropertyChain(row, connectionSpecification);
 		}
 	}
 });

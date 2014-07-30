@@ -67,7 +67,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				var attributeName = attribute.nodeName;
 				if(attributeName.indexOf("xmlns:") == 0) {
 					var prefix = attributeName.substr(6);
-					var uri  = attribute.nodeValue;
+					var uri  = attribute.value;
 					this.__namespaces[prefix] = uri;
 				}
 			}
@@ -81,7 +81,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			for(var i = 0; i < xmlAttributes.length; i++) {
 				var xmlAttribute = xmlAttributes.item(i);
 				var attributeName = xmlAttribute.nodeName;
-				var text = xmlAttribute.nodeValue;
+				var text = xmlAttribute.value;
 				if(text == null || text.length == 0) continue;
 				text = text.trim();
 				if(text.length == 0) continue;

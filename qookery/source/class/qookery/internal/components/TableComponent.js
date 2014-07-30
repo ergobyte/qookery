@@ -39,6 +39,23 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		__tableModel: null,
 		__selectedRowIndex: null,
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "column-visibility-button-visible": return "Boolean";
+			case "flex": return "Integer";
+			case "header-click": return "ReplaceableString";
+			case "header-icon": return "String";
+			case "row-height": return "Number";
+			case "sortable": return "Boolean";
+			case "status-bar-visible": return "Boolean";
+			default: return this.base(arguments, attributeName);
+			}
+		},
+
+		// Creation
+
 		_createMainWidget: function(attributes) {
 			var table = new qx.ui.table.Table(null, {
 				tableColumnModel: function(_table) {
@@ -83,51 +100,17 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return false;
 		},
 
-		getAttributeType: function(attributeName) {
-			switch(attributeName) {
-			case "column-visibility-button-visible": return "Boolean";
-			case "flex": return "Integer";
-			case "header-click": return "ReplaceableString";
-			case "header-icon": return "String";
-			case "row-height": return "Number";
-			case "sortable": return "Boolean";
-			case "status-bar-visible": return "Boolean";
-			default: return this.base(arguments, attributeName);
-			}
-		},
-
-		getTableModel: function() {
-			return this.__tableModel;
-		},
-
-		setTableModel: function(tableModel) {
-			this.__tableModel = tableModel;
-		},
-
-		addColumn: function(column) {
-			this.__columns.push(column);
-		},
-
-		getColumns: function() {
-			return this.__columns;
-		},
-
-		setColumns: function(columns) {
-			this.__columns = columns;
-		},
-
 		setup: function(formParser, attributes) {
 			if(this.__columns.length == 0)
 				throw new Error("Table must have at least one column");
-			var tableModel = this.getTableModel();
-			if(!tableModel)
-				throw new Error("Table must have a table model set");
+			if(!this.__tableModel)
+				this.__tableModel = new qookery.impl.DefaultTableModel(this);
 			var table = this.getMainWidget();
-			if(tableModel && tableModel.setup && typeof(tableModel.setup) == "function") {
+			if(this.__tableModel.setup && typeof(this.__tableModel.setup) == "function") {
 				// Give model a chance to perform last minute changes
-				tableModel.setup(table, this.__columns);
+				this.__tableModel.setup(table, this.__columns);
 			}
-			table.setTableModel(tableModel);
+			table.setTableModel(this.__tableModel);
 			var columnModel = table.getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < this.__columns.length; i++) {
@@ -164,6 +147,28 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.base(arguments, formParser, attributes);
 		},
 
+		// Public methods
+
+		getTableModel: function() {
+			return this.__tableModel;
+		},
+
+		setTableModel: function(tableModel) {
+			this.__tableModel = tableModel;
+		},
+
+		addColumn: function(column) {
+			this.__columns.push(column);
+		},
+
+		getColumns: function() {
+			return this.__columns;
+		},
+
+		setColumns: function(columns) {
+			this.__columns = columns;
+		},
+
 		getSelectedRowIndex: function() {
 			return this.__selectedRowIndex;
 		},
@@ -196,6 +201,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 	destruct: function() {
 		this.__columns.length = 0;
-		this._disposeObjects("__tableModel", "__paneHeader");
+		this._disposeObjects("__tableModel");
 	}
 });

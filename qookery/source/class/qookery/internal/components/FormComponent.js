@@ -64,19 +64,19 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		prepare: function(formParser, xmlElement) {
 			this.__variables = formParser.getVariables();
-			this.__translationPrefix = formParser.getAttribute(xmlElement, 'translation-prefix');
+			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
 		},
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes['model-provider']);
-			var icon = this.getAttribute('icon');
+			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes["model-provider"]);
+			var icon = this.getAttribute("icon");
 			if(icon) this.setIcon(icon);
 			this.debug("Created form", this.getId() || "");
 		},
 
 		setup: function(formParser, attributes) {
-			var title = this.getAttribute('title');
+			var title = this.getAttribute("title");
 			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
 			return this.base(arguments, formParser, attributes);
 		},
@@ -130,7 +130,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var context = function(selector) {
 				if(!selector)
 					throw new Error("$() without a selector is not supported");
-				if(selector.charAt(0) == '#')
+				if(selector.charAt(0) == "#")
 					return form.getComponent(selector.substr(1));
 				return null;
 			};
@@ -199,7 +199,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				var invalidMessage = this.__validateComponent(validation);
 				if(!invalidMessage) continue;
 				validation.component.setInvalidMessage(invalidMessage);
-				errorMessages.push({ 'component': validation.component, 'message': invalidMessage });
+				errorMessages.push({ "component": validation.component, "message": invalidMessage });
 				invalidComponents.push(validation.component);
 				validation.component.setUserData("__form.Validator", validation);
 			}
@@ -226,7 +226,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			invalidMessage = this.executeAction("validate");
 			if(invalidMessage) {
 				formValid = false;
-				errorMessages.push({ 'component': null, 'message': invalidMessage });
+				errorMessages.push({ "component": null, "message": invalidMessage });
 			}
 			this.setValid(formValid);
 			if(errorMessages.length == 0)
@@ -310,7 +310,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		__parseTranslation: function(formParser, translationElement) {
 			if(!qx.dom.Element.hasChildren(translationElement)) return;
-			var languageCode = qx.xml.Element.getAttributeNS(translationElement, 'http://www.w3.org/XML/1998/namespace', 'lang');
+			var languageCode = qx.xml.Element.getAttributeNS(translationElement, "http://www.w3.org/XML/1998/namespace", "lang");
 			if(!languageCode) throw new Error("Language code missing");
 			var messages = { };
 			var prefix = this.getTranslationPrefix();
@@ -318,11 +318,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			for(var i = 0; i < children.length; i++) {
 				var messageElement = children[i];
 				var elementName = qx.dom.Node.getName(messageElement);
-				if(elementName != 'message')
+				if(elementName != "message")
 					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in translation block", [ elementName ]));
 				var messageId = formParser.getAttribute(messageElement, "id");
 				if(!messageId) throw new Error("Message identifier missing");
-				if(prefix) messageId = prefix + '.' + messageId;
+				if(prefix) messageId = prefix + "." + messageId;
 				messages[messageId] = formParser.getNodeText(messageElement);
 			}
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
