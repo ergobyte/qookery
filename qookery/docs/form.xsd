@@ -37,7 +37,7 @@
 
 	<simpleType name="format-specification">
 		<restriction base="string">
-			<pattern value="[a-z]+:.*" />
+			<pattern value="[a-z]+:?.*" />
 		</restriction>
 	</simpleType>
 
@@ -362,7 +362,10 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="group-box"><complexType><complexContent><extension base="q:container-component">
-		<attribute name="legend-position" type="string" />
+		<attribute name="legend-position" default="middle"><simpleType><restriction base="token">
+			<enumeration value="middle" />
+			<enumeration value="top" />
+		</restriction></simpleType></attribute>
 	</extension></complexContent></complexType></element>
 
 	<element name="html"><complexType><complexContent><extension base="q:component">
@@ -381,6 +384,7 @@
 	<element name="label"><complexType><complexContent><extension base="q:component">
 		<attribute name="icon" type="anyURI" />
 		<attribute name="rich" type="boolean" default="false" />
+		<attribute name="text-align" type="q:horizontal-alignment" />
 		<attribute name="wrap" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
 	
@@ -389,8 +393,8 @@
 	<element name="password-field" type="q:field-component" />
 
 	<element name="progress-bar"><complexType><complexContent><extension base="q:component">
-		<attribute name="maximum" type="float" />
-		<attribute name="value" type="float" />
+		<attribute name="maximum" type="double" />
+		<attribute name="value" type="double" />
 	</extension></complexContent></complexType></element>
 	
 	<element name="radio-button"><complexType><complexContent><extension base="q:atom-component">
@@ -416,7 +420,12 @@
 		<attribute name="null-item-label" type="string" />
 	</extension></complexContent></complexType></element>
 
-	<element name="separator" type="q:component" />
+	<element name="separator"><complexType><complexContent><extension base="q:component">
+		<attribute name="variant" default="horizontal"><simpleType><restriction base="token">
+			<enumeration value="horizontal" />
+			<enumeration value="vertical" />
+		</restriction></simpleType></attribute>
+	</extension></complexContent></complexType></element>
 
 	<element name="slider"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="maximum" type="integer" default="100" />

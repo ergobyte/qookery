@@ -27,10 +27,10 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 	members: {
 
 		_createWidgets: function(attributes) {
-			var labelText = attributes['label'] || "";
-			var label = new qx.ui.basic.Label(labelText);
-			if(attributes['rich'] !== undefined) label.setRich(attributes['rich']);
-			if(attributes['wrap'] !== undefined) label.setWrap(attributes['wrap']);
+			var label = new qx.ui.basic.Label(this.getAttribute("label", ""));
+			var rich = this.getAttribute("rich"); if(rich !== undefined) label.setRich(rich);
+			var wrap = this.getAttribute("wrap"); if(wrap !== undefined) label.setWrap(wrap);
+			label.setTextAlign(this.getAttribute("text-align", null));
 			this._applyLayoutAttributes(label, attributes);
 			return [ label ];
 		},

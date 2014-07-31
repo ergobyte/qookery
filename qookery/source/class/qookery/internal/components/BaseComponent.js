@@ -225,7 +225,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		isActionSupported: function(actionName) {
-			return typeof(this.__actions[actionName]) !== "undefined";
+			return this.__actions[actionName] !== undefined;
 		},
 
 		getAttributeType: function(attributeName) {

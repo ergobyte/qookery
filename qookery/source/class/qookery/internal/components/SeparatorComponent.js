@@ -27,11 +27,18 @@ qx.Class.define("qookery.internal.components.SeparatorComponent", {
 	members: {
 
 		_createWidgets: function(attributes) {
-			var separator = new qx.ui.core.Widget().set({
-				decorator: "separator-horizontal",
-				backgroundColor: "gray",
-				height: 1
-			});
+			var separator = new qx.ui.core.Widget();
+			separator.setBackgroundColor("gray");
+			switch(this.getAttribute("variant", "horizontal")) {
+			case "horizontal":
+				separator.set({ decorator: "separator-horizontal", width: 10, height: 1, allowStretchX: true, allowStretchY: false });
+				break;
+			case "vertical":
+				separator.set({ decorator: "separator-vertical", width: 1, height: 10, allowStretchX: false, allowStretchY: true });
+				break;
+			default:
+				throw new Error("Unknown separator variant");
+			}
 			this._applyLayoutAttributes(separator, attributes);
 			return [ separator ];
 		}

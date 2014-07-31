@@ -27,10 +27,10 @@ qx.Class.define("qookery.internal.components.GroupBoxComponent", {
 	members: {
 
 		_createContainerWidget: function(attributes) {
-			var widget = new qx.ui.groupbox.GroupBox(attributes['label']);
-			this._applyLayoutAttributes(widget, attributes);
-			if(attributes['legend-position']) widget.setLegendPosition(attributes['legend-position']);
-			return widget;
+			var groupBox = new qx.ui.groupbox.GroupBox(attributes['label']);
+			groupBox.setLegendPosition(this.getAttribute("legend-position", "middle"));
+			this._applyLayoutAttributes(groupBox, attributes);
+			return groupBox;
 		}
 	}
 });

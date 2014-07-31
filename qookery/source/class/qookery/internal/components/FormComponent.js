@@ -345,7 +345,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					this.__addTarget(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions);
 					continue;
 				}
-				if(targetObject == "undefined" || qx.core.ObjectRegistry.inShutDown) {
+				if(targetObject === undefined || qx.core.ObjectRegistry.inShutDown) {
 					continue;
 				}
 				if(targetProperty.indexOf("[") == -1) {

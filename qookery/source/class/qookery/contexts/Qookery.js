@@ -33,7 +33,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
 		 * @param successCallback {Function} callback to call after successful load
 		 * @param failCallback {Function} callback to call in case load fails
-		 * 
+		 *
 		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
 		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
@@ -50,7 +50,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * 		<li>variables {Map ? null} optional variables to pass to the form parser</li>
 		 * 		</ul>
 		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
-		 * 
+		 *
 		 * @return {qookery.impl.FormWindow} the newly opened form window
 		 */
 		openWindow: function(form, options, thisArg) {
@@ -79,11 +79,11 @@ qx.Class.define("qookery.contexts.Qookery", {
 
 		/**
 		 * Programmatically create a new Qookery component
-		 * 
+		 *
 		 * @param parentComponent {qookery.IContainerComponent} the parent component to hold new component
 		 * @param componentClassName {String} the name of the new component's implementation class
 		 * @param attributes {Map ? null} any number of attributes understood by new component implementation
-		 * 
+		 *
 		 * @return {qookery.IComponent} newly created component
 		 */
 		createComponent: function(parentComponent, componentClassName, attributes) {
@@ -92,30 +92,36 @@ qx.Class.define("qookery.contexts.Qookery", {
 			component.setup(null, attributes);
 			return component;
 		},
-		
+
 		/**
-		 * 
-		 * @param url {String} the URI of the resource to load
+		 * Load a Qookery form from a URL
+		 *
+		 * @param formUrl {String} the URI of the resource to load
 		 * @param thisArg {Object} an object to set as <code>this</code> for callbacks
-		 * @param successCallback {Function} callback to call after successful load
-		 * @param failCallback {Function} callback to call in case load fails
-		 * @param model {Object} the form model
-		 * @param variables {Object ? null} variables that will be available in xml <code> $.variableName</code>
-		 * @return {String|null} loaded resource as text in case call is synchronous
+		 * @param options {Map ? null} operation options
+		 * 	<ul>
+		 * 		<li>async {Boolean} if <code>true</code> load asynchronously - this is the default
+		 * 		<li>fail {Function} callback to call in case load fails</li>
+		 * 		<li>model {Object} the form model</li>
+		 * 		<li>success {Function} callback to call after successful load</li>
+		 * 		<li>variables {Object ? null} variables that will be available in xml <code> $.variableName</code></li>
+		 * 	</ul>
+		 *
+		 * @return {qookery.IComponent|null} loaded form component if synchronous or <code>null</code>
 		 */
-		loadForm: function(url, thisArg, options) {
+		loadForm: function(formUrl, thisArg, options) {
 			var successCallback = options["success"];
 			var failCallback = options["fail"];
 			var model = options["model"];
 			var variables = options["variables"];
-			var asynchronous = options["async"];
-			var callback = null;
-			var createForm = callback = function(xmlCode) {
+			var createForm = function(xmlCode) {
 				var xmlDocument = qx.xml.Document.fromString(xmlCode);
 				var parser = qookery.Qookery.createFormParser(variables);
 				try {
 					var formComponent = parser.parseXmlDocument(xmlDocument);
-					if(successCallback) successCallback.call(thisArg, formComponent, model, variables);
+					if(successCallback)
+						successCallback.call(thisArg, formComponent, model, variables);
+					return formComponent;
 				}
 				catch(error) {
 					qx.log.Logger.error(this, qx.lang.String.format("Error creating form editor: %1", [ error ]));
@@ -126,14 +132,11 @@ qx.Class.define("qookery.contexts.Qookery", {
 				}
 			};
 
-			if(asynchronous !== null && asynchronous === false) {
-				callback = null;
+			if(options["async"] === false) {
+				var xmlCode = qookery.Qookery.getResourceLoader().loadResource(formUrl, thisArg, null, failCallback);
+				return createForm(xmlCode);
 			}
-			var result = qookery.Qookery.getResourceLoader().loadResource(url, thisArg, callback, failCallback);
-			if(asynchronous !== null && asynchronous === false) {
-				return createForm(result);
-			}
-			return result;
+			return qookery.Qookery.getResourceLoader().loadResource(formUrl, thisArg, createForm, failCallback);
 		}
 	}
 });
