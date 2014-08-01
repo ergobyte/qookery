@@ -534,21 +534,27 @@
 		<complexType>
 			<simpleContent>
 				<extension base="string">
+					<attribute name="action" type="token"><annotation><documentation>
+						The name of the action the script is a handler for.
+						Mutually exclusive with <code>event</code> and <code>name</code>.
+					</documentation></annotation></attribute>
 					<attribute name="component" type="token"><annotation><documentation>
 						The identifier of a previously registered component. If undefined, the
 						enclosing component will receive the script.
 					</documentation></annotation></attribute>
-					<attribute name="event" type="token"><annotation><documentation>
-						The name of the component's event the script should be attached to.
-					</documentation></annotation></attribute>
-					<attribute name="action" type="token"><annotation><documentation>
-						The name of the action the script is a handler for.
-					</documentation></annotation></attribute>
-					<attribute name="source" type="anyURI"><annotation><documentation>
-						The URL to the script that will be attached.
+					<attribute name="event"><annotation><documentation>
+						The name(s) of the component's event(s) the script should be attached to.
+						Mutually exclusive with <code>action</code> and <code>name</code>.
+					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
+					<attribute name="name" type="token"><annotation><documentation>
+						The name of the function to register into the form context ("$") for later execution of script.
+						Mutually exclusive with <code>action</code> and <code>event</code>.
 					</documentation></annotation></attribute>
 					<attribute name="once" type="boolean" default="false"><annotation><documentation>
 						Remove the script from the component after it has been run once (implemented only for "event" scripts)
+					</documentation></annotation></attribute>
+					<attribute name="source" type="anyURI"><annotation><documentation>
+						The URL to the script that will be attached.
 					</documentation></annotation></attribute>
 				</extension>
 			</simpleContent>

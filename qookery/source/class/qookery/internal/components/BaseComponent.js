@@ -157,11 +157,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this.listWidgets("main")[0];
 		},
 
-		initialize: function(initOptions) {
-			// Subclasses that require additional initialization
-			// should override this method
-		},
-
 		getParent: function() {
 			return this.__parentComponent;
 		},
@@ -213,6 +208,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				return clientFunction.apply(this, values);
 			}
 			catch(error) {
+				if(error instanceof qx.core.AssertionError) throw error;
 				this.error(qx.lang.String.format(
 						"Error executing client code: %1\n\n%2\n\n%3", [ error, clientCode, error.stack ]));
 			}

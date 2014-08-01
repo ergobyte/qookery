@@ -109,15 +109,6 @@ qx.Interface.define("qookery.IComponent", {
 		getParent: function() { },
 
 		/**
-		 * Perform additional component initialization
-		 *
-		 * <p>This method is intended to be called by XML authors</p>
-		 *
-		 * @param initOptions {Map?null} optional map with additional data expected by component's implementation
-		 */
-		initialize: function(initOptions) { },
-
-		/**
 		 * Set the focus to this component
 		 */
 		focus: function() { },

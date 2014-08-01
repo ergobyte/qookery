@@ -265,20 +265,29 @@ qx.Class.define("qookery.internal.FormParser", {
 					throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
 			}
 
-			var eventName = this.getAttribute(scriptElement, "event");
-			if(eventName) {
+			var eventNames = this.getAttribute(scriptElement, "event");
+			if(eventNames) {
 				var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
-				component.addEventHandler(eventName, clientCode, onlyOnce);
+				eventNames.split(/\s+/).forEach(function(eventName) {
+					component.addEventHandler(eventName, clientCode, onlyOnce);
+				});
+				return;
 			}
-			else {
-				var actionName = this.getAttribute(scriptElement, "action");
-				if(actionName) {
-					component.setAction(actionName, clientCode);
-				}
-				else {
+
+			var actionName = this.getAttribute(scriptElement, "action");
+			if(actionName) {
+				component.setAction(actionName, clientCode);
+				return;
+			}
+
+			var functionName = this.getAttribute(scriptElement, "name");
+			if(functionName) {
+				component.getForm().getClientCodeContext()[functionName] = function() {
 					component.executeClientCode(clientCode);
-				}
+				};
+				return;
 			}
+			component.executeClientCode(clientCode);
 		},
 
 		__resolveQName: function(qname) {

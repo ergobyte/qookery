@@ -17,7 +17,7 @@
 */
 
 /**
- * A form widget which allows a single selection
+ * Component for {@link qx.ui.form.SelectBox}
  */
 qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
@@ -42,7 +42,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		_createMainWidget: function(attributes) {
 			var selectBox = new qx.ui.form.SelectBox();
-			this._applyLayoutAttributes(selectBox, attributes);
+			selectBox.setFormat(this.__getListItemLabel.bind(this));
 			selectBox.addListener("changeSelection", function(event) {
 				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
@@ -50,18 +50,15 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(model === this.constructor.nullItemModel) model = null;
 				this.setValue(model);
 			}, this);
-			var formatFunction = function(item) {
-				if(!item) return "";
-				var model = item.getModel();
-				if(model === this.constructor.nullItemModel) return this.__nullItemLabel;
-				return item.getLabel();
-			};
-			selectBox.setFormat(formatFunction.bind(this));
+			this._applyLayoutAttributes(selectBox, attributes);
 			return selectBox;
 		},
 
-		initialize: function(initOptions) {
-			if(initOptions["items"]) this.setItems(initOptions["items"]);
+		__getListItemLabel: function(listItem) {
+			if(!listItem) return "";
+			var model = listItem.getModel();
+			if(model === this.constructor.nullItemModel) return this.__nullItemLabel;
+			return listItem.getLabel();
 		},
 
 		_updateUI: function(value) {
@@ -92,12 +89,20 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			this.getMainWidget().add(item);
 		},
 
+		addNullItem: function() {
+			var listItem = new qx.ui.form.ListItem(this.__nullItemLabel, null, this.constructor.nullItemModel);
+			this.getMainWidget().add(listItem);
+		},
+
+		removeAllItems: function() {
+			this.getMainWidget().removeAll();
+		},
+
 		setItems: function(items) {
 			var selectBox = this.getMainWidget();
 			selectBox.removeAll();
 			if(this.__nullItemLabel !== undefined) {
-				var listItem = new qx.ui.form.ListItem(this.__nullItemLabel, null, this.constructor.nullItemModel);
-				selectBox.add(listItem);
+				this.addNullItem();
 			}
 			if(items instanceof qx.data.Array) {
 				items = items.toArray();
