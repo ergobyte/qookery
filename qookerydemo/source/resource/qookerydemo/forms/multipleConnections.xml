@@ -38,7 +38,7 @@
 		<tab-view-page label="Options" column-count="2" column-flexes="0 1">
 			<date-field label="Delivery Date" connect="date" format="date: format = dd/MM/yyyy HH:mm:ss" />
 			<check-field label="Pearl Paint" connect="pearl" />
-			<group-box label="Loan Percent" column-span="2" column-count="2" column-flexes="0 1">
+			<group-box label="Loan Percent" col-span="2" column-count="2" column-flexes="0 1">
 				<slider connect="loan" minimum="0" maximum="100" single-step="1" page-step="5" />
 				<spinner connect="loan" minimum="0" maximum="100" single-step="1" page-step="5" />
 			</group-box>

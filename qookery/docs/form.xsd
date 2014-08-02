@@ -184,15 +184,15 @@
 		<attribute name="margin-bottom" type="integer" default="0" />
 		<attribute name="margin-left" type="integer" default="0" />
 		<attribute name="margin"><simpleType><list itemType="integer" /></simpleType></attribute>
-		<attribute name="stretch-x" type="boolean" default="true" />
-		<attribute name="stretch-y" type="boolean" default="true" />
-		<attribute name="stretch" type="boolean" default="true" />
-		<attribute name="alignment-x" type="q:horizontal-alignment">
+		<attribute name="allow-stretch-x" type="boolean" default="true" />
+		<attribute name="allow-stretch-y" type="boolean" default="true" />
+		<attribute name="allow-stretch" type="boolean" default="true" />
+		<attribute name="align-x" type="q:horizontal-alignment">
 			<annotation><documentation>
 				Horizontal alignment for component positioning purposes
 			</documentation></annotation>
 		</attribute>
-		<attribute name="alignment-y" type="q:vertical-alignment">
+		<attribute name="align-y" type="q:vertical-alignment">
 			<annotation><documentation>
 				Vertical alignment for component positioning purposes
 			</documentation></annotation>
@@ -207,11 +207,11 @@
 		<attribute name="padding-bottom" type="nonNegativeInteger" default="0" />
 		<attribute name="padding-left" type="nonNegativeInteger" default="0" />
 		<attribute name="padding"><simpleType><list itemType="nonNegativeInteger" /></simpleType></attribute>
-		<attribute name="tooltip-text" type="string" />
-		<attribute name="tooltip-icon" type="anyURI" />
+		<attribute name="tool-tip-text" type="string" />
+		<attribute name="tool-tip-icon" type="anyURI" />
 		<!-- Grid layout data -->
 		<attribute name="row-span" type="integer" default="1" />
-		<attribute name="column-span" type="integer" default="1" />
+		<attribute name="col-span" type="integer" default="1" />
 		<!-- Parsing flow -->
 		<attribute name="skip-if" type="string" />
 	</complexType>

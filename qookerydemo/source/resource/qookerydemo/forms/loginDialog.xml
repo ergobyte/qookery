@@ -13,7 +13,7 @@
 
 	<!-- Buttons -->
 
-	<composite column-count="auto" max-width="100" alignment-x="right" column-flexes="1">
+	<composite column-count="auto" max-width="100" align-x="right" column-flexes="1">
 		<button id="loginButton" label="Login">
 			<script event="execute">
 				if($.form.validate()) return;

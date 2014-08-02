@@ -7,7 +7,7 @@
 	<import class="qookery.contexts.Qookery" />
 	<import class="qookerydemo.contexts.QookeryDemo" />
 
-	<label label="Hacker-Proof® Password Manager" column-span="2" />
+	<label label="Hacker-Proof® Password Manager" col-span="2" />
 
 	<table id="passwords" connect="passwords" label="%none">
 		<table-model class="qookery.impl.DefaultTableModel" />
@@ -24,7 +24,7 @@
 		</script>
 	</table>
 
-	<composite alignment-x="right">
+	<composite align-x="right">
 		<button label="Add Password">
 			<script event="execute">
 				$.Qookery.openWindow($("#editor"), {
@@ -62,7 +62,7 @@
 			<password-field label="Password" required="true" connect="password" />
 		</composite>
 	
-		<composite column-count="auto" max-width="300" alignment-x="right" column-flexes="1 1">
+		<composite column-count="auto" max-width="300" align-x="right" column-flexes="1 1">
 			<button label="OK">
 				<script event="execute">
 					if($.form.validate()) return;

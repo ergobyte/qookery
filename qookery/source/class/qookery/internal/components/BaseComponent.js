@@ -28,7 +28,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	statics: {
 
 		baseAttributeTypes: {
-			"column-span": "Integer",
+			"col-span": "Integer",
 			"margin-bottom": "Integer",
 			"margin-left": "Integer",
 			"margin-right": "Integer",
@@ -60,9 +60,9 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"rich": "Boolean",
 			"scale": "Boolean",
 			"status-bar-visible": "Boolean",
-			"stretch": "Boolean",
-			"stretch-x": "Boolean",
-			"stretch-y": "Boolean",
+			"allow-stretch": "Boolean",
+			"allow-stretch-x": "Boolean",
+			"allow-stretch-y": "Boolean",
 			"tri-state": "Boolean",
 			"wrap": "Boolean",
 
@@ -82,7 +82,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"null-item-label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
 			"title": "ReplaceableString",
-			"tooltip-text": "ReplaceableString"
+			"tool-tip-text": "ReplaceableString"
 		}
 	},
 
@@ -259,48 +259,59 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		/**
-		 * Apply layout properties to a widget
+		 * Apply common attributes to a widget
 		 *
 		 * @param widget {qx.ui.core.Widget} Widget to receive layout properties
 		 * @param attributes {Object} Layouting instructions as provided by the XML parser
 		 */
 		_applyLayoutAttributes: function(widget, attributes) {
+
 			// Layout
+
 			if(undefined !== attributes["row-span"]) widget.setLayoutProperties({ rowSpan: attributes["row-span"] });
-			if(undefined !== attributes["column-span"]) widget.setLayoutProperties({ colSpan: attributes["column-span"] });
+			if(undefined !== attributes["col-span"]) widget.setLayoutProperties({ colSpan: attributes["col-span"] });
+
 			// Size and position
+
 			if(undefined !== attributes["width"]) widget.setWidth(attributes["width"]);
 			if(undefined !== attributes["height"]) widget.setHeight(attributes["height"]);
 			if(undefined !== attributes["min-width"]) widget.setMinWidth(attributes["min-width"]);
 			if(undefined !== attributes["min-height"]) widget.setMinHeight(attributes["min-height"]);
 			if(undefined !== attributes["max-width"]) widget.setMaxWidth(attributes["max-width"]);
 			if(undefined !== attributes["max-height"]) widget.setMaxHeight(attributes["max-height"]);
-			if(undefined !== attributes["alignment-x"]) widget.setAlignX(attributes["alignment-x"]);
-			if(undefined !== attributes["alignment-y"]) widget.setAlignY(attributes["alignment-y"]);
-			var stretchX = attributes["stretch-x"] !== undefined ? attributes["stretch-x"] : attributes["stretch"];
-			if(stretchX !== undefined) widget.setAllowStretchX(stretchX);
-			var stretchY = attributes["stretch-y"] !== undefined ? attributes["stretch-y"] : attributes["stretch"];
-			if(stretchY !== undefined) widget.setAllowStretchY(stretchY);
+
+			if(undefined !== attributes["align-x"]) widget.setAlignX(attributes["align-x"]);
+			if(undefined !== attributes["align-y"]) widget.setAlignY(attributes["align-y"]);
+
+			if(undefined !== attributes["allow-stretch"]) { var v = attributes["allow-stretch"]; widget.setAllowStretchX(v); widget.setAllowStretchY(v); }
+			if(undefined !== attributes["allow-stretch-x"]) widget.setAllowStretchX(attributes["allow-stretch-x"]);
+			if(undefined !== attributes["allow-stretch-y"]) widget.setAllowStretchY(attributes["allow-stretch-y"]);
+
 			if(undefined !== attributes["margin"]) widget.setMargin(attributes["margin"]);
 			if(undefined !== attributes["margin-top"]) widget.setMarginTop(attributes["margin-top"]);
 			if(undefined !== attributes["margin-right"]) widget.setMarginRight(attributes["margin-right"]);
 			if(undefined !== attributes["margin-bottom"]) widget.setMarginBottom(attributes["margin-bottom"]);
 			if(undefined !== attributes["margin-left"]) widget.setMarginLeft(attributes["margin-left"]);
+
 			if(undefined !== attributes["padding"]) widget.setPadding(attributes["padding"]);
 			if(undefined !== attributes["padding-top"]) widget.setPaddingTop(attributes["padding-top"]);
 			if(undefined !== attributes["padding-right"]) widget.setPaddingRight(attributes["padding-right"]);
 			if(undefined !== attributes["padding-bottom"]) widget.setPaddingBottom(attributes["padding-bottom"]);
 			if(undefined !== attributes["padding-left"]) widget.setPaddingLeft(attributes["padding-left"]);
+
 			// Appearance
+
 			if(undefined !== attributes["appearance"]) widget.setAppearance(attributes["appearance"]);
 			if(undefined !== attributes["cursor"]) widget.setCursor(attributes["cursor"]);
 			if(undefined !== attributes["decorator"]) widget.setDecorator(attributes["decorator"]);
 			if(undefined !== attributes["font"]) widget.setFont(attributes["font"]);
 			if(undefined !== attributes["text-color"]) widget.setTextColor(attributes["text-color"]);
 			if(undefined !== attributes["background-color"]) widget.setBackgroundColor(attributes["background-color"]);
-			if(undefined !== attributes["tooltip-text"]) widget.setToolTipText(attributes["tooltip-text"]);
-			if(undefined !== attributes["tooltip-icon"]) widget.setToolTipIcon(attributes["tooltip-icon"]);
+			if(undefined !== attributes["tool-tip-text"]) widget.setToolTipText(attributes["tool-tip-text"]);
+			if(undefined !== attributes["tool-tip-icon"]) widget.setToolTipIcon(attributes["tool-tip-icon"]);
+
 			// Miscellaneous
+
 			if(undefined !== attributes["tab-index"]) widget.setTabIndex(attributes["tab-index"]);
 		},
 

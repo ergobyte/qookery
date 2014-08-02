@@ -24,11 +24,11 @@
 		]]></message>
 	</translation>
 
-	<image source="qookerydemo/icons/66/loading-66.gif" alignment-y="middle" />
+	<image source="qookerydemo/icons/66/loading-66.gif" align-y="middle" />
 
 	<label rich="true" wrap="true" label="%.about" />
 
-	<button label="Close" column-span="2" max-width="150" alignment-x="right">
+	<button label="Close" col-span="2" max-width="150" align-x="right">
 		<script event="execute">
 			$.form.close();
 		</script>
