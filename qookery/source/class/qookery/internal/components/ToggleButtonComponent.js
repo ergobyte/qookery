@@ -18,42 +18,32 @@
 
 qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 
-	extend: qookery.internal.components.EditableComponent,
-	
-	properties: {
-		triState: { init: false, inheritable: true, check: "Boolean", nullable: true, apply: "_applyTriState" },
-		model: { init: null, inheritable: true, nullable: true, apply: "_applyModel" }
-	},
-	
+	extend: qookery.internal.components.AtomComponent,
+
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
 
 	members: {
-		
-		_createMainWidget: function(attributes) {
-			var label = attributes['label'];
-			if(attributes['model']) this.setModel(attributes['model']);
-			var widget = new qx.ui.form.ToggleButton(label);
-			widget.addListener("changeValue", function(event) {
+
+		_createAtomWidget: function(attributes) {
+			var toggleButton = new qx.ui.form.ToggleButton(attributes['label']);
+			toggleButton.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);
-			attributes['label'] = "%none";
-			this._applyLayoutAttributes(widget, attributes);
-			return widget;
+			this._applyAtomAttributes(toggleButton, attributes);
+			if(attributes['model'] !== undefined) this.setModel(attributes['model']);
+			if(attributes['tri-state'] !== undefined) this.setTriState(attributes['tri-state']);
+			return toggleButton;
 		},
 
-		_updateUI: function(value) {
-			this.getMainWidget().setValue(value);
+		getModel: function() {
+			return this.getMainWidget().getModel();
 		},
-		
-		_applyTriState: function(triState) {
-			this.getMainWidget().setTriState(triState);
-		},
-		
-		_applyModel: function(model) {
-			//
+
+		setModel: function(model) {
+			this.getMainWidget().setModel(model);
 		}
 	}
 });

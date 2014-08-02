@@ -286,7 +286,7 @@
 
 	<element name="button" type="q:atom-component" />
 
-	<element name="check-box"><complexType><complexContent><extension base="q:editable-component">
+	<element name="check-field"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="tri-state" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
 	
@@ -479,8 +479,9 @@
 
 	<element name="text-field" type="q:field-component" />
 	
-	<element name="toggle-button"><complexType><complexContent><extension base="q:editable-component">
+	<element name="toggle-button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="model" type="string" />
+		<attribute name="tri-state" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
 	
 	<element name="tool-bar" type="q:container-component" />

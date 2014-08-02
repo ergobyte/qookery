@@ -18,7 +18,7 @@
 
 qx.Class.define("qookery.internal.components.ButtonComponent", {
 
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.AtomComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -26,40 +26,27 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 
 	members: {
 
-		_createWidgets: function(attributes) {
-			var widget = this._createButtonWidget(attributes);
-			this._applyButtonAttributes(widget, attributes);
-			return [ widget ];
-		},
-
-		_createButtonWidget: function(attributes) {
-			var label = attributes['label'];
-			var icon = attributes['icon'];
-			return new qx.ui.form.Button(label, icon);
-		},
-
-		_applyButtonAttributes: function(widget, attributes) {
-			if(attributes["icon-position"] !== undefined) widget.setIconPosition(attributes["icon-position"]);
-			if(attributes["rich"] !== undefined) widget.setRich(attributes["rich"]);
-			if(attributes["center"] !== undefined) widget.setCenter(attributes["center"]);
-			this._applyLayoutAttributes(widget, attributes);
-		},
-
-		setLabel: function(label) {
-			this.getMainWidget().setLabel(label);
+		_createAtomWidget: function(attributes) {
+			var button = new qx.ui.form.Button(attributes['label']);
+			this._applyAtomAttributes(button, attributes);
+			return button;
 		},
 
 		setValue: function(buttonLabelValue) {
-			// BC Qookery: Method kept for compatibilty with former way of setting label
+			// BCC Qookery: Method kept for compatibilty with former way of setting label
 			this.getMainWidget().setLabel(buttonLabelValue);
 		},
 
-		setCommand: function(codeToExecute) {
-			this._widgets[0].setCommand(codeToExecute);
+		getCommand: function() {
+			return this.getMainWidget().getCommand();
+		},
+
+		setCommand: function(command) {
+			this.getMainWidget().setCommand(command);
 		},
 
 		execute: function() {
-			this._widgets[0].execute();
+			this.getMainWidget().execute();
 		}
 
 	}

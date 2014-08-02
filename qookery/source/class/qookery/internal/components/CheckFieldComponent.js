@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.CheckBoxComponent", {
+qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
@@ -36,8 +36,8 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 		},
 
 		_createMainWidget: function(attributes) {
-			var widget = new qx.ui.form.CheckBox(attributes["label"]);
-			widget.addListener("changeValue", function(event) {
+			var checkBox = new qx.ui.form.CheckBox(attributes["label"]);
+			checkBox.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);
@@ -45,15 +45,15 @@ qx.Class.define("qookery.internal.components.CheckBoxComponent", {
 
 			// Below hack works around chechbox shortcomings with triple state values
 			if(attributes["tri-state"]) {
-				widget.__availableStates = [ true, false, null ];
-				widget.toggleValue = function () {
+				checkBox.__availableStates = [ true, false, null ];
+				checkBox.toggleValue = function () {
 					this.__currentState = this.__availableStates.indexOf(this.getValue());
 					this.__currentState = this.__currentState >= 2 ? 0 : this.__currentState + 1;
 					this.setValue(this.__availableStates[this.__currentState]);
-				}.bind(widget);
+				}.bind(checkBox);
 			}
-			this._applyLayoutAttributes(widget, attributes);
-			return widget;
+			this._applyLayoutAttributes(checkBox, attributes);
+			return checkBox;
 		},
 
 		_updateUI: function(value) {

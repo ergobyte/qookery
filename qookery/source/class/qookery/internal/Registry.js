@@ -35,7 +35,7 @@ qx.Class.define("qookery.internal.Registry", {
 
 		this.__components = { };
 		this.__components["button"] = qookery.internal.components.ButtonComponent;
-		this.__components["check-box"] = qookery.internal.components.CheckBoxComponent;
+		this.__components["check-field"] = qookery.internal.components.CheckFieldComponent;
 		this.__components["composite"] = qookery.internal.components.CompositeComponent;
 		this.__components["date-field"] = qookery.internal.components.DateFieldComponent;
 		this.__components["form"] = qookery.internal.components.FormComponent;
