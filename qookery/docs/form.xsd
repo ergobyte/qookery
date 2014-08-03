@@ -45,6 +45,12 @@
 		<restriction base="nonNegativeInteger" />
 	</simpleType>
 
+	<simpleType name="javascript-identifier">
+		<restriction base="token">
+			<pattern value="[a-zA-Z_$][0-9a-zA-Z_$]*" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="horizontal-alignment">
 		<restriction base="token">
 			<enumeration value="left" />
@@ -71,6 +77,12 @@
 		</restriction>
 	</simpleType>
 	
+	<simpleType name="qooxdoo-class-name">
+		<restriction base="token">
+			<pattern value="([a-zA-Z_$][0-9a-zA-Z_$]*\.)+[A-Z][0-9a-zA-Z_$]*" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="row-and-column-count">
 		<union memberTypes="integer">
 			<simpleType>
@@ -309,12 +321,12 @@
 					Import a Qooxdoo class within the form's scripting context
 				</documentation></annotation>
 				<complexType>
-					<attribute name="class" type="token" use="required">
+					<attribute name="class" type="q:qooxdoo-class-name" use="required">
 						<annotation><documentation>
 							The name of the Qooxdoo class to import
 						</documentation></annotation>
 					</attribute>
-					<attribute name="key" type="token">
+					<attribute name="key" type="q:javascript-identifier">
 						<annotation><documentation>
 							The name of the property to create in the scripting context - 
 							if not set, the part of the class name after the last dot character
@@ -547,7 +559,7 @@
 						The name(s) of the component's event(s) the script should be attached to.
 						Mutually exclusive with <code>action</code> and <code>name</code>.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
-					<attribute name="name" type="token"><annotation><documentation>
+					<attribute name="name" type="q:javascript-identifier"><annotation><documentation>
 						The name of the function to register into the form context ("$") for later execution of script.
 						Mutually exclusive with <code>action</code> and <code>event</code>.
 					</documentation></annotation></attribute>
