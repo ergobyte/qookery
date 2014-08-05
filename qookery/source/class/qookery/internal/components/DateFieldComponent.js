@@ -20,10 +20,6 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
-	statics: {
-		THRESHOLD: 30
-	},
-
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__regularExpression = /(\d{1,2})[\.\-\/\\\:](\d{1,2})([\.\-\/\\\:](\d?\d?\d\d))?/;
@@ -121,10 +117,10 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 		__parseDateTime: function(string) {
 			if(string == null) return "";
 			var dateParts = string.split(/ +/);
-			
+
 			var datePart = "";
 			var timePart = "00:00";
-			
+
 			//user give only time
 			if(dateParts[0].indexOf(":") != -1) {
 					datePart = qx.lang.String.format("%1/%2/%3", [new Date().getDate(),new Date().getMonth()+1, new Date().getFullYear()]);
@@ -148,7 +144,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			var date = string.split("/");
 			if(date.length == 1)
 				date = string.split("-");
-			
+
 			switch(date.length) {
 			case 1:
 				string = qx.lang.String.format("01/%1/%2", [string, new Date().getFullYear()]);
@@ -161,7 +157,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				break;
 			case 3:
 				if(date[2].length == 2) {
-					date[2] = (parseInt(date[2], 10) < this.constructor.THRESHOLD ? 
+					date[2] = (parseInt(date[2], 10) < this.constructor.THRESHOLD ?
 							(date[2].length == 1 ? "200" : "20") + date[2] : (date[2].length == 1 ? "190" : "19") + date[2]);
 				}
 				string = qx.lang.String.format("%1/%2/%3", [date[0], date[1], date[2]]);

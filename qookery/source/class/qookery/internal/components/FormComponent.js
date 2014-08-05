@@ -58,12 +58,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__targets: null,
 		__bindings: null,
 		__clientCodeContext: null,
-		__result: null,
 
 		// Creation
 
 		prepare: function(formParser, xmlElement) {
-			this.__variables = formParser.getVariables();
+			this.__variables = formParser.getVariables() || { };
 			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
 		},
 
@@ -99,12 +98,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__modelProvider;
 		},
 
-		getResult: function() {
-			return this.__result;
+		getVariable: function(variableName) {
+			return this.__variables[variableName];
 		},
 
-		getVariables: function() {
-			return this.__variables;
+		setVariable: function(variableName, value) {
+			this.__variables[variableName] = value;
 		},
 
 		// Component registration
@@ -134,9 +133,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					return form.getComponent(selector.substr(1));
 				return null;
 			};
-			context.form = this;
-			if(this.__variables)
-				qx.lang.Object.mergeWith(context, this.__variables, false);
+			context["form"] = this;
+			qx.lang.Object.mergeWith(context, this.__variables, false);
 			return this.__clientCodeContext = context;
 		},
 
@@ -273,7 +271,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		 * @param result {Object} Optional result value to set before closing
 		 */
 		close: function(result) {
-			if(result !== undefined) this.__result = result;
+			if(result !== undefined) this.__variables["result"] = result;
 			this.fireEvent("close", qx.event.type.Event, null);
 		},
 

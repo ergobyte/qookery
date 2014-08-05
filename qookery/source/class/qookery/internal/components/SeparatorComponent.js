@@ -28,7 +28,7 @@ qx.Class.define("qookery.internal.components.SeparatorComponent", {
 
 		_createWidgets: function(attributes) {
 			var separator = new qx.ui.core.Widget();
-			separator.setBackgroundColor("gray");
+			separator.setBackgroundColor("border-separator");
 			switch(this.getAttribute("variant", "horizontal")) {
 			case "horizontal":
 				separator.set({ decorator: "separator-horizontal", width: 10, height: 1, allowStretchX: true, allowStretchY: false });

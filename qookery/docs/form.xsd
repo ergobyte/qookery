@@ -430,6 +430,9 @@
 	
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="null-item-label" type="string" />
+		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
+			If true, the select box items will be kept sorted in ascending order at all times
+		</documentation></annotation></attribute>
 	</extension></complexContent></complexType></element>
 
 	<element name="separator"><complexType><complexContent><extension base="q:component">

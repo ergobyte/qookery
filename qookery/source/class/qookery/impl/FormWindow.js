@@ -42,7 +42,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(options['caption'] !== undefined) this.setCaption(options['caption']);
 			if(options['allowClose'] !== undefined) this.setAllowClose(options['allowClose']);
 			if(options['onDisappear'] !== undefined) this.addListener("disappear", function() {
-				var result = this.getFormComponent().getResult();
+				var result = this.getFormComponent().getVariable("result");
 				options['onDisappear'].call(thisArg, result);
 			}, this);
 		}

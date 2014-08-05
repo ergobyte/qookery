@@ -34,10 +34,12 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 	members: {
 
 		__nullItemLabel: "",
+		__keepSorted: null,
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			this.__nullItemLabel = this.getAttribute("null-item-label");
+			this.__keepSorted = this.getAttribute("keep-sorted", true);
 		},
 
 		_createMainWidget: function(attributes) {
@@ -83,10 +85,19 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		addItem: function(model, label, icon) {
-			qx.core.Assert.assertNotNull(model);
 			if(!label) label = this._getLabelOf(model);
 			var item = new qx.ui.form.ListItem(label, icon, model);
-			this.getMainWidget().add(item);
+			var selectBox = this.getMainWidget();
+			if(this.__keepSorted) {
+				var insertionIndex = 0, existingItems = selectBox.getChildren(), lastIndex = existingItems.length;
+				while(insertionIndex < lastIndex) {
+					var existingItem = existingItems[insertionIndex];
+					if(existingItem.getLabel() > label) break;
+					insertionIndex++;
+				}
+				selectBox.addAt(item, insertionIndex);
+			}
+			else selectBox.add(item);
 		},
 
 		addNullItem: function() {
@@ -110,17 +121,14 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			if(qx.lang.Type.isArray(items)) {
 				for(var i = 0; i < items.length; i++) {
 					var model = items[i];
-					var label = this._getLabelOf(model);
-					var listItem = new qx.ui.form.ListItem(label, null, model);
-					selectBox.add(listItem);
+					this.addItem(model);
 				}
 				return;
 			}
 			if(qx.lang.Type.isObject(items)) {
 				for(var model in items) {
 					var label = items[model];
-					var listItem = new qx.ui.form.ListItem(label, null, model);
-					selectBox.add(listItem);
+					this.addItem(model, label);
 				}
 			}
 		}

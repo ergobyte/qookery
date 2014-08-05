@@ -68,8 +68,25 @@ qx.Interface.define("qookery.IFormComponent", {
 		getModelProvider: function() { },
 
 		/**
+		 * Get a form variable's value
+		 *
+		 * @param variableName {String} the name of the variable
+		 *
+		 * @return {any} variable value or <code>undefined</code>
+		 */
+		getVariable: function(variableName) { },
+
+		/**
+		 * Set a form variable's value
+		 *
+		 * @param variableName {String} the name of the variable
+		 * @param value {any} the new variable value
+		 */
+		setVariable: function(variableName, value) { },
+
+		/**
 		 * Register a value within the client scripting context
-		 * 
+		 *
 		 * @param key {String} The name of the user context
 		 * @param userContext {Object} A qooxdoo class with the desired functionality
 		 */
@@ -93,7 +110,7 @@ qx.Interface.define("qookery.IFormComponent", {
 		removeValidations: function(component) { },
 
 		/**
-		 * Invokes the form validation
+		 * Invoke the form validation
 		 *
 		 * <p>The result of the validation is also set in the valid property.</p>
 		 *
@@ -102,22 +119,15 @@ qx.Interface.define("qookery.IFormComponent", {
 		validate: function() { },
 
 		/**
-		 * Resets the form validation
+		 * Reset all form validations
 		 */
 		resetValidation: function() { },
 
 		/**
-		 * Close the form.
+		 * Close the form
 		 *
-		 * @param result {Object} Optional result value to set before closing
+		 * @param result {any} optional value to set into the <code>result</code> variable
 		 */
-		close: function() { },
-
-		/**
-		 * Return the form's variables
-		 * 
-		 *  @return {Object} 
-		 */
-		getVariables: function() { }
+		close: function(result) { }
 	}
 });
