@@ -380,6 +380,10 @@
 		</restriction></simpleType></attribute>
 	</extension></complexContent></complexType></element>
 
+	<element name="hover-button"><complexType><complexContent><extension base="q:atom-component.attributes">
+		<attribute name="interval" type="positiveInteger" />
+	</extension></complexContent></complexType></element>
+
 	<element name="html"><complexType><complexContent><extension base="q:component">
 		<attribute name="html" type="string" />
 	</extension></complexContent></complexType></element>
@@ -554,6 +558,9 @@
 						The name of the action the script is a handler for.
 						Mutually exclusive with <code>event</code> and <code>name</code>.
 					</documentation></annotation></attribute>
+					<attribute name="arguments"><annotation><documentation>
+						A list of JavaScript argument names to use for generated function body
+					</documentation></annotation><simpleType><list itemType="q:javascript-identifier" /></simpleType></attribute>
 					<attribute name="component" type="token"><annotation><documentation>
 						The identifier of a previously registered component. If undefined, the
 						enclosing component will receive the script.

@@ -282,8 +282,13 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var functionName = this.getAttribute(scriptElement, "name");
 			if(functionName) {
+				var argumentNames = this.getAttribute(scriptElement, "arguments");
+				if(argumentNames) argumentNames = argumentNames.split(/\s+/);
 				component.getForm().getClientCodeContext()[functionName] = function() {
-					component.executeClientCode(clientCode);
+					var argumentMap = { };
+					if(argumentNames) for(var i = 0; i < argumentNames.length; i++)
+						argumentMap[argumentNames[i]] = arguments[i];
+					return component.executeClientCode(clientCode, argumentMap);
 				};
 				return;
 			}

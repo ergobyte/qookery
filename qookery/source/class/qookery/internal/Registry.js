@@ -40,6 +40,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["date-field"] = qookery.internal.components.DateFieldComponent;
 		this.__components["form"] = qookery.internal.components.FormComponent;
 		this.__components["group-box"] = qookery.internal.components.GroupBoxComponent;
+		this.__components["hover-button"] = qookery.internal.components.HoverButtonComponent;
 		this.__components["html"] = qookery.internal.components.HtmlComponent;
 		this.__components["iframe"] = qookery.internal.components.IframeComponent;
 		this.__components["image"] = qookery.internal.components.ImageComponent;

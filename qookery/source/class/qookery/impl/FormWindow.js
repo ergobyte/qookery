@@ -118,7 +118,6 @@ qx.Class.define("qookery.impl.FormWindow", {
 		_getButtonsContainer: function() {
 			if(this.__buttonsContainer == null) {
 				var buttonsLayout = new qx.ui.layout.Grid();
-				//buttonsLayout.setReversed(true);
 				buttonsLayout.setSpacing(10);
 				this.__buttonsContainer = new qx.ui.container.Composite(buttonsLayout);
 				this.__buttonsContainer.setLayout(buttonsLayout);
@@ -127,7 +126,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			return this.__buttonsContainer;
 		},
 
-		_createButtons: function(buttonsContainer) {
+		_createButtons: function(buttonsContainer, buttonsLayout) {
 			// Override to add button to the window
 		},
 
