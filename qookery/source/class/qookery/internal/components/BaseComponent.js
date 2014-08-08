@@ -109,6 +109,18 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		// IComponent Implementation
 
+		getId: function() {
+			return this.__id;
+		},
+
+		getAttribute: function(attributeName, defaultValue) {
+			var value = this.__attributes[attributeName];
+			if(value !== undefined) return value;
+			if(defaultValue === Error) throw new Error(qx.lang.String.format(
+					"Required attribute '%1' missing for component '%2'", [ attributeName, this ]));
+			return defaultValue;
+		},
+
 		prepare: function(formParser, xmlElement) {
 			// Nothing is done here by default, components may override
 		},
@@ -135,18 +147,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		setAction: function(actionName, clientCode) {
 			this.__actions[actionName] = clientCode;
-		},
-
-		getId: function() {
-			return this.__id;
-		},
-
-		getAttribute: function(attributeName, defaultValue) {
-			var value = this.__attributes[attributeName];
-			if(value !== undefined) return value;
-			if(defaultValue === Error) throw new Error(qx.lang.String.format(
-					"Required attribute '%1' missing for component '%2'", [ attributeName, this ]));
-			return defaultValue;
 		},
 
 		listWidgets: function(filterName) {

@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.TabHolderComponent", {
+qx.Class.define("qookery.internal.components.TabViewComponent", {
 
 	extend: qookery.internal.components.ContainerComponent,
 
@@ -35,6 +35,16 @@ qx.Class.define("qookery.internal.components.TabHolderComponent", {
 			var tabView = new qx.ui.tabview.TabView();
 			this._applyLayoutAttributes(tabView, attributes);
 			return tabView;
+		},
+
+		getSelection: function() {
+			var selection = this.getMainWidget().getSelection();
+			if(!selection || selection.length !== 1) return null;
+			return selection[0].getUserData("qookeryComponent");
+		},
+
+		setSelection: function(page) {
+			this.getMainWidget().setSelection(page ? [ page.getMainWidget() ] : [ ]);
 		}
 	}
 });

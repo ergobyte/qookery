@@ -33,6 +33,25 @@ qx.Interface.define("qookery.IComponent", {
 	members: {
 
 		/**
+		 * Return the component identifier, if any
+		 *
+		 * <p>This identifier is guaranteed to be unique within the defining XML document</p>
+		 *
+		 * @return {String} unique identifier or <code>null</code>
+		 */
+		getId: function() { },
+
+		/**
+		 * Return the value of component's attribute
+		 *
+		 * <p>You may supply the default value to return in case the attribute is not defined. If you supply the global
+		 * object <code>Error</code>, then an exception will be thrown instead.</p>
+		 *
+		 * @return {any} the attribute's value if set, the default value or <code>undefined</code> otherwise
+		 */
+		getAttribute: function(attributeName, defaultValue) { },
+
+		/**
 		 * Called by the parser immediately after new instance construction
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
@@ -71,15 +90,6 @@ qx.Interface.define("qookery.IComponent", {
 		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
 		setup: function(formParser, attributes) { },
-
-		/**
-		 * Return the component identifier, if any
-		 *
-		 * <p>This identifier is guaranteed to be unique within the defining XML document</p>
-		 *
-		 * @return {String} unique identifier or <code>null</code>
-		 */
-		getId: function() { },
 
 		/**
 		 * Return an attribute value from the defining XML document

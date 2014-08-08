@@ -58,8 +58,8 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
 		this.__components["split-pane"] = qookery.internal.components.SplitPaneComponent;
 		this.__components["stack"] = qookery.internal.components.StackComponent;
-		this.__components["tab-view"] = qookery.internal.components.TabHolderComponent;
-		this.__components["tab-view-page"] = qookery.internal.components.TabPageComponent;
+		this.__components["tab-view"] = qookery.internal.components.TabViewComponent;
+		this.__components["tab-view-page"] = qookery.internal.components.TabViewPageComponent;
 		this.__components["table"] = qookery.internal.components.TableComponent;
 		this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
 		this.__components["text-field"] = qookery.internal.components.TextFieldComponent;

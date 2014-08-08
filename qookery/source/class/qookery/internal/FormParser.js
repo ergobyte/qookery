@@ -120,6 +120,8 @@ qx.Class.define("qookery.internal.FormParser", {
 				return this.__resolveQName(text);
 			case "Size":
 				return this.constructor.namedSizes[text] || (isNaN(text) ? text : parseInt(text, 10));
+			case "StringList":
+				return text.split(/\s+/);
 			default:
 				// Fallback for unknown types
 				return text;

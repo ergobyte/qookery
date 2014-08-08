@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.TabPageComponent", {
+qx.Class.define("qookery.internal.components.TabViewPageComponent", {
 
 	extend: qookery.internal.components.ContainerComponent,
 
