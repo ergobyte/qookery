@@ -38,12 +38,12 @@ qx.Class.define("qookery.impl.FormWindow", {
 		this.setLayout(new qx.ui.layout.VBox());
 		this.set({ modal: true, showMinimize: false, showMaximize: false });
 		if(options) {
-			if(options['icon'] !== undefined) this.setIcon(options['icon']);
-			if(options['caption'] !== undefined) this.setCaption(options['caption']);
-			if(options['allowClose'] !== undefined) this.setAllowClose(options['allowClose']);
-			if(options['onDisappear'] !== undefined) this.addListener("disappear", function() {
+			if(options["icon"] !== undefined) this.setIcon(options["icon"]);
+			if(options["caption"] !== undefined) this.setCaption(options["caption"]);
+			if(options["allowClose"] !== undefined) this.setAllowClose(options["allowClose"]);
+			if(options["onDisappear"] !== undefined) this.addListener("disappear", function() {
 				var result = this.getFormComponent().getVariable("result");
-				options['onDisappear'].call(thisArg, result);
+				options["onDisappear"].call(thisArg, result);
 			}, this);
 		}
 		if(this.getAllowClose()) this.addListener("keypress", function(event) {
