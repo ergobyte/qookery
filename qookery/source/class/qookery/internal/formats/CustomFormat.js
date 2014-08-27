@@ -24,8 +24,16 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 	construct: function(options) {
 		this.base(arguments);
 		var expression = options["expression"];
-		if(!expression) throw new Error("A JavaScript expression must be provided for custom formatter");
-		this.__formatFunction = new Function([ "value" ], "return(" + expression + ");");
+		if(expression) {
+			this.__formatFunction = new Function([ "value" ], "return(" + expression + ");");
+			return;
+		}
+		var format = options["format"];
+		if(format) {
+			this.__formatFunction = format;
+			return;
+		}
+		throw new Error("An expression or function must be provided");
 	},
 
 	members: {
