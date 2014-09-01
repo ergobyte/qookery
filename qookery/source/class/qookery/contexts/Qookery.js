@@ -57,10 +57,15 @@ qx.Class.define("qookery.contexts.Qookery", {
 			if(!options) options = {};
 			var window = new qookery.impl.FormWindow(null, null, options, thisArg);
 			if(qx.Class.implementsInterface(form, qookery.IFormComponent)) {
-				window.openForm(form, options['model']);
+				if(options["variables"]) {
+					for(var key in options["variables"]) {
+						form.setVariable(key, options["variables"][key]);
+					}
+				}
+				window.openForm(form, options["model"]);
 			}
 			else this.loadResource(form, null, function(formXml) {
-				window.createAndOpen(formXml, options['model'], options['variables']);
+				window.createAndOpen(formXml, options["model"], options["variables"]);
 			});
 			return window;
 		},

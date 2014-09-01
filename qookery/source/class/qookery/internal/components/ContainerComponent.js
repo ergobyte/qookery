@@ -42,29 +42,29 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.__columnCount = attributes['column-count'] || 1;
+			this.__columnCount = attributes["column-count"] || 1;
 			if(this.__columnCount === "none") return;
 			if(this.__columnCount !== "auto") {
 				this.__rowArray = [ ];
 				for(var i = 0; i < this.__columnCount; i++) this.__rowArray.push(0);
 			}
 			this.__layout = new qx.ui.layout.Grid();
-			var spacing = attributes['spacing'];
+			var spacing = attributes["spacing"];
 			if(spacing !== undefined) {
 				this.__layout.setSpacingX(spacing);
 				this.__layout.setSpacingY(spacing);
 			}
 			else {
-				var spacingX = attributes['spacing-x'];
+				var spacingX = attributes["spacing-x"];
 				this.__layout.setSpacingX(spacingX !== undefined ? spacingX : 10);
-				var spacingY = attributes['spacing-y'];
+				var spacingY = attributes["spacing-y"];
 				this.__layout.setSpacingY(spacingY !== undefined ? spacingY : 10);
 			}
-			var columnFlexes = attributes['column-flexes'];
+			var columnFlexes = attributes["column-flexes"];
 			if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
 				this.__layout.setColumnFlex(index, parseInt(columnFlex, 10));
 			}, this);
-			var rowFlexes = attributes['row-flexes'];
+			var rowFlexes = attributes["row-flexes"];
 			if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
 				this.__layout.setRowFlex(index, parseInt(rowFlex, 10));
 			}, this);

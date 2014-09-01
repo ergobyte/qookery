@@ -39,8 +39,8 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['placeholder']) this.setPlaceholder(attributes['placeholder']);
-			if(attributes['input-specification']) this.__parseSpecification(attributes['input-specification']);
+			if(attributes["placeholder"]) this.setPlaceholder(attributes["placeholder"]);
+			if(attributes["input-specification"]) this.__parseSpecification(attributes["input-specification"]);
 		},
 
 		_createMainWidget: function(attributes) {
@@ -170,7 +170,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 		},
 
 		__parseSpecification: function(specification) {
-			var result = specification.split(' ', 7);
+			var result = specification.split(" ", 7);
 			if(!result || result.length != 7) return null;
 			this.__inputIndexMap = {
 				year: result[0],
@@ -180,7 +180,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				minutes: result[4],
 				seconds: result[5]
 			};
-			this.__regularExpression = new RegExp(result[6], 'i');
+			this.__regularExpression = new RegExp(result[6], "i");
 		}
 	}
 });
