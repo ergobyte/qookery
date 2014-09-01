@@ -37,8 +37,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	events: {
-		"close": "qx.event.type.Event",
-		"dispose": "qx.event.type.Event"
+		"close": "qx.event.type.Event"
 	},
 
 	properties: {
@@ -50,8 +49,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__translationPrefix: null,
 		__variables: null,
+		__translationPrefix: null,
 		__components: null,
 		__validations: null,
 		__modelProvider: null,
@@ -118,11 +117,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Client script context
 
-		/**
-		 * Generate a JavaScript context to be used by Qookery client code
-		 *
-		 * @return {Object} a suitable JavaScript context
-		 */
 		getClientCodeContext: function() {
 			if(this.__clientCodeContext != null) return this.__clientCodeContext;
 			var form = this;
@@ -138,9 +132,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__clientCodeContext = context;
 		},
 
-		/**
-		 * Register a value within the client scripting context
-		 */
 		registerUserContext: function(key, userContext) {
 			var clientCodeContext = this.getClientCodeContext();
 			clientCodeContext[key] = userContext;
@@ -148,14 +139,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Validation
 
-		/**
-		 * Add a validation to the list of validations performed by this form
-		 *
-		 * The validator can either return a boolean or throw a {@link qx.core.ValidationError}
-		 *
-		 * @param component {qookery.IEditableComponent} editable component to check against
-		 * @param validator {Function} validator function
-		 */
 		addValidation: function(component, validatorFunction) {
 			if(!validatorFunction) return;
 			if(!qx.Class.hasInterface(component.constructor, qookery.IEditableComponent))
@@ -167,11 +150,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__validations.push(validation);
 		},
 
-		/**
-		 * Remove component's validations from the form validations
-		 *
-		 * @param component {qookery.IEditableComponent} Component to look for, or <code>null</code> to remove all validations
-		 */
 		removeValidations: function(component) {
 			if(this.__validations.length == 0) return;
 			if(!component) { this.__validations = []; return; }
@@ -182,13 +160,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 		},
 
-		/**
-		 * Invokes the form validation
-		 *
-		 * <p>The result of the validation is also set in the valid property.</p>
-		 *
-		 * @return {Array} The validation result
-		 */
 		validate: function() {
 			var invalidComponents = [ ];
 			var errorMessages = [ ];
@@ -253,9 +224,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return invalidMessage;
 		},
 
-		/**
-		 * Resets the form validation
-		 */
 		resetValidation: function() {
 			this.__validations.forEach(function(validation) {
 				validation.component.setValid(true);
@@ -265,14 +233,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Closing
 
-		/**
-		 * Close the form.
-		 *
-		 * @param result {Object} Optional result value to set before closing
-		 */
 		close: function(result) {
 			if(result !== undefined) this.__variables["result"] = result;
-			this.fireEvent("close", qx.event.type.Event, null);
+			this.fireDataEvent("close", this.__variables["result"]);
 		},
 
 		parseCustomElement: function(formParser, xmlElement) {
@@ -413,7 +376,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		this.fireEvent("dispose", qx.event.type.Event, null);
 		this.removeAllBindings();
 		this.__components = null;
 		this.__validations = null;

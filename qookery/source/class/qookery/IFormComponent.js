@@ -26,14 +26,9 @@ qx.Interface.define("qookery.IFormComponent", {
 	events: {
 
 		/**
-		 * This event is fired when the form has been closed
+		 * This event is fired when the form has been closed. Its value is set to the form's <code>result</code> variable.
 		 */
-		"close": "qx.event.type.Event",
-
-		/**
-		 * This event is fired when the form component is about to be disposed
-		 */
-		"dispose": "qx.event.type.Event"
+		"close": "qx.event.type.Data"
 	},
 
 	properties: {
@@ -67,6 +62,8 @@ qx.Interface.define("qookery.IFormComponent", {
 		 */
 		getModelProvider: function() { },
 
+		// Variables
+
 		/**
 		 * Get a form variable's value
 		 *
@@ -84,6 +81,15 @@ qx.Interface.define("qookery.IFormComponent", {
 		 */
 		setVariable: function(variableName, value) { },
 
+		// Scripting
+
+		/**
+		 * Return the JavaScript context that is used by Qookery scripting code
+		 *
+		 * @return {Object} a suitable JavaScript context
+		 */
+		getClientCodeContext: function() { },
+
 		/**
 		 * Register a value within the client scripting context
 		 *
@@ -91,6 +97,8 @@ qx.Interface.define("qookery.IFormComponent", {
 		 * @param userContext {Object} A qooxdoo class with the desired functionality
 		 */
 		registerUserContext: function(key, userContext) { },
+
+		// Validation
 
 		/**
 		 * Add a validation to the list of validations performed by this form
@@ -110,11 +118,11 @@ qx.Interface.define("qookery.IFormComponent", {
 		removeValidations: function(component) { },
 
 		/**
-		 * Invoke the form validation
+		 * Invokes the form validation
 		 *
 		 * <p>The result of the validation is also set in the valid property.</p>
 		 *
-		 * @return {Boolean} The validation result
+		 * @return {Array} The validation result
 		 */
 		validate: function() { },
 

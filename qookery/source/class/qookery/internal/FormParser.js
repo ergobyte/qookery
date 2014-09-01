@@ -65,11 +65,8 @@ qx.Class.define("qookery.internal.FormParser", {
 			for(var i = 0; i < attributes.length; i++) {
 				var attribute = attributes.item(i);
 				var attributeName = attribute.nodeName;
-				if(attributeName.indexOf("xmlns:") == 0) {
-					var prefix = attributeName.substr(6);
-					var uri  = attribute.value;
-					this.__namespaces[prefix] = uri;
-				}
+				if(attributeName.indexOf("xmlns:") === 0)
+					this.__namespaces[attributeName.substr(6)] = attribute.value;
 			}
 			var rootComponent = this.__parseComponent(rootElement, parentComponent);
 			return rootComponent;

@@ -52,6 +52,15 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(model === this.constructor.nullItemModel) model = null;
 				this.setValue(model);
 			}, this);
+			selectBox.addListener("keypress", function(event) {
+				switch(event.getKeyIdentifier()) {
+				case "Delete":
+				case "Backspace":
+					this.setValue(null);
+					event.preventDefault();
+					return;
+				}
+			}, this);
 			this._applyLayoutAttributes(selectBox, attributes);
 			return selectBox;
 		},

@@ -45,6 +45,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 				var result = this.getFormComponent().getVariable("result");
 				options["onDisappear"].call(thisArg, result);
 			}, this);
+			if(options["onClose"]) this.__onClose = options["onClose"].bind(thisArg);
 		}
 		if(this.getAllowClose()) this.addListener("keypress", function(event) {
 			if(event.getKeyIdentifier() == "Escape") this.destroy();
@@ -56,6 +57,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 		__formComponent: null,
 		__buttonsContainer: null,
 		__disposeForm: false,
+		__onClose: null,
 
 		/**
 		 * Create and open Qookery window
@@ -89,6 +91,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			formComponent.addListenerOnce("close", function(event) {
 				formComponent.executeAction("onFocusLost");
 				formComponent.setModel(null);
+				if(this.__onClose) this.__onClose(event.getData());
 				this.destroy();
 			}, this);
 			formComponent.addListener("changeTitle", function(event) {
