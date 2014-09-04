@@ -139,12 +139,16 @@
 		The URI of the icon to use when presenting element
 	</documentation></annotation></attribute>
 
+	<attribute name="flex" type="q:flex"><annotation><documentation>
+		The relative weight for computing the size of the user interface holding element's contents
+	</documentation></annotation></attribute>
+
 	<attribute name="format" type="q:format-specification"><annotation><documentation>
 		A specification for creating the formatter to attach to element
 	</documentation></annotation></attribute>
 
-	<attribute name="flex" type="q:flex"><annotation><documentation>
-		The relative weight for computing the size of the user interface holding element's contents
+	<attribute name="tool-tip-text" type="string"><annotation><documentation>
+		Text to associate with element that may be used when a tool tip needs to appear
 	</documentation></annotation></attribute>
 
 	<!-- Component attributes -->
@@ -541,6 +545,7 @@
 		<attribute name="max-width" type="q:size" />
 		<attribute name="sortable" type="boolean" default="true" />
 		<attribute name="text-align" type="q:horizontal-alignment" default="left" />
+		<attribute name="tool-tip-text" type="string" />
 		<attribute name="width" type="string" />
 		<attribute name="white-space" type="string" />
 	</complexType></element>

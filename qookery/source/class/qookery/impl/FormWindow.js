@@ -30,21 +30,16 @@ qx.Class.define("qookery.impl.FormWindow", {
 	 *
 	 * @option caption {String ? null} a caption for the created Window instance
 	 * @option icon {String ? null} an icon for the created Window instance
-	 * @option onDisappear {Function ? null} a callback that will receive the form's result property on disappear
-	 *
+	 * @option onClose {Function ? null} a callback that will receive the form's result property when window is closed
 	 */
 	construct: function(caption, icon, options, thisArg) {
 		this.base(arguments, caption, icon);
-		this.setLayout(new qx.ui.layout.VBox());
-		this.set({ modal: true, showMinimize: false, showMaximize: false });
+		this.setLayout(new qx.ui.layout.Grow());
+		this.set({ modal: true, showMinimize: false, showMaximize: false, contentPadding: 10 });
 		if(options) {
 			if(options["icon"] !== undefined) this.setIcon(options["icon"]);
 			if(options["caption"] !== undefined) this.setCaption(options["caption"]);
 			if(options["allowClose"] !== undefined) this.setAllowClose(options["allowClose"]);
-			if(options["onDisappear"] !== undefined) this.addListener("disappear", function() {
-				var result = this.getFormComponent().getVariable("result");
-				options["onDisappear"].call(thisArg, result);
-			}, this);
 			if(options["onClose"]) this.__onClose = options["onClose"].bind(thisArg);
 		}
 		if(this.getAllowClose()) this.addListener("keypress", function(event) {
@@ -89,7 +84,6 @@ qx.Class.define("qookery.impl.FormWindow", {
 				formComponent.focus();
 			}, this);
 			formComponent.addListenerOnce("close", function(event) {
-				formComponent.executeAction("onFocusLost");
 				formComponent.setModel(null);
 				if(this.__onClose) this.__onClose(event.getData());
 				this.destroy();
@@ -107,8 +101,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(formIcon && !this.getIcon()) this.setIcon(formIcon);
 			if(model) formComponent.setModel(model);
 
-			this.add(formComponent.getMainWidget(), { flex: 1 });
-			this.add(this._getButtonsContainer());
+			this.add(formComponent.getMainWidget());
 			this.center();
 			this.open();
 		},
@@ -118,22 +111,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			return "";
 		},
 
-		_getButtonsContainer: function() {
-			if(this.__buttonsContainer == null) {
-				var buttonsLayout = new qx.ui.layout.Grid();
-				buttonsLayout.setSpacing(10);
-				this.__buttonsContainer = new qx.ui.container.Composite(buttonsLayout);
-				this.__buttonsContainer.setLayout(buttonsLayout);
-				this._createButtons(this.__buttonsContainer, buttonsLayout);
-			}
-			return this.__buttonsContainer;
-		},
-
-		_createButtons: function(buttonsContainer, buttonsLayout) {
-			// Override to add button to the window
-		},
-
-		_onCloseButtonClick: function(event) {
+		_onCloseButtonTap: function(event) {
 			this.__formComponent.close();
 		},
 

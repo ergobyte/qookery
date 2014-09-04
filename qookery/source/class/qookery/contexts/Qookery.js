@@ -45,10 +45,11 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 *
 		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
 		 * @param options {Map ? null} any of FormWindow options in addition to any of those below
-		 * 		<ul>
-		 * 		<li>model {any} an optional model to load into the form</li>
-		 * 		<li>variables {Map ? null} optional variables to pass to the form parser</li>
-		 * 		</ul>
+		 *		<ul>
+		 *		<li>model {any} an optional model to load into the form</li>
+		 *		<li>variables {Map ? null} optional variables to pass to the form parser</li>
+		 *		<li>onClose {Function ? null} a callback that will receive the form's result property when window is closed</li>
+		 *		</ul>
 		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
 		 *
 		 * @return {qookery.impl.FormWindow} the newly opened form window

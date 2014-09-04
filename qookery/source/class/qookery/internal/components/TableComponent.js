@@ -136,6 +136,10 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
 					headerWidget.setIcon(column["header-icon"]);
 				}
+				if(column["tool-tip-text"]) {
+					var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
+					headerWidget.setToolTipText(column["tool-tip-text"]);
+				}
 				if(column["header-click"]) {
 					var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
 					headerWidget.addListener("click", function(event) {
