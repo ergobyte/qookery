@@ -62,6 +62,11 @@ qx.Interface.define("qookery.IFormComponent", {
 		 */
 		getModelProvider: function() { },
 
+		/**
+		 * Return the form that is the parent of this form, or <code>null</code> if no such linkage exists
+		 */
+		getParentForm: function() { },
+
 		// Variables
 
 		/**

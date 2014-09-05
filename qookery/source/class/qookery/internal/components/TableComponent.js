@@ -128,23 +128,24 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				}
 
 				var cellRenderer = new qookery.internal.DefaultCellRenderer(column);
+				var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
 				if(column["format"]) {
 					var format = qookery.Qookery.getRegistry().createFormatSpecification(column["format"]);
 					cellRenderer.setFormat(format);
 				}
 				if(column["header-icon"]) {
-					var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
 					headerWidget.setIcon(column["header-icon"]);
 				}
 				if(column["tool-tip-text"]) {
-					var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
 					headerWidget.setToolTipText(column["tool-tip-text"]);
 				}
 				if(column["header-click"]) {
-					var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
 					headerWidget.addListener("click", function(event) {
 						column["header-click"](event);
 					});
+				}
+				if(column["text-align"]) {
+					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
 				}
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}

@@ -40,6 +40,14 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 
 		setModel: function(model) {
 			this.getMainWidget().setModel(model);
+		},
+
+		getValue: function() {
+			return this.getMainWidget().getValue();
+		},
+
+		setValue: function(value) {
+			this.getMainWidget().setValue(value);
 		}
 	}
 });

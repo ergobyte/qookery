@@ -89,6 +89,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this;
 		},
 
+		getParentForm: function() {
+			return this.__variables["parentForm"];
+		},
+
 		getTranslationPrefix: function() {
 			return this.__translationPrefix;
 		},
@@ -96,6 +100,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		getModelProvider: function() {
 			return this.__modelProvider;
 		},
+
+		// Variables
 
 		getVariable: function(variableName) {
 			return this.__variables[variableName];
@@ -128,6 +134,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				return null;
 			};
 			context["form"] = this;
+			context["parent"] = function() {
+				var parentForm = this.getParentForm();
+				if(!parentForm) return undefined;
+				return parentForm.getClientCodeContext();
+			}.bind(this);
 			qx.lang.Object.mergeWith(context, this.__variables, false);
 			return this.__clientCodeContext = context;
 		},
