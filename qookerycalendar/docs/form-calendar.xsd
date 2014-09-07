@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		xmlns:q="http://www.qookery.org/ns/Form"
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		xmlns:xml="http://www.w3.org/XML/1998/namespace"
+		targetNamespace="http://www.qookery.org/ns/Form/Calendar"
+		elementFormDefault="qualified">
+
+	<import namespace="http://www.qookery.org/ns/Form" />
+
+	<element name="calendar"><complexType><complexContent><extension base="q:component">
+		<attribute name="header-left" type="string" default="title" />
+		<attribute name="header-center" type="string" default="" />
+		<attribute name="header-right" type="string" default="today prev,next" />
+		<attribute name="first-day" type="nonNegativeInteger" default="0" />
+		<attribute name="event-limit" default="false"><simpleType><union memberTypes="boolean nonNegativeInteger" /></simpleType></attribute>
+		<attribute name="editable" default="false" type="boolean" />
+		<attribute name="default-date" type="date" />
+		<attribute name="lang" type="language" />
+		<attribute name="aspect-ratio" type="float" default="1.35" />
+		<attribute name="time-format" type="string" default="h(:mm)t" />
+		<attribute name="all-day-slot" type="boolean" default="true" />
+		<attribute name="axis-format" type="string" default="h(:mm)a" />
+		<attribute name="slot-duration" type="time" default="00:30:00" />
+		<attribute name="min-time" type="time" default="00:00:00" />
+		<attribute name="scroll-time" type="time" default="06:00:00" />
+		<attribute name="max-time" type="time" default="24:00:00" />
+		<attribute name="selectable" type="boolean" default="false" />
+	</extension></complexContent></complexType></element>
+		
+</schema>

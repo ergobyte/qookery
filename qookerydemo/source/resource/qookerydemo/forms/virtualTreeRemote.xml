@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-	A Virtual tree with colums and dynamic loading in Qookery
+<!--
+	A virtual tree with colums and dynamic loading in Qookery
 -->
 <form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" >
 

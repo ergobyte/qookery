@@ -432,8 +432,6 @@
 		<attribute name="spacing" type="nonNegativeInteger" default="5" />
 	</extension></complexContent></complexType></element>
 	
-	<element name="rich-text" type="q:editable-component" />
-
 	<element name="scroll" type="q:container-component" />
 	
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">

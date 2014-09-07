@@ -26,10 +26,6 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
-	statics: {
-		pending: null // Array of widgets waiting for script to load
-	},
-
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
@@ -52,7 +48,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this._applyLayoutAttributes(widget, attributes);
 			// Defer creation of CKEditor until after positioning is done
 			widget.addListenerOnce("appear", function(event) {
-				this.__createCkEditor(widget);
+				qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__createCkEditor, this);
 			}, this);
 			return widget;
 		},
@@ -67,35 +63,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this.__ckEditor.setData(value);
 		},
 
-		// Automatic loading of CKEditor on first use
-
-		__loadCkEditor: function() {
-			this.debug("Loading CKEditor");
-			var scriptUri = qx.util.ResourceManager.getInstance().toUri("qookery/lib/ckeditor/ckeditor.js");
-			var scriptRequest = new qx.bom.request.Script();
-			scriptRequest.onload = function() {
-				var pending = qookery.richtext.internal.RichTextComponent.pending;
-				pending.forEach(function(createFunction) { createFunction(); });
-				pending = [ ];
-			};
-			scriptRequest.open("GET", scriptUri);
-			scriptRequest.send();
-		},
-
-		__createCkEditor: function(widget) {
-			// If the script is already loaded, just create this editor
-			if(typeof CKEDITOR != 'undefined') return this.__createCkEditor0(widget);
-			// Is this the first time a CKEditor is needed?
-			if(!this.constructor.pending) {
-				this.constructor.pending = [ ];
-				this.__loadCkEditor();
-			}
-			// Add widget to the queue of waiting ones
-			var createFunction = this.__createCkEditor0.bind(this, widget);
-			this.constructor.pending.push(createFunction);
-		},
-
-		__createCkEditor0: function(widget) {
+		__createCkEditor: function() {
+			var widget = this.getMainWidget();
 			// Method might be called after widget destruction
 			if(widget.isDisposed()) return;
 			// Make qx.html.Element selectable, otherwise mouse behavior is broken
@@ -108,12 +77,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this.__ckEditor = CKEDITOR.inline(domElement, {
 				language: qx.locale.Manager.getInstance().getLanguage()
 			});
-			
-			if(this.getValue() !== null && this.__ckEditor.getData().trim().length === 0) {
-				this.__previousValue = this.getValue();
-				this.__ckEditor.setData(this.getValue());
-			}
-			
+			// Insert current value into newly created editor
+			this._updateUI(this.getValue());
 			// Register change listener
 			this.__ckEditor.on("change", this.__onCkEditorChange, this);
 		},
@@ -122,8 +87,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			// If the reason of this event is us, do nothing
 			if(this._disableValueEvents) return;
 			// Check incoming value, if not different from previous one ignore it
-			var data = this.__ckEditor.getData();
-			var value =  ( data.trim().length == 0 ) ? null : data ;
+			var data = this.__ckEditor.getData().trim();
+			var value = data.trim().length === 0 ? null : data;
 			if(value === this.__previousValue) return;
 			// Store value for later difference check, according to CKEditor manual
 			this.__previousValue = value;

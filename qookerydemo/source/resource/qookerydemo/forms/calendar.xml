@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Calendar (fullcalendar.io) demo
+-->
+<form xmlns="http://www.qookery.org/ns/Form"
+		xmlns:q-cal="http://www.qookery.org/ns/Form/Calendar"
+		column-count="1" column-flexes="1" row-flexes="1">
+
+	<q-cal:calendar id="calendar" width="400" height="400" editable="true" selectable="true"
+			first-day="1" event-limit="true" default-date="2014-09-12"
+			header-left="prev,next today" header-center="title" header-right="month,basicWeek,basicDay">
+
+		<script event="eventClick">
+			alert(event.title);
+		</script>
+
+	</q-cal:calendar>
+
+	<script component="calendar" event="loaded">
+		this.executeAction("addEventSource", { events: [
+			{
+				title: 'All Day Event',
+				start: '2014-09-01'
+			},
+			{
+				title: 'Long Event',
+				start: '2014-09-07',
+				end: '2014-09-10'
+			},
+			{
+				id: 999,
+				title: 'Repeating Event',
+				start: '2014-09-09T16:00:00'
+			},
+			{
+				id: 999,
+				title: 'Repeating Event',
+				start: '2014-09-16T16:00:00'
+			},
+			{
+				title: 'Conference',
+				start: '2014-09-11',
+				end: '2014-09-13'
+			},
+			{
+				title: 'Meeting',
+				start: '2014-09-12T10:30:00',
+				end: '2014-09-12T12:30:00'
+			},
+			{
+				title: 'Lunch',
+				start: '2014-09-12T12:00:00'
+			},
+			{
+				title: 'Meeting',
+				start: '2014-09-12T14:30:00'
+			},
+			{
+				title: 'Happy Hour',
+				start: '2014-09-12T17:30:00'
+			},
+			{
+				title: 'Dinner',
+				start: '2014-09-12T20:00:00'
+			},
+			{
+				title: 'Birthday Party',
+				start: '2014-09-13T07:00:00'
+			},
+			{
+				title: 'Dinner',
+				start: '2014-09-12T20:00:00'
+			},
+			{
+				title: 'Birthday Party',
+				start: '2014-09-13T07:00:00'
+			},
+			{
+				title: 'Click for Google',
+				url: 'http://google.com/',
+				start: '2014-09-28'
+			}
+		]});
+	</script>
+
+</form>

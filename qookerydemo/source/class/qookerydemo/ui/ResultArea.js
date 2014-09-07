@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookerydemo.ResultArea",
+qx.Class.define("qookerydemo.ui.ResultArea",
 {
 	extend: qx.ui.container.Scroll,
 

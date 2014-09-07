@@ -227,13 +227,13 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseXInclude: function(xIncludeElement, parentComponent) {
 			var formUrl = this.getAttribute(xIncludeElement, "href");
-			var xmlIdAttribute = xIncludeElement.attributes["xml:id"];
 			formUrl = this.parseValue(parentComponent, "ReplaceableString", formUrl);
 			var xmlString = qookery.Qookery.getResourceLoader().loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
 			var formParser = new qookery.internal.FormParser(this.__variables);
 			try {
 				var component = formParser.parseXmlDocument(xmlDocument, parentComponent);
+				var xmlIdAttribute = xIncludeElement.attributes["xml:id"];
 				if(xmlIdAttribute)
 					parentComponent.getForm().putComponent(xmlIdAttribute.value, component);
 				return component;

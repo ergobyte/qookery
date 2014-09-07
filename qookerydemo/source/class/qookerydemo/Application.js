@@ -23,6 +23,26 @@ qx.Class.define("qookerydemo.Application", {
 
 	extend: qx.application.Standalone,
 
+	statics: {
+		DEMOS: [
+			{ label: "Hello, World!", formFile: "helloWorld.xml" },
+			{ label: "About Dialog", formFile: "aboutDialog.xml" },
+			{ label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
+			{ label: "Layouts", formFile: "layouts.xml" },
+			{ label: "Stack", formFile: "stack.xml" },
+			{ label: "Translations", formFile: "translations.xml" },
+			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
+			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
+			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
+			{ label: "XInclude", formFile: "xInclude.xml" },
+			{ label: "Unstable: Virtual Tree", formFile: "virtualTree.xml", modelFile: "fileSystem.json"},
+			{ label: "Unstable: Virtual Tree Columns", formFile: "virtualTreeColumns.xml", modelFile: "fileSystemColumns.json"},
+			{ label: "Unstable: Virtual Tree Remote", formFile: "virtualTreeRemote.xml", modelFile: "virtualTreeRemote.json"},
+			{ label: "Extension: Rich Text", formFile: "richText.xml", modelFile: "carConfiguration.json" },
+			{ label: "Extension: Calendar", formFile: "calendar.xml" }
+		]
+	},
+
 	members: {
 
 		__toolbar: null,
@@ -37,10 +57,10 @@ qx.Class.define("qookerydemo.Application", {
 				qx.log.appender.Console;
 			}
 
-			this.__toolbar = new qookerydemo.Toolbar();
-			this.__xmlEditor = new qookerydemo.XmlEditor();
-			this.__jsonEditor = new qookerydemo.JsonEditor();
-			this.__resultArea = new qookerydemo.ResultArea();
+			this.__toolbar = new qookerydemo.ui.Toolbar();
+			this.__xmlEditor = new qookerydemo.ui.XmlEditor();
+			this.__jsonEditor = new qookerydemo.ui.JsonEditor();
+			this.__resultArea = new qookerydemo.ui.ResultArea();
 
 			var verticalSplitter = new qx.ui.splitpane.Pane("vertical");
 			verticalSplitter.setDecorator(new qx.ui.decoration.Decorator().set({ width: 0 }));
@@ -60,21 +80,22 @@ qx.Class.define("qookerydemo.Application", {
 			qx.dom.Element.remove(document.getElementById('splash'));
 		},
 
-		loadDemo: function(formFile, modelFile) {
+		loadDemo: function(demoConfiguration) {
+			var formFile = demoConfiguration["formFile"];
 			var formUrl = "resource/qookerydemo/forms/" + formFile;
 			qookery.contexts.Qookery.loadResource(formUrl, this, function(data) {
 				this.setXmlEditorCode(data);
 				this.runCode();
 			});
-			if(modelFile) {
-				var modelUrl = "resource/qookerydemo/models/" + modelFile;
-				qookery.contexts.Qookery.loadResource(modelUrl, this, function(data) {
-					this.setModelAreaCode(data);
-				});
+			var modelFile = demoConfiguration["modelFile"];
+			if(!modelFile) {
+				this.setModelAreaCode("null");
+				return;
 			}
-			else {
-				this.setModelAreaCode("false");
-			}
+			var modelUrl = "resource/qookerydemo/models/" + modelFile;
+			qookery.contexts.Qookery.loadResource(modelUrl, this, function(data) {
+				this.setModelAreaCode(data);
+			});
 		},
 
 		setModelAreaCode: function(code) {

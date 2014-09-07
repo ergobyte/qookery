@@ -76,6 +76,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__formats["number"] = qookery.internal.formats.NumberFormat;
 
 		this.__maps = { };
+		this.__libraries = { };
 	},
 
 	members: {
@@ -87,6 +88,7 @@ qx.Class.define("qookery.internal.Registry", {
 		__componentConstructorArgs: null,
 		__formats: null,
 		__maps: null,
+		__libraries: null,
 
 		// Model providers
 
@@ -170,6 +172,19 @@ qx.Class.define("qookery.internal.Registry", {
 
 		getMap: function(mapName) {
 			return this.__maps[mapName];
+		},
+
+		// Libraries
+
+		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) {
+			if(this.__libraries[libraryName]) return; // Prevent redefinition
+			this.__libraries[libraryName] = new qookery.internal.registry.Library(libraryName, resourceUris, dependencies, postLoadCallback);
+		},
+
+		loadLibrary: function(libraryName, callback, thisArg) {
+			var library = this.__libraries[libraryName];
+			if(!library) throw new Error("Unable to load unknown library " + libraryName);
+			library.load(callback, thisArg);
 		}
 	},
 

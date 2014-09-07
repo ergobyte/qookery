@@ -16,10 +16,22 @@
 	limitations under the License.
 */
 
-qx.Bootstrap.define("qookery.richtext.Bootstrap", {
+/**
+ * @ignore(jQuery.*)
+ */
+qx.Bootstrap.define("qookery.calendar.Bootstrap", {
 
 	defer: function() {
-		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "qookery/lib/ckeditor/ckeditor.js" ]);
-		qookery.Qookery.getRegistry().registerComponentType("q-rt:rich-text", qookery.richtext.internal.RichTextComponent);
+		var registry = qookery.Qookery.getRegistry();
+
+		registry.registerLibrary("jquery", [ "qookery/lib/jquery/jquery.min.js" ], null, function() { jQuery.noConflict(); });
+		registry.registerLibrary("moment", [ "qookery/lib/moment/moment.min.js" ]);
+		registry.registerLibrary("fullcalendar", [
+			"qookery/lib/fullcalendar/fullcalendar.min.css",
+			"qookery/lib/fullcalendar/fullcalendar.min.js",
+			"qookery/lib/fullcalendar/lang/el.js"
+		], [ "moment", "jquery" ]);
+
+		registry.registerComponentType("q-cal:calendar", qookery.calendar.internal.CalendarComponent);
 	}
 });

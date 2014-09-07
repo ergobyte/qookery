@@ -20,7 +20,7 @@
 
 	<property environment="env" />
 
-	<property name="build.root" value="/var/tmp/${user.name}/qookery" />
+	<property name="build.root" value="/var/tmp/${user.name}/tmp/qookery" />
 	<property name="build.applicationName" value="${build.projectName}" />
 	<property name="build.gitRepositoryName" value="qookery" />
 	<condition property="build.browser" value="${env.BROWSER}" else="/usr/bin/x-www-browser"><isset property="env.BROWSER" /></condition>
@@ -32,7 +32,7 @@
 	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
 
 	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
-	<condition property="qooxdoo.version" value="3.5"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.version" value="4.0.1"><not><isset property="qooxdoo.version" /></not></condition>
 	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
 
@@ -97,14 +97,9 @@
 
 	<!-- Source targets -->
 
-	<target name="Source-Init" depends="Init, Qooxdoo-Install" unless="build.sourceUpToDate">
-		<uptodate property="build.sourceUpToDate" targetfile="source/script/${build.applicationName}.js">
-			<srcfiles dir="source" />
-			<srcfiles file="config.json" />
-		</uptodate>
-	</target>
+	<target name="Source-Init" depends="Init, Qooxdoo-Install" />
 	
-	<target name="Source-Generate" depends="Source-Init" unless="build.sourceUpToDate">
+	<target name="Source-Generate" depends="Source-Init">
 		<call-generator-py job="source" />
 	</target>
 
@@ -116,14 +111,9 @@
 
 	<!-- Build targets -->
 
-	<target name="Build-Init" depends="Init, Qooxdoo-Install">
-		<uptodate property="build.sourceUpToDate" targetfile="build/script/${build.applicationName}.js">
-			<srcfiles dir="source" />
-			<srcfiles file="config.json" />
-		</uptodate>
-	</target>
+	<target name="Build-Init" depends="Init, Qooxdoo-Install" />
 	
-	<target name="Build-Generate" depends="Build-Init" unless="build.sourceUpToDate">
+	<target name="Build-Generate" depends="Build-Init">
 		<call-generator-py job="build" />
 	</target>
 

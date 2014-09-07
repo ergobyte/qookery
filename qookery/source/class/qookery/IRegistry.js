@@ -127,6 +127,12 @@ qx.Interface.define("qookery.IRegistry", {
 		 *
 		 * @return {Map} The map object or <code>null</code> if map was not found
 		 */
-		getMap: function(mapName) { }
+		getMap: function(mapName) { },
+
+		// Scripts
+
+		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) { },
+
+		loadLibrary: function(libraryName, callback, thisArg) { }
 	}
 });

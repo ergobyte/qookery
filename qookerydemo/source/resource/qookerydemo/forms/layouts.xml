@@ -4,15 +4,19 @@
 	freeing the XML author from specifying a row and column
 	number for each cell of the underlying grid layout.
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-count="5" column-flexes="1 1 1 1 1">
+<form xmlns="http://www.qookery.org/ns/Form">
 
-	<button label="Child Widget 0" />
-	<button label="Child Widget 1" col-span="2"/>
-	<button label="Child Widget 2" row-span="2"/>
-	<button label="Child Widget 3"/>
-	<button label="Child Widget 4" row-span="2" col-span="2"/>
-	<button label="Child Widget 5"/>
-	<button label="Child Widget 6" row-span="2"/>
-	<button label="Child Widget 7" col-span="2"/>
+	<composite id="grid" column-count="5" column-flexes="1 1 1 1 1" spacing="5">
+		<button label="row1 col1" />
+		<button label="row1 col2" col-span="2" />
+		<button label="row1 col4" row-span="2" />
+		<button label="row1 col5" />
+		<button label="row2 col1" row-span="2" />
+		<button label="row2 col2" />
+		<button label="row2 col3" row-span="2" />
+		<button label="row2 col5" />
+		<button label="row3 col2" />
+		<button label="row3 col4" col-span="2" />
+	</composite>
 
 </form>

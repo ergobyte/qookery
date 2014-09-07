@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="Qookery Calendar" basedir="." default="Download">
+
+	<property name="fullcalendar.version" value="2.1.1" />
+	<property name="fullcalendar.zipFilename" value="fullcalendar-2.1.1.zip" />
+	<property name="fullcalendar.downloadUrl" value="https://github.com/arshaw/fullcalendar/releases/download/v${fullcalendar.version}/${fullcalendar.zipFilename}" />
+	<property name="fullcalendar.temp" location="/tmp/" />
+	<property name="fullcalendar.target" location="../qookerycalendar/source/resource/qookery/lib" />
+
+	<target name="Download-Init">
+		<condition property="build.fullcalendarAvailable">
+			<available type="file" file="${fullcalendar.target}/fullcalendar.min.js" />
+		</condition>
+	</target>
+
+	<target name="Download" depends="Download-Init" unless="build.fullcalendarAvailable">
+		<get dest="${fullcalendar.temp}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="${fullcalendar.downloadUrl}" />
+		</get>
+		<unzip src="${fullcalendar.temp}/${fullcalendar.zipFilename}" dest="${fullcalendar.temp}/" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${fullcalendar.version}/fullcalendar.min.js" tofile="${fullcalendar.target}/fullcalendar/fullcalendar.min.js" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${fullcalendar.version}/fullcalendar.min.css" tofile="${fullcalendar.target}/fullcalendar/fullcalendar.min.css" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${fullcalendar.version}/lang/el.js" tofile="${fullcalendar.target}/fullcalendar/lang/el.js" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${fullcalendar.version}/lib/jquery.min.js" tofile="${fullcalendar.target}/jquery/jquery.min.js" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${fullcalendar.version}/lib/moment.min.js" tofile="${fullcalendar.target}/moment/moment.min.js" overwrite="true" />
+	</target>
+
+	<target name="Clean">
+		<delete dir="${fullcalendar.target}" />
+	</target>
+
+</project>

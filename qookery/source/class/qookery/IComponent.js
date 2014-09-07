@@ -142,6 +142,15 @@ qx.Interface.define("qookery.IComponent", {
 		getMainWidget: function() { },
 
 		/**
+		 * Add an event handler to this component
+		 *
+		 * @param eventName {String} the name of the event to listen to
+		 * @param clientCode {String} the JavaScript source code to execute when the event is triggered
+		 * @param onlyOnce {Boolean} if <code>true</code>, the listener will be removed as soon as it triggered for the first time
+		 */
+		addEventHandler: function(eventName, clientCode, onlyOnce) { },
+
+		/**
 		 * Execute an action provided by this component
 		 *
 		 * <p>It is safe to call this method for undefined actions,

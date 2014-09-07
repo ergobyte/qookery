@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 	Qookery - Declarative UI Building for Qooxdoo
 
 	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
@@ -14,12 +15,16 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-*/
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		xmlns:q="http://www.qookery.org/ns/Form"
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		xmlns:xml="http://www.w3.org/XML/1998/namespace"
+		targetNamespace="http://www.qookery.org/ns/Form/RichText"
+		elementFormDefault="qualified">
 
-qx.Bootstrap.define("qookery.richtext.Bootstrap", {
+	<import namespace="http://www.qookery.org/ns/Form" />
 
-	defer: function() {
-		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "qookery/lib/ckeditor/ckeditor.js" ]);
-		qookery.Qookery.getRegistry().registerComponentType("q-rt:rich-text", qookery.richtext.internal.RichTextComponent);
-	}
-});
+	<element name="rich-text" type="q:editable-component" />
+
+</schema>

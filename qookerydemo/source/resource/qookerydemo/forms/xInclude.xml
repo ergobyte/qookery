@@ -6,18 +6,18 @@
 
 	<import class="qookerydemo.contexts.QookeryDemo" />
 
-	<group-box label="Login dialog - root element of included XML is 'form'">
-		<xi:include xml:id="loginDialog" href="qookerydemo/forms/loginDialog.xml" />
+	<group-box label="'Layouts' demo" legend-position="top">
+		<xi:include href="qookerydemo/forms/layouts.xml" />
+	</group-box>
+
+	<group-box label="'Login Dialog' demo, with setup script" legend-position="top">
+		<xi:include xml:id="dialog" href="qookerydemo/forms/loginDialog.xml" />
 		<script>
-			$("#loginDialog").setModel($.QookeryDemo.createModel({ 
+			$("#dialog").setModel($.QookeryDemo.createModel({ 
 				username: 'admin',
 				password: '1234'
 			}));
 		</script>
-	</group-box>
-
-	<group-box label="Some components - root element of included XML  is 'composite'">
-		<xi:include href="qookerydemo/forms/xInclude_someComponents.xml" />
 	</group-box>
 
 </form>

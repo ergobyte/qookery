@@ -20,15 +20,15 @@
 
 	<property name="build.projectHome" location="." />
 	<property name="build.projectName" value="qookerydemo" />
-	<property name="qooxdoo.version" value="3.5" />
 
 	<import file="../qookery/docs/qookery.ant.xml" as="qookery" />
 	<import file="../qookeryrichtext/build.xml" as="richtext" />
+	<import file="../qookerycalendar/build.xml" as="calendar" />
 
-	<target name="Build" depends="richtext.Download, qookery.Build-Run" description="Generate and run the build version of the demo application" />
-	<target name="Source" depends="richtext.Download, qookery.Source-Run" description="Generate and run the source version of the demo application" />
+	<target name="Build" depends="richtext.Download, calendar.Download, qookery.Build-Run" description="Generate and run the build version of the demo application" />
+	<target name="Source" depends="richtext.Download, calendar.Download, qookery.Source-Run" description="Generate and run the source version of the demo application" />
 
-	<target name="Clean" depends="richtext.Clean, qookery.Clean" description="Clean up any intermediate files produced by build" />
+	<target name="Clean" depends="richtext.Clean, calendar.Clean, qookery.Clean" description="Clean up any intermediate files produced by build" />
 	<target name="Lint" depends="qookery.Lint" description="Perform syntactic checks on application" />
 
 </project>

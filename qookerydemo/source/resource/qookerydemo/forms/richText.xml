@@ -2,10 +2,12 @@
 <!-- 
 	Rich text (CKEditor) demo
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="0 1">
+<form xmlns="http://www.qookery.org/ns/Form"
+		xmlns:q-rt="http://www.qookery.org/ns/Form/RichText"
+		column-count="2" column-flexes="0 1">
 
-	<rich-text width="200" height="100" label="Description" connect="description" />
+	<q-rt:rich-text width="200" height="100" label="Description" connect="description" />
 
-	<rich-text width="200" height="200" label="Comments" connect="comments" />
+	<q-rt:rich-text width="200" height="200" label="Comments" connect="comments" />
 
 </form>

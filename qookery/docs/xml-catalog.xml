@@ -18,8 +18,16 @@
 -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 
-	<!-- Qookery -->
+	<uri id="q"
+			name="http://www.qookery.org/ns/Form" 
+			uri="form.xsd" />
 
-	<uri id="q" name="http://www.qookery.org/ns/Form" uri="form.xsd" />
+	<uri id="q-rt"
+			name="http://www.qookery.org/ns/Form/RichText"
+			uri="../../org.qookery.richtext/docs/form-richtext.xsd" />
+
+	<uri id="q-cal"
+			name="http://www.qookery.org/ns/Form/Calendar"
+			uri="../../org.qookery.calendar/docs/form-calendar.xsd" />
 
 </catalog>
