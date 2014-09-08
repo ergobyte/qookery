@@ -92,7 +92,11 @@ qx.Class.define("qookery.internal.FormParser", {
 		parseValue: function(component, type, text) {
 			switch(type) {
 			case "Boolean":
-				return text.toLowerCase() == "true";
+				switch(text.toLowerCase()) {
+				case "true": return true;
+				case "false": return false;
+				}
+				return text;
 			case "Integer":
 				return parseInt(text, 10);
 			case "IntegerList":

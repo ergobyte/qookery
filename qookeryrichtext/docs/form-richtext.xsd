@@ -25,6 +25,9 @@
 
 	<import namespace="http://www.qookery.org/ns/Form" />
 
-	<element name="rich-text" type="q:editable-component" />
+	<element name="rich-text"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="toolbar-can-collapse" type="boolean" default="false" />
+		<attribute name="title" default="false"><simpleType><union memberTypes="boolean string" /></simpleType></attribute>
+	</extension></complexContent></complexType></element>
 
 </schema>

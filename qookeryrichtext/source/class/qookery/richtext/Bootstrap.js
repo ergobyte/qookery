@@ -16,10 +16,15 @@
 	limitations under the License.
 */
 
+/**
+ * @ignore(CKEDITOR.*)
+ */
 qx.Bootstrap.define("qookery.richtext.Bootstrap", {
 
 	defer: function() {
-		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "qookery/lib/ckeditor/ckeditor.js" ]);
+		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "qookery/lib/ckeditor/ckeditor.js" ], null, function() {
+			CKEDITOR.disableAutoInline = true;
+		});
 		qookery.Qookery.getRegistry().registerComponentType("q-rt:rich-text", qookery.richtext.internal.RichTextComponent);
 	}
 });

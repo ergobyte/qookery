@@ -35,6 +35,13 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 		__ckEditor: null,
 		__previousValue: null,
 
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "title": return "Boolean";
+			case "toolbar-can-collapse": return "Boolean";
+			default: return this.base(arguments, attributeName); }
+		},
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
 		},
@@ -63,6 +70,11 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this.__ckEditor.setData(value);
 		},
 
+		_applyReadOnly: function(readOnly) {
+			if(!this.__ckEditor) return;
+			this.__ckEditor.setReadOnly(readOnly);
+		},
+
 		__createCkEditor: function() {
 			var widget = this.getMainWidget();
 			// Method might be called after widget destruction
@@ -73,10 +85,13 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			// Get underlying DOM element and invoke CKEditor inline()
 			var domElement = htmlElement.getDomElement();
 			domElement.setAttribute("contenteditable", "true");
-			CKEDITOR.disableAutoInline = true;
-			this.__ckEditor = CKEDITOR.inline(domElement, {
-				language: qx.locale.Manager.getInstance().getLanguage()
-			});
+			var config = {
+				language: qx.locale.Manager.getInstance().getLanguage(),
+				readOnly: this.getReadOnly(),
+				title: this.getAttribute("title", false),
+				toolbarCanCollapse: this.getAttribute("toolbar-can-collapse", false)
+			};
+			this.__ckEditor = CKEDITOR.inline(domElement, config);
 			// Insert current value into newly created editor
 			this._updateUI(this.getValue());
 			// Register change listener
