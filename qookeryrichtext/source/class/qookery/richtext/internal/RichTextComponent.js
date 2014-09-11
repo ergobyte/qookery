@@ -75,6 +75,14 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this.__ckEditor.setReadOnly(readOnly);
 		},
 
+		_applyValid: function(readOnly) {
+			// Overriden to block default implementation
+		},
+
+		setInvalidMessage: function(invalidMessage) {
+			// Overriden to block default implementation
+		},
+
 		__createCkEditor: function() {
 			var widget = this.getMainWidget();
 			// Method might be called after widget destruction

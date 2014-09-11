@@ -24,6 +24,7 @@ qx.Bootstrap.define("qookery.richtext.Bootstrap", {
 	defer: function() {
 		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "qookery/lib/ckeditor/ckeditor.js" ], null, function() {
 			CKEDITOR.disableAutoInline = true;
+			CKEDITOR.config.entities = false;
 		});
 		qookery.Qookery.getRegistry().registerComponentType("q-rt:rich-text", qookery.richtext.internal.RichTextComponent);
 	}

@@ -86,6 +86,12 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				allDaySlot: this.getAttribute("all-day-slot", "true"),
 				aspectRatio: this.getAttribute("aspect-ratio", 1.35),
 				axisFormat: this.getAttribute("axis-format", "h(:mm)a"),
+				buttonText: {
+					today: this.getAttribute("button-text-today", undefined),
+					month: this.getAttribute("button-text-month", undefined),
+					week: this.getAttribute("button-text-week", undefined),
+					day: this.getAttribute("button-text-day", undefined)
+				},
 				defaultDate: this.getAttribute("default-date", undefined),
 				editable: this.getAttribute("editable", false),
 				eventLimit: this.getAttribute("event-limit", false),

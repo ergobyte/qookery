@@ -36,13 +36,11 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 		},
 
 		_createMainWidget: function(attributes) {
-			var checkBox = new qx.ui.form.CheckBox(attributes["label"]);
+			var checkBox = new qx.ui.form.CheckBox();
 			checkBox.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);
-			attributes["label"] = "%none";
-
 			// Below hack works around chechbox shortcomings with triple state values
 			if(attributes["tri-state"]) {
 				checkBox.__availableStates = [ true, false, null ];
