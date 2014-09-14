@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	A simple login dialog in Qookery
 -->
 <form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
 
 	<!-- Form fields -->
 
-	<composite column-count="2" column-flexes="0 1"> 
+	<composite column-count="2" column-flexes="0 1">
 		<text-field id="username" label="User name" required="true" connect="username" />
 		<password-field id="password" label="Password" required="true" connect="password" />
 	</composite>

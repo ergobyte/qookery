@@ -15,26 +15,3 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 */
-
-qx.Class.define("qookery.internal.validators.NotNullValidator", {
-
-	extend: qx.core.Object,
-	implement: [ qookery.IValidator ],
-	type: "singleton",
-
-	construct : function() {
-		this.base(arguments);
-	},
-
-	members: {
-		createValidatorFunction: function(component, invalidMessage, options) {
-			return function(value) {
-				if(!value || value.length == 0) {
-					var message = invalidMessage || "Required value is missing";
-					return message;
-				}
-				return null;
-			};
-		}
-	}
-});

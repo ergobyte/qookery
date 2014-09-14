@@ -24,7 +24,7 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 	construct: function() {
 		this.__futures = [ ];
 	},
-	
+
 	events: {
 
 		/**
@@ -39,7 +39,7 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 
 		/**
 		 * Create a new future (parallel task) handle
-		 * 
+		 *
 		 * @return {any} new future handle
 		 */
 		createFuture: function() {
@@ -50,7 +50,7 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 
 		/**
 		 * Called by future when finished to notify owning object of it completion
-		 * 
+		 *
 		 * @param future {any} future handle, as returned by #createFuture()
 		 */
 		futureFinished: function(future) {
@@ -60,7 +60,7 @@ qx.Mixin.define("qookery.util.MFuturesHandling", {
 
 		/**
 		 * Register a function to be called once all futures are finished
-		 * 
+		 *
 		 * @param callback {Function} the callback to be called
 		 * @param thisArg {any} <code>this</code> context for callback
 		 */

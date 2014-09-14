@@ -25,7 +25,7 @@ qx.Class.define("qookerydemo.ui.ResultArea",
 		this.setPadding(10);
 	},
 
-	members:  {
+	members: {
 
 		__formComponent: null,
 

@@ -48,7 +48,7 @@ qx.Class.define("qookerydemo.ui.XmlEditor", {
 			this.__ace.selection.moveCursorFileStart();
 		},
 
-    	_createChildControlImpl: function(id, hash) {
+		_createChildControlImpl: function(id, hash) {
 			switch(id) {
 			case "heading":
 				var control = new qx.ui.basic.Label("Form XML").set({ font: "bold" });

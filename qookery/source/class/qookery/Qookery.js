@@ -44,15 +44,15 @@ qx.Class.define("qookery.Qookery", {
 		 * <pre class="javascript">
 		 * var parser = qookery.Qookery.createNewParser();
 		 * try {
-		 * 	var formComponent = parser.parse(xmlDocument);
-		 * 	var mainWidget = formComponent.getMainWidget();
-		 * 	container.add(mainWidget);
+		 *	var formComponent = parser.parse(xmlDocument);
+		 *	var mainWidget = formComponent.getMainWidget();
+		 *	container.add(mainWidget);
 		 * }
 		 * catch(error) {
-		 * 	// Handle the exception
+		 *	// Handle the exception
 		 * }
 		 * finally {
-		 * 	parser.dispose();
+		 *	parser.dispose();
 		 * }
 		 * </pre>
 

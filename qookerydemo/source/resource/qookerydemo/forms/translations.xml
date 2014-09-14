@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	Demonstration of translation support in Qookery
 -->
 <form xmlns="http://www.qookery.org/ns/Form" translation-prefix="qookerydemo.forms.translations" column-flexes="1">
@@ -28,7 +28,7 @@
 	<translation xml:lang="el">
 		<message id="header">Θεοί των Αρχαίων Ελλήνων</message>
 		<message id="intro">
-			Στην Ελληνική μυθολογία, οι Δώδεκα θεοί του Ολύμπου, γνωστοί και ως το Δωδεκάθεον, 
+			Στην Ελληνική μυθολογία, οι Δώδεκα θεοί του Ολύμπου, γνωστοί και ως το Δωδεκάθεον,
 			υπήρξαν οι κύριες θεότητες του Ελληνικού πάνθεου.
 		</message>
 		<message id="selectAGod">Επιλέξτε θεό</message>
@@ -62,7 +62,7 @@
 	</select-box>
 
 	<separator />
-	
+
 	<composite column-count="auto" align-x="center" max-width="300" column-flexes="1 1">
 		<button label="Switch to EL" width="1">
 			<script event="execute">

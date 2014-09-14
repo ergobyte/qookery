@@ -68,26 +68,26 @@ qx.Interface.define("qookery.IFormParser", {
 
 		/**
 		 * Return the (unparsed) text value of an XML node
-		 * 
+		 *
 		 * @param xmlNode {Node} XML node to get text from
-		 * 
+		 *
 		 * @return {String} whitespace trimmed text or <code>null</code> if empty
 		 */
 		getNodeText: function(xmlNode) { },
 
 		/**
 		 * Return the (unparsed) text value of an XML element's attribute
-		 * 
+		 *
 		 * @param xmlElement {Element} XML element holding required attribute
 		 * @param attributeName {String} name of required attribute
-		 * 
+		 *
 		 * @return {String} whitespace trimmed text or <code>null</code> if empty
 		 */
 		getAttribute: function(xmlElement, attributeName) { },
 
 		/**
 		 * Return the namespace URI bound to a prefix, or <code>null</code> if not bound
-		 * 
+		 *
 		 * @param prefix {String} the prefix to resolve
 		 * @return {String} URI or <code>null</code>
 		 */

@@ -19,7 +19,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 
 	<uri id="q"
-			name="http://www.qookery.org/ns/Form" 
+			name="http://www.qookery.org/ns/Form"
 			uri="form.xsd" />
 
 	<uri id="q-rt"

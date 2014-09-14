@@ -27,7 +27,7 @@
 	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
 
 	<!-- Simple types -->
-	
+
 	<simpleType name="display">
 		<restriction base="token">
 			<enumeration value="inline" />
@@ -76,7 +76,7 @@
 			<enumeration value="vertical" />
 		</restriction>
 	</simpleType>
-	
+
 	<simpleType name="qooxdoo-class-name">
 		<restriction base="token">
 			<pattern value="([a-zA-Z_$][0-9a-zA-Z_$]*\.)+[A-Z][0-9a-zA-Z_$]*" />
@@ -132,7 +132,7 @@
 			<enumeration value="excluded" />
 		</restriction>
 	</simpleType>
-	
+
 	<!-- Global attributes -->
 
 	<attribute name="icon" type="anyURI"><annotation><documentation>
@@ -238,7 +238,7 @@
 		<attribute name="icon-position" type="q:icon-position" default="left" />
 		<attribute name="rich" type="boolean" default="false" />
 	</extension></complexContent></complexType>
-	
+
 	<complexType name="container-component.attributes"><complexContent><extension base="q:component.attributes">
 		<attribute name="row-count" type="q:row-and-column-count" default="auto" />
 		<attribute name="column-count" type="q:row-and-column-count" default="1" />
@@ -257,7 +257,7 @@
 		<attribute name="read-only" type="boolean" default="false" />
 		<attribute name="required" type="boolean" default="false" />
 	</extension></complexContent></complexType>
-	
+
 	<complexType name="field-component.attributes"><complexContent><extension base="q:editable-component.attributes">
 		<attribute name="filter" type="string" />
 		<attribute name="live-update" type="boolean" default="false" />
@@ -267,7 +267,7 @@
 	</extension></complexContent></complexType>
 
 	<!-- Component types -->
-	
+
 	<complexType name="component"><complexContent><extension base="q:component.attributes">
 		<sequence>
 			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
@@ -305,7 +305,7 @@
 	<element name="check-field"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="tri-state" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="component"><complexType><complexContent><extension base="q:component">
 		<attribute name="type" type="string" use="required" />
 		<anyAttribute namespace="##any" />
@@ -332,7 +332,7 @@
 					</attribute>
 					<attribute name="key" type="q:javascript-identifier">
 						<annotation><documentation>
-							The name of the property to create in the scripting context - 
+							The name of the property to create in the scripting context -
 							if not set, the part of the class name after the last dot character
 							will be used.
 						</documentation></annotation>
@@ -391,7 +391,7 @@
 	<element name="html"><complexType><complexContent><extension base="q:component">
 		<attribute name="html" type="string" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="iframe"><complexType><complexContent><extension base="q:component">
 		<attribute name="source" type="string" />
 	</extension></complexContent></complexType></element>
@@ -407,7 +407,7 @@
 		<attribute name="text-align" type="q:horizontal-alignment" />
 		<attribute name="wrap" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="list" type="q:editable-component" />
 
 	<element name="password-field" type="q:field-component" />
@@ -416,7 +416,7 @@
 		<attribute name="maximum" type="double" />
 		<attribute name="value" type="double" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="radio-button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="model" type="string" />
 	</extension></complexContent></complexType></element>
@@ -431,9 +431,9 @@
 		<attribute name="orientation" type="q:orientation" default="horizontal" />
 		<attribute name="spacing" type="nonNegativeInteger" default="5" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="scroll" type="q:container-component" />
-	
+
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="null-item-label" type="string" />
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
@@ -458,7 +458,7 @@
 		<attribute name="page-step" type="integer" default="10" />
 		<attribute name="single-step" type="integer" default="1" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="spacer" type="q:component" />
 
 	<element name="spinner"><complexType><complexContent><extension base="q:editable-component">
@@ -467,7 +467,7 @@
 		<attribute name="page-step" type="integer" default="10" />
 		<attribute name="single-step" type="decimal" default="1" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="split-pane"><complexType><complexContent><extension base="q:container-component">
 		<attribute name="orientation" type="q:orientation" default="horizontal" />
 	</extension></complexContent></complexType></element>
@@ -475,7 +475,7 @@
 	<element name="stack"><complexType><complexContent><extension base="q:container-component">
 		<attribute name="dynamic" type="boolean" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="tab-view" type="q:container-component" />
 
 	<element name="tab-view-page" type="q:container-component" />
@@ -499,14 +499,14 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="text-field" type="q:field-component" />
-	
+
 	<element name="toggle-button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="model" type="string" />
 		<attribute name="tri-state" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
-	
+
 	<element name="tool-bar" type="q:container-component" />
-	
+
 	<element name="virtual-tree"><complexType><complexContent><extension base="q:editable-component.attributes">
 		<sequence>
 			<element name="virtual-tree-delegate" minOccurs="0" maxOccurs="1"><complexType>
@@ -522,7 +522,7 @@
 	</extension></complexContent></complexType></element>
 
 	<!-- Custom elements referenced as children of component elements -->
-	
+
 	<element name="table-model"><complexType>
 		<attribute name="class" type="string" use="required" />
 		<anyAttribute namespace="##other" />

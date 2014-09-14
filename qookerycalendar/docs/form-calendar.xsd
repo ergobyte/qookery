@@ -48,5 +48,5 @@
 		<attribute name="slot-duration" type="time" default="00:30:00" />
 		<attribute name="time-format" type="string" default="h(:mm)t" />
 	</extension></complexContent></complexType></element>
-		
+
 </schema>

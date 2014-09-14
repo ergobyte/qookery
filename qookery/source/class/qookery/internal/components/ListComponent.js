@@ -63,7 +63,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 		__onChangeSelection:function(e) {
 			if(e.getData().length == 0 || this._disableValueEvents) return;
 			var selectedItem = e.getData()[0];
-      		this.setValue(qx.lang.Object.getKeyFromValue(this.__listItemsMap, selectedItem));
+			this.setValue(qx.lang.Object.getKeyFromValue(this.__listItemsMap, selectedItem));
 		}
 	}
 });

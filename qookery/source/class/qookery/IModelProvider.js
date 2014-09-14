@@ -39,8 +39,8 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * Test two model objects for equality
 		 *
 		 * <p>Method must be null-safe:
-		 * 		equals(null, null) -> true and
-		 * 		equals(null, non-null) -> false</p>
+		 *		equals(null, null) -> true and
+		 *		equals(null, non-null) -> false</p>
 		 *
 		 * @param object1 {any} model object, may be <code>null</code>
 		 * @param object2 {any} model object, may be <code>null</code>
@@ -64,24 +64,24 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * @param formParser {qookery.IFormParser} optinal parser requesting connection, may be <code>null</code>
 		 * @param connectableComponent {qookery.IComponent} a component that supports data binding
 		 * @param connectionSpecification {String} a specification that may be parsed by the model provider
-		 * 
+		 *
 		 * @return {any} implementation specific value that may be used with getConnectionAttribute()
 		 */
 		handleConnection: function(formParser, connectableComponent, connectionSpecification) { },
 
 		/**
 		 * Return the value of a connection's attribute, if available
-		 * 
+		 *
 		 * @param connectionHandle {any} the opaque value returned by handleConnection()
 		 * @param attributeName {String} name of wanted attribute
-		 * 
+		 *
 		 * @return {any} attribute's value or <code>undefined
 		 */
 		getConnectionAttribute: function(connectionHandle, attributeName) { },
 
 		/**
 		 * Clone an object
-		 * 
+		 *
 		 * @param object {any} model object to clone
 		 */
 		clone: function(object) { }

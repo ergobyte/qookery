@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-	A form with a variety of components, some of them 
+<!--
+	A form with a variety of components, some of them
 	connected to shared model properties.
 -->
 <form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
-	
+
 	<script>
 		$.brands = {
 			"audi": "Audi",
@@ -13,7 +13,7 @@
 			"opel": "Opel"
 		};
 	</script>
-	
+
 	<tab-view column-flexes="1">
 		<tab-view-page label="Car Brand" column-flexes="1">
 			<group-box column-count="2" column-flexes="0 1">
@@ -47,5 +47,5 @@
 			<image source="qookerydemo/images/ascona.jpg" />
 		</tab-view-page>
 	</tab-view>
-	
+
 </form>

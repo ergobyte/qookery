@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 	An about window - this same form is opened from the toolbar by calling
-	
+
 		qookery.contexts.Qookery.openWindow("qookerydemo/forms/aboutDialog.xml");
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
@@ -12,13 +12,13 @@
 	<translation xml:lang="en">
 		<message id="about"><![CDATA[
 			<h3>Qookery Demo and Playground application</h3>
-			<p>	
-				Discover Qookery and experiment with its features, thanks to this interactive demo. 
+			<p>
+				Discover Qookery and experiment with its features, thanks to this interactive demo.
 				Load a demo, modify XML and/or JSON code and press Run Again to see the results.
 			</p>
-			<p>	
+			<p>
 				Qookery is a community project sponsored by Ergobyte Informatics S.A. and licensed under the
-				Apache License, v2.0. Visit <a href="http://www.qookery.org/" target="_blank">www.qookery.org</a> 
+				Apache License, v2.0. Visit <a href="http://www.qookery.org/" target="_blank">www.qookery.org</a>
 				for more information.
 			</p>
 		]]></message>

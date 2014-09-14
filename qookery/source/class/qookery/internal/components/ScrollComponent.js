@@ -28,7 +28,7 @@ qx.Class.define("qookery.internal.components.ScrollComponent", {
 	},
 
 	members: {
-		
+
 		__scroll: null,
 		__composite: null,
 
@@ -39,7 +39,7 @@ qx.Class.define("qookery.internal.components.ScrollComponent", {
 			this._applyLayoutAttributes(this.__scroll, attributes);
 			return this.__scroll;
 		},
-		
+
 		getMainWidget: function() {
 			return this.__composite;
 		}

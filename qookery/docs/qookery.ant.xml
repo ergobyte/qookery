@@ -98,7 +98,7 @@
 	<!-- Source targets -->
 
 	<target name="Source-Init" depends="Init, Qooxdoo-Install" />
-	
+
 	<target name="Source-Generate" depends="Source-Init">
 		<call-generator-py job="source" />
 	</target>
@@ -112,7 +112,7 @@
 	<!-- Build targets -->
 
 	<target name="Build-Init" depends="Init, Qooxdoo-Install" />
-	
+
 	<target name="Build-Generate" depends="Build-Init">
 		<call-generator-py job="build" />
 	</target>
@@ -124,14 +124,14 @@
 	</target>
 
 	<!-- Test targets -->
-	
+
 	<target name="Test-Init" depends="Init, Qooxdoo-Install">
 		<uptodate property="build.sourceUpToDate" targetfile="test/script/tests.js">
 			<srcfiles dir="source" />
 			<srcfiles file="config.json" />
 		</uptodate>
 	</target>
-	
+
 	<target name="Test-Generate" depends="Test-Init" unless="build.sourceUpToDate">
 		<call-generator-py job="test" />
 	</target>
@@ -153,11 +153,11 @@
 			<srcfiles file="config.json" />
 		</uptodate>
 	</target>
-	
+
 	<target name="Api-Data" depends="Api-Init, Qooxdoo-Install" unless="build.sourceUpToDate">
 		<call-generator-py job="api-data" />
 	</target>
-	
+
 	<target name="Api-Application" depends="Api-Init, Qooxdoo-Install" unless="build.apiUpToDate">
 		<call-generator-py job="api" />
 	</target>
@@ -169,7 +169,7 @@
 	</target>
 
 	<!-- Misc generator.py targets -->
-	
+
 	<target name="Lint" depends="Init, Qooxdoo-Install">
 		<call-generator-py job="lint" />
 	</target>

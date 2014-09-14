@@ -27,7 +27,7 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 	},
 
 	members: {
-		createValidatorFunction: function(component, invalidMessage, options) { 
+		createValidatorFunction: function(component, invalidMessage, options) {
 			return function(value) {
 				if(!value) return null;
 				var success = true;

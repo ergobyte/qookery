@@ -132,7 +132,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 					if(dateParts[1].indexOf(":") != -1) {
 						timePart = dateParts[1];
 					}
-					else if(dateParts[1].indexOf(":") == -1  && dateParts[1]>0) {
+					else if(dateParts[1].indexOf(":") == -1 && dateParts[1]>0) {
 						timePart = qx.lang.String.format("%1:%2", [dateParts[1], "00"]);
 					}
 				}

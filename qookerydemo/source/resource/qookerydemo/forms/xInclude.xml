@@ -13,7 +13,7 @@
 	<group-box label="'Login Dialog' demo, with setup script" legend-position="top">
 		<xi:include xml:id="dialog" href="qookerydemo/forms/loginDialog.xml" />
 		<script>
-			$("#dialog").setModel($.QookeryDemo.createModel({ 
+			$("#dialog").setModel($.QookeryDemo.createModel({
 				username: 'admin',
 				password: '1234'
 			}));

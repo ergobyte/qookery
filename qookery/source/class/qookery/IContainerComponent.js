@@ -22,38 +22,38 @@
 qx.Interface.define("qookery.IContainerComponent", {
 
 	extend: qookery.IComponent,
-	
+
 	members: {
-		
+
 		/**
 		 * Add a component as a child of this component
-		 * 
+		 *
 		 * @param component {qookery.IComponent} the component to add to this component
 		 * @param display {String?null} optional argument refining the container's handling of the new child
-		 * 
+		 *
 		 * @throw an exception is thrown in case this component does not support children
 		 */
 		add: function(component, display) { },
-		
+
 		/**
 		 * Remove component from the children list
-		 * 
+		 *
 		 * @param component {qookery.IComponent} component to remove
 		 */
 		remove: function(component) { },
-		
+
 		/**
 		 * Return index of component in the children list
-		 * 
+		 *
 		 * @param component {qookery.IComponent} component to find index of
-		 * 
+		 *
 		 * @return {Number} component index or <code>-1</code> if no found in children list
 		 */
 		contains: function(component) { },
 
 		/**
 		 * Return a list of all component's registered as children if this component
-		 * 
+		 *
 		 * @return {Array} children list
 		 */
 		listChildren: function() { }
