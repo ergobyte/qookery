@@ -48,6 +48,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			case "header-click": return "ReplaceableString";
 			case "header-icon": return "String";
 			case "row-height": return "Number";
+			case "show-cell-focus-indicator": return "Boolean";
 			case "sortable": return "Boolean";
 			case "status-bar-visible": return "Boolean";
 			default: return this.base(arguments, attributeName);
@@ -81,6 +82,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				table.setRowHeight(attributes["row-height"]);
 			if(attributes["status-bar-visible"] !== undefined)
 				table.setStatusBarVisible(attributes["status-bar-visible"]);
+			if(attributes["show-cell-focus-indicator"] !== undefined)
+				table.setShowCellFocusIndicator(attributes["show-cell-focus-indicator"]);
 			return table;
 		},
 
@@ -176,6 +179,10 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		getSelectedRowIndex: function() {
 			return this.__selectedRowIndex;
+		},
+
+		setSelectedRowIndex: function(rowIndex) {
+			this.getMainWidget().getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
 		},
 
 		getSelectedRowData: function() {

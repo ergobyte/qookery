@@ -36,6 +36,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			replaceRow: function(data, index, rowData) {
 				return false;
 			},
+			insertRow: function(data, index, rowData) {
+				return false;
+			},
 			removeRow: function(data, index) {
 				return false;
 			}
@@ -56,9 +59,12 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				data[index] = rowData;
 				return true;
 			},
+			insertRow: function(data, index, rowData) {
+				qx.lang.Array.insertAt(data, rowData, index);
+				return false;
+			},
 			removeRow: function(data, index) {
-				qx.lang.Array.removeAt(data, index);
-				return true;
+				return qx.lang.Array.removeAt(data, index);
 			}
 		},
 
@@ -77,9 +83,12 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				data.setItem(index, rowData);
 				return true;
 			},
+			insertRow: function(data, index, rowData) {
+				data.insertAt(index, rowData);
+				return false;
+			},
 			removeRow: function(data, index) {
-				data.removeAt(index);
-				return true;
+				return data.removeAt(index);
 			}
 		}
 	},
@@ -206,6 +215,37 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				firstRow: rowIndex,
 				lastRow: this.getRowCount() - 1
 			});
+		},
+
+		moveRowUp: function(rowIndex) {
+			if(rowIndex <= 0) return false;
+			var rowData = this.__accessor.removeRow(this.__data, rowIndex);
+			if(!rowData) return false;
+			var insertPosition = rowIndex - 1;
+			this.__accessor.insertRow(this.__data, insertPosition, rowData);
+			this.fireDataEvent("dataChanged", {
+				firstColumn: 0,
+				lastColumn: this.getColumnCount() - 1,
+				firstRow: insertPosition,
+				lastRow: insertPosition + 1
+			});
+			return true;
+		},
+
+		moveRowDown: function(rowIndex) {
+			var length = this.__accessor.getLength(this.__data);
+			if(rowIndex >= length - 1) return false;
+			var rowData = this.__accessor.removeRow(this.__data, rowIndex);
+			if(!rowData) return false;
+			var insertPosition = rowIndex + 1;
+			this.__accessor.insertRow(this.__data, insertPosition, rowData);
+			this.fireDataEvent("dataChanged", {
+				firstColumn: 0,
+				lastColumn: this.getColumnCount() - 1,
+				firstRow: insertPosition - 1,
+				lastRow: insertPosition
+			});
+			return true;
 		},
 
 		// .	Cells

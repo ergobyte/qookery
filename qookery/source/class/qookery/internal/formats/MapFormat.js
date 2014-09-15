@@ -34,7 +34,7 @@ qx.Class.define("qookery.internal.formats.MapFormat", {
 		__map: null,
 
 		format: function(obj) {
-			return this.__map[obj];
+			return this.__map[obj] || obj;
 		},
 
 		parse: function(str) {

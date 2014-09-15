@@ -435,7 +435,7 @@
 	<element name="scroll" type="q:container-component" />
 
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
-		<attribute name="null-item-label" type="string" />
+		<attribute name="null-item-label" type="string" default="-" />
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
 			If true, the select box items will be kept sorted in ascending order at all times
 		</documentation></annotation></attribute>
@@ -486,8 +486,9 @@
 			<element ref="q:table-column" minOccurs="0" maxOccurs="unbounded" />
 			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="row-height" type="integer" default="20" />
 		<attribute name="column-visibility-button-visible" type="boolean" default="true" />
+		<attribute name="row-height" type="integer" default="20" />
+		<attribute name="show-cell-focus-indicator" type="boolean" default="true" />
 		<attribute name="status-bar-visible" type="boolean" default="true" />
 	</extension></complexContent></complexType></element>
 

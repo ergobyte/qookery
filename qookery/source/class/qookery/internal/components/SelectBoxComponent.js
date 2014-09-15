@@ -36,9 +36,20 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		__nullItemLabel: "",
 		__keepSorted: null,
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "keep-sorted": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.__nullItemLabel = this.getAttribute("null-item-label");
+			this.__nullItemLabel = this.getAttribute("null-item-label", "-");
 			this.__keepSorted = this.getAttribute("keep-sorted", true);
 		},
 
