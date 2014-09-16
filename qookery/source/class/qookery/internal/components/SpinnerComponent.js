@@ -29,10 +29,10 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.Spinner();
 			this._applyLayoutAttributes(widget, attributes);
-			if(attributes['minimum']) widget.setMinimum(attributes['minimum']);
-			if(attributes['maximum']) widget.setMaximum(attributes['maximum']);
-			if(attributes['page-step']) widget.setPageStep(attributes['page-step']);
-			if(attributes['single-step']) widget.setSingleStep(attributes['single-step']);
+			widget.setMinimum(this.getAttribute("minimum", 0));
+			widget.setMaximum(this.getAttribute("maximum", 100));
+			widget.setPageStep(this.getAttribute("page-step", 10));
+			widget.setSingleStep(this.getAttribute("single-step", 1));
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());

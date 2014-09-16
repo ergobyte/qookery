@@ -75,8 +75,9 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			this.__ckEditor.setReadOnly(readOnly);
 		},
 
-		_applyValid: function(readOnly) {
-			// Overriden to block default implementation
+		_applyValid: function(valid) {
+			var mainWidget = this.getMainWidget();
+			valid ? mainWidget.removeState("invalid") : mainWidget.addState("invalid");
 		},
 
 		setInvalidMessage: function(invalidMessage) {

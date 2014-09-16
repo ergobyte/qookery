@@ -55,7 +55,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @return {qookery.impl.FormWindow} the newly opened form window
 		 */
 		openWindow: function(form, options, thisArg) {
-			if(!options) options = {};
+			if(!options) options = { };
 			var window = new qookery.impl.FormWindow(null, null, options, thisArg);
 			if(qx.Class.implementsInterface(form, qookery.IFormComponent)) {
 				if(options["variables"]) {
