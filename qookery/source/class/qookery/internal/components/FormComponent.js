@@ -159,6 +159,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				validatorFunction: validatorFunction
 			};
 			this.__validations.push(validation);
+			return validation;
+		},
+
+		removeValidation: function(validation) {
+			qx.lang.Array.remove(this.__validations, validation);
 		},
 
 		removeValidations: function(component) {
@@ -245,6 +250,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Closing
 
 		close: function(result) {
+			if(this.isDisposed()) return;
 			if(result !== undefined) this.__variables["result"] = result;
 			this.fireDataEvent("close", this.__variables["result"]);
 		},

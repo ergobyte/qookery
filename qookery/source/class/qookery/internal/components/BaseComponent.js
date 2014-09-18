@@ -202,8 +202,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			}
 			catch(error) {
 				if(error instanceof qx.core.AssertionError) throw error;
-				this.error(qx.lang.String.format(
-						"Error executing client code: %1\n\n%2\n\n%3", [ error, clientCode, error.stack ]));
+				this.error("Error executing client code\n\n", clientCode, "\n\n", error.stack);
 			}
 		},
 

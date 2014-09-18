@@ -112,8 +112,17 @@ qx.Interface.define("qookery.IFormComponent", {
 		 *
 		 * @param component {qookery.IEditableComponent} editable component to check against
 		 * @param validator {Function} validator function
+		 *
+		 * @return {Object} an opaque handle that may be used with #removeValidation()
 		 */
 		addValidation: function(component, validatorFunction) { },
+
+		/**
+		 * Remove a validation from the list of validations
+		 *
+		 * @param validationHandle the value returned by a former call to #addValidation()
+		 */
+		removeValidation: function(validationHandle) { },
 
 		/**
 		 * Remove component's validations from the form validations

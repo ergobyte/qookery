@@ -42,6 +42,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	members: {
 
 		_disableValueEvents: false,
+		__validationHandle: null,
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
@@ -92,7 +93,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!validator) throw new Error(qx.lang.String.format("Validator %1 not found", [ validatorType ]));
 			if(!options) options = { };
 			var validatorFunction = validator.createValidatorFunction(this, invalidMessage, options);
-			this.getForm().addValidation(this, validatorFunction);
+			return this.getForm().addValidation(this, validatorFunction);
+		},
+
+		removeValidation: function(validationHandle) {
+			return this.getForm().removeValidation(validationHandle);
 		},
 
 		setInvalidMessage: function(invalidMessage) {
@@ -167,8 +172,14 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_applyRequired: function(required) {
 			var mainWidget = this.getMainWidget();
-			if(!mainWidget || !required) return;
-			this.addValidation("notNull");
+			if(!mainWidget) return;
+			if(required && !this.__validationHandle) {
+				this.__validationHandle = this.addValidation("notNull");
+			}
+			else if(!required && this.__validationHandle) {
+				this.removeValidation(this.__validationHandle);
+				this.__validationHandle = null;
+			}
 		},
 
 		_applyReadOnly: function(readOnly) {

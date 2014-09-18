@@ -41,6 +41,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(options["caption"]) this.setCaption(options["caption"]);
 			if(options["allowClose"]) this.setAllowClose(options["allowClose"]);
 			if(options["onClose"]) this.__onClose = options["onClose"].bind(thisArg);
+			if(options["showMaximize"]) this.setShowMaximize(options["showMaximize"]);
 		}
 		if(this.getAllowClose()) this.addListener("keypress", function(event) {
 			if(event.getKeyIdentifier() == "Escape") this.destroy();
@@ -102,8 +103,10 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(model) formComponent.setModel(model);
 
 			this.add(formComponent.getMainWidget());
-			this.center();
 			this.open();
+			this.addListenerOnce("appear", function() {
+				this.center();
+			}, this);
 		},
 
 		_getFallbackCaption: function() {

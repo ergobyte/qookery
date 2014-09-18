@@ -42,12 +42,15 @@ qx.Interface.define("qookery.IComponent", {
 		getId: function() { },
 
 		/**
-		 * Return the value of component's attribute
+		 * Return an attribute value from the defining XML document
 		 *
-		 * <p>You may supply the default value to return in case the attribute is not defined. If you supply the global
-		 * object <code>Error</code>, then an exception will be thrown instead.</p>
+		 * <p>You may supply the <code>Error</code> build-in object as the defaultValue parameter
+		 * in order to request that an exception is thrown when value is missing.</p>
 		 *
-		 * @return {any} the attribute's value if set, the default value or <code>undefined</code> otherwise
+		 * @param attributeName {String} the name of the wanted attribute
+		 * @param defaultValue {any} value to return when attribute is missing
+		 *
+		 * @return {any} attribute's value or <code>null</code> if undefined
 		 */
 		getAttribute: function(attributeName, defaultValue) { },
 
@@ -90,19 +93,6 @@ qx.Interface.define("qookery.IComponent", {
 		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
 		setup: function(formParser, attributes) { },
-
-		/**
-		 * Return an attribute value from the defining XML document
-		 *
-		 * <p>You may supply the <code>Error</code> build-in object as the defaultValue parameter
-		 * in order to request that an exception is thrown when value is missing.</p>
-		 *
-		 * @param attributeName {String} the name of the wanted attribute
-		 * @param defaultValue {any} value to return when attribute is missing
-		 *
-		 * @return {any} attribute's value or <code>null</code> if undefined
-		 */
-		getAttribute: function(attributeName, defaultValue) { },
 
 		/**
 		 * Return the form containing this component
