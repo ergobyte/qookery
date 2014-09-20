@@ -26,10 +26,22 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "rich": return "Boolean";
+			case "wrap": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		_createWidgets: function(attributes) {
 			var label = new qx.ui.basic.Label(this.getAttribute("label", ""));
-			var rich = this.getAttribute("rich"); if(rich !== undefined) label.setRich(rich);
-			var wrap = this.getAttribute("wrap"); if(wrap !== undefined) label.setWrap(wrap);
+			label.setRich(this.getAttribute("rich", false));
+			if(label.isRich()) label.setWrap(this.getAttribute("wrap", true));
 			label.setTextAlign(this.getAttribute("text-align", null));
 			this._applyLayoutAttributes(label, attributes);
 			return [ label ];

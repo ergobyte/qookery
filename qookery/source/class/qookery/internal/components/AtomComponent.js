@@ -27,6 +27,17 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "rich": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		_createWidgets: function(attributes) {
 			var atom = this._createAtomWidget(attributes);
 			return [ atom ];

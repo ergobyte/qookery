@@ -405,7 +405,7 @@
 		<attribute name="icon" type="anyURI" />
 		<attribute name="rich" type="boolean" default="false" />
 		<attribute name="text-align" type="q:horizontal-alignment" />
-		<attribute name="wrap" type="boolean" default="false" />
+		<attribute name="wrap" type="boolean" default="true" />
 	</extension></complexContent></complexType></element>
 
 	<element name="list" type="q:editable-component" />
@@ -435,7 +435,7 @@
 	<element name="scroll" type="q:container-component" />
 
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
-		<attribute name="null-item-label" type="string" default="-" />
+		<attribute name="null-item-label" type="string" />
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
 			If true, the select box items will be kept sorted in ascending order at all times
 		</documentation></annotation></attribute>

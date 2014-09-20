@@ -30,6 +30,17 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "wrap": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes['placeholder']) this.setPlaceholder(attributes['placeholder']);
