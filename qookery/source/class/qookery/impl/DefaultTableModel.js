@@ -128,6 +128,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			else
 				this.__accessor = this.self(arguments).nullAccessor;
 			this.__data = data;
+			var sortColumn = this.getColumn(this.__sortColumnIndex);
+			if(sortColumn)
+				this.__sortData(sortColumn, this.__sortAscending);
 			this.reloadData();
 		},
 
@@ -290,20 +293,13 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		sortByColumn: function(columnIndex, ascending) {
 			var column = this.getColumn(columnIndex);
 			if(!column) throw new Error("Column to sort does not exist");
-			this.__data.sort(function(row1, row2) {
-				var value1 = this.__readColumnValue(column, row1);
-				var value2 = this.__readColumnValue(column, row2);
-				var comparison = (value1 > value2) ? 1 : ((value1 == value2) ? 0 : -1);
-				var signum = ascending ? 1 : -1;
-				return signum * comparison;
-			}.bind(this));
 			this.__sortColumnIndex = columnIndex;
 			this.__sortAscending = ascending;
-			var data = {
+			this.__sortData(column, ascending);
+			this.fireDataEvent("sorted", {
 				columnIndex: columnIndex,
 				ascending: ascending
-			};
-			this.fireDataEvent("sorted", data);
+			});
 			this.fireEvent("metaDataChanged");
 		},
 
@@ -322,6 +318,17 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		// Internals
+
+		__sortData: function(column, ascending) {
+			if(!this.__data) return;
+			this.__data.sort(function(row1, row2) {
+				var value1 = this.__readColumnValue(column, row1);
+				var value2 = this.__readColumnValue(column, row2);
+				var comparison = (value1 > value2) ? 1 : ((value1 == value2) ? 0 : -1);
+				var signum = ascending ? 1 : -1;
+				return signum * comparison;
+			}.bind(this));
+		},
 
 		__readColumnValue: function(column, row) {
 			var connectionSpecification = column["connect"];

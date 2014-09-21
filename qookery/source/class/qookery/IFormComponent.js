@@ -120,7 +120,7 @@ qx.Interface.define("qookery.IFormComponent", {
 		/**
 		 * Remove a validation from the list of validations
 		 *
-		 * @param validationHandle the value returned by a former call to #addValidation()
+		 * @param validationHandle {Object} the value returned by a former call to #addValidation()
 		 */
 		removeValidation: function(validationHandle) { },
 
