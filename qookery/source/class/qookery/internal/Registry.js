@@ -82,6 +82,7 @@ qx.Class.define("qookery.internal.Registry", {
 	members: {
 
 		__modelProviders: null,
+		__resourceLoader: null,
 		__defaultModelProvider: null,
 		__validators: null,
 		__components: null,
@@ -103,6 +104,19 @@ qx.Class.define("qookery.internal.Registry", {
 		registerModelProvider: function(providerName, provider, setDefault) {
 			this.__modelProviders[providerName] = provider;
 			if(setDefault) this.__defaultModelProvider = provider;
+		},
+
+		// Resource loader
+
+		getResourceLoader: function() {
+			if(!this.__resourceLoader)
+				this.__resourceLoader = new qookery.impl.DefaultResourceLoader();
+			return this.__resourceLoader;
+		},
+
+		setResourceLoader: function(loader) {
+			this._disposeObjects("__resourceLoader");
+			this.__resourceLoader = loader;
 		},
 
 		// Components

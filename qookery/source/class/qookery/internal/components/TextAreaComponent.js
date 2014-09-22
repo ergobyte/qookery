@@ -53,6 +53,16 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 				var value = (event.getData().trim().length == 0)? null: event.getData();
 				this.setValue(value);
 			}, this);
+			widget.addListener("keypress", function(event) {
+				if(this.isReadOnly()) return;
+				if(!event.isShiftPressed()) return;
+				switch(event.getKeyIdentifier()) {
+				case "Delete":
+				case "Backspace":
+					this.setValue(null);
+					return;
+				}
+			}, this);
 			this._applyLayoutAttributes(widget, attributes);
 			if(attributes['auto-size'] !== undefined) widget.setAutoSize(attributes['auto-size']);
 			if(attributes['filter'] !== undefined) widget.setFilter(attributes['filter']);

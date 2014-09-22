@@ -62,6 +62,17 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 				this.getMainWidget().setValue(text);
 			}, this);
 
+			widget.addListener("keypress", function(event) {
+				if(this.isReadOnly()) return;
+				if(!event.isShiftPressed()) return;
+				switch(event.getKeyIdentifier()) {
+				case "Delete":
+				case "Backspace":
+					this.setValue(null);
+					return;
+				}
+			}, this);
+
 			this._applyLayoutAttributes(widget, attributes);
 			if(attributes['text-align']) widget.setTextAlign(attributes['text-align']);
 			if(attributes['filter']) widget.setFilter(attributes['filter']);

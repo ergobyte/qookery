@@ -26,7 +26,6 @@ qx.Class.define("qookery.Qookery", {
 
 	construct: function() {
 		this.base(arguments);
-		this.__resourceLoader = qookery.impl.DefaultResourceLoader.getInstance();
 	},
 
 	statics: {
@@ -88,7 +87,7 @@ qx.Class.define("qookery.Qookery", {
 		 * @return {qookery.IResourceLoader} Resource loader implementation
 		 */
 		getResourceLoader: function() {
-			return this.getInstance().__resourceLoader;
+			return qookery.internal.Registry.getInstance().getResourceLoader();
 		}
 	},
 

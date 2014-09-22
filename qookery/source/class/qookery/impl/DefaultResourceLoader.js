@@ -18,15 +18,13 @@
 
 qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
-	implement: [ qookery.IResourceLoader ],
-	type: "singleton",
 	extend: qx.core.Object,
+	implement: [ qookery.IResourceLoader ],
 
 	members: {
 
 		loadResource: function(url, thisArg, successCallback, failCallback) {
-			var resourceUri = qx.util.ResourceManager.getInstance().toUri(url);
-			if(qx.core.Environment.get("qx.debug")) resourceUri += "?nocache=" + new Date().getTime();
+			var resourceUri = this._resolveResourceUri(url);
 			var xhrRequest = new qx.bom.request.Xhr(), result = null;
 			xhrRequest.onload = function() {
 				var statusCode = xhrRequest.status;
@@ -52,6 +50,10 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 			xhrRequest.open("GET", resourceUri, asynchronous);
 			xhrRequest.send();
 			return result;
+		},
+
+		_resolveResourceUri: function(url) {
+			return qx.util.ResourceManager.getInstance().toUri(url);
 		}
 	}
 });

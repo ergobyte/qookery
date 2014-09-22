@@ -42,6 +42,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(options["allowClose"]) this.setAllowClose(options["allowClose"]);
 			if(options["onClose"]) this.__onClose = options["onClose"].bind(thisArg);
 			if(options["showMaximize"]) this.setShowMaximize(options["showMaximize"]);
+			if(options["openMaximized"]) this.maximize();
 		}
 		if(this.getAllowClose()) this.addListener("keypress", function(event) {
 			if(event.getKeyIdentifier() == "Escape") this.destroy();

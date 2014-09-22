@@ -78,6 +78,12 @@ qx.Interface.define("qookery.IRegistry", {
 		 */
 		getModelProvider: function(providerName) { },
 
+		// Resource loader
+
+		getResourceLoader: function() { },
+
+		setResourceLoader: function(loader) { },
+
 		// Formats
 
 		/**
