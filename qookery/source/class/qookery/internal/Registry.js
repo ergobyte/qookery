@@ -141,12 +141,12 @@ qx.Class.define("qookery.internal.Registry", {
 
 		// Validators
 
-		registerValidator: function(validator, name) {
-			this.__validators[name] = validator.getInstance();
+		registerValidator: function(name, validator) {
+			this.__validators[name] = validator;
 		},
 
-		getValidator: function(validator) {
-			return this.__validators[validator];
+		getValidator: function(name) {
+			return this.__validators[name];
 		},
 
 		// Formats

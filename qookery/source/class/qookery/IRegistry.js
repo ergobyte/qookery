@@ -53,18 +53,21 @@ qx.Interface.define("qookery.IRegistry", {
 		// Validators
 
 		/**
+		 * Register a validator under provided name
 		 *
-		 * @param validator {String} The IValidator class name
-		 * @param name {String} The name of the validator for subsequent access
+		 * @param name {String} the name of the validator for subsequent access
+		 * @param validator {qookery.IValidator} the validator itself
 		 */
-		registerValidator: function(validator, name) { },
+		registerValidator: function(name, validator) { },
 
 		/**
+		 * Get a previously registered validator by name
 		 *
-		 * @param validator {String} The name of the validator
-		 * @return {IValidator} The real Validator or null
+		 * @param name {String} The name of the validator
+		 *
+		 * @return {qookery.IValidator} the validator or <code>undefined</code> if not found
 		 */
-		getValidator: function(validator) { },
+		getValidator: function(name) { },
 
 		// Model providers
 

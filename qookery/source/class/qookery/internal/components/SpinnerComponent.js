@@ -35,13 +35,15 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 			widget.setSingleStep(this.getAttribute("single-step", 1));
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
-				this.setValue(event.getData());
+				var value = event.getData();
+				if(value !== null) value = parseInt(value, 10);
+				this._setValueSilently(value);
 			}, this);
 			return widget;
 		},
 
 		_updateUI: function(value) {
-			if(!value)
+			if(value === null)
 				this.getMainWidget().resetValue();
 			else
 				this.getMainWidget().setValue(parseInt(value, 10));

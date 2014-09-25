@@ -143,7 +143,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					headerWidget.setToolTipText(column["tool-tip-text"]);
 				}
 				if(column["header-click"]) {
-					headerWidget.addListener("click", function(event) {
+					headerWidget.addListener("tap", function(event) {
 						column["header-click"](event);
 					});
 				}
