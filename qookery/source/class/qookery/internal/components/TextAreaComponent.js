@@ -43,11 +43,13 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['placeholder']) this.setPlaceholder(attributes['placeholder']);
+			if(attributes["placeholder"]) this.setPlaceholder(attributes["placeholder"]);
 		},
 
 		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.TextArea();
+			var nativeContextMenu = this.getAttribute("native-context-menu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
+			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				var value = (event.getData().trim().length == 0)? null: event.getData();
@@ -64,14 +66,14 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 				}
 			}, this);
 			this._applyLayoutAttributes(widget, attributes);
-			if(attributes['auto-size'] !== undefined) widget.setAutoSize(attributes['auto-size']);
-			if(attributes['filter'] !== undefined) widget.setFilter(attributes['filter']);
-			if(attributes['live-update'] !== undefined) widget.setLiveUpdate(attributes['live-update']);
-			if(attributes['max-length'] !== undefined) widget.setMaxLength(attributes['max-length']);
-			if(attributes['minimal-line-height'] !== undefined) widget.setMinimalLineHeight(attributes['minimal-line-height']);
-			if(attributes['single-step'] !== undefined) widget.setSingleStep(attributes['single-step']);
-			if(attributes['text-align'] !== undefined) widget.setTextAlign(attributes['text-align']);
-			if(attributes['wrap'] !== undefined) widget.setWrap(attributes['wrap']);
+			if(attributes["auto-size"] !== undefined) widget.setAutoSize(attributes["auto-size"]);
+			if(attributes["filter"] !== undefined) widget.setFilter(attributes["filter"]);
+			if(attributes["live-update"] !== undefined) widget.setLiveUpdate(attributes["live-update"]);
+			if(attributes["max-length"] !== undefined) widget.setMaxLength(attributes["max-length"]);
+			if(attributes["minimal-line-height"] !== undefined) widget.setMinimalLineHeight(attributes["minimal-line-height"]);
+			if(attributes["single-step"] !== undefined) widget.setSingleStep(attributes["single-step"]);
+			if(attributes["text-align"] !== undefined) widget.setTextAlign(attributes["text-align"]);
+			if(attributes["wrap"] !== undefined) widget.setWrap(attributes["wrap"]);
 			return widget;
 		},
 

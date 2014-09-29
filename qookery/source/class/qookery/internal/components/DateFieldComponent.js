@@ -45,6 +45,8 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.form.DateField();
+			var nativeContextMenu = this.getAttribute("native-context-menu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
+			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
 			widget.getChildControl("textfield").addListener("focusout", function(event) {
 				if(this.__userTyped == true) {
 					this.__userTyped = false;

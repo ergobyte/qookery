@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes['placeholder']) this.setPlaceholder(attributes['placeholder']);
+			if(attributes["placeholder"]) this.setPlaceholder(attributes["placeholder"]);
 		},
 
 		_createMainWidget: function(attributes) {
@@ -41,6 +41,8 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		},
 
 		_setupTextField: function(widget, attributes) {
+			var nativeContextMenu = this.getAttribute("native-context-menu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
+			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				var text = event.getData();
@@ -51,16 +53,19 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 				this._setValueSilently(value);
 			}, this);
 
-			var liveUpdate = attributes['live-update'];
-			if(liveUpdate) widget.addListener("blur", function(event) {
-				if(this._disableValueEvents) return;
-				var format = this.getFormat();
-				if(!format) return;
-				var text = this.getMainWidget().getValue();
-				var value = format.parse(text);
-				text = format.format(value);
-				this.getMainWidget().setValue(text);
-			}, this);
+			var liveUpdate = this.getAttribute("live-update", false);
+			if(liveUpdate) {
+				widget.addListener("blur", function(event) {
+					if(this._disableValueEvents) return;
+					var format = this.getFormat();
+					if(!format) return;
+					var text = this.getMainWidget().getValue();
+					var value = format.parse(text);
+					text = format.format(value);
+					this.getMainWidget().setValue(text);
+				}, this);
+				widget.setLiveUpdate(true);
+			}
 
 			widget.addListener("keypress", function(event) {
 				if(this.isReadOnly()) return;
@@ -74,10 +79,9 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 			}, this);
 
 			this._applyLayoutAttributes(widget, attributes);
-			if(attributes['text-align']) widget.setTextAlign(attributes['text-align']);
-			if(attributes['filter']) widget.setFilter(attributes['filter']);
-			if(attributes['max-length']) widget.setMaxLength(attributes['max-length']);
-			if(attributes['live-update']) widget.setLiveUpdate(attributes['live-update']);
+			if(attributes["text-align"]) widget.setTextAlign(attributes["text-align"]);
+			if(attributes["filter"]) widget.setFilter(attributes["filter"]);
+			if(attributes["max-length"]) widget.setMaxLength(attributes["max-length"]);
 			return widget;
 		},
 

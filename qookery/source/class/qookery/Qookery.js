@@ -30,6 +30,29 @@ qx.Class.define("qookery.Qookery", {
 
 	statics: {
 
+		OPTIONS: { },
+
+		OPTION_DEFAULT_NATIVE_CONTEXT_MENU: "default-native-context-menu",
+
+		getOption: function(optionName, defaultValue) {
+			var value = qookery.Qookery.OPTIONS[optionName];
+			if(value === undefined) return defaultValue;
+			return value;
+		},
+
+		setOption: function(optionName, value) {
+			qookery.Qookery.OPTIONS[optionName] = value;
+		},
+
+		/**
+		 * Get the Qookery registry instance
+		 *
+		 * @return {qookery.IRegistry} the registry instance
+		 */
+		getRegistry: function() {
+			return qookery.internal.Registry.getInstance();
+		},
+
 		/**
 		 * Create a new Qookery form parser
 		 *
@@ -64,15 +87,6 @@ qx.Class.define("qookery.Qookery", {
 		},
 
 		/**
-		 * Get the Qookery registry instance
-		 *
-		 * @return {qookery.IRegistry} the registry instance
-		 */
-		getRegistry: function() {
-			return qookery.internal.Registry.getInstance();
-		},
-
-		/**
 		 * Return the default model provider implementation
 		 *
 		 * @return {qookery.IModelProvider} A model provider implementation
@@ -89,33 +103,5 @@ qx.Class.define("qookery.Qookery", {
 		getResourceLoader: function() {
 			return qookery.internal.Registry.getInstance().getResourceLoader();
 		}
-	},
-
-	members: {
-
-		__resourceLoader: null,
-
-		/**
-		 * Configure Qookery by setting a configuration key's value
-		 *
-		 * @param key {String} one of the acceptable configuration keys
-		 * @param value {any} an acceptable value for the configuration key
-		 *
-		 * @return {Boolean} <code>true</code> in case the change was accepted
-		 */
-		configure: function(key, value) {
-			switch(key) {
-			case "resource-loader":
-				qx.Interface.assertObject(value, qookery.IResourceLoader);
-				this._disposeObjects("__resourceLoader");
-				this.__resourceLoader = value;
-				return true;
-			}
-			return false;
-		}
-	},
-
-	destruct: function() {
-		this._disposeObjects("__resourceLoader");
 	}
 });

@@ -200,6 +200,7 @@
 		<attribute name="margin-bottom" type="integer" default="0" />
 		<attribute name="margin-left" type="integer" default="0" />
 		<attribute name="margin"><simpleType><list itemType="integer" /></simpleType></attribute>
+		<attribute name="native-context-menu" type="boolean" />
 		<attribute name="allow-stretch-x" type="boolean" default="true" />
 		<attribute name="allow-stretch-y" type="boolean" default="true" />
 		<attribute name="allow-stretch" type="boolean" default="true" />

@@ -40,6 +40,9 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		__domIdentifier: null,
 		__calendar: null,
 		__options: null,
+		__refetchPending: null,
+
+		// Metadata
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
@@ -51,6 +54,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "selectable": return "Boolean";
 			default: return this.base(arguments, attributeName); }
 		},
+
+		// Construction
 
 		create: function(attributes) {
 			this.__domIdentifier = "calendar-" + this.toHashCode();
@@ -111,8 +116,17 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				timeFormat: this.getAttribute("time-format", "h(:mm)t")
 			});
 			this.__calendar = jQuery("#" + this.__domIdentifier).fullCalendar(this.__options);
+
+			this.getMainWidget().addListener("appear", function() {
+				if(!this.__refetchPending) return;
+				this.__refetchPending = false;
+				this.__calendar.fullCalendar("refetchEvents");
+			}, this);
+
 			this.fireEvent("loaded");
 		},
+
+		// Component implementation
 
 		addEventHandler: function(eventName, clientCode, onlyOnce) {
 			switch(eventName) {
@@ -135,10 +149,22 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		executeAction: function(actionName, argumentMap) {
 			if(this.__calendar) switch(actionName) {
-			case "addEventSource": return this.__calendar.fullCalendar("addEventSource", argumentMap["events"]);
-			case "refetchEvents": return this.__calendar.fullCalendar("refetchEvents");
+			case "addEventSource":
+				return this.__calendar.fullCalendar("addEventSource", argumentMap["events"]);
+			case "refetchEvents":
+				if(this.__isCalendarVisible())
+					this.__calendar.fullCalendar("refetchEvents");
+				else
+					this.__refetchPending = true;
+				return;
 			}
 			return this.base(arguments, actionName, argumentMap);
+		},
+
+		// Internals
+
+		__isCalendarVisible: function() {
+			return jQuery("#" + this.__domIdentifier).is(":visible");
 		}
 	},
 
