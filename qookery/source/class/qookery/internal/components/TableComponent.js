@@ -91,6 +91,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
 			case "table-model":
+				if(this.__tableModel) throw new Error("Table model has already been created");
 				var tableModelClassName = formParser.getAttribute(xmlElement, "class");
 				var tableModelClass = qx.Class.getByName(tableModelClassName);
 				this.__tableModel = new tableModelClass(this, formParser, xmlElement);
@@ -106,14 +107,13 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		setup: function(formParser, attributes) {
 			if(this.__columns.length == 0)
 				throw new Error("Table must have at least one column");
-			if(!this.__tableModel)
-				this.__tableModel = new qookery.impl.DefaultTableModel(this);
 			var table = this.getMainWidget();
-			if(this.__tableModel.setup && typeof(this.__tableModel.setup) == "function") {
+			var tableModel = this.getTableModel();
+			if(tableModel.setup && typeof(tableModel.setup) == "function") {
 				// Give model a chance to perform last minute changes
-				this.__tableModel.setup(table, this.__columns);
+				tableModel.setup(table, this.__columns);
 			}
-			table.setTableModel(this.__tableModel);
+			table.setTableModel(tableModel);
 			var columnModel = table.getTableColumnModel();
 			var resizeBehavior = columnModel.getBehavior();
 			for(var i = 0; i < this.__columns.length; i++) {
@@ -158,6 +158,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		// Public methods
 
 		getTableModel: function() {
+			if(!this.__tableModel)
+				this.__tableModel = new qookery.impl.DefaultTableModel(this);
 			return this.__tableModel;
 		},
 
@@ -202,7 +204,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			switch(eventName) {
 			case "dataChanged":
 				var methodName = onlyOnce ? "addListenerOnce" : "addListener";
-				this.__tableModel[methodName]("dataChanged", function(event) {
+				this.getTableModel()[methodName]("dataChanged", function(event) {
 					this.executeClientCode(clientCode, { "event": event });
 				}, this);
 				return;

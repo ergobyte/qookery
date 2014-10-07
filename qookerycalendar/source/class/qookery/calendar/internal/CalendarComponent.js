@@ -48,6 +48,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			switch(attributeName) {
 			case "all-day-slot": return "Boolean";
 			case "aspect-ratio": return "Number";
+			case "default-all-day-event-duration": return "Integer";
 			case "editable": return "Boolean";
 			case "event-limit": return "Boolean";
 			case "first-day": return "Integer";
@@ -97,7 +98,9 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 					week: this.getAttribute("button-text-week", undefined),
 					day: this.getAttribute("button-text-day", undefined)
 				},
+				defaultAllDayEventDuration: { days: this.getAttribute("default-all-day-event-duration", 1) },
 				defaultDate: this.getAttribute("default-date", undefined),
+				defaultTimedEventDuration: this.getAttribute("default-timed-event-duration", "02:00:00"),
 				editable: this.getAttribute("editable", false),
 				eventLimit: this.getAttribute("event-limit", false),
 				firstDay: this.getAttribute("first-day", 0),

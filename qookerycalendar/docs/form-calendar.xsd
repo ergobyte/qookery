@@ -33,7 +33,9 @@
 		<attribute name="button-text-month" type="string" />
 		<attribute name="button-text-today" type="string" />
 		<attribute name="button-text-week" type="string" />
+		<attribute name="default-all-day-event-duration" type="nonNegativeInteger" default="1" />
 		<attribute name="default-date" type="date" />
+		<attribute name="default-timed-event-duration" type="time" default="02:00:00" />
 		<attribute name="first-day" type="nonNegativeInteger" default="0" />
 		<attribute name="editable" default="false" type="boolean" />
 		<attribute name="event-limit" default="false"><simpleType><union memberTypes="boolean nonNegativeInteger" /></simpleType></attribute>

@@ -48,9 +48,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 		_createMainWidget: function(attributes) {
 			// Create lightest possible widget since we only need a <div>
-			var widget = new qx.ui.core.Widget();
-			// Make it look like a text field
-			widget.setAppearance("textfield");
+			var widget = new qookery.richtext.internal.RichTextWidget();
 			// Configure widget positioning by applying layout
 			this._applyLayoutAttributes(widget, attributes);
 			// Defer creation of CKEditor until after positioning is done
@@ -88,11 +86,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			var widget = this.getMainWidget();
 			// Method might be called after widget destruction
 			if(widget.isDisposed()) return;
-			// Make qx.html.Element selectable, otherwise mouse behavior is broken
-			var htmlElement = widget.getContentElement();
-			htmlElement.setSelectable(true);
 			// Get underlying DOM element and invoke CKEditor inline()
-			var domElement = htmlElement.getDomElement();
+			var domElement = widget.getContentElement().getDomElement();
 			domElement.setAttribute("contenteditable", "true");
 			var config = {
 				language: qx.locale.Manager.getInstance().getLanguage(),
