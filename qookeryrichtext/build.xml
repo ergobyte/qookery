@@ -18,7 +18,7 @@
 -->
 <project name="Qookery Rich Text" basedir="." default="Download">
 
-	<property name="ckeditor.version" value="4.3.1" />
+	<property name="ckeditor.version" value="4.4.5" />
 	<property name="ckeditor.package" value="standard" />
 	<property name="ckeditor.zipFilename" value="ckeditor_${ckeditor.version}_${ckeditor.package}.zip" />
 	<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${ckeditor.version}/${ckeditor.zipFilename}" />

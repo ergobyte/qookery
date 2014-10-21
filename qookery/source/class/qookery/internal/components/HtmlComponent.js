@@ -27,7 +27,7 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 	members: {
 
 		_createWidgets: function(attributes) {
-			var htmlText = attributes['html'] || null;
+			var htmlText = attributes["html"] || null;
 			var html = new qx.ui.embed.Html(htmlText);
 			this._applyLayoutAttributes(html, attributes);
 			return [ html ];
