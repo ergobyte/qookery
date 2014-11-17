@@ -40,6 +40,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 	members: {
 
+		__defaultNamespace: null,
 		__namespaces: null,
 		__variables: null,
 
@@ -57,7 +58,9 @@ qx.Class.define("qookery.internal.FormParser", {
 			for(var i = 0; i < attributes.length; i++) {
 				var attribute = attributes.item(i);
 				var attributeName = attribute.nodeName;
-				if(attributeName.indexOf("xmlns:") === 0)
+				if(attributeName === "xmlns")
+					this.__defaultNamespace = attribute.value;
+				else if(attributeName.indexOf("xmlns:") === 0)
 					this.__namespaces[attributeName.substr(6)] = attribute.value;
 			}
 			var rootComponent = this.__parseComponent(rootElement, parentComponent);
@@ -160,8 +163,9 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Instantiate and initialize new component
 
-			var componentTypeName = qx.dom.Node.getName(componentElement);
-			var component = this.constructor.REGISTRY.createComponent(componentTypeName, parentComponent);
+			var elementName = qx.dom.Node.getName(componentElement);
+			var componentQName = this.__resolveQName(elementName);
+			var component = this.constructor.REGISTRY.createComponent(componentQName, parentComponent);
 			component.prepare(this, componentElement);
 
 			// Id registration
@@ -213,7 +217,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "parsererror":
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				default:
-					if(this.constructor.REGISTRY.isComponentTypeAvailable(elementName))
+					if(this.constructor.REGISTRY.isComponentTypeAvailable(this.__resolveQName(elementName)))
 						this.__parseComponent(statementElement, component);
 					else if(!component.parseCustomElement(this, statementElement))
 						throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementName ]));
@@ -291,13 +295,15 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__resolveQName: function(qname) {
-			var parts = qname.split(":");
-			if(parts.length == 1) return [ "", qname ];
-			var prefix = parts[0];
-			var localPart = parts[1];
-			var namespaceUri = this.__namespaces[prefix];
-			if(!namespaceUri) throw new Error(qx.lang.String.format("Unable to resolve unknown namespace prefix '%1'", [ prefix ]));
-			return [ namespaceUri, localPart ];
+			var colonPos = qname.indexOf(":");
+			if(colonPos === -1)
+				return "{" + this.__defaultNamespace + "}" + qname;
+			var prefix = qname.substr(0, colonPos);
+			var namespaceUri = this.resolveNamespacePrefix(prefix);
+			if(!namespaceUri)
+				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
+			var localPart = qname.substring(colonPos + 1);
+			return "{" + namespaceUri + "}" + localPart;
 		}
 	},
 

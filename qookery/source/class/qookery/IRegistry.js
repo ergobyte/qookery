@@ -25,30 +25,30 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Register a new component type
 		 *
-		 * @param typeName {String} The symbolic name of the component type for subsequent access
+		 * @param componentQName {String} The qualified name of the component to register
 		 * @param componentClass {qx.Class} The class that implements (at least) qookery.IComponent
 		 * @param constructorArg {Object} Optional constructor argument
 		 */
-		registerComponentType: function(typeName, componentClass, constructorArg) { },
+		registerComponentType: function(componentQName, componentClass, constructorArg) { },
 
 		/**
 		 * Check if a component type is available
 
-		 * @param typeName {String} The symbolic name of the component type to look for
+		 * @param componentQName {String} Qualified name of a possibly registered component type
 		 *
 		 * @return {boolean} <code>true</code> in case the component type is available
 		 */
-		isComponentTypeAvailable: function(typeName) { },
+		isComponentTypeAvailable: function(componentQName) { },
 
 		/**
 		 * Create a new component instance
 		 *
-		 * @param typeName {String} Symbolic name of a registered component type
+		 * @param componentQName {String} Qualified name of a registered component type
 		 * @param parentComponent {IComponent?null} Component that will contain new component
 		 *
 		 * @return {IComponent} Newly created component, an exception is thrown on error
 		 */
-		createComponent: function(typeName, parentComponent) { },
+		createComponent: function(componentQName, parentComponent) { },
 
 		// Validators
 

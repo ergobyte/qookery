@@ -32,6 +32,6 @@ qx.Bootstrap.define("qookery.calendar.Bootstrap", {
 			"qookery/lib/fullcalendar/lang/el.js"
 		], [ "moment", "jquery" ]);
 
-		registry.registerComponentType("q-cal:calendar", qookery.calendar.internal.CalendarComponent);
+		registry.registerComponentType("{http://www.qookery.org/ns/Form/Calendar}calendar", qookery.calendar.internal.CalendarComponent);
 	}
 });

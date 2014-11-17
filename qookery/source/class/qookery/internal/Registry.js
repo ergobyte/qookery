@@ -34,38 +34,38 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
 
 		this.__components = { };
-		this.__components["button"] = qookery.internal.components.ButtonComponent;
-		this.__components["check-field"] = qookery.internal.components.CheckFieldComponent;
-		this.__components["composite"] = qookery.internal.components.CompositeComponent;
-		this.__components["date-field"] = qookery.internal.components.DateFieldComponent;
-		this.__components["form"] = qookery.internal.components.FormComponent;
-		this.__components["group-box"] = qookery.internal.components.GroupBoxComponent;
-		this.__components["hover-button"] = qookery.internal.components.HoverButtonComponent;
-		this.__components["html"] = qookery.internal.components.HtmlComponent;
-		this.__components["iframe"] = qookery.internal.components.IframeComponent;
-		this.__components["image"] = qookery.internal.components.ImageComponent;
-		this.__components["label"] = qookery.internal.components.LabelComponent;
-		this.__components["list"] = qookery.internal.components.ListComponent;
-		this.__components["password-field"] = qookery.internal.components.PasswordFieldComponent;
-		this.__components["progress-bar"] = qookery.internal.components.ProgressBarComponent;
-		this.__components["radio-button"] = qookery.internal.components.RadioButtonComponent;
-		this.__components["radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
-		this.__components["scroll"] = qookery.internal.components.ScrollComponent;
-		this.__components["select-box"] = qookery.internal.components.SelectBoxComponent;
-		this.__components["separator"] = qookery.internal.components.SeparatorComponent;
-		this.__components["slider"] = qookery.internal.components.SliderComponent;
-		this.__components["spacer"] = qookery.internal.components.SpacerComponent;
-		this.__components["spinner"] = qookery.internal.components.SpinnerComponent;
-		this.__components["split-pane"] = qookery.internal.components.SplitPaneComponent;
-		this.__components["stack"] = qookery.internal.components.StackComponent;
-		this.__components["tab-view"] = qookery.internal.components.TabViewComponent;
-		this.__components["tab-view-page"] = qookery.internal.components.TabViewPageComponent;
-		this.__components["table"] = qookery.internal.components.TableComponent;
-		this.__components["text-area"] = qookery.internal.components.TextAreaComponent;
-		this.__components["text-field"] = qookery.internal.components.TextFieldComponent;
-		this.__components["toggle-button"] = qookery.internal.components.ToggleButtonComponent;
-		this.__components["tool-bar"] = qookery.internal.components.ToolBarComponent;
-		this.__components["virtual-tree"] = qookery.internal.components.VirtualTreeComponent;
+		this.__components["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
+		this.__components["{http://www.qookery.org/ns/Form}check-field"] = qookery.internal.components.CheckFieldComponent;
+		this.__components["{http://www.qookery.org/ns/Form}composite"] = qookery.internal.components.CompositeComponent;
+		this.__components["{http://www.qookery.org/ns/Form}date-field"] = qookery.internal.components.DateFieldComponent;
+		this.__components["{http://www.qookery.org/ns/Form}form"] = qookery.internal.components.FormComponent;
+		this.__components["{http://www.qookery.org/ns/Form}group-box"] = qookery.internal.components.GroupBoxComponent;
+		this.__components["{http://www.qookery.org/ns/Form}hover-button"] = qookery.internal.components.HoverButtonComponent;
+		this.__components["{http://www.qookery.org/ns/Form}html"] = qookery.internal.components.HtmlComponent;
+		this.__components["{http://www.qookery.org/ns/Form}iframe"] = qookery.internal.components.IframeComponent;
+		this.__components["{http://www.qookery.org/ns/Form}image"] = qookery.internal.components.ImageComponent;
+		this.__components["{http://www.qookery.org/ns/Form}label"] = qookery.internal.components.LabelComponent;
+		this.__components["{http://www.qookery.org/ns/Form}list"] = qookery.internal.components.ListComponent;
+		this.__components["{http://www.qookery.org/ns/Form}password-field"] = qookery.internal.components.PasswordFieldComponent;
+		this.__components["{http://www.qookery.org/ns/Form}progress-bar"] = qookery.internal.components.ProgressBarComponent;
+		this.__components["{http://www.qookery.org/ns/Form}radio-button"] = qookery.internal.components.RadioButtonComponent;
+		this.__components["{http://www.qookery.org/ns/Form}radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
+		this.__components["{http://www.qookery.org/ns/Form}scroll"] = qookery.internal.components.ScrollComponent;
+		this.__components["{http://www.qookery.org/ns/Form}select-box"] = qookery.internal.components.SelectBoxComponent;
+		this.__components["{http://www.qookery.org/ns/Form}separator"] = qookery.internal.components.SeparatorComponent;
+		this.__components["{http://www.qookery.org/ns/Form}slider"] = qookery.internal.components.SliderComponent;
+		this.__components["{http://www.qookery.org/ns/Form}spacer"] = qookery.internal.components.SpacerComponent;
+		this.__components["{http://www.qookery.org/ns/Form}spinner"] = qookery.internal.components.SpinnerComponent;
+		this.__components["{http://www.qookery.org/ns/Form}split-pane"] = qookery.internal.components.SplitPaneComponent;
+		this.__components["{http://www.qookery.org/ns/Form}stack"] = qookery.internal.components.StackComponent;
+		this.__components["{http://www.qookery.org/ns/Form}tab-view"] = qookery.internal.components.TabViewComponent;
+		this.__components["{http://www.qookery.org/ns/Form}tab-view-page"] = qookery.internal.components.TabViewPageComponent;
+		this.__components["{http://www.qookery.org/ns/Form}table"] = qookery.internal.components.TableComponent;
+		this.__components["{http://www.qookery.org/ns/Form}text-area"] = qookery.internal.components.TextAreaComponent;
+		this.__components["{http://www.qookery.org/ns/Form}text-field"] = qookery.internal.components.TextFieldComponent;
+		this.__components["{http://www.qookery.org/ns/Form}toggle-button"] = qookery.internal.components.ToggleButtonComponent;
+		this.__components["{http://www.qookery.org/ns/Form}tool-bar"] = qookery.internal.components.ToolBarComponent;
+		this.__components["{http://www.qookery.org/ns/Form}virtual-tree"] = qookery.internal.components.VirtualTreeComponent;
 
 		this.__componentConstructorArgs = { };
 
@@ -121,21 +121,22 @@ qx.Class.define("qookery.internal.Registry", {
 
 		// Components
 
-		isComponentTypeAvailable: function(typeName) {
-			return this.__components[typeName] !== undefined;
+		isComponentTypeAvailable: function(componentQName) {
+			var componentClass = this.__components[componentQName];
+			return componentClass !== undefined;
 		},
 
-		registerComponentType: function(typeName, componentClass, constructorArg) {
-			this.__components[typeName] = componentClass;
+		registerComponentType: function(componentQName, componentClass, constructorArg) {
+			this.__components[componentQName] = componentClass;
 			if(constructorArg)
-				this.__componentConstructorArgs[typeName] = constructorArg;
+				this.__componentConstructorArgs[componentQName] = constructorArg;
 		},
 
-		createComponent: function(typeName, parentComponent) {
-			var componentClass = this.__components[typeName];
+		createComponent: function(componentQName, parentComponent) {
+			var componentClass = this.__components[componentQName];
 			if(!componentClass)
-				throw new Error(qx.lang.String.format("Unknown component type '%1'", [ typeName ]));
-			var constructorArg = this.__componentConstructorArgs[typeName];
+				throw new Error(qx.lang.String.format("Unknown component '%1'", [ componentQName ]));
+			var constructorArg = this.__componentConstructorArgs[componentQName];
 			return new componentClass(parentComponent, constructorArg);
 		},
 

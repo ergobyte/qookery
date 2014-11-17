@@ -87,13 +87,14 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * Programmatically create a new Qookery component
 		 *
 		 * @param parentComponent {qookery.IContainerComponent} the parent component to hold new component
-		 * @param componentClassName {String} the name of the new component's implementation class
+		 * @param componentName {String} the qualified or symbolic name of the new component's implementation class
 		 * @param attributes {Map ? null} any number of attributes understood by new component implementation
 		 *
 		 * @return {qookery.IComponent} newly created component
 		 */
-		createComponent: function(parentComponent, componentClassName, attributes) {
-			var component = qookery.Qookery.getRegistry().createComponent(componentClassName, parentComponent);
+		createComponent: function(parentComponent, componentName, attributes) {
+			var componentQName = componentName.indexOf("{") === 0 ? componentName : "{http://www.qookery.org/ns/Form}" + componentName;
+			var component = qookery.Qookery.getRegistry().createComponent(componentQName, parentComponent);
 			component.create(attributes);
 			component.setup(null, attributes);
 			return component;

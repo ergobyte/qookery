@@ -26,6 +26,6 @@ qx.Bootstrap.define("qookery.richtext.Bootstrap", {
 			CKEDITOR.disableAutoInline = true;
 			CKEDITOR.config.entities = false;
 		});
-		qookery.Qookery.getRegistry().registerComponentType("q-rt:rich-text", qookery.richtext.internal.RichTextComponent);
+		qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/RichText}rich-text", qookery.richtext.internal.RichTextComponent);
 	}
 });
