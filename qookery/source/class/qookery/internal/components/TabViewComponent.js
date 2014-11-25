@@ -27,7 +27,7 @@ qx.Class.define("qookery.internal.components.TabViewComponent", {
 	members: {
 
 		create: function(attributes) {
-			attributes['column-count'] = 'none';
+			attributes["column-count"] = "none";
 			this.base(arguments, attributes);
 		},
 

@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.registry.Library", {
+qx.Class.define("qookery.internal.util.Library", {
 
 	extend: Object,
 	include: [ qx.core.MLogging ],

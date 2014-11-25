@@ -1,43 +1,80 @@
 <!DOCTYPE html>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Qookery Demo</title>
-	<style type="text/css">
-		#splash {
-			margin: 200px auto 0 auto;
-			border: 1px solid #ccc;
-			width: 400px;
-			-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
-			-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
-		}
-		#splash a, #splash a:visited {
-			color: #225588;
-			font-weight: bold;
-		}
-		#splash-msg {
-			font: normal 10px arial, tahoma, sans-serif;
-		}
-	</style>
-	<script src="resource/qookerydemo/editor/ace.js" type="text/javascript" charset="utf-8"></script>
-	<script src="resource/qookerydemo/editor/theme-eclipse.js" type="text/javascript" charset="utf-8"></script>
-	<script src="resource/qookerydemo/editor/mode-xml.js" type="text/javascript" charset="utf-8"></script>
-</head>
-<body>
-	<div id="splash">
-		<div style="background: #6699FF; color: #444; font: bold 22px tahoma, arial, helvetica, sans-serif; padding: 10px; margin: 0; height: 32px;">
-			<img src="resource/qookerydemo/icons/66/loading-66.gif" width="32" height="32" style="margin-right: 8px; float: left; vertical-align: top;">
-				Qookery - Live Demo
-			<br>
-			<span id="splash-msg"></span>
+
+	<head>
+
+		<meta charset="utf-8">
+
+		<title>Qookery Demo</title>
+
+		<style type="text/css">
+			#splash {
+				margin: 200px auto 0 auto;
+				border: 1px solid #ccc;
+				width: 400px;
+				-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+				-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+			}
+			#splash a, #splash a:visited {
+				color: #225588;
+				font-weight: bold;
+			}
+			#splash-msg {
+				font: normal 10px arial, tahoma, sans-serif;
+			}
+		</style>
+
+		<script src="resource/qookerydemo/editor/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/qookerydemo/editor/theme-eclipse.js" type="text/javascript" charset="utf-8"></script>
+		<script src="resource/qookerydemo/editor/mode-xml.js" type="text/javascript" charset="utf-8"></script>
+
+	</head>
+
+	<body>
+
+		<div id="splash">
+			<div style="background: #6699FF; color: #444; font: bold 22px tahoma, arial, helvetica, sans-serif; padding: 10px; margin: 0; height: 32px;">
+				<img src="resource/qookerydemo/icons/66/loading-66.gif" width="32" height="32" style="margin-right: 8px; float: left; vertical-align: top;">
+					Qookery - Live Demo
+				<br>
+				<span id="splash-msg"></span>
+			</div>
+			<div style="font: normal 12px arial, tahoma, sans-serif; color: #336699; text-align: justify; padding: 10px 20px;">
+				<p>
+					The Qookery library allows Qooxdoo programmers to declare and
+					run user interfaces through an easy to master XML language.
+				</p>
+			</div>
 		</div>
-		<div style="font: normal 12px arial, tahoma, sans-serif; color: #336699; text-align: justify; padding: 10px 20px;">
-			<p>
-				The Qookery library allows Qooxdoo programmers to declare and
-				run user interfaces through an easy to master XML language.
-			</p>
-		</div>
-	</div>
-	<script type="text/javascript" src="script/qookerydemo.js"></script>
-</body>
+
+		<script type="text/javascript">
+			(function() {
+				var version = "0.8.1.01";
+				var scriptElement = document.createElement("script");
+				scriptElement.type = "text/javascript";
+				scriptElement.src = "script/qookerydemo.js?version=" + version;
+				var headElement = document.getElementsByTagName("head")[0];
+				headElement.appendChild(scriptElement);
+			})();
+		</script>
+
+	</body>
+
 </html>

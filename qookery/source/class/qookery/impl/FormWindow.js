@@ -16,6 +16,9 @@
 	limitations under the License.
 */
 
+/**
+ * Window implementation that uses a Qookery form for its contents
+ */
 qx.Class.define("qookery.impl.FormWindow", {
 
 	extend: qx.ui.window.Window,

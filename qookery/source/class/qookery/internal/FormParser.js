@@ -209,19 +209,33 @@ qx.Class.define("qookery.internal.FormParser", {
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
 				var elementName = qx.dom.Node.getName(statementElement);
-				switch(elementName) {
-				case "xi:include":
-					this.__parseXInclude(statementElement, component); continue;
-				case "script":
-					this.__parseScript(statementElement, component); continue;
-				case "parsererror":
+				if(elementName === "parsererror")
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
-				default:
-					if(this.constructor.REGISTRY.isComponentTypeAvailable(this.__resolveQName(elementName)))
-						this.__parseComponent(statementElement, component);
-					else if(!component.parseCustomElement(this, statementElement))
-						throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementName ]));
+				var elementQName = this.__resolveQName(elementName);
+
+				// First check the registry for same-name component
+				if(this.constructor.REGISTRY.isComponentTypeAvailable(elementQName)) {
+					this.__parseComponent(statementElement, component);
+					continue;
 				}
+
+				// Then check a number of special elements known by parser
+				if(elementQName === "{http://www.qookery.org/ns/Form}script") {
+					this.__parseScript(statementElement, component);
+					continue;
+				}
+				if(elementQName === "{http://www.w3.org/2001/XInclude}include") {
+					this.__parseXInclude(statementElement, component);
+					continue;
+				}
+
+				// Lastly, attempt to delegate element parsing to current component
+				if(component.parseCustomElement(this, statementElement)) {
+					continue;
+				}
+
+				// Since everything failed, break parser execution here
+				throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementQName ]));
 			}
 		},
 

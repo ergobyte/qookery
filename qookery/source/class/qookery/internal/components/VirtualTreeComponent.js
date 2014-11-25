@@ -21,7 +21,7 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 	extend: qookery.internal.components.EditableComponent,
 
 	events: {
-		"changeSelection" : "qx.event.type.Data"
+		"changeSelection": "qx.event.type.Data"
 	},
 
 	construct: function(parentComponent) {
@@ -29,15 +29,15 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 	},
 
 	members: {
-		__model: null,
+
 		__delegate: null,
 
 		_createMainWidget: function(attributes) {
 			var virtualTree = new qx.ui.tree.VirtualTree();
-			if(attributes['child-property']) virtualTree.setChildProperty(attributes['child-property']);
-			if(attributes['hide-root']) virtualTree.setHideRoot(true);
-			if(attributes['icon-property']) virtualTree.setIconPath(attributes['icon-property']);
-			if(attributes['label-path']) virtualTree.setLabelPath(attributes['label-path']);
+			if(attributes["child-property"]) virtualTree.setChildProperty(attributes["child-property"]);
+			if(attributes["hide-root"]) virtualTree.setHideRoot(true);
+			if(attributes["icon-property"]) virtualTree.setIconPath(attributes["icon-property"]);
+			if(attributes["label-path"]) virtualTree.setLabelPath(attributes["label-path"]);
 
 			virtualTree.getSelection().addListener("change", function(e) {
 				this.fireDataEvent("changeSelection", virtualTree.getSelection().getItem(0));
@@ -65,24 +65,16 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
-				case"child-property": return "String";
-				case"hide-root": return "Boolean";
-				case"icon-property": return "String";
-				case"label-path": return "String";
-				default: return this.base(arguments, attributeName);
+			case "child-property": return "String";
+			case "hide-root": return "Boolean";
+			case "icon-property": return "String";
+			case "label-path": return "String";
+			default: return this.base(arguments, attributeName);
 			}
 		},
 
-		getVirtualTreeModel: function() {
-			return this.__virtualTreeModel;
-		},
-
-		setVirtualTreeModel: function(treeModel) {
-			this.__model = treeModel;
-		},
-
-		setIconOptions: function(func) {
-			this.getMainWidget().setIconOptions(func);
+		setIconOptions: function(iconOptions) {
+			this.getMainWidget().setIconOptions(iconOptions);
 		},
 
 		_updateUI: function(value) {
@@ -92,6 +84,6 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__model","__delegate");
+		this._disposeObjects("__delegate");
 	}
 });

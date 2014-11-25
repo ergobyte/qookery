@@ -31,4 +31,18 @@
 	<target name="Clean" depends="richtext.Clean, calendar.Clean, qookery.Clean" description="Clean up any intermediate files produced by build" />
 	<target name="Lint" depends="qookery.Lint" description="Perform syntactic checks on application" />
 
+	<target name="Publish" depends="Build" description="Publish project build to a WAFFLE server - do not use if not working at Ergobyte">
+		<zip destfile="build/waffle-archive.zip" level="9" basedir="build" includes="resource/** script/** index.html" />
+		<input addproperty="waffle.serverHost" message="WAFFLE server hostname : " defaultvalue="www.ergobyte.net" />
+		<input addproperty="waffle.safiraUsername" message="Safira username : " defaultvalue="${user.name}" />
+		<input addproperty="waffle.safiraPassword" message="Safira password : " />
+		<exec executable="${git.root}/kitchen/com.ergobyte.ria.waffle/tool/uploader.py">
+			<arg value="${waffle.serverHost}" />
+			<arg value="${waffle.safiraUsername}" />
+			<arg value="${waffle.safiraPassword}" />
+			<arg value="qookerydemo" />
+			<arg value="build/waffle-archive.zip" />
+		</exec>
+	</target>
+
 </project>

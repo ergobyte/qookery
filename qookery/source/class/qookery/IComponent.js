@@ -17,7 +17,7 @@
 */
 
 /**
- * Each and every Qookery user interface component implements this interface
+ * Base interface implemented by all Qookery components
  */
 qx.Interface.define("qookery.IComponent", {
 

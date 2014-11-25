@@ -27,8 +27,8 @@ qx.Class.define("qookery.internal.components.RadioButtonComponent", {
 	members: {
 
 		_createAtomWidget: function(attributes) {
-			var radioButton = new qx.ui.form.RadioButton(attributes['label']);
-			if(attributes['model'] !== undefined) radioButton.setModel(attributes['model']);
+			var radioButton = new qx.ui.form.RadioButton(attributes["label"]);
+			if(attributes["model"] !== undefined) radioButton.setModel(attributes["model"]);
 			this._applyAtomAttributes(radioButton, attributes);
 			return radioButton;
 		},

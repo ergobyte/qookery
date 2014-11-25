@@ -17,7 +17,7 @@
 */
 
 /**
- * Interface providing access to some internals of the Qookery parser
+ * Interface providing access to some internals of the Qookery XML parser
  */
 qx.Interface.define("qookery.IFormParser", {
 

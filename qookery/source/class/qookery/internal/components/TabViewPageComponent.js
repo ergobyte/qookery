@@ -27,7 +27,7 @@ qx.Class.define("qookery.internal.components.TabViewPageComponent", {
 	members: {
 
 		_createContainerWidget: function(attributes) {
-			var page = new qx.ui.tabview.Page(attributes['label']);
+			var page = new qx.ui.tabview.Page(attributes["label"]);
 			page.setLayout(new qx.ui.layout.Grid());
 			this._applyLayoutAttributes(page, attributes);
 			return page;

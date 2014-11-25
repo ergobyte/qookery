@@ -19,7 +19,7 @@
 /**
  * Extend this class if you want to create a new component that bind a value.
  */
-qx.Class.define("qookery.internal.DefaultCellRenderer", {
+qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 
 	extend: qx.ui.table.cellrenderer.Abstract,
 

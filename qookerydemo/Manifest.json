@@ -6,7 +6,7 @@
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
-			{ "name": "George Nikolaidis (geonik)", "email": "gnikolaidis@ergobyte.gr" },
+			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "stylkarr@gmail.com" },
 			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" }
 		],

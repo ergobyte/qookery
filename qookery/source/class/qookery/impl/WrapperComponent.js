@@ -16,6 +16,9 @@
 	limitations under the License.
 */
 
+/**
+ * Class wrapping Qooxdoo widgets as Qookery components
+ */
 qx.Class.define("qookery.impl.WrapperComponent", {
 
 	extend: qookery.internal.components.BaseComponent,

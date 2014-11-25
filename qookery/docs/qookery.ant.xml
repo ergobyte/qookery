@@ -74,30 +74,36 @@
 	<!-- Qooxdoo installation -->
 
 	<target name="Qooxdoo-Init" depends="Init">
+		<mkdir dir="${qooxdoo.root}" />
 		<condition property="build.qooxdooInstalled">
 			<available type="dir" file="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 		</condition>
 	</target>
 
-	<target name="Qooxdoo-Install" depends="Qooxdoo-Init" unless="build.qooxdooInstalled">
-		<mkdir dir="${qooxdoo.root}" />
+	<target name="Qooxdoo-DownloadSdk" unless="build.qooxdooInstalled">
 		<get dest="${qooxdoo.root}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="http://downloads.sourceforge.net/qooxdoo/qooxdoo-${qooxdoo.version}-sdk.zip" />
 		</get>
 		<unzip src="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk.zip" dest="${qooxdoo.root}/" />
 		<chmod dir="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk/tool/bin" includes="*.py" perm="+x" />
+	</target>
+
+	<target name="Qooxdoo-SymLinks" unless="build.qooxdooInstalled">
 		<symlink link="${qooxdoo.relativePath}" resource="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" overwrite="true" />
 		<symlink link="${qooxdoo.path}/component/library/qookery" resource="${git.repository.qookery}/qookery" overwrite="true" />
 		<symlink link="${qooxdoo.path}/component/library/qookeryrichtext" resource="${git.repository.qookery}/qookeryrichtext" overwrite="true" />
+		<symlink link="${qooxdoo.path}/component/library/qookerycalendar" resource="${git.repository.qookery}/qookerycalendar" overwrite="true" />
 	</target>
 
-	<target name="Qooxdoo-DistClean" depends="Init, Qooxdoo-Install">
+	<target name="Qooxdoo" depends="Qooxdoo-Init, Qooxdoo-DownloadSdk, Qooxdoo-SymLinks" />
+
+	<target name="Qooxdoo-DistClean" depends="Init, Qooxdoo">
 		<call-generator-py job="distclean" />
 	</target>
 
 	<!-- Source targets -->
 
-	<target name="Source-Init" depends="Init, Qooxdoo-Install" />
+	<target name="Source-Init" depends="Init, Qooxdoo" />
 
 	<target name="Source-Generate" depends="Source-Init">
 		<call-generator-py job="source" />
@@ -111,7 +117,7 @@
 
 	<!-- Build targets -->
 
-	<target name="Build-Init" depends="Init, Qooxdoo-Install" />
+	<target name="Build-Init" depends="Init, Qooxdoo" />
 
 	<target name="Build-Generate" depends="Build-Init">
 		<call-generator-py job="build" />
@@ -125,7 +131,7 @@
 
 	<!-- Test targets -->
 
-	<target name="Test-Init" depends="Init, Qooxdoo-Install">
+	<target name="Test-Init" depends="Init, Qooxdoo">
 		<uptodate property="build.sourceUpToDate" targetfile="test/script/tests.js">
 			<srcfiles dir="source" />
 			<srcfiles file="config.json" />
@@ -154,11 +160,11 @@
 		</uptodate>
 	</target>
 
-	<target name="Api-Data" depends="Api-Init, Qooxdoo-Install" unless="build.sourceUpToDate">
+	<target name="Api-Data" depends="Api-Init, Qooxdoo" unless="build.sourceUpToDate">
 		<call-generator-py job="api-data" />
 	</target>
 
-	<target name="Api-Application" depends="Api-Init, Qooxdoo-Install" unless="build.apiUpToDate">
+	<target name="Api-Application" depends="Api-Init, Qooxdoo" unless="build.apiUpToDate">
 		<call-generator-py job="api" />
 	</target>
 
@@ -170,7 +176,7 @@
 
 	<!-- Misc generator.py targets -->
 
-	<target name="Lint" depends="Init, Qooxdoo-Install">
+	<target name="Lint" depends="Init, Qooxdoo">
 		<call-generator-py job="lint" />
 	</target>
 

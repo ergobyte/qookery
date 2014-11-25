@@ -193,7 +193,7 @@ qx.Class.define("qookery.internal.Registry", {
 
 		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) {
 			if(this.__libraries[libraryName]) return; // Prevent redefinition
-			this.__libraries[libraryName] = new qookery.internal.registry.Library(libraryName, resourceUris, dependencies, postLoadCallback);
+			this.__libraries[libraryName] = new qookery.internal.util.Library(libraryName, resourceUris, dependencies, postLoadCallback);
 		},
 
 		loadLibrary: function(libraryName, callback, thisArg) {

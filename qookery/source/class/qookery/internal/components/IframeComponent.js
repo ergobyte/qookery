@@ -27,7 +27,7 @@ qx.Class.define("qookery.internal.components.IframeComponent", {
 	members: {
 
 		_createWidgets: function(attributes) {
-			var source = attributes['source'] || "about:blank";
+			var source = attributes["source"] || "about:blank";
 			var iframe = new qx.ui.embed.Iframe(source);
 			this._applyLayoutAttributes(iframe, attributes);
 			return [ iframe ];
