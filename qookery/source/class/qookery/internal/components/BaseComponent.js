@@ -54,7 +54,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"allow-stretch-x": "Boolean",
 			"allow-stretch-y": "Boolean",
 			"auto-size": "Boolean",
-			"center": "Boolean",
 			"column-visibility-button-visible": "Boolean",
 			"enabled": "Boolean",
 			"live-update": "Boolean",

@@ -35,25 +35,33 @@ qx.Class.define("qookery.internal.formats.NumberFormat", {
 		__setOption: function(key, value) {
 			switch(key) {
 			case "groupingUsed":
-				this.setGroupingUsed("true" == value);
-				return;
-			case "postfix":
-				this.setPostfix(value);
+				this.setGroupingUsed(!!value);
 				return;
 			case "prefix":
 				this.setPrefix(value);
 				return;
-			case "maximumFractionDigits":
+			case "postfix":
+				this.setPostfix(value);
+				return;
+			case "fractionDigits": // Shorthand for setting both min and max
+				this.setMinimumFractionDigits(parseInt(value));
 				this.setMaximumFractionDigits(parseInt(value));
 				return;
 			case "minimumFractionDigits":
 				this.setMinimumFractionDigits(parseInt(value));
 				return;
-			case "maximumIntegerDigits":
+			case "maximumFractionDigits":
+				this.setMaximumFractionDigits(parseInt(value));
+				return;
+			case "integerDigits": // Shorthand for setting both min and max
+				this.setMinimumIntegerDigits(parseInt(value));
 				this.setMaximumIntegerDigits(parseInt(value));
 				return;
 			case "minimumIntegerDigits":
 				this.setMinimumIntegerDigits(parseInt(value));
+				return;
+			case "maximumIntegerDigits":
+				this.setMaximumIntegerDigits(parseInt(value));
 				return;
 			}
 		}

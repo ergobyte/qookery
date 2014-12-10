@@ -31,6 +31,7 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
+			case "center": return "Boolean";
 			case "rich": return "Boolean";
 			}
 			return this.base(arguments, attributeName);
