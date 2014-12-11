@@ -46,12 +46,12 @@ qx.Class.define("qookery.internal.components.ProgressBarComponent", {
 
 		// Public methods
 
-		getMaximun: function() {
+		getMaximum: function() {
 			return this.getMainWidget().getMaximum();
 		},
 
-		setMaximun: function(maximim) {
-			this.getMainWidget().setMaximum(maximim);
+		setMaximum: function(maximum) {
+			this.getMainWidget().setMaximum(maximum);
 		},
 
 		getValue: function() {

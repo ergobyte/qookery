@@ -86,8 +86,14 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			var widget = this.getMainWidget();
 			// Method might be called after widget destruction
 			if(widget.isDisposed()) return;
-			// Get underlying DOM element and invoke CKEditor inline()
+			// Get underlying DOM element
 			var domElement = widget.getContentElement().getDomElement();
+			// Check that CKEditor is in a supported environment
+			if(!CKEDITOR.env.isCompatible) {
+				domElement.innerHTML = "<span style='color: red;'>Rich text editing is not supported in this environment. Please upgrade your browser or device.</span>";
+				return;
+			}
+			// Invoke CKEditor inline()
 			domElement.setAttribute("contenteditable", "true");
 			var config = {
 				language: qx.locale.Manager.getInstance().getLanguage(),

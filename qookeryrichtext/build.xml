@@ -18,7 +18,7 @@
 -->
 <project name="Qookery Rich Text" basedir="." default="Download">
 
-	<property name="ckeditor.version" value="4.4.5" />
+	<property name="ckeditor.version" value="4.4.6" />
 	<property name="ckeditor.package" value="standard" />
 	<property name="ckeditor.zipFilename" value="ckeditor_${ckeditor.version}_${ckeditor.package}.zip" />
 	<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${ckeditor.version}/${ckeditor.zipFilename}" />
@@ -30,7 +30,7 @@
 		</condition>
 	</target>
 
-	<target name="Download" depends="Download-Init" unless="build.ckeditorAvailable">
+	<target name="Download" depends="Download-Init" unless="build.ckeditorAvailable" description="Download CKEditor">
 		<mkdir dir="${ckeditor.target}" />
 		<get dest="${ckeditor.target}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="${ckeditor.downloadUrl}" />
@@ -39,7 +39,7 @@
 		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
 	</target>
 
-	<target name="Clean">
+	<target name="Clean" description="Clean up target directory">
 		<delete dir="${ckeditor.target}" />
 	</target>
 

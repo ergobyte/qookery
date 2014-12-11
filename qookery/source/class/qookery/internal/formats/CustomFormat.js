@@ -42,7 +42,13 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 
 		format: function(obj) {
 			if(!this.__formatFunction) return obj;
-			return this.__formatFunction.apply(this, [ obj ]);
+			try {
+				return this.__formatFunction.apply(this, [ obj ]);
+			}
+			catch(e) {
+				this.error("Error applying custom format", e.stack);
+				return "";
+			}
 		},
 
 		parse: function(str) {

@@ -76,6 +76,9 @@ qx.Class.define("qookery.internal.util.Library", {
 			if(qx.lang.String.endsWith(absoluteUri, ".js")) {
 				var scriptRequest = new qx.bom.request.Script();
 				scriptRequest.onload = this.__onResourceLoaded.bind(this);
+				scriptRequest.onerror = function() {
+					this.error("Error loading script from", absoluteUri);
+				}.bind(this);
 				scriptRequest.open("GET", absoluteUri);
 				scriptRequest.send();
 				return;
