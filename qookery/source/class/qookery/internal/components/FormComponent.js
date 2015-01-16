@@ -184,7 +184,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				var invalidMessage = this.__validateComponent(validation);
 				if(!invalidMessage) continue;
 				validation.component.setInvalidMessage(invalidMessage);
-				errorMessages.push({ "component": validation.component, "message": invalidMessage });
+				var errorDescriptor = { "source": validation.component };
+				if(invalidMessage instanceof Array) errorDescriptor["children"] = invalidMessage;
+				else errorDescriptor["message"] = invalidMessage;
+				errorMessages.push(errorDescriptor);
 				invalidComponents.push(validation.component);
 				validation.component.setUserData("__form.Validator", validation);
 			}
@@ -211,7 +214,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			invalidMessage = this.executeAction("validate");
 			if(invalidMessage) {
 				formValid = false;
-				errorMessages.push({ "component": null, "message": invalidMessage });
+				var errorDescriptor = { "source": this };
+				if(invalidMessage instanceof Array) errorDescriptor["children"] = invalidMessage;
+				else errorDescriptor["message"] = invalidMessage;
+				errorMessages.push(errorDescriptor);
 			}
 			this.setValid(formValid);
 			if(errorMessages.length == 0)

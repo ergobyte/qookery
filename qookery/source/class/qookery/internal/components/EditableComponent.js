@@ -44,6 +44,17 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_disableValueEvents: false,
 		__validationHandle: null,
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "create-label": return "Boolean";
+			default: return this.base(arguments, attributeName);
+			}
+		},
+
+		// Initialization
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes["required"]) this.setRequired(true);
@@ -54,7 +65,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_createWidgets: function(attributes) {
 			var mainWidget = this._createMainWidget(attributes);
-			if(attributes["label"] !== "%none") {
+			if(attributes["label"] !== "%none" && this.getAttribute("create-label", true)) {
 				var label = new qx.ui.basic.Label();
 				this._setupLabelAppearance(label, attributes);
 				return [ mainWidget, label ];
