@@ -38,8 +38,7 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 				if(success && options["maximumLength"])
 					success = value.length <= parseInt(options["maximumLength"], 10);
 				if(success) return null;
-				var message = invalidMessage || "String is invalid";
-				return message;
+				return new qookery.util.ValidationError(component, invalidMessage || "String is invalid", null);
 			};
 		}
 	}

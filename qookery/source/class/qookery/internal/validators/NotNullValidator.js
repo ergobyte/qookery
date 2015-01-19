@@ -29,11 +29,8 @@ qx.Class.define("qookery.internal.validators.NotNullValidator", {
 	members: {
 		createValidatorFunction: function(component, invalidMessage, options) {
 			return function(value) {
-				if(!value || value.length == 0) {
-					var message = invalidMessage || "Required value is missing";
-					return message;
-				}
-				return null;
+				if(value !== null) return null;
+				return new qookery.util.ValidationError(component, invalidMessage || "Required value is missing", null);
 			};
 		}
 	}
