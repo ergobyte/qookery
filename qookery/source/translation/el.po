@@ -24,37 +24,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "qookery.internal.validators.ComparisonValidator.eq"
-msgstr "Value must be equal to %1"
+msgstr "H τιμή πρέπει να ισούται με %1"
 
 msgid "qookery.internal.validators.ComparisonValidator.ne"
-msgstr "Value must not be equal to %1"
+msgstr "H τιμή δεν πρέπει να ισούται με %1"
 
 msgid "qookery.internal.validators.ComparisonValidator.gt"
-msgstr "Value must be greater than %1"
+msgstr "H τιμή πρέπει να είναι μεγαλύτερη από %1"
 
 msgid "qookery.internal.validators.ComparisonValidator.ge"
-msgstr "Value must be greater than or equal with %1"
+msgstr "H τιμή πρέπει να είναι μεγαλύτερη ή ίση με %1"
 
 msgid "qookery.internal.validators.ComparisonValidator.le"
-msgstr "Value must be less than or equal with %1"
+msgstr "H τιμή πρέπει να είναι μικρότερη ή ίση με %1"
 
 msgid "qookery.internal.validators.ComparisonValidator.lt"
-msgstr "Value must be less than %1"
+msgstr "H τιμή πρέπει να είναι μικρότερη από %1"
 
 msgid "qookery.internal.validators.NotNullValidator.invalidMessage"
-msgstr "Required value is missing"
+msgstr "Λείπει απαιτούμενη τιμή"
 
 msgid "qookery.internal.validators.StringValidator.regularExpression"
-msgstr "Text does not match expected pattern"
+msgstr "Το κείμενο δεν είναι στην αναγκαία μορφή"
 
 msgid "qookery.internal.validators.StringValidator.minimumLength"
-msgstr "Text is not long enough, at least %1 characters are needed"
+msgstr "Το μήκος του κειμένου δεν είναι επαρκές, απαιτούνται %1 χαρακτήρες"
 
 msgid "qookery.internal.validators.StringValidator.maximumLength"
-msgstr "Text is exceeds maximum length of %1"
+msgstr "Το μήκος του κειμένου υπερβαίνει το όριο των %1 χαρακτήρων"
 
 msgid "qookery.internal.components.FormComponent.validationErrors"
-msgstr "Error(s) encountered during form %1 validation"
+msgstr "Εντοπίσθηκαν σφάλματα εγκυρότητας κατά τον έλεγχο της φόρμας %1"
 
 msgid "qookery.internal.components.FormComponent.componentError"
-msgstr "Error(s) in component %1"
+msgstr "Σφάλμα(-τα) στο πλαίσιο ελέγχου %1"

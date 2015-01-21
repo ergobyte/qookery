@@ -30,6 +30,7 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__defaultModelProvider = this.__modelProviders["default"];
 
 		this.__validators = { };
+		this.__validators["comparison"] = qookery.internal.validators.ComparisonValidator.getInstance();
 		this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
 		this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
 

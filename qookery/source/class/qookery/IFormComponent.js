@@ -132,11 +132,11 @@ qx.Interface.define("qookery.IFormComponent", {
 		removeValidations: function(component) { },
 
 		/**
-		 * Invoke the form validation and return any discovered validation errors
+		 * Invoke the form validation and return discovered error, if any
 		 *
-		 * <p>This method changes the <code>valid</code> property accordingly.</p>
+		 * <p>This method alters the state of the <code>valid</code> property accordingly.</p>
 		 *
-		 * @return {Array} An array of with validation messages or <code>null</code> if form is valid
+		 * @return {qookery.util.ValidationError} A validation error or <code>null</code> if form is valid
 		 */
 		validate: function() { },
 

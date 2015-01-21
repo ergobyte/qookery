@@ -29,16 +29,19 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 	members: {
 		createValidatorFunction: function(component, invalidMessage, options) {
 			return function(value) {
-				if(!value) return null;
-				var success = true;
-				if(success && options["regularExpression"])
-					success = options["regularExpression"].test(value);
-				if(success && options["minimumLength"])
-					success = value.length >= parseInt(options["minimumLength"], 10);
-				if(success && options["maximumLength"])
-					success = value.length <= parseInt(options["maximumLength"], 10);
-				if(success) return null;
-				return new qookery.util.ValidationError(component, invalidMessage || "String is invalid", null);
+				if(value === null) return null;
+				var message = null;
+				if(options["regularExpression"] && !options["regularExpression"].test(value)) {
+					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.regularExpression")
+				}
+				else if(options["minimumLength"] && value.length < parseInt(options["minimumLength"], 10)) {
+					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.minimumLength", options["minimumLength"])
+				}
+				else if(options["maximumLength"] && value.length > parseInt(options["maximumLength"], 10)) {
+					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.maximumLength", options["maximumLength"])
+				}
+				if(!message) return null;
+				return new qookery.util.ValidationError(component, message, null);
 			};
 		}
 	}

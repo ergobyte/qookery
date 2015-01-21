@@ -183,11 +183,13 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				var validation = this.__validations[i];
 				var validationError = this.__validateComponent(validation);
 				if(!validationError) continue;
-				if(qx.core.Environment.get("qx.debug")) qx.core.Assert.assertInstance(validationError, qookery.util.ValidationError);
+
 				validation.component.setInvalidMessage(validationError.getMessage());
-				validationErrors.push(validationError);
-				invalidComponents.push(validation.component);
 				validation.component.setUserData("__form.Validator", validation);
+
+				invalidComponents.push(validation.component);
+				var message = this.tr("qookery.internal.components.FormComponent.componentError", [ validation.component.getLabel() ])
+				validationErrors.push(new qookery.util.ValidationError(this, message, [ validationError ]));
 			}
 
 			this.__validations.forEach(function(validator) {
@@ -221,9 +223,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.setValid(formValid);
 			if(validationErrors.length == 0) return null;
 
-			var message = qx.locale.Manager.tr("waffle.contexts.Waffle.errorMessageHeader");
-			if(this.getTitle() !== null)
-				message = qx.lang.String.format("%1 %2", [ qx.locale.Manager.tr("waffle.contexts.Waffle.errorMessageHeader"), this.getTitle() ]);
+			var message = this.tr("qookery.internal.components.FormComponent.validationErrors", this.getTitle());
 			return new qookery.util.ValidationError(this, message, validationErrors);
 		},
 

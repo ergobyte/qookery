@@ -30,7 +30,8 @@ qx.Class.define("qookery.internal.validators.NotNullValidator", {
 		createValidatorFunction: function(component, invalidMessage, options) {
 			return function(value) {
 				if(value !== null) return null;
-				return new qookery.util.ValidationError(component, invalidMessage || "Required value is missing", null);
+				if(!invalidMessage) invalidMessage = qx.locale.Manager.tr("qookery.internal.validators.NotNullValidator.invalidMessage");
+				return new qookery.util.ValidationError(component, invalidMessage, null);
 			};
 		}
 	}
