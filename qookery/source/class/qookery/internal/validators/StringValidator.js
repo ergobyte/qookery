@@ -27,18 +27,19 @@ qx.Class.define("qookery.internal.validators.StringValidator", {
 	},
 
 	members: {
-		createValidatorFunction: function(component, invalidMessage, options) {
+
+		createValidation: function(component, invalidMessage, options) {
 			return function(value) {
 				if(value === null) return null;
 				var message = null;
 				if(options["regularExpression"] && !options["regularExpression"].test(value)) {
-					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.regularExpression")
+					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.regularExpression");
 				}
 				else if(options["minimumLength"] && value.length < parseInt(options["minimumLength"], 10)) {
-					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.minimumLength", options["minimumLength"])
+					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.minimumLength", options["minimumLength"]);
 				}
 				else if(options["maximumLength"] && value.length > parseInt(options["maximumLength"], 10)) {
-					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.maximumLength", options["maximumLength"])
+					message = invalidMessage || qx.locale.Manager.tr("qookery.internal.validators.StringValidator.maximumLength", options["maximumLength"]);
 				}
 				if(!message) return null;
 				return new qookery.util.ValidationError(component, message, null);

@@ -27,6 +27,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__validations = [ ];
 	},
 
 	properties: {
@@ -42,7 +43,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	members: {
 
 		_disableValueEvents: false,
-		__validationHandle: null,
+		__validations: null,
+		__requiredValidation: null,
+		__connection: null,
 
 		// Metadata
 
@@ -73,6 +76,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			return [ mainWidget ];
 		},
 
+		_createMainWidget: function(attributes) {
+			throw new Error("Override _createMainWidget() to provide implementation specific code");
+		},
+
 		setup: function(formParser, attributes) {
 			var connectionSpecification = this.getAttribute("connect");
 			if(!connectionSpecification) return;
@@ -80,11 +87,41 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!modelProvider)
 				throw new Error("Install a model provider to handle connections in XML forms");
 			var connectionHandle = modelProvider.handleConnection(formParser, this, connectionSpecification);
-			if(connectionHandle) this._applyConnectionHandle(modelProvider, connectionHandle);
+			if(connectionHandle)
+				this._applyConnectionHandle(modelProvider, connectionHandle);
 		},
 
-		connect: function(formComponent, propertyPath) {
-			formComponent.addTarget(this, "value", propertyPath, true);
+		// Widget access
+
+		listWidgets: function(filterName) {
+			var mainWidget = this._widgets[0];
+			if(filterName == "main") return [ mainWidget ];
+			var labelWidget = this._widgets[1];
+			if(!labelWidget) return [ mainWidget ];
+			// Reverse order of main and label widget since
+			// we want to present the label in front of the editor
+			return [ labelWidget, mainWidget ];
+		},
+
+		getEditableWidget: function() {
+			return this.getMainWidget();
+		},
+
+		getLabelWidget: function() {
+			return this._widgets[1];
+		},
+
+		// Model connection
+
+		connect: function(propertyPath) {
+			this.disconnect();
+			this.__connection = this.getForm().addConnection(this, "value", propertyPath, true);
+		},
+
+		disconnect: function() {
+			if(this.__connection == null) return;
+			this.getForm().removeConnection(this.__connection);
+			this.__connection = null;
 		},
 
 		_applyConnectionHandle: function(modelProvider, connectionHandle) {
@@ -99,56 +136,75 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			}
 		},
 
+		_updateUI: function(value) {
+			// Override to update UI according to new value
+		},
+
+		// Validation
+
 		addValidation: function(validatorType, invalidMessage, options) {
 			var validator = qookery.Qookery.getRegistry().getValidator(validatorType);
 			if(!validator) throw new Error(qx.lang.String.format("Validator %1 not found", [ validatorType ]));
 			if(!options) options = { };
-			var validatorFunction = validator.createValidatorFunction(this, invalidMessage, options);
-			return this.getForm().addValidation(this, validatorFunction);
+			var validation = validator.createValidation(this, invalidMessage, options);
+			this.__validations.push(validation);
+			return validation;
 		},
 
-		removeValidation: function(validationHandle) {
-			return this.getForm().removeValidation(validationHandle);
+		removeValidation: function(validation) {
+			qx.lang.Array.remove(this.__validations, validation);
+		},
+
+		removeAllValidations: function() {
+			this.__validations.length = 0;
+		},
+
+		validate: function() {
+			var errors = [ ];
+			for(var i = 0; i < this.__validations.length; i++) {
+				var validation = this.__validations[i];
+				var error = null;
+				try {
+					var value = this.getValue();
+					error = validation.call(this, value);
+				}
+				catch(e) {
+					if(!(e instanceof qx.core.ValidationError)) throw e; // Rethrow unknown exception
+					var message = (e.message && e.message != qx.type.BaseError.DEFAULTMESSAGE) ? e.message : e.getComment();
+					error = new qookery.util.ValidationError(this, message);
+				}
+				if(error == null) continue;
+				errors.push(error);
+			}
+			if(errors.length === 0) {
+				this.setValid(true);
+				return null;
+			}
+			var message = this.tr("qookery.internal.components.EditableComponent.componentError", [ this.getLabel() ]);
+			var error = new qookery.util.ValidationError(this, message, errors);
+			this.setValid(false);
+			this.setInvalidMessage(error.getFormattedMessage());
+			return error;
 		},
 
 		setInvalidMessage: function(invalidMessage) {
-			this.getMainWidget().setInvalidMessage(invalidMessage);
-		},
-
-		clearValidations: function() {
-			this.getForm().removeValidations(this);
-		},
-
-		_createMainWidget: function(attributes) {
-			throw new Error("Override _createMainWidget() to provide implementation specific code");
-		},
-
-		getEditableWidget: function() {
-			return this.getMainWidget();
-		},
-
-		getLabelWidget: function() {
-			return this._widgets[1];
-		},
-
-		listWidgets: function(filterName) {
-			var mainWidget = this._widgets[0];
-			if(filterName == "main") return [ mainWidget ];
-			var labelWidget = this._widgets[1];
-			if(!labelWidget) return [ mainWidget ];
-			// Reverse order of main and label widget since
-			// we want to present the label in front of the editor
-			return [ labelWidget, mainWidget ];
-		},
-
-		_updateUI: function(value) {
-			// Override to update UI according to new value
+			var widget = this.getEditableWidget();
+			if(typeof widget.setInvalidMessage !== "function") {
+				this.debug("Unable to set property 'invalidMessage' of broken editable component");
+				return;
+			}
+			widget.setInvalidMessage(invalidMessage);
 		},
 
 		// Apply methods
 
 		_applyValid: function(value) {
-			this.getMainWidget().setValid(value);
+			var widget = this.getEditableWidget();
+			if(typeof widget.setValid !== "function") {
+				this.debug("Unable to apply property 'valid' of broken editable component");
+				return;
+			}
+			widget.setValid(value);
 		},
 
 		_applyFormat: function(format) {
@@ -182,14 +238,12 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_applyRequired: function(required) {
-			var mainWidget = this.getMainWidget();
-			if(!mainWidget) return;
-			if(required && !this.__validationHandle) {
-				this.__validationHandle = this.addValidation("notNull");
+			if(required && !this.__requiredValidation) {
+				this.__requiredValidation = this.addValidation("notNull");
 			}
-			else if(!required && this.__validationHandle) {
-				this.removeValidation(this.__validationHandle);
-				this.__validationHandle = null;
+			if(!required && this.__requiredValidation) {
+				this.removeValidation(this.__requiredValidation);
+				this.__requiredValidation = null;
 			}
 		},
 
@@ -256,5 +310,9 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				this._disableValueEvents = false;
 			}
 		}
+	},
+
+	destruct: function() {
+		this.disconnect();
 	}
 });

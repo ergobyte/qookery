@@ -58,6 +58,21 @@ qx.Class.define("qookery.util.ValidationError", {
 		 */
 		getCause: function() {
 			return this.__cause;
+		},
+
+		/**
+		 * Return the computed formatted message which describes this error is more detail
+		 *
+		 * @return {String} an error message, <code>null</code> is never returned
+		 */
+		getFormattedMessage: function() {
+			var message = this.__message || "";
+			if(this.__cause != null) {
+				if(message) message += ": ";
+				message += this.__cause.map(function(cause) { return cause.getFormattedMessage(); }).join("; ");
+			}
+			if(!message) message = "Nondescript error";
+			return message;
 		}
 	}
 });

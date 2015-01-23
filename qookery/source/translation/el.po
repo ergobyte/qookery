@@ -56,5 +56,5 @@ msgstr "Το μήκος του κειμένου υπερβαίνει το όρι
 msgid "qookery.internal.components.FormComponent.validationErrors"
 msgstr "Εντοπίσθηκαν σφάλματα εγκυρότητας κατά τον έλεγχο της φόρμας %1"
 
-msgid "qookery.internal.components.FormComponent.componentError"
+msgid "qookery.internal.components.EditableComponent.componentError"
 msgstr "Σφάλμα(-τα) στο πλαίσιο ελέγχου %1"

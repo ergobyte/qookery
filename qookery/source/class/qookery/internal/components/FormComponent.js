@@ -31,9 +31,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__components = { };
-		this.__validations = [ ];
-		this.__bindings = { };
-		this.__targets = [ ];
+		this.__connections = [ ];
 	},
 
 	events: {
@@ -52,10 +50,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__variables: null,
 		__translationPrefix: null,
 		__components: null,
-		__validations: null,
 		__modelProvider: null,
-		__targets: null,
-		__bindings: null,
+		__connections: null,
 		__clientCodeContext: null,
 
 		// Creation
@@ -150,110 +146,24 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Validation
 
-		addValidation: function(component, validatorFunction) {
-			if(!validatorFunction) return;
-			if(!qx.Class.hasInterface(component.constructor, qookery.IEditableComponent))
-				throw new Error("Component to validate must be editable");
-			var validation = {
-				component: component,
-				validatorFunction: validatorFunction
-			};
-			this.__validations.push(validation);
-			return validation;
-		},
-
-		removeValidation: function(validation) {
-			qx.lang.Array.remove(this.__validations, validation);
-		},
-
-		removeValidations: function(component) {
-			if(this.__validations.length == 0) return;
-			if(!component) { this.__validations = []; return; }
-			for(var i = 0; i < this.__validations.length; i++) {
-				var validation = this.__validations[i];
-				if(component !== validation.component) continue;
-				this.__validations.splice(i, 1); i--;
-			}
-		},
-
 		validate: function() {
-			var invalidComponents = [ ];
-			var validationErrors = [ ];
-			for(var i = 0; i < this.__validations.length; i++) {
-				var validation = this.__validations[i];
-				var validationError = this.__validateComponent(validation);
-				if(!validationError) continue;
-
-				validation.component.setInvalidMessage(validationError.getMessage());
-				validation.component.setUserData("__form.Validator", validation);
-
-				invalidComponents.push(validation.component);
-				var message = this.tr("qookery.internal.components.FormComponent.componentError", [ validation.component.getLabel() ])
-				validationErrors.push(new qookery.util.ValidationError(this, message, [ validationError ]));
+			var baseError = this.base(arguments);
+			var actionError = this.executeAction("validate");
+			if(baseError == null && actionError == null) {
+				this.setValid(true);
+				return null;
 			}
-
-			this.__validations.forEach(function(validator) {
-				validator.component.setValid(invalidComponents.indexOf(validator.component) === -1);
-			});
-
-			invalidComponents.forEach(function(component) {
-				if(!component.getUserData("__form.Validator.listenerId")) {
-					var id = component.addListener("changeValue", function(e) {
-						var validator = component.getUserData("__form.Validator");
-						var invalidMessage = this.__validateComponent(validator);
-						if(!invalidMessage) {
-							component.removeListenerById(component.getUserData("__form.Validator.listenerId"));
-							component.setValid(true);
-						}
-					}, this);
-					component.setUserData("__form.Validator.listenerId", id);
-				}
-			}, this);
-
-			var formValid = invalidComponents.length == 0;
-			var validationError = this.executeAction("validate");
-			if(validationError) {
-				formValid = false;
-				if(qx.lang.Type.isString(validationError))
-					validationError = new qookery.util.ValidationError(this, validationError);
-				else if(qx.core.Environment.get("qx.debug"))
-					qx.core.Assert.assertInstance(validationError, qookery.util.ValidationError);
-				validationErrors.push(validationError);
+			var errors = [ ];
+			if(baseError) errors.push(baseError);
+			if(actionError) {
+				if(qx.lang.Type.isString(actionError))
+					errors.push(new qookery.util.ValidationError(this, actionError));
+				else
+					errors.push(actionError);
 			}
-			this.setValid(formValid);
-			if(validationErrors.length == 0) return null;
-
+			this.setValid(false);
 			var message = this.tr("qookery.internal.components.FormComponent.validationErrors", this.getTitle());
-			return new qookery.util.ValidationError(this, message, validationErrors);
-		},
-
-		__validateComponent: function(validation) {
-			var component = validation.component;
-			var validatorFunction = validation.validatorFunction;
-			try {
-				var value = component.getValue();
-				return validatorFunction.call(this, value, component);
-			}
-			catch(e) {
-				if(!(e instanceof qx.core.ValidationError)) throw e; // Rethrow unknown exception
-				var message = (e.message && e.message != qx.type.BaseError.DEFAULTMESSAGE) ? e.message : e.getComment();
-				return new qookery.util.ValidationError(component, message);
-			}
-		},
-
-		resetValidation: function() {
-			this.__validations.forEach(function(validation) {
-				validation.component.setValid(true);
-			});
-			this.setValid(true);
-		},
-
-		// Closing
-
-		close: function(result) {
-			if(this.isDisposed()) return;
-			if(result !== undefined) this.__variables["result"] = result;
-			this.fireDataEvent("close", this.__variables["result"]);
+			return new qookery.util.ValidationError(this, message, errors);
 		},
 
 		parseCustomElement: function(formParser, xmlElement) {
@@ -307,94 +217,41 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		},
 
-		// Controller methods follow, actually copy-pasted from qx.data.controller.Object
+		// Operations
 
-		_applyModel: function(newModel, oldModel) {
-			for(var i = 0; i < this.__targets.length; i++) {
-				var targetObject = this.__targets[i][0];
-				var targetProperty = this.__targets[i][1];
-				var sourceProperty = this.__targets[i][2];
-				var bidirectional = this.__targets[i][3];
-				var options = this.__targets[i][4];
-				var reverseOptions = this.__targets[i][5];
-				if(oldModel != undefined) {
-					this.__removeTargetFrom(targetObject, targetProperty, sourceProperty, oldModel);
-				}
-				if(newModel != undefined) {
-					this.__addTarget(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions);
-					continue;
-				}
-				if(targetObject === undefined || qx.core.ObjectRegistry.inShutDown) {
-					continue;
-				}
-				if(targetProperty.indexOf("[") == -1) {
-					targetObject["reset" + qx.lang.String.firstUp(targetProperty)]();
-				}
-				else {
-					var open = targetProperty.indexOf("[");
-					var index = parseInt(targetProperty.substring(open + 1, targetProperty.length - 1), 10);
-					targetProperty = targetProperty.substring(0, open);
-					var targetArray = targetObject["get" + qx.lang.String.firstUp(targetProperty)]();
-					if(index == "last") {
-						index = targetArray.length;
-					}
-					if(targetArray) {
-						targetArray.setItem(index, null);
-					}
-				}
+		close: function(result) {
+			if(this.isDisposed()) return;
+			if(result !== undefined) this.__variables["result"] = result;
+			this.fireDataEvent("close", this.__variables["result"]);
+		},
+
+		// Model connection
+
+		addConnection: function(target, targetPropertyPath, modelPropertyPath) {
+			var connection = new qookery.internal.util.Connection(target, targetPropertyPath, modelPropertyPath);
+			this.__connections.push(connection);
+			connection.connect(this.getModel()); // Attempt model connection immediately
+			return connection;
+		},
+
+		removeConnection: function(connection) {
+			connection.disconnect();
+			for(var i = 0; i < this.__connections.length; i++) {
+				if(connection.equals(this.__connections[i]))
+					this.__connections.splice(i, 1);
 			}
 		},
 
-		addTarget: function(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions) {
-			this.__targets.push([ targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions ]);
-			this.__addTarget(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions);
-		},
-
-		__addTarget: function(targetObject, targetProperty, sourceProperty, bidirectional, options, reverseOptions) {
-			if(this.getModel() == null) return;
-			var id = this.getModel().bind(sourceProperty, targetObject, targetProperty, options);
-			var idReverse = !bidirectional ? null :
-				targetObject.bind(targetProperty, this.getModel(), sourceProperty, reverseOptions);
-			var targetHash = targetObject.toHashCode();
-			if(this.__bindings[targetHash] == undefined) {
-				this.__bindings[targetHash] = [ ];
-			}
-			this.__bindings[targetHash].push(
-					[ id, idReverse, targetProperty, sourceProperty, options, reverseOptions ]);
-		},
-
-		removeTarget: function(targetObject, targetProperty, sourceProperty) {
-			this.__removeTargetFrom(targetObject, targetProperty, sourceProperty, this.getModel());
-			for(var i = 0; i < this.__targets.length; i++) {
-				if(this.__targets[i][0] == targetObject && this.__targets[i][1] == targetProperty && this.__targets[i][2] == sourceProperty)
-					this.__targets.splice(i, 1);
-			}
-		},
-
-		__removeTargetFrom: function(targetObject, targetProperty, sourceProperty, sourceObject) {
-			if(!(targetObject instanceof qx.core.Object)) {
-				return;
-			}
-			var currentListing = this.__bindings[targetObject.toHashCode()];
-			if(currentListing == undefined || currentListing.length == 0) {
-				return;
-			}
-			for(var i = 0; i < currentListing.length; i++) {
-				if(currentListing[i][2] == targetProperty && currentListing[i][3] == sourceProperty) {
-					var id = currentListing[i][0];
-					sourceObject.removeBinding(id);
-					if(currentListing[i][1] != null) {
-						targetObject.removeBinding(currentListing[i][1]);
-					}
-					currentListing.splice(i, 1);
-					return;
-				}
+		_applyModel: function(model) {
+			for(var i = 0; i < this.__connections.length; i++) {
+				var connection = this.__connections[i];
+				connection.connect(model);
 			}
 		}
 	},
 
 	destruct: function() {
-		this.removeAllBindings();
+		for(var i = 0; i < this.__connections.length; i++) this.__connections[i].disconnect();
 		this.__components = null;
 		this.__validations = null;
 		this.__userContextMap = null;

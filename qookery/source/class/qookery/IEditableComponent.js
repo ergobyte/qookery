@@ -49,13 +49,23 @@ qx.Interface.define("qookery.IEditableComponent", {
 
 	members: {
 
+		// Model connection
+
 		/**
 		 * Create a two way binding between form's model and component's value
 		 *
-		 * @param formComponent {qookery.IFormComponent} The form component
-		 * @param propertyPath {String} A valid model property pth
+		 * <p>This method will first disconnect an existing connection made a previous call.</p>
+		 *
+		 * @param propertyPath {String} A valid model property path
 		 */
-		connect: function(formComponent, propertyPath) { },
+		connect: function(propertyPath) { },
+
+		/**
+		 * Remove connection created by #connect(), if any
+		 */
+		disconnect: function() { },
+
+		// Validation
 
 		/**
 		 * Add a validation to this component
@@ -64,20 +74,20 @@ qx.Interface.define("qookery.IEditableComponent", {
 		 * @param invalidMessage {String?null} error message to use in case of validation failure, <code>null</code> for default one(s)
 		 * @param options {Map?null} validator specific options
 		 *
-		 * @return {Object} an opaque handle that may be used to remove the validation in the future
+		 * @return {any} an opaque handle that may be used to remove the validation in the future
 		 */
 		addValidation: function(validatorType, invalidMessage, options) { },
 
 		/**
 		 * Remove a validation from this component
 		 *
-		 * @param validationHandle {Object} the value returned by a former call to #addValidation()
+		 * @param validation {Object} the value returned by a former call to #addValidation()
 		 */
-		removeValidation: function(validationHandle) { },
+		removeValidation: function(validation) { },
 
 		/**
-		 * Clear all validators
+		 * Remove all validations from this component
 		 */
-		clearValidations: function() { }
+		removeAllValidations: function() { }
 	}
 });

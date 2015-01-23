@@ -16,13 +16,16 @@
 	limitations under the License.
 */
 
+/**
+ * Validators are used by components to instanciate validation functions
+ */
 qx.Interface.define("qookery.IValidator", {
 
 	members: {
 
 		/**
-		 * Create a validator function for use by a qx.ui.form.validation.Manager instance
+		 * Create a validation function
 		 */
-		createValidatorFunction: function(component, invalidMessage, options) { }
+		createValidation: function(component, invalidMessage, options) { }
 	}
 });

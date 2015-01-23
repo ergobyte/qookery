@@ -22,12 +22,13 @@ qx.Class.define("qookery.internal.validators.NotNullValidator", {
 	implement: [ qookery.IValidator ],
 	type: "singleton",
 
-	construct : function() {
+	construct: function() {
 		this.base(arguments);
 	},
 
 	members: {
-		createValidatorFunction: function(component, invalidMessage, options) {
+
+		createValidation: function(component, invalidMessage, options) {
 			return function(value) {
 				if(value !== null) return null;
 				if(!invalidMessage) invalidMessage = qx.locale.Manager.tr("qookery.internal.validators.NotNullValidator.invalidMessage");

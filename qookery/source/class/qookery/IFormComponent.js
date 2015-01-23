@@ -103,47 +103,7 @@ qx.Interface.define("qookery.IFormComponent", {
 		 */
 		registerUserContext: function(key, userContext) { },
 
-		// Validation
-
-		/**
-		 * Add a validation to the list of validations performed by this form
-		 *
-		 * The validator can either return a boolean or throw a {@link qx.core.ValidationError}
-		 *
-		 * @param component {qookery.IEditableComponent} editable component to check against
-		 * @param validator {Function} validator function
-		 *
-		 * @return {Object} an opaque handle that may be used with #removeValidation()
-		 */
-		addValidation: function(component, validatorFunction) { },
-
-		/**
-		 * Remove a validation from the list of validations
-		 *
-		 * @param validationHandle {Object} the value returned by a former call to #addValidation()
-		 */
-		removeValidation: function(validationHandle) { },
-
-		/**
-		 * Remove component's validations from the form validations
-		 *
-		 * @param component {qookery.IEditableComponent} Component to look for, or <code>null</code> to remove all validations
-		 */
-		removeValidations: function(component) { },
-
-		/**
-		 * Invoke the form validation and return discovered error, if any
-		 *
-		 * <p>This method alters the state of the <code>valid</code> property accordingly.</p>
-		 *
-		 * @return {qookery.util.ValidationError} A validation error or <code>null</code> if form is valid
-		 */
-		validate: function() { },
-
-		/**
-		 * Reset all form validations
-		 */
-		resetValidation: function() { },
+		// Operations
 
 		/**
 		 * Close the form

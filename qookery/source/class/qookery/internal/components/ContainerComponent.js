@@ -151,6 +151,20 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			for(var i = 0; i < widgets.length; i++)
 				if(container.indexOf(widgets[i]) != -1) return true;
 			return false;
+		},
+
+		validate: function() {
+			var errors = [ ];
+			var children = this.listChildren();
+			for(var i = 0; i < children.length; i++) {
+				var child = children[i];
+				var childError = child.validate();
+				if(childError == null) continue;
+				errors.push(childError);
+			}
+			if(errors.length == 0) return null;
+			if(errors.length == 1) return errors[0];
+			return new qookery.util.ValidationError(this, null, errors);
 		}
 	},
 

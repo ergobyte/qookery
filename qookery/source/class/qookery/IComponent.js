@@ -171,6 +171,13 @@ qx.Interface.define("qookery.IComponent", {
 		getAttributeType: function(attributeName) { },
 
 		/**
+		 * Request validation of component state and contents
+		 *
+		 * @return {qookery.util.ValidationError} discovered validation error or <code>null</code> if component is valid
+		 */
+		validate: function() { },
+
+		/**
 		 * Return a translated message
 		 *
 		 * @param messageId {String} the identifier of the wanted message

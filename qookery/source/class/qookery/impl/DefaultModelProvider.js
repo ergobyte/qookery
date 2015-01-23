@@ -43,7 +43,7 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 		},
 
 		handleConnection: function(formParser, component, connectionSpecification) {
-			component.connect(component.getForm(), connectionSpecification);
+			component.connect(connectionSpecification);
 			return null;
 		},
 

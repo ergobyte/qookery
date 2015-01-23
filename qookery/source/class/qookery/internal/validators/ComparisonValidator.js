@@ -22,12 +22,13 @@ qx.Class.define("qookery.internal.validators.ComparisonValidator", {
 	implement: [ qookery.IValidator ],
 	type: "singleton",
 
-	construct : function() {
+	construct: function() {
 		this.base(arguments);
 	},
 
 	members: {
-		createValidatorFunction: function(component, invalidMessage, options) {
+
+		createValidation: function(component, invalidMessage, options) {
 			var operator = options["operator"] || "eq";
 			var expectedValue = options["value"];
 			return function(value) {

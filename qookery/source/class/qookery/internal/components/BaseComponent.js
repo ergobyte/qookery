@@ -218,6 +218,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return qookery.internal.components.BaseComponent.baseAttributeTypes[attributeName];
 		},
 
+		validate: function() {
+			// Override to implement component validation
+			return null;
+		},
+
 		tr: function(messageId, varArgs) {
 			if(!messageId) return null;
 			var manager = qx.locale.Manager;
