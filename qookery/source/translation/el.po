@@ -54,7 +54,7 @@ msgid "qookery.internal.validators.StringValidator.maximumLength"
 msgstr "Το μήκος του κειμένου υπερβαίνει το όριο των %1 χαρακτήρων"
 
 msgid "qookery.internal.components.FormComponent.validationErrors"
-msgstr "Εντοπίσθηκαν σφάλματα εγκυρότητας κατά τον έλεγχο της φόρμας %1"
+msgstr "Εντοπίσθηκαν σφάλματα εγκυρότητας κατά τον έλεγχο της φόρμας «%1»"
 
 msgid "qookery.internal.components.EditableComponent.componentError"
-msgstr "Σφάλμα(-τα) στο πλαίσιο ελέγχου %1"
+msgstr "Πεδίο «%1»"

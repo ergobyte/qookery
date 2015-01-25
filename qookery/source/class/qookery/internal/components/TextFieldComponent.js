@@ -51,7 +51,6 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 				var value = format ? format.parse(text) : text;
 				this.getMainWidget().setValue(this._getLabelOf(value));
 				this._setValueSilently(value);
-				this.validate();
 			}, this);
 
 			var liveUpdate = this.getAttribute("live-update", false);

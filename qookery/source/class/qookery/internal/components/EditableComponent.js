@@ -60,10 +60,23 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes["required"]) this.setRequired(true);
-			if(attributes["read-only"]) this.setReadOnly(true);
-			if(attributes["format"]) this.setFormat(attributes["format"]);
-			if(attributes["label"]) this.setLabel(attributes["label"]);
+			this.setRequired(this.getAttribute("required", false));
+			this.setReadOnly(this.getAttribute("read-only", false));
+			this.setFormat(this.getAttribute("format", null));
+			this.setLabel(this.getAttribute("label", null));
+			var liveValidate = this.getAttribute("live-validate", "false");
+			switch(liveValidate) {
+			case "component":
+				this.addListener("changeValue", function() {
+					this.validate();
+				}, this);
+				break;
+			case "form":
+				this.addListener("changeValue", function() {
+					this.getForm().validate();
+				}, this);
+				break;
+			}
 		},
 
 		_createWidgets: function(attributes) {
@@ -180,7 +193,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				this.setValid(true);
 				return null;
 			}
-			var message = this.tr("qookery.internal.components.EditableComponent.componentError", [ this.getLabel() ]);
+			var message = this.tr("qookery.internal.components.EditableComponent.componentError", this.getLabel());
 			var error = new qookery.util.ValidationError(this, message, errors);
 			this.setValid(false);
 			this.setInvalidMessage(error.getFormattedMessage());
@@ -228,7 +241,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_applyLabel: function(label) {
 			var labelWidget = this.getLabelWidget();
 			if(!labelWidget) return;
-			if(this.getRequired()) label += " (*)";
 			labelWidget.setValue(label);
 		},
 

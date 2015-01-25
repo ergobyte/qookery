@@ -254,8 +254,28 @@
 
 	<complexType name="editable-component.attributes"><complexContent><extension base="q:component.attributes">
 		<attribute name="connect" type="string" />
-		<attribute name="create-label" type="boolean" default="true" />
+		<attribute name="create-label" type="boolean" default="true">
+			<annotation><documentation>
+				When set, an additional widget will be created in order to hold component's label
+			</documentation></annotation>
+		</attribute>
 		<attribute name="format" type="q:format-specification" />
+		<attribute name="live-validate" default="false">
+			<annotation><documentation>
+				When set, component's value changes will automatically trigger component or form validation
+			</documentation></annotation>
+			<simpleType><restriction base="token">
+				<enumeration value="false">
+					<annotation><documentation>Live validation disabled</documentation></annotation>
+				</enumeration>
+				<enumeration value="component">
+					<annotation><documentation>Validate component on value changes</documentation></annotation>
+				</enumeration>
+				<enumeration value="form">
+					<annotation><documentation>Validate form on value changes</documentation></annotation>
+				</enumeration>
+			</restriction></simpleType>
+		</attribute>
 		<attribute name="read-only" type="boolean" default="false" />
 		<attribute name="required" type="boolean" default="false" />
 	</extension></complexContent></complexType>

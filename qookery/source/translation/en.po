@@ -54,7 +54,7 @@ msgid "qookery.internal.validators.StringValidator.maximumLength"
 msgstr "Text is exceeds maximum length of %1"
 
 msgid "qookery.internal.components.FormComponent.validationErrors"
-msgstr "Error(s) encountered during form %1 validation"
+msgstr "Error(s) encountered during form '%1' validation"
 
 msgid "qookery.internal.components.EditableComponent.componentError"
-msgstr "Error(s) in component %1"
+msgstr "Field '%1'"
