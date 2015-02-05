@@ -62,8 +62,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.base(arguments, attributes);
 			this.setRequired(this.getAttribute("required", false));
 			this.setReadOnly(this.getAttribute("read-only", false));
-			this.setFormat(this.getAttribute("format", null));
-			this.setLabel(this.getAttribute("label", null));
+			var format = this.getAttribute("format"); if(format !== undefined) this.setFormat(format);
+			var label = this.getAttribute("label"); if(label !== undefined) this.setLabel(label);
 			var liveValidate = this.getAttribute("live-validate", "false");
 			switch(liveValidate) {
 			case "component":
@@ -173,6 +173,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		validate: function() {
+			if(!this.getEnabled()) return null;
 			var errors = [ ];
 			for(var i = 0; i < this.__validations.length; i++) {
 				var validation = this.__validations[i];
@@ -241,6 +242,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_applyLabel: function(label) {
 			var labelWidget = this.getLabelWidget();
 			if(!labelWidget) return;
+			if(this.getRequired()) label += " (*)";
 			labelWidget.setValue(label);
 		},
 

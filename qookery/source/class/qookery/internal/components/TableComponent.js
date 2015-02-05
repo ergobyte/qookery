@@ -130,12 +130,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					resizeBehavior.setMaxWidth(i, column["max-width"]);
 				}
 
-				var cellRenderer = new qookery.internal.util.DefaultCellRenderer(column);
 				var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
-				if(column["format"]) {
-					var format = qookery.Qookery.getRegistry().createFormatSpecification(column["format"]);
-					cellRenderer.setFormat(format);
-				}
 				if(column["header-icon"]) {
 					headerWidget.setIcon(column["header-icon"]);
 				}
@@ -150,6 +145,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				if(column["text-align"]) {
 					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
 				}
+
+				var cellRenderer = new qookery.internal.util.DefaultCellRenderer(column, column["format"]);
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
 			this.base(arguments, formParser, attributes);

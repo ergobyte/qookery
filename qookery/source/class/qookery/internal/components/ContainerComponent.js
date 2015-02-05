@@ -154,6 +154,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		},
 
 		validate: function() {
+			if(!this.getEnabled()) return null;
 			var errors = [ ];
 			var children = this.listChildren();
 			for(var i = 0; i < children.length; i++) {

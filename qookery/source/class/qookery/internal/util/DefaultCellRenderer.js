@@ -34,23 +34,16 @@ qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 		}
 	},
 
-	construct: function(column) {
+	construct: function(column, formatSpecification) {
 		this.base(arguments);
 		this.__column = column;
+		this.__format = formatSpecification ? qookery.Qookery.getRegistry().createFormatSpecification(formatSpecification) : null;
 	},
 
 	members: {
 
 		__column: null,
 		__format: null,
-
-		getFormat: function() {
-			return this.__format;
-		},
-
-		setFormat: function(format) {
-			this.__format = format;
-		},
 
 		_getContentHtml: function(cellInfo) {
 			var text = this._formatValue(cellInfo);
@@ -74,5 +67,9 @@ qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 			}
 			return style.join("");
 		}
+	},
+
+	destruct: function() {
+		this._disposeObjects("__format");
 	}
 });
