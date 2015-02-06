@@ -29,9 +29,13 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 		_createAtomWidget: function(attributes) {
 			var toggleButton = new qx.ui.form.ToggleButton(attributes["label"]);
 			this._applyAtomAttributes(toggleButton, attributes);
-			if(attributes["model"]) this.setModel(attributes["model"]);
 			if(attributes["tri-state"]) this.setTriState(attributes["tri-state"]);
 			return toggleButton;
+		},
+
+		setup: function() {
+			var model = this.getAttribute("model");
+			if(model !== undefined) this.setModel(model);
 		},
 
 		getModel: function() {
@@ -49,5 +53,10 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 		setValue: function(value) {
 			this.getMainWidget().setValue(value);
 		}
+	},
+
+	defer: function() {
+		qx.Class.patch(qx.ui.form.ToggleButton, qx.ui.form.MModelProperty);
+		qx.Class.patch(qx.ui.form.ToggleButton, qx.ui.form.MForm);
 	}
 });

@@ -189,6 +189,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return this.getTableModel().getRowData(this.__selectedRowIndex);
 		},
 
+		// Component overrides
+
 		_updateUI: function(value) {
 			// Setting the model data requires some cooperation from the model implementation
 			var tableModel = this.getTableModel();
@@ -207,6 +209,15 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				return;
 			}
 			this.base(arguments, eventName, clientCode, onlyOnce);
+		},
+
+		_applyValid: function() {
+			// Overriden in order to prevent default handling
+		},
+
+		_applyRequired: function() {
+			// Overriden in order to prevent default handling
+			// TODO Qookery: Add a validator that checks that table is not empty
 		}
 	},
 
