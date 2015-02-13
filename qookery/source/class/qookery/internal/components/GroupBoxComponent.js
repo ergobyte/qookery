@@ -31,6 +31,14 @@ qx.Class.define("qookery.internal.components.GroupBoxComponent", {
 			groupBox.setLegendPosition(this.getAttribute("legend-position", "middle"));
 			this._applyLayoutAttributes(groupBox, attributes);
 			return groupBox;
+		},
+
+		getLegend: function() {
+			return this.getMainWidget().getLegend();
+		},
+
+		setLegend: function(legend) {
+			this.getMainWidget().setLegend(legend);
 		}
 	}
 });

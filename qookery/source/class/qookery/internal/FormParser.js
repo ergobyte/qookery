@@ -77,7 +77,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				if(text == null || text.length == 0) continue;
 				text = text.trim();
 				if(text.length == 0) continue;
-				var type = typeMap ? typeMap[attributeName] : component.getAttributeType(attributeName);
+				var type = (typeMap ? typeMap[attributeName] : undefined) || component.getAttributeType(attributeName);
 				var value = type ? this.parseValue(component, type, text) : text;
 				attributes[attributeName] = value;
 			}

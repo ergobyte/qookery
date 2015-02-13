@@ -33,11 +33,11 @@ qx.Class.define("qookery.internal.util.Library", {
 	members: {
 
 		__libraryName: null,
-		__resourceUri: null,
+		__resourceUris: null,
 		__dependencies: null,
 		__isLoaded: null,
 		__callbacks: null,
-		__onLoadCallback: null,
+		__postLoadCallback: null,
 
 		isLoaded: function() {
 			return this.__isLoaded;
