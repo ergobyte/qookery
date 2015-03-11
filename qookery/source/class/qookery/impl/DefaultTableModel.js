@@ -175,7 +175,8 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		isColumnSortable: function(columnIndex) {
-			return true;
+			var sortable = this.getColumn(columnIndex)["sortable"];
+			return sortable !== undefined ? sortable : true;
 		},
 
 		// .	Rows
@@ -333,7 +334,14 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		__readColumnValue: function(column, row) {
 			var connectionSpecification = column["connect"];
 			if(!connectionSpecification) return null;
-			return qx.data.SingleValueBinding.resolvePropertyChain(row, connectionSpecification);
+			var value = qx.data.SingleValueBinding.resolvePropertyChain(row, connectionSpecification);
+			if(value === undefined || value === null) return null;
+			var mapName = column["map"];
+			if(mapName) {
+				var map = qookery.Qookery.getRegistry().getMap(mapName);
+				if(map) return map[value];
+			}
+			return value;
 		}
 	}
 });

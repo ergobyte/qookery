@@ -41,6 +41,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "keep-sorted": return "Boolean";
+			case "map": return "String";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -72,8 +73,24 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 					return;
 				}
 			}, this);
+
 			this._applyLayoutAttributes(selectBox, attributes);
 			return selectBox;
+		},
+
+		_applyConnectionHandle: function(modelProvider, connectionHandle) {
+			if(this.getAttribute("map") === undefined) {
+				var mapName = modelProvider.getConnectionAttribute(connectionHandle, "map");
+				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
+			}
+			this.base(arguments, modelProvider, connectionHandle);
+		},
+
+		setup: function(formParser, attributes) {
+			var mapName = this.getAttribute("map");
+			if(mapName !== undefined)
+				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
+			this.base(arguments, formParser, attributes);
 		},
 
 		__getListItemLabel: function(listItem) {

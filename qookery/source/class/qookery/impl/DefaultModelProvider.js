@@ -38,8 +38,8 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			return object1 === object2;
 		},
 
-		getLabel: function(object) {
-			return object;
+		getLabel: function(object, labelType) {
+			return qx.data.Conversion.toString(object);
 		},
 
 		handleConnection: function(formParser, component, connectionSpecification) {

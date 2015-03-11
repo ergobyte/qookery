@@ -53,10 +53,11 @@ qx.Interface.define("qookery.IModelProvider", {
 		 * Return a human-friendly label for a model object
 		 *
 		 * @param object {any} model object - it may not be <code>null</code>
+		 * @param labelType {String?} optional symbolic name of needed label type
 		 *
 		 * @return {String} any textual label or <code>null</code> if none available
 		 */
-		getLabel: function(object) { },
+		getLabel: function(object, labelType) { },
 
 		/**
 		 * Handle connection specification of a connectable component

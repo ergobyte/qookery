@@ -135,16 +135,20 @@
 
 	<!-- Global attributes -->
 
-	<attribute name="icon" type="anyURI"><annotation><documentation>
-		The URI of the icon to use when presenting element
-	</documentation></annotation></attribute>
-
 	<attribute name="flex" type="q:flex"><annotation><documentation>
 		The relative weight for computing the size of the user interface holding element's contents
 	</documentation></annotation></attribute>
 
 	<attribute name="format" type="q:format-specification"><annotation><documentation>
 		A specification for creating the formatter to attach to element
+	</documentation></annotation></attribute>
+
+	<attribute name="icon" type="anyURI"><annotation><documentation>
+		The URI of the icon to use when presenting element
+	</documentation></annotation></attribute>
+
+	<attribute name="map" type="token"><annotation><documentation>
+		The symbolic name of a registered map to associate with element
 	</documentation></annotation></attribute>
 
 	<attribute name="tool-tip-text" type="string"><annotation><documentation>
@@ -457,6 +461,9 @@
 	<element name="scroll" type="q:container-component" />
 
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="map" type="token"><annotation><documentation>
+			The symbolic name of a map registered with the Qookery registry
+		</documentation></annotation></attribute>
 		<attribute name="null-item-label" type="string" />
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
 			If true, the select box items will be kept sorted in ascending order at all times
@@ -562,8 +569,9 @@
 		<attribute name="header-click" type="string" />
 		<attribute name="label" type="string" />
 		<attribute name="line-height" type="string" />
-		<attribute name="min-width" type="q:size" />
+		<attribute name="map" type="token" />
 		<attribute name="max-width" type="q:size" />
+		<attribute name="min-width" type="q:size" />
 		<attribute name="sortable" type="boolean" default="true" />
 		<attribute name="text-align" type="q:horizontal-alignment" default="left" />
 		<attribute name="tool-tip-text" type="string" />
