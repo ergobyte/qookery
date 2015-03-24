@@ -151,6 +151,10 @@
 		The symbolic name of a registered map to associate with element
 	</documentation></annotation></attribute>
 
+	<attribute name="read-only" type="boolean"><annotation><documentation>
+		If set, associated element's value may not be modified through its user interface
+	</documentation></annotation></attribute>
+
 	<attribute name="tool-tip-text" type="string"><annotation><documentation>
 		Text to associate with element that may be used when a tool tip needs to appear
 	</documentation></annotation></attribute>
@@ -302,7 +306,9 @@
 
 	<complexType name="container-component"><complexContent><extension base="q:container-component.attributes">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<any namespace="##any" />
+			<element ref="q:script" />
+			<group ref="q:components" />
+			<any namespace="##other" />
 		</choice>
 	</extension></complexContent></complexType>
 
@@ -325,6 +331,45 @@
 	</extension></complexContent></complexType>
 
 	<!-- Component elements -->
+
+	<group name="components">
+		<annotation><documentation>Index of all components defined by Qookery</documentation></annotation>
+		<choice>
+			<element ref="q:button" />
+			<element ref="q:check-field" />
+			<element ref="q:component" />
+			<element ref="q:composite" />
+			<element ref="q:date-field" />
+			<element ref="q:form" />
+			<element ref="q:group-box" />
+			<element ref="q:hover-button" />
+			<element ref="q:html" />
+			<element ref="q:iframe" />
+			<element ref="q:image" />
+			<element ref="q:label" />
+			<element ref="q:list" />
+			<element ref="q:password-field" />
+			<element ref="q:progress-bar" />
+			<element ref="q:radio-button-group" />
+			<element ref="q:radio-button" />
+			<element ref="q:scroll" />
+			<element ref="q:select-box" />
+			<element ref="q:separator" />
+			<element ref="q:slider" />
+			<element ref="q:spacer" />
+			<element ref="q:spinner" />
+			<element ref="q:split-pane" />
+			<element ref="q:stack" />
+			<element ref="q:tab-view-page" />
+			<element ref="q:tab-view" />
+			<element ref="q:table" />
+			<element ref="q:text-area" />
+			<element ref="q:text-field" />
+			<element ref="q:toggle-button" />
+			<element ref="q:tool-bar" />
+			<element ref="q:virtual-tree" />
+		</choice>
+	</group>
 
 	<element name="button" type="q:atom-component" />
 
@@ -374,26 +419,11 @@
 					<attribute name="uri" type="anyURI" use="required" />
 				</complexType>
 			</element>
-			<element name="translation" minOccurs="0" maxOccurs="unbounded">
-				<annotation><documentation>
-					Provide an addition translation to the Qooxdoo locale manager
-				</documentation></annotation>
-				<complexType>
-					<sequence>
-						<element name="message" minOccurs="1" maxOccurs="unbounded">
-							<annotation><documentation>
-								A translated message
-							</documentation></annotation>
-							<complexType mixed="true">
-								<attribute name="id" use="required" />
-							</complexType>
-						</element>
-					</sequence>
-					<attribute ref="xml:lang" use="required" />
-				</complexType>
-			</element>
+			<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
 			<choice minOccurs="0" maxOccurs="unbounded">
-				<any namespace="##any" />
+				<element ref="q:script" />
+				<group ref="q:components" />
+				<any namespace="##other" />
 			</choice>
 		</sequence>
 		<attribute ref="xml:base" />
@@ -562,6 +592,7 @@
 		<attribute name="color" type="string" />
 		<attribute name="connect" type="string" />
 		<attribute name="flex" type="q:flex" />
+		<attribute name="font-family" />
 		<attribute name="font-style" />
 		<attribute name="font-weight" />
 		<attribute name="format" type="q:format-specification" />
@@ -615,6 +646,25 @@
 					</documentation></annotation></attribute>
 				</extension>
 			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="translation">
+		<annotation><documentation>
+			Provide an addition translation to the Qooxdoo locale manager
+		</documentation></annotation>
+		<complexType>
+			<sequence>
+				<element name="message" minOccurs="1" maxOccurs="unbounded">
+					<annotation><documentation>
+						A translated message
+					</documentation></annotation>
+					<complexType mixed="true">
+						<attribute name="id" use="required" />
+					</complexType>
+				</element>
+			</sequence>
+			<attribute ref="xml:lang" use="required" />
 		</complexType>
 	</element>
 

@@ -81,7 +81,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		_applyConnectionHandle: function(modelProvider, connectionHandle) {
 			if(this.getAttribute("map") === undefined) {
 				var mapName = modelProvider.getConnectionAttribute(connectionHandle, "map");
-				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
+				if(mapName) this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
 			}
 			this.base(arguments, modelProvider, connectionHandle);
 		},
@@ -117,7 +117,8 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		_applyReadOnly: function(readOnly) {
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget) return;
-			// TODO SelectBox: Add a state, allowing theme to display correctly a read-only checkbox
+			if(readOnly) mainWidget.addState("disabled");
+			else mainWidget.removeState("disabled");
 			mainWidget.setEnabled(!readOnly);
 		},
 

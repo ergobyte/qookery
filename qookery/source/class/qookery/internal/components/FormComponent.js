@@ -35,7 +35,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	events: {
-		"close": "qx.event.type.Event"
+		"close": "qx.event.type.Data"
 	},
 
 	properties: {
@@ -86,7 +86,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		getParentForm: function() {
-			return this.__variables["parentForm"];
+			var parentForm = this.__variables["parentForm"];
+			if(parentForm !== undefined) return parentForm;
+			var parentComponent = this.getParent();
+			if(!parentComponent) return null;
+			return parentComponent.getForm();
 		},
 
 		getTranslationPrefix: function() {

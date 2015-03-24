@@ -27,6 +27,7 @@ qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 		cssKeys: {
 			"text-align": null,
 			"color": null,
+			"font-family": null,
 			"font-style": null,
 			"font-weight": null,
 			"line-height": null,
