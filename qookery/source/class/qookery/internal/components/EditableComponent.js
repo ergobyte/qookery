@@ -172,8 +172,25 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			this.__validations.length = 0;
 		},
 
+		setInvalidMessage: function(invalidMessage) {
+			var widget = this.getEditableWidget();
+			if(typeof widget.setInvalidMessage !== "function") {
+				this.debug("Unable to set property 'invalidMessage' of broken editable component");
+				return;
+			}
+			widget.setInvalidMessage(invalidMessage);
+		},
+
 		validate: function() {
 			if(!this.getEnabled()) return null;
+			var errors = this._runValidations();
+			return this._applyValidationErrors(errors);
+		},
+
+		/**
+		 * Call all installed validations and return possibly empty array of discovered errors
+		 */
+		_runValidations: function() {
 			var errors = [ ];
 			for(var i = 0; i < this.__validations.length; i++) {
 				var validation = this.__validations[i];
@@ -190,24 +207,26 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				if(error == null) continue;
 				errors.push(error);
 			}
-			if(errors.length === 0) {
+			return errors;
+		},
+
+		/**
+		 * Update component state according to (possibly empty) array of validation errors
+		 *
+		 * @return {qookery.util.ValidationError} merged validation error or <code>null</code> if no errors passed
+		 */
+		_applyValidationErrors: function(errors) {
+			if(errors == null || errors.length === 0) {
 				this.setValid(true);
 				return null;
 			}
-			var message = this.tr("qookery.internal.components.EditableComponent.componentError", this.getLabel());
-			var error = new qookery.util.ValidationError(this, message, errors);
-			this.setValid(false);
-			this.setInvalidMessage(error.getFormattedMessage());
-			return error;
-		},
-
-		setInvalidMessage: function(invalidMessage) {
-			var widget = this.getEditableWidget();
-			if(typeof widget.setInvalidMessage !== "function") {
-				this.debug("Unable to set property 'invalidMessage' of broken editable component");
-				return;
+			else {
+				var message = this.tr("qookery.internal.components.EditableComponent.componentError", this.getLabel());
+				var error = new qookery.util.ValidationError(this, message, errors);
+				this.setValid(false);
+				this.setInvalidMessage(error.getFormattedMessage());
+				return error;
 			}
-			widget.setInvalidMessage(invalidMessage);
 		},
 
 		// Apply methods

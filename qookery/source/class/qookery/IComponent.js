@@ -173,6 +173,8 @@ qx.Interface.define("qookery.IComponent", {
 		/**
 		 * Request validation of component state and contents
 		 *
+		 * <p>NB: Components should not return errors when disabled, hidden or excluded.</p>
+		 *
 		 * @return {qookery.util.ValidationError} discovered validation error or <code>null</code> if component is valid
 		 */
 		validate: function() { },

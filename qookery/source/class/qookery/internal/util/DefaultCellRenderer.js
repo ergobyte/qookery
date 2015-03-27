@@ -55,7 +55,7 @@ qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 			var value = cellInfo.value;
 			if(value == null) return "";
 			if(this.__format) return this.__format.format(value);
-			return value.toString();
+			return qookery.Qookery.getRegistry().getModelProvider().getLabel(value, "short");
 		},
 
 		_getCellStyle: function(cellInfo) {

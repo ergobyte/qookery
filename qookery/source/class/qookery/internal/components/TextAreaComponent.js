@@ -52,8 +52,10 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
-				var value = (event.getData().trim().length == 0)? null: event.getData();
-				this.setValue(value);
+				var value = event.getData();
+				if(value != null && value.trim().length === 0) value = null;
+				this.getMainWidget().setValue(this._getLabelOf(value));
+				this._setValueSilently(value);
 			}, this);
 			widget.addListener("keypress", function(event) {
 				if(this.isReadOnly()) return;
@@ -77,7 +79,7 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 			return widget;
 		},
 
-		_applyValue: function(value) {
+		_updateUI: function(value) {
 			this.getMainWidget().setValue(this._getLabelOf(value));
 		},
 

@@ -119,7 +119,6 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			if(!mainWidget) return;
 			if(readOnly) mainWidget.addState("disabled");
 			else mainWidget.removeState("disabled");
-			mainWidget.setEnabled(!readOnly);
 		},
 
 		addItem: function(model, label, icon) {

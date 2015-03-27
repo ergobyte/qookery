@@ -30,6 +30,8 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 
 	members: {
 
+		// Creation
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes["tri-state"] !== undefined) this.setTriState(attributes["tri-state"]);
@@ -54,9 +56,13 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 			return checkBox;
 		},
 
+		// Component implementation
+
 		_updateUI: function(value) {
 			this.getMainWidget().setValue(value);
 		},
+
+		// Internals
 
 		__applyTriState: function(triState) {
 			this.getMainWidget().setTriState(triState);

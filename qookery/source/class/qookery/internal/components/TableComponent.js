@@ -30,7 +30,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 	},
 
 	properties: {
-		value: { refine: true, init: [] }
+		value: { refine: true, init: [ ] }
 	},
 
 	members: {
@@ -180,8 +180,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return this.__selectedRowIndex;
 		},
 
-		setSelectedRowIndex: function(rowIndex) {
+		setSelectedRowIndex: function(rowIndex, setFocus) {
 			this.getMainWidget().getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
+			if(setFocus) this.getMainWidget().setFocusedCell(rowIndex, 0, true);
 		},
 
 		getSelectedRowData: function() {
