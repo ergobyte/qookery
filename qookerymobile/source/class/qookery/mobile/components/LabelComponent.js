@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.HtmlComponent", {
+qx.Class.define("qookery.mobile.components.LabelComponent", {
 
 	extend: qookery.internal.components.BaseComponent,
 
@@ -26,35 +26,31 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "wrap": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		_createWidgets: function(attributes) {
-			var htmlText = attributes["html"] || null;
-			var html = new qx.ui.embed.Html(htmlText);
-			this._applyLayoutAttributes(html, attributes);
-			return [ html ];
+			var label = new qx.ui.mobile.basic.Label(this.getAttribute("label", ""));
+			label.setWrap(this.getAttribute("wrap", false));
+			return [ label ];
 		},
 
-		getHtml: function() {
-			return this.getMainWidget().getHtml();
+		// Public methods
+
+		getValue: function() {
+			return this.getMainWidget().getValue();
 		},
 
-		setHtml: function(html) {
-			this.getMainWidget().setHtml(html);
-		},
-
-		getOverflowY: function() {
-			return this.getMainWidget().getOverflowY();
-		},
-
-		setOverflowY: function(overflow) {
-			this.getMainWidget().setOverflowY(overflow);
-		},
-
-		getDomElement: function() {
-			return this.getMainWidget().getContentElement().getDomElement();
-		},
-
-		updateAppearance: function() {
-			this.getMainWidget().updateAppearance();
+		setValue: function(value) {
+			this.getMainWidget().setValue(value);
 		}
 	}
 });

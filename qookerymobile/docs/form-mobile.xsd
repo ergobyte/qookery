@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -16,22 +16,14 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		xmlns:w="http://dev.ergobyte.gr/ns/Ria/Waffle"
+		xmlns:q="http://www.qookery.org/ns/Form"
+		targetNamespace="http://www.qookery.org/ns/Form/Mobile"
+		elementFormDefault="qualified">
 
-	<uri id="q"
-			name="http://www.qookery.org/ns/Form"
-			uri="form.xsd" />
+	<import namespace="http://www.qookery.org/ns/Form" />
 
-	<uri id="q-rt"
-			name="http://www.qookery.org/ns/Form/RichText"
-			uri="../../org.qookery.richtext/docs/form-richtext.xsd" />
+	<element name="button" type="q:atom-component" />
 
-	<uri id="q-cal"
-			name="http://www.qookery.org/ns/Form/Calendar"
-			uri="../../org.qookery.calendar/docs/form-calendar.xsd" />
-
-	<uri id="q-mobile"
-			name="http://www.qookery.org/ns/Form/Mobile"
-			uri="../../org.qookery.mobile/docs/form-mobile.xsd" />
-
-</catalog>
+</schema>

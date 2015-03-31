@@ -22,11 +22,12 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__listItemsMap = { };
 	},
 
 	members: {
 
-		__listItemsMap: { },
+		__listItemsMap: null,
 
 		_createMainWidget: function(attributes) {
 			var list = new qx.ui.form.List();
@@ -48,7 +49,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 			if(!items) return;
 			var list = this.getMainWidget();
 			list.removeAll();
-			this.__listItemsMap = {};
+			this.__listItemsMap = { };
 			for(var property in items) {
 				var item = new qx.ui.form.ListItem(items[property]);
 				this.__listItemsMap[property] = item;

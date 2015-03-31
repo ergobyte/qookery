@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.HtmlComponent", {
+qx.Class.define("qookery.mobile.components.HtmlComponent", {
 
 	extend: qookery.internal.components.BaseComponent,
 
@@ -28,7 +28,7 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 
 		_createWidgets: function(attributes) {
 			var htmlText = attributes["html"] || null;
-			var html = new qx.ui.embed.Html(htmlText);
+			var html = new qx.ui.mobile.embed.Html(htmlText);
 			this._applyLayoutAttributes(html, attributes);
 			return [ html ];
 		},
@@ -42,19 +42,19 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 		},
 
 		getOverflowY: function() {
-			return this.getMainWidget().getOverflowY();
+			return this.getDomElement().style.overflow;
 		},
 
 		setOverflowY: function(overflow) {
-			this.getMainWidget().setOverflowY(overflow);
+			this.getDomElement().style.overflow = overflow;
 		},
 
 		getDomElement: function() {
-			return this.getMainWidget().getContentElement().getDomElement();
+			return this.getMainWidget().getContainerElement();
 		},
 
 		updateAppearance: function() {
-			this.getMainWidget().updateAppearance();
+			// TODO force update apperance
 		}
 	}
 });

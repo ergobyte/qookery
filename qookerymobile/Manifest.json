@@ -1,0 +1,21 @@
+{
+	"info": {
+		"name": "qookery mobile",
+		"summary": "Declarative UI Building for Qooxdoo",
+		"description": "The Qookery library allows Qooxdoo programmers to declare and run user interfaces through an easy to master XML language.",
+		"homepage": "http://www.qookery.org/",
+		"license": "Apache License 2.0",
+		"authors": [
+			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
+			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" }
+		],
+		"version" : "0.1",
+		"qooxdoo-versions": [ "4.0.1" ]
+	},
+	"provides": {
+		"namespace": "qookery.mobile",
+		"encoding": "utf-8",
+		"class": "source/class",
+		"type": "component"
+	}
+}

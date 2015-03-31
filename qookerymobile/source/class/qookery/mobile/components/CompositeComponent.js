@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
+/*
 	Qookery - Declarative UI Building for Qooxdoo
 
 	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
@@ -15,23 +14,25 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
--->
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+*/
 
-	<uri id="q"
-			name="http://www.qookery.org/ns/Form"
-			uri="form.xsd" />
+/**
+ * Component wrapping a Qooxdoo qx.ui.container.Composite
+ */
+qx.Class.define("qookery.mobile.components.CompositeComponent", {
 
-	<uri id="q-rt"
-			name="http://www.qookery.org/ns/Form/RichText"
-			uri="../../org.qookery.richtext/docs/form-richtext.xsd" />
+	extend: qookery.mobile.components.ContainerComponent,
 
-	<uri id="q-cal"
-			name="http://www.qookery.org/ns/Form/Calendar"
-			uri="../../org.qookery.calendar/docs/form-calendar.xsd" />
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
+	},
 
-	<uri id="q-mobile"
-			name="http://www.qookery.org/ns/Form/Mobile"
-			uri="../../org.qookery.mobile/docs/form-mobile.xsd" />
+	members: {
 
-</catalog>
+		_createContainerWidget: function(attributes) {
+			var	container = new qx.ui.mobile.container.Composite();
+			this._applyLayoutAttributes(container, attributes);
+			return container;
+		}
+	}
+});
