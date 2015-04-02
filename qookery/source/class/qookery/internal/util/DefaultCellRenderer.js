@@ -38,7 +38,7 @@ qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 	construct: function(column, formatSpecification) {
 		this.base(arguments);
 		this.__column = column;
-		this.__format = formatSpecification ? qookery.Qookery.getRegistry().createFormatSpecification(formatSpecification) : null;
+		this.__format = formatSpecification ? qookery.Qookery.getRegistry().createFormatFromSpecification(formatSpecification) : null;
 	},
 
 	members: {

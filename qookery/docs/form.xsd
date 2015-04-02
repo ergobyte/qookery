@@ -525,6 +525,7 @@
 		<attribute name="minimum" type="integer" default="0" />
 		<attribute name="page-step" type="integer" default="10" />
 		<attribute name="single-step" type="decimal" default="1" />
+		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType></element>
 
 	<element name="split-pane"><complexType><complexContent><extension base="q:container-component">

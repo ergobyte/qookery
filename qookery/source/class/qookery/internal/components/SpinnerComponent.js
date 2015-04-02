@@ -39,6 +39,7 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 				if(value !== null) value = parseInt(value, 10);
 				this._setValueSilently(value);
 			}, this);
+			widget.getChildControl("textfield").setTextAlign(this.getAttribute("text-align", null));
 			return widget;
 		},
 

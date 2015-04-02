@@ -71,10 +71,12 @@ qx.Class.define("qookery.internal.Registry", {
 		this.__componentConstructorArgs = { };
 
 		this.__formats = { };
-		this.__formats["custom"] = qookery.internal.formats.CustomFormat;
-		this.__formats["date"] = qookery.internal.formats.DateFormat;
-		this.__formats["map"] = qookery.internal.formats.MapFormat;
-		this.__formats["number"] = qookery.internal.formats.NumberFormat;
+
+		this.__formatFactories = { };
+		this.__formatFactories["custom"] = qookery.internal.formats.CustomFormat;
+		this.__formatFactories["date"] = qookery.internal.formats.DateFormat;
+		this.__formatFactories["map"] = qookery.internal.formats.MapFormat;
+		this.__formatFactories["number"] = qookery.internal.formats.NumberFormat;
 
 		this.__maps = { };
 		this.__libraries = { };
@@ -88,7 +90,7 @@ qx.Class.define("qookery.internal.Registry", {
 		__validators: null,
 		__components: null,
 		__componentConstructorArgs: null,
-		__formats: null,
+		__formatFactories: null,
 		__maps: null,
 		__libraries: null,
 
@@ -153,20 +155,28 @@ qx.Class.define("qookery.internal.Registry", {
 
 		// Formats
 
-		registerFormatClass: function(formatName, formatClass) {
-			this.__formats[formatName] = formatClass;
+		registerFormat: function(formatName, format) {
+			this.__formats[formatName] = format;
+		},
+
+		getFormat: function(formatName) {
+			return this.__formats[formatName];
+		},
+
+		registerFormatFactory: function(factoryName, formatClass) {
+			this.__formatFactories[factoryName] = formatClass;
 		},
 
 		createFormat: function(formatName, options) {
-			var formatClass = this.__formats[formatName];
+			var formatClass = this.__formatFactories[formatName];
 			if(!formatClass)
 				throw new Error(qx.lang.String.format("Unknown format '%1'", [ formatName ]));
 			return new formatClass(options);
 		},
 
-		createFormatSpecification: function(formatSpecification) {
+		createFormatFromSpecification: function(formatSpecification) {
 			var formatName = formatSpecification;
-			var options = {};
+			var options = { };
 			var colonCharacterPos = formatSpecification.indexOf(":");
 			if(colonCharacterPos != -1) {
 				formatName = formatSpecification.slice(0, colonCharacterPos);
@@ -208,6 +218,6 @@ qx.Class.define("qookery.internal.Registry", {
 		this._disposeArray("__modelProviders");
 		this.__validators = null;
 		this.__components = null;
-		this.__formats = null;
+		this.__formatFactories = null;
 	}
 });

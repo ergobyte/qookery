@@ -90,34 +90,47 @@ qx.Interface.define("qookery.IRegistry", {
 		// Formats
 
 		/**
-		 * Register an IFormat class for easy instance creation by XML authors
+		 * Register an IFormat under a symbolic name
 		 *
-		 * @param formatName {String} The name of the format class for easy referencing
+		 * @param formatName {String} The symbolic name of the format for easy referencing
+		 * @param format {qx.util.format.IFormat} The format class
+		 */
+		registerFormat: function(formatName, format) { },
+
+		/**
+		 * Return a previously registered format
+		 */
+		getFormat: function(formatName) { },
+
+		/**
+		 * Register an IFormat factory for easy instance creation by XML authors
+		 *
+		 * @param factoryName {String} The name of the format class for easy referencing
 		 * @param formatClass {qx.Class} The format class
 		 */
-		registerFormatClass: function(formatName, formatClass) { },
+		registerFormatFactory: function(factoryName, formatClass) { },
 
 		/**
 		 * Create a new instance of a registered format class
 		 *
-		 * @param formatName {String} The name of the format class
+		 * @param factoryName {String} The name of the format class
 		 * @param options {Map} Options to pass to the format constructor
 		 *
-		 * @return {IFormat} The newly created format instance
+		 * @return {qx.util.format.IFormat} The newly created format instance
 		 */
-		createFormat: function(formatName, options) { },
+		createFormat: function(factoryName, options) { },
 
 		/**
 		 * Parse a format specification
-		 * <p>Format specification syntax is:</p>
 		 *
-		 * <pre>{formatName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
+		 * <p>Format specification syntax is:</p>
+		 * <pre>{factoryName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
 		 *
 		 * @param formatSpecification {String} a specification according to above syntax
 		 *
-		 * @return {IFormat} The newly created format instance
+		 * @return {qx.util.format.IFormat} The newly created format instance
 		 */
-		createFormatSpecification: function(formatSpecification) { },
+		createFormatFromSpecification: function(formatSpecification) { },
 
 		// Maps
 
