@@ -24,32 +24,43 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 	members: {
 
 		loadResource: function(url, thisArg, successCallback, failCallback) {
+			var asynchronous = true;
+			if(!successCallback) { successCallback = this._defaultSuccessCallback; asynchronous = false; }
+			if(!failCallback) { failCallback = this._defaultFailCallback; }
+			var result = undefined;
 			var resourceUri = this._resolveResourceUri(url);
-			var xhrRequest = new qx.bom.request.Xhr(), result = null;
+			var xhrRequest = new qx.bom.request.Xhr();
+			xhrRequest.onerror = xhrRequest.ontimeout = function() {
+				result = failCallback.call(thisArg, xhrRequest, url);
+			};
 			xhrRequest.onload = function() {
 				var statusCode = xhrRequest.status;
-				if(qx.util.Request.isSuccessful(statusCode)) {
-					if(successCallback && thisArg)
-						successCallback.call(thisArg, xhrRequest.responseText);
-					else if(successCallback)
-						successCallback(xhrRequest.responseText);
-					else
-						result = xhrRequest.responseText;
-				}
-				else {
-					if(failCallback && thisArg)
-						failCallback.call(thisArg, xhrRequest);
-					else if(failCallback)
-						failCallback(xhrRequest);
-					else
-						throw new Error(qx.lang.String.format(
-							"Error %1 loading resource '%2': %3", [ xhrRequest.status, url, xhrRequest.statusText ]));
-				}
+				var wasSuccessful = qx.util.Request.isSuccessful(statusCode);
+				if(wasSuccessful)
+					result = successCallback.call(thisArg, xhrRequest.responseText, url);
+				else
+					result = failCallback.call(thisArg, xhrRequest, url);
 			};
-			var asynchronous = !!successCallback;
-			xhrRequest.open("GET", resourceUri, asynchronous);
-			xhrRequest.send();
+			try {
+				xhrRequest.open("GET", resourceUri, asynchronous);
+				xhrRequest.send();
+				return result;
+			}
+			catch(e) {
+				qx.log.Logger.error(this, "I/O error loading resource", url, e.stack);
+				result = failCallback.call(thisArg, xhrRequest, url);
+			}
 			return result;
+		},
+
+		_defaultFailCallback: function(xhrRequest, url) {
+			throw new Error(qx.lang.String.format(
+					"Error %1 loading resource '%2': %3",
+					[ xhrRequest.status, url, xhrRequest.statusText ]));
+		},
+
+		_defaultSuccessCallback: function(responseText, url) {
+			return responseText;
 		},
 
 		_resolveResourceUri: function(url) {

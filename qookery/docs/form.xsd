@@ -371,7 +371,9 @@
 		</choice>
 	</group>
 
-	<element name="button" type="q:atom-component" />
+	<element name="button"><complexType><complexContent><extension base="q:atom-component">
+		<attribute name="command" type="token" />
+	</extension></complexContent></complexType></element>
 
 	<element name="check-field"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="tri-state" type="boolean" default="false" />

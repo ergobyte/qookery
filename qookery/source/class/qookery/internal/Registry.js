@@ -80,6 +80,7 @@ qx.Class.define("qookery.internal.Registry", {
 
 		this.__maps = { };
 		this.__libraries = { };
+		this.__commands = { };
 	},
 
 	members: {
@@ -93,6 +94,7 @@ qx.Class.define("qookery.internal.Registry", {
 		__formatFactories: null,
 		__maps: null,
 		__libraries: null,
+		__commands: null,
 
 		// Model providers
 
@@ -211,6 +213,16 @@ qx.Class.define("qookery.internal.Registry", {
 			var library = this.__libraries[libraryName];
 			if(!library) throw new Error("Unable to load unknown library " + libraryName);
 			library.load(callback, thisArg);
+		},
+
+		// Commands
+
+		registerCommand: function(commandName, command) {
+			this.__commands[commandName] = command;
+		},
+
+		getCommand: function(commandName) {
+			return this.__commands[commandName];
 		}
 	},
 

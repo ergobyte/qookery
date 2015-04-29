@@ -28,6 +28,12 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 
 		_createAtomWidget: function(attributes) {
 			var button = new qx.ui.form.Button(attributes["label"]);
+			var commandName = this.getAttribute("command");
+			if(commandName !== undefined) {
+				var command = qookery.Qookery.getRegistry().getCommand(commandName);
+				if(command === undefined) throw new Error("Undefined command " + commandName);
+				button.setCommand(command);
+			}
 			this._applyAtomAttributes(button, attributes);
 			return button;
 		},

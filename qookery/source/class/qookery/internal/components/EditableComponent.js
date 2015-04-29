@@ -261,7 +261,6 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		_applyLabel: function(label) {
 			var labelWidget = this.getLabelWidget();
 			if(!labelWidget) return;
-			if(this.getRequired()) label += " (*)";
 			labelWidget.setValue(label);
 		},
 
@@ -271,12 +270,15 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_applyRequired: function(required) {
+			var labelWidget = this.getLabelWidget();
 			if(required && !this.__requiredValidation) {
 				this.__requiredValidation = this.addValidation("notNull");
+				if(labelWidget) labelWidget.addState("required");
 			}
 			if(!required && this.__requiredValidation) {
 				this.removeValidation(this.__requiredValidation);
 				this.__requiredValidation = null;
+				if(labelWidget) labelWidget.removeState("required");
 			}
 		},
 
