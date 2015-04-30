@@ -466,7 +466,22 @@
 		<attribute name="wrap" type="boolean" default="true" />
 	</extension></complexContent></complexType></element>
 
-	<element name="list" type="q:editable-component" />
+	<element name="list"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="scrollbarY" default="auto" >
+			<simpleType><restriction base="token">
+				<enumeration value="auto" />
+				<enumeration value="false" />
+				<enumeration value="true" />
+			</restriction></simpleType>
+		</attribute>
+		<attribute name="selectionMode" default="single">
+			<simpleType><restriction base="token">
+				<enumeration value="additive" />
+				<enumeration value="multi" />
+				<enumeration value="single" />
+			</restriction></simpleType>
+		</attribute>
+	</extension></complexContent></complexType></element>
 
 	<element name="password-field" type="q:field-component" />
 
