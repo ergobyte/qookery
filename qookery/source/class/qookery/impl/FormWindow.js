@@ -47,9 +47,6 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(options["showMaximize"]) this.setShowMaximize(options["showMaximize"]);
 			if(options["openMaximized"]) this.maximize();
 		}
-		if(this.getAllowClose()) this.addListener("keypress", function(event) {
-			if(event.getKeyIdentifier() == "Escape") this.destroy();
-		}, this);
 	},
 
 	members: {
@@ -67,7 +64,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 		 */
 		createAndOpen: function(formXml, model, variables) {
 			var xmlDocument = qx.xml.Document.fromString(formXml);
-			var parser = qookery.Qookery.createFormParser(variables);
+			var parser = qookery.Qookery.createFormParser(this.__createVariables(variables));
 			try {
 				this.__formComponent = parser.parseXmlDocument(xmlDocument);
 				this.__disposeForm = true;
@@ -113,6 +110,10 @@ qx.Class.define("qookery.impl.FormWindow", {
 			}, this);
 		},
 
+		getFormComponent: function() {
+			return this.__formComponent;
+		},
+
 		_getFallbackCaption: function() {
 			// Override to provide a fallback caption
 			return "";
@@ -122,8 +123,11 @@ qx.Class.define("qookery.impl.FormWindow", {
 			this.__formComponent.close();
 		},
 
-		getFormComponent: function() {
-			return this.__formComponent;
+		__createVariables: function(variables) {
+			variables = variables != null ? qx.lang.Object.clone(variables, false) : { };
+			if(variables.hasOwnProperty("window")) throw new Error("Variable named 'window' is reserved");
+			variables["window"] = this;
+			return variables;
 		}
 	},
 

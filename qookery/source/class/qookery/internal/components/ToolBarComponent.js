@@ -44,6 +44,7 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 
 		_createWidgets: function(attributes) {
 			var toolbar = new qx.ui.toolbar.ToolBar();
+			if(undefined !== attributes["spacing"]) toolbar.setSpacing(attributes["spacing"]);
 			this._applyLayoutAttributes(toolbar, attributes);
 			return [ toolbar ];
 		},
