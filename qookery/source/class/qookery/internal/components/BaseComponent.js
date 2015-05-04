@@ -54,6 +54,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"allow-stretch-x": "Boolean",
 			"allow-stretch-y": "Boolean",
 			"auto-size": "Boolean",
+			"focusable": "Boolean",
 			"column-visibility-button-visible": "Boolean",
 			"enabled": "Boolean",
 			"live-update": "Boolean",
@@ -308,6 +309,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			// Miscellaneous
 
 			if(undefined !== attributes["tab-index"]) widget.setTabIndex(attributes["tab-index"]);
+			if(undefined !== attributes["focusable"]) widget.setFocusable(attributes["focusable"]);
 		},
 
 		_applyEnabled: function(enabled) {

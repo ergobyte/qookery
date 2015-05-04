@@ -52,6 +52,7 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 			if(attributes["center"] !== undefined) atom.setCenter(attributes["center"]);
 			if(attributes["icon"] !== undefined) atom.setIcon(attributes["icon"]);
 			if(attributes["icon-position"] !== undefined) atom.setIconPosition(attributes["icon-position"]);
+			if(attributes["label"] !== undefined) atom.setLabel(attributes["label"]);
 			if(attributes["rich"] !== undefined) atom.setRich(attributes["rich"]);
 			this._applyLayoutAttributes(atom, attributes);
 		},

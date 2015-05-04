@@ -59,7 +59,7 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 			}, this);
 			widget.addListener("keypress", function(event) {
 				if(this.isReadOnly()) return;
-				if(!event.isShiftPressed()) return;
+				if(!event.isShiftPressed() || event.isAltPressed() || event.isCtrlPressed()) return;
 				switch(event.getKeyIdentifier()) {
 				case "Delete":
 				case "Backspace":

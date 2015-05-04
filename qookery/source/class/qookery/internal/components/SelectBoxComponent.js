@@ -65,6 +65,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				this.setValue(model);
 			}, this);
 			selectBox.addListener("keypress", function(event) {
+				if(event.isShiftPressed() || event.isAltPressed() || event.isCtrlPressed()) return;
 				switch(event.getKeyIdentifier()) {
 				case "Delete":
 				case "Backspace":
