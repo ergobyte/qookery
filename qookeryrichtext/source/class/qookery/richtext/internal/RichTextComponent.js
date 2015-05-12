@@ -48,7 +48,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 		_createMainWidget: function(attributes) {
 			// Create lightest possible widget since we only need a <div>
-			var widget = new qookery.richtext.internal.RichTextWidget();
+			var widget = new qookery.richtext.internal.RichTextWidget(attributes);
 			// Configure widget positioning by applying layout
 			this._applyLayoutAttributes(widget, attributes);
 			// Defer creation of CKEditor until after positioning is done
@@ -99,7 +99,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 				language: qx.locale.Manager.getInstance().getLanguage(),
 				readOnly: this.getReadOnly(),
 				title: this.getAttribute("title", false),
-				toolbarCanCollapse: this.getAttribute("toolbar-can-collapse", false)
+				toolbarCanCollapse: this.getAttribute("toolbar-can-collapse", false),
+				floatSpaceDockedOffsetY: 10
 			};
 			this.__ckEditor = CKEDITOR.inline(domElement, config);
 			// Insert current value into newly created editor

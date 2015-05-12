@@ -38,6 +38,25 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			return object1 === object2;
 		},
 
+		compare: function(object1, object2) {
+			if(object1 === object2) return 0;
+			if(object1 == null) return -1;
+			if(object2 == null) return 1;
+			var type1 = typeof object1;
+			var type2 = typeof object2;
+			if(type1 !== type2)
+				throw new Error("Unable to compare objects of different type");
+			if(type1 === "string")
+				return object1 == object2 ? 0 : object1 > object2 ? 1 : -1;
+			if(type1 === "number")
+				return object1 - object2;
+			if(type1 === "boolean")
+				return object1 ? 1 : -1;
+			if(object1 instanceof Date && object2 instanceof Date)
+				return object1.getTime() - object2.getTime();
+			throw new Error("Unsupported object types for comparison");
+		},
+
 		getLabel: function(object, labelType) {
 			return qx.data.Conversion.toString(object);
 		},

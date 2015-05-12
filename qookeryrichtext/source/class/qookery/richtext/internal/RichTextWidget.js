@@ -20,12 +20,13 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 	extend: qx.ui.core.Widget,
 
-	construct: function(Component) {
+	construct: function(attributes) {
 		this.base(arguments);
 		this.setAppearance("textfield");
+		this.setFocusable(true);
+		if(attributes["tab-index"] !== undefined) this.setTabIndex(attributes["tab-index"]);
 		this.addListener("roll", function(event) {
-			if(event.getPointerType() != "wheel")
-				return;
+			if(event.getPointerType() != "wheel") return;
 			var contentElement = this.getContentElement();
 			var scrollY = contentElement.getScrollY();
 			contentElement.scrollToY(scrollY + (event.getDelta().y / 30) * 20);

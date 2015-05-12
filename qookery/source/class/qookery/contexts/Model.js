@@ -37,6 +37,13 @@ qx.Class.define("qookery.contexts.Model", {
 		 */
 		areEqual: function(object1, object2) {
 			return qookery.Qookery.getModelProvider().areEqual(object1, object2);
+		},
+
+		/**
+		 * Access to {@link qookery.IModelProvider#compare}
+		 */
+		compare: function(object1, object2) {
+			return qookery.Qookery.getModelProvider().compare(object1, object2);
 		}
 	}
 });

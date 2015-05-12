@@ -50,6 +50,21 @@ qx.Interface.define("qookery.IModelProvider", {
 		areEqual: function(object1, object2) { },
 
 		/**
+		 * Returns a negative number, zero, or a positive number as object1 is less than, equal to, or greater than object2
+		 *
+		 * <p>Method must be null-safe:
+		 *		compare(null, null) -> 0,
+		 *		compare(null, non-null) -> -1 and
+		 *		compare(non-null, null) -> 1</p>
+		 *
+		 * @param object1 {any} model object, may be <code>null</code>
+		 * @param object2 {any} model object, may be <code>null</code>
+		 *
+		 * @return {Number} negative number, positive number or zero according to comparison result
+		 */
+		compare: function(object1, object2) { },
+
+		/**
 		 * Return a human-friendly label for a model object
 		 *
 		 * @param object {any} model object - it may not be <code>null</code>
