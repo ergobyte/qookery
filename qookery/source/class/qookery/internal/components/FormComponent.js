@@ -17,16 +17,21 @@
 */
 
 /**
- * Form components are the topmost components in a Qookery form's component hierarchy,
+ * Forms are containers that lay the necessary groundwork for Qookery components
  *
- * They are responsible, among others, for managing children components, maintaining bindings,
- * handling data validation and providing scripting contexts to event handlers.
+ * <p>Among others, they cater for:</p>
+ * <ul>
+ *	<li>context bindings</li>
+ *	<li>client scripting</li>
+ *	<li>model connections</li>
+ *	<li>component validation</li>
+ *	<li>translation support</li>
+ * </ul>
  */
 qx.Class.define("qookery.internal.components.FormComponent", {
 
 	extend: qookery.internal.components.CompositeComponent,
 	implement: [ qookery.IFormComponent ],
-	include: [ qookery.util.MFuturesHandling ],
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -53,12 +58,14 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__modelProvider: null,
 		__connections: null,
 		__clientCodeContext: null,
+		__operationQueue: null,
 
 		// Creation
 
 		prepare: function(formParser, xmlElement) {
 			this.__variables = formParser.getVariables() || { };
 			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
+			this.__enableOperationQueuing();
 		},
 
 		create: function(attributes) {
@@ -72,6 +79,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		setup: function(formParser, attributes) {
 			var title = this.getAttribute("title");
 			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
+			this.__flushOperationQueue();
 			return this.base(arguments, formParser, attributes);
 		},
 
@@ -151,6 +159,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Validation
 
 		validate: function() {
+			if(this.__queueOperation(this.validate)) return;
 			var baseError = this.base(arguments);
 			var actionError = this.executeAction("validate");
 			if(baseError == null && actionError == null) {
@@ -173,15 +182,15 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		parseCustomElement: function(formParser, xmlElement) {
 			var elementName = qx.dom.Node.getName(xmlElement);
 			switch(elementName) {
-				case "bind":
-					this.__parseBind(formParser, xmlElement);
-					return true;
-				case "import":
-					this.__parseImport(formParser, xmlElement);
-					return true;
-				case "translation":
-					this.__parseTranslation(formParser, xmlElement);
-					return true;
+			case "bind":
+				this.__parseBind(formParser, xmlElement);
+				return true;
+			case "import":
+				this.__parseImport(formParser, xmlElement);
+				return true;
+			case "translation":
+				this.__parseTranslation(formParser, xmlElement);
+				return true;
 			}
 			return false;
 		},
@@ -250,6 +259,30 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			for(var i = 0; i < this.__connections.length; i++) {
 				var connection = this.__connections[i];
 				connection.connect(model);
+			}
+		},
+
+		// Operation queuing
+
+		__enableOperationQueuing: function() {
+			this.__operationQueue = [ ];
+		},
+
+		__queueOperation: function(operation) {
+			if(this.__operationQueue === null) return false;
+			if(this.__operationQueue.indexOf(operation) === -1)
+				this.__operationQueue.push(operation);
+			return true;
+		},
+
+		__flushOperationQueue: function() {
+			if(this.__operationQueue === null) return;
+			var queue = this.__operationQueue;
+			this.__operationQueue = null;
+			if(queue.length === 0) return;
+			for(var i = 0; i < queue.length; i++) {
+				var operation = queue[i];
+				operation.call(this);
 			}
 		}
 	},

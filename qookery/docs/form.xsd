@@ -93,6 +93,23 @@
 		</union>
 	</simpleType>
 
+	<simpleType name="selection-mode">
+		<restriction base="token">
+			<enumeration value="single" />
+			<enumeration value="multi" />
+			<enumeration value="additive" />
+			<enumeration value="one" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="scrollbar-policy">
+		<restriction base="token">
+			<enumeration value="auto" />
+			<enumeration value="on" />
+			<enumeration value="off" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="size">
 		<union memberTypes="integer">
 			<simpleType>
@@ -269,6 +286,7 @@
 			</documentation></annotation>
 		</attribute>
 		<attribute name="format" type="q:format-specification" />
+		<attribute name="initialize" type="string" />
 		<attribute name="live-validate" default="false">
 			<annotation><documentation>
 				When set, component's value changes will automatically trigger component or form validation
@@ -468,20 +486,9 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="list"><complexType><complexContent><extension base="q:editable-component">
-		<attribute name="scrollbarY" default="auto" >
-			<simpleType><restriction base="token">
-				<enumeration value="auto" />
-				<enumeration value="false" />
-				<enumeration value="true" />
-			</restriction></simpleType>
-		</attribute>
-		<attribute name="selectionMode" default="single">
-			<simpleType><restriction base="token">
-				<enumeration value="additive" />
-				<enumeration value="multi" />
-				<enumeration value="single" />
-			</restriction></simpleType>
-		</attribute>
+		<attribute name="scrollbar-x" type="q:scrollbar-policy" default="auto" />
+		<attribute name="scrollbar-y" type="q:scrollbar-policy" default="auto" />
+		<attribute name="selection-mode" type="q:selection-mode" default="single" />
 	</extension></complexContent></complexType></element>
 
 	<element name="password-field" type="q:field-component" />
@@ -509,13 +516,14 @@
 	<element name="scroll" type="q:container-component" />
 
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
-		<attribute name="map" type="token"><annotation><documentation>
-			The symbolic name of a map registered with the Qookery registry
-		</documentation></annotation></attribute>
-		<attribute name="null-item-label" type="string" />
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
 			If true, the select box items will be kept sorted in ascending order at all times
 		</documentation></annotation></attribute>
+		<attribute name="map" type="token"><annotation><documentation>
+			The symbolic name of a map registered with the Qookery registry
+		</documentation></annotation></attribute>
+		<attribute name="max-list-height" type="nonNegativeInteger" />
+		<attribute name="null-item-label" type="string" />
 	</extension></complexContent></complexType></element>
 
 	<element name="separator"><complexType><complexContent><extension base="q:component">
@@ -653,6 +661,9 @@
 						The name(s) of the component's event(s) the script should be attached to.
 						Mutually exclusive with <code>action</code> and <code>name</code>.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
+					<attribute name="execute" type="boolean"><annotation><documentation>
+						If true, execute script immediately in addition to any other performed attachments/registrations
+					</documentation></annotation></attribute>
 					<attribute name="name" type="q:javascript-identifier"><annotation><documentation>
 						The name of the function to register into the form context ("$") for later execution of script.
 						Mutually exclusive with <code>action</code> and <code>event</code>.

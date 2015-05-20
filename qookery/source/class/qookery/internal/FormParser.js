@@ -271,6 +271,8 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(clientCode == null)
 				throw new Error("Empty <script> element");
 
+			var execute = true;
+
 			var componentId = this.getAttribute(scriptElement, "component");
 			if(componentId) {
 				component = component.getForm().getComponent(componentId);
@@ -284,13 +286,13 @@ qx.Class.define("qookery.internal.FormParser", {
 				eventNames.split(/\s+/).forEach(function(eventName) {
 					component.addEventHandler(eventName, clientCode, onlyOnce);
 				});
-				return;
+				execute = this.getAttribute(scriptElement, "execute") === "true";
 			}
 
 			var actionName = this.getAttribute(scriptElement, "action");
 			if(actionName) {
 				component.setAction(actionName, clientCode);
-				return;
+				execute = this.getAttribute(scriptElement, "execute") === "true";
 			}
 
 			var functionName = this.getAttribute(scriptElement, "name");
@@ -303,9 +305,9 @@ qx.Class.define("qookery.internal.FormParser", {
 						argumentMap[argumentNames[i]] = arguments[i];
 					return component.executeClientCode(clientCode, argumentMap);
 				};
-				return;
+				execute = this.getAttribute(scriptElement, "execute") === "true";
 			}
-			component.executeClientCode(clientCode);
+			if(execute) component.executeClientCode(clientCode);
 		},
 
 		__resolveQName: function(qname) {

@@ -27,88 +27,90 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 	members: {
 
-		__listItemsMap: null,
-
 		_createMainWidget: function(attributes) {
 			var list = new qx.ui.form.List();
-			list.setScrollbarY(this.getAttribute("scrollbarY", "auto"));
-			list.setSelectionMode(this.getAttribute("selectionMode", "single"));
-			list.addListener("changeSelection", this.__onChangeSelection, this);
+			list.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));
+			list.setScrollbarY(this.getAttribute("scrollbar-y", "auto"));
+			list.setSelectionMode(this.getAttribute("selection-mode", "single"));
+			list.addListener("changeSelection", function(event) {
+				if(this._disableValueEvents) return;
+				var selection = event.getData();
+				switch(this.getMainWidget().getSelectionMode()) {
+				case "single": case "one":
+					var item = selection[0];
+					this.setValue(item ? item.getModel() : null);
+					return;
+				case "multi": case "additive":
+					var value = selection.map(function(item) {
+						return item.getModel();
+					});
+					this.setValue(value.length > 0 ? value : null);
+					return;
+				}
+			}, this);
 			this._applyLayoutAttributes(list, attributes);
 			return list;
 		},
 
 		_updateUI: function(value) {
-			var selectionMode = this.getMainWidget().getSelectionMode();
 			if(!value) {
 				this.getMainWidget().resetSelection();
 				return;
 			}
-			var itemsToSelect = [ ];
-			switch(selectionMode) {
-			case "single":
-				var selectedItem = this.__listItemsMap[value];
-				itemsToSelect.push(selectedItem);
+			var selection = [ ];
+			switch(this.getMainWidget().getSelectionMode()) {
+			case "single": case "one":
+				var item = this.__findItem(value);
+				if(item) selection.push(item);
 				break;
-			case "additive":
-			case "multi":
-				if(value && value.length != 0) {
-					for(var i = 0; i < value.length; i++) {
-						itemsToSelect.push(this.__listItemsMap[value[i]]);
-					}
+			case "multi": case "additive":
+				for(var i = 0; i < value.length; i++) {
+					var item = this.__findItem(value[i]);
+					if(item) selection.push(item);
 				}
 				break;
-			default:
-				throw new Error("Unimplemented selection mode " + selectionMode);
 			}
 
-			if(itemsToSelect.length != 0) {
-				this.getMainWidget().setSelection(itemsToSelect);
-			}
-			else {
+			if(selection.length > 0)
+				this.getMainWidget().setSelection(selection);
+			else
 				this.getMainWidget().resetSelection();
-			}
+		},
+
+		addItem: function(model, label, icon) {
+			if(!label) label = this._getLabelOf(model);
+			var item = new qx.ui.form.ListItem(label, icon, model);
+			this.getMainWidget().add(item);
 		},
 
 		setItems: function(items) {
-			if(!items) return;
-			var list = this.getMainWidget();
-			list.removeAll();
-			this.__listItemsMap = { };
-			for(var property in items) {
-				var item = new qx.ui.form.ListItem(items[property]);
-				this.__listItemsMap[property] = item;
-				list.add(item);
+			this.removeAllItems();
+			if(items instanceof qx.data.Array) items = items.toArray();
+			if(qx.lang.Type.isArray(items)) {
+				for(var i = 0; i < items.length; i++) {
+					var model = items[i];
+					this.addItem(model);
+				}
+			}
+			else if(qx.lang.Type.isObject(items)) {
+				for(var model in items) {
+					var label = items[model];
+					this.addItem(model, qx.data.Conversion.toString(label));
+				}
 			}
 		},
 
-		select: function(value) {
-			this._updateUI(value);
+		removeAllItems: function() {
+			this.getMainWidget().removeAll();
 		},
 
-		__onChangeSelection:function(event) {
-			if(this._disableValueEvents) return;
-			if(event.getData() == null ||event.getData().length == 0) {
-				this.setValue(null);
-				return;
-			}
-			var selectionMode = this.getMainWidget().getSelectionMode();
-			switch(selectionMode) {
-			case "single":
-				var selectedItem = event.getData()[0];
-				this.setValue(qx.lang.Object.getKeyFromValue(this.__listItemsMap, selectedItem));
-				return;
-			case "additive":
-			case "multi":
-				var selectedItems = event.getData();
-				var selectedItemsKeys = selectedItems.reduce(function(selectedKeys, currentItem) {
-					selectedKeys.push(qx.lang.Object.getKeyFromValue(this.__listItemsMap, currentItem));
-					return selectedKeys;
-				}.bind(this), [ ]);
-				this.setValue(selectedItemsKeys);
-				return;
-			default:
-				throw new Error("Unimplemented selection mode " + selectionMode);
+		__findItem: function(model) {
+			var items = this.getMainWidget().getChildren();
+			for(var i = 0; i < items.length; i++) {
+				var item = items[i];
+				var model2 = item.getModel();
+				if(!qookery.contexts.Model.areEqual(model, model2)) continue;
+				return item;
 			}
 		}
 	}

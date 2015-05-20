@@ -95,13 +95,19 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		setup: function(formParser, attributes) {
 			var connectionSpecification = this.getAttribute("connect");
-			if(!connectionSpecification) return;
-			var modelProvider = this.getForm().getModelProvider();
-			if(!modelProvider)
-				throw new Error("Install a model provider to handle connections in XML forms");
-			var connectionHandle = modelProvider.handleConnection(formParser, this, connectionSpecification);
-			if(connectionHandle)
-				this._applyConnectionHandle(modelProvider, connectionHandle);
+			if(connectionSpecification) {
+				var modelProvider = this.getForm().getModelProvider();
+				if(!modelProvider)
+					throw new Error("Install a model provider to handle connections in XML forms");
+				var connectionHandle = modelProvider.handleConnection(formParser, this, connectionSpecification);
+				if(connectionHandle)
+					this._applyConnectionHandle(modelProvider, connectionHandle);
+			}
+			var initializeClientCode = this.getAttribute("initialize");
+			if(initializeClientCode) {
+				var initialValue = this.executeClientCode(qx.lang.String.format("return (%1);", [ initializeClientCode ]));
+				this.setValue(initialValue);
+			}
 		},
 
 		// Widget access
