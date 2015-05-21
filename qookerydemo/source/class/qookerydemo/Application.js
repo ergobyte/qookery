@@ -25,23 +25,24 @@ qx.Class.define("qookerydemo.Application", {
 
 	statics: {
 		DEMOS: [
-			{ label: "Hello, World!", formFile: "helloWorld.xml" },
-			{ label: "About Dialog", formFile: "aboutDialog.xml" },
-			{ label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
-			{ label: "Layouts", formFile: "layouts.xml" },
-			{ label: "Stack", formFile: "stack.xml" },
-			{ label: "Translations", formFile: "translations.xml" },
-			{ label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
-			{ label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
-			{ label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
-			{ label: "XInclude", formFile: "xInclude.xml" },
-			{ label: "Extension: Rich Text", formFile: "richText.xml", modelFile: "carConfiguration.json" },
-			{ label: "Extension: Calendar", formFile: "calendar.xml" }
+			{ id: "helloWorld", label: "Hello, World!", formFile: "helloWorld.xml" },
+			{ id: "aboutDialog", label: "About Dialog", formFile: "aboutDialog.xml" },
+			{ id: "loginDialog", label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
+			{ id: "layouts", label: "Layouts", formFile: "layouts.xml" },
+			{ id: "stack", label: "Stack", formFile: "stack.xml" },
+			{ id: "translations", label: "Translations", formFile: "translations.xml" },
+			{ id: "tableWithFormEditor", label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
+			{ id: "masterDetails", label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
+			{ id: "multipleConnections", label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
+			{ id: "xInclude", label: "XInclude", formFile: "xInclude.xml" },
+			{ id: "richText", label: "Extension: Rich Text", formFile: "richText.xml", modelFile: "carConfiguration.json" },
+			{ id: "calendar", label: "Extension: Calendar", formFile: "calendar.xml" }
 		]
 	},
 
 	members: {
 
+		__pendingComponents: null,
 		__toolbar: null,
 		__xmlEditor: null,
 		__resultArea: null,
@@ -54,6 +55,7 @@ qx.Class.define("qookerydemo.Application", {
 				qx.log.appender.Console;
 			}
 
+			this.__pendingComponents = [ qookerydemo.ui.XmlEditor, qookerydemo.ui.JsonEditor ];
 			this.__toolbar = new qookerydemo.ui.Toolbar();
 			this.__xmlEditor = new qookerydemo.ui.XmlEditor();
 			this.__jsonEditor = new qookerydemo.ui.JsonEditor();
@@ -74,10 +76,29 @@ qx.Class.define("qookerydemo.Application", {
 			mainContainer.add(horizontalSplitter, { flex: 1 });
 			this.getRoot().add(mainContainer, { edge: 0 });
 
-			qx.dom.Element.remove(document.getElementById('splash'));
+			qx.bom.History.getInstance().addListener("request", function(event) {
+				var demoId = event.getData();
+				if(!demoId) return;
+				this.loadDemo(demoId);
+			}, this);
 		},
 
-		loadDemo: function(demoConfiguration) {
+		onComponentReady: function(component) {
+			qx.lang.Array.remove(this.__pendingComponents, component);
+			if(this.__pendingComponents.length > 0) return;
+
+			var initialDemoId = qx.bom.History.getInstance().getState();
+			if(!initialDemoId) initialDemoId = "helloWorld";
+			this.loadDemo(initialDemoId);
+			qx.dom.Element.remove(document.getElementById("splash"));
+		},
+
+		loadDemo: function(demoId) {
+			var demoConfiguration = qookerydemo.Application.DEMOS.filter(function(configuration) {
+				return configuration["id"] === demoId;
+			})[0];
+			if(!demoConfiguration)
+				throw new Error("Demo " + demoId + " not found");
 			var formFile = demoConfiguration["formFile"];
 			var formUrl = "resource/qookerydemo/forms/" + formFile;
 			qookery.contexts.Qookery.loadResource(formUrl, this, function(data) {

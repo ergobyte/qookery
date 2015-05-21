@@ -64,8 +64,8 @@ qx.Class.define("qookerydemo.ui.XmlEditor", {
 						var aceSession = aceEditor.getSession();
 						aceSession.setMode("ace/mode/xml");
 						aceSession.setTabSize(4);
-						qx.core.Init.getApplication().loadDemo(qookerydemo.Application.DEMOS[0]);
-					}, this, 500);
+						qx.core.Init.getApplication().onComponentReady(qookerydemo.ui.XmlEditor);
+					}, this, 0);
 				}, this);
 				control.addListener("resize", function() {
 					if(!this.__ace) { return null; }

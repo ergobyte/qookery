@@ -16,25 +16,47 @@
 	limitations under the License.
 */
 
+/**
+ * @asset(qookery/lib/ckeditor/*)
+ *
+ * @ignore(CKEDITOR)
+ * @ignore(CKEDITOR.*)
+ */
 qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 	extend: qx.ui.core.Widget,
 
-	construct: function(attributes) {
+	properties: {
+		appearance: { refine: true, init: "textfield" },
+		focusable: { refine: true, init: true },
+		selectable: { refine: true, init: true },
+		readOnly: { nullable: false, init: false },
+		value: { nullable: true, check: "String", event: "changeValue", apply: "__setCkEditorData" }
+	},
+
+	construct: function(configuration) {
 		this.base(arguments);
-		this.setAppearance("textfield");
-		this.setFocusable(true);
-		if(attributes["tab-index"] !== undefined) this.setTabIndex(attributes["tab-index"]);
-		this.addListener("roll", function(event) {
-			if(event.getPointerType() != "wheel") return;
-			var contentElement = this.getContentElement();
-			var scrollY = contentElement.getScrollY();
-			contentElement.scrollToY(scrollY + (event.getDelta().y / 30) * 20);
-			event.stop();
+		this.__configuration = configuration;
+		// Defer creation of CKEditor until after positioning is done
+		this.addListenerOnce("appear", function(event) {
+			qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__createCkEditor, this);
+		}, this);
+		this.addListener("focusin", function() {
+			if(!this.__ckEditor) return;
+			this.__ckEditor.focus();
+		}, this);
+		this.addListener("keypress", function(event) {
+			// Absolutely horrible workaround to a yet unknown bug with space keypress
+			if(event.getKeyIdentifier() === "Space")
+				this.__ckEditor.insertText(" ");
 		}, this);
 	},
 
 	members: {
+
+		__configuration: null,
+		__ckEditor: null,
+		__disableValueUpdate: false,
 
 		_createContentElement: function() {
 			// Create a selectable and overflow enabled <div>
@@ -44,6 +66,60 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			});
 			element.setSelectable(true);
 			return element;
+		},
+
+		__createCkEditor: function() {
+			// Method might be called after widget destruction
+			if(this.isDisposed()) return;
+
+			// Get underlying DOM element
+			var domElement = this.getContentElement().getDomElement();
+
+			// Check that CKEditor is in a supported environment
+			if(!CKEDITOR.env.isCompatible) {
+				domElement.innerHTML = "<span style='color: red;'>Rich text editing is not supported in this environment. Please upgrade your browser.</span>";
+				return;
+			}
+
+			// Invoke CKEditor inline()
+			domElement.setAttribute("contenteditable", "true");
+			this.__ckEditor = CKEDITOR.inline(domElement, this.__configuration);
+
+			// Register listeners
+			this.__ckEditor.on("change", this.__onCkEditorChange, this);
+			this.__ckEditor.on("instanceReady", function() {
+				// Insert current value into newly created editor
+				this.__setCkEditorData(this.getValue());
+			}, this);
+			this.setFocusable(true);
+		},
+
+		__onCkEditorChange: function() {
+			// Check incoming value, if not different from previous one ignore it
+			var data = this.__ckEditor.getData();
+			// Update model
+			this.__disableValueUpdate = true;
+			try {
+				this.setValue(data);
+			}
+			finally {
+				this.__disableValueUpdate = false;
+			}
+		},
+
+		__setCkEditorData: function(data) {
+			// It is possible that we are not ready to accept values yet
+			if(!this.__ckEditor || this.__disableValueUpdate) return;
+			// Store and set new value into CKEditor
+			this.__ckEditor.setData(data);
+		}
+	},
+
+	destruct: function() {
+		// We have to behave ourselves and properly clean up our mess
+		if(this.__ckEditor) {
+			this.__ckEditor.destroy();
+			this.__ckEditor = null;
 		}
 	}
 });

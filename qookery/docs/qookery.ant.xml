@@ -32,7 +32,7 @@
 	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
 
 	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
-	<condition property="qooxdoo.version" value="4.0.1"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.version" value="4.1"><not><isset property="qooxdoo.version" /></not></condition>
 	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
 

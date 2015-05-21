@@ -4,10 +4,12 @@
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
 		xmlns:q-rt="http://www.qookery.org/ns/Form/RichText"
-		column-count="2" column-flexes="0 1">
+		column-count="1" column-flexes="1">
 
-	<q-rt:rich-text width="200" height="100" label="Description" connect="description" />
+	<q-rt:rich-text width="200" height="200" label="First CKEditor" connect="comments" tab-index="1001" />
 
-	<q-rt:rich-text width="200" height="200" label="Comments" connect="comments" />
+	<text-area connect="comments"  tab-index="1002" label="HTML" />
+
+	<q-rt:rich-text width="200" height="100" label="Additional CKEditor" connect="description"  tab-index="1003" />
 
 </form>

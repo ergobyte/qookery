@@ -95,7 +95,8 @@ qx.Class.define("qookerydemo.ui.JsonEditor", {
 						aceSession.setMode("ace/mode/json");
 						aceSession.setTabSize(4);
 						this.setCode("false");
-					}, this, 500);
+						qx.core.Init.getApplication().onComponentReady(qookerydemo.ui.JsonEditor);
+					}, this, 0);
 				}, this);
 				control.addListener("resize", function() {
 					if(!this.__ace) { return null; }

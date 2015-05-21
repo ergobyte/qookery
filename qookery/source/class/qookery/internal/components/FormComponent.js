@@ -45,7 +45,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	properties: {
 		"icon": { nullable: true },
-		"title": { nullable: true, check: "String", event: "changeTitle"},
+		"title": { nullable: true, check: "String", event: "changeTitle" },
 		"valid": { nullable: false, check: "Boolean", init: true, event: "changeValid" },
 		"model": { nullable: true, dereference: true, event: "changeModel", apply: "_applyModel" }
 	},

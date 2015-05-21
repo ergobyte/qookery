@@ -556,6 +556,7 @@
 
 	<element name="split-pane"><complexType><complexContent><extension base="q:container-component">
 		<attribute name="orientation" type="q:orientation" default="horizontal" />
+		<attribute name="flexes"><simpleType><list itemType="nonNegativeInteger" /></simpleType></attribute>
 	</extension></complexContent></complexType></element>
 
 	<element name="stack"><complexType><complexContent><extension base="q:container-component">

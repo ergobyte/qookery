@@ -16,24 +16,24 @@
 	limitations under the License.
 */
 
-/**
- * @asset(qookery/lib/ckeditor/*)
- *
- * @ignore(CKEDITOR)
- * @ignore(CKEDITOR.*)
- */
 qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
+
+	statics: {
+		DEFAULT_TOOLBAR: "Bold Italic Underline Strike - Subscript Superscript | " +
+				"NumberedList BulletedList - Outdent Indent Blockquote | " +
+				"JustifyLeft JustifyCenter JustifyRight JustifyBlock | " +
+				"Cut Copy Paste PasteText | " +
+				"Undo Redo - SelectAll RemoveFormat | " +
+				"Link Unlink"
+	},
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
 
 	members: {
-
-		__ckEditor: null,
-		__previousValue: null,
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
@@ -47,88 +47,51 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 		},
 
 		_createMainWidget: function(attributes) {
-			// Create lightest possible widget since we only need a <div>
-			var widget = new qookery.richtext.internal.RichTextWidget(attributes);
+			// Prepare CKEditor configuration
+			var configuration = { };
+			configuration["language"] = qx.locale.Manager.getInstance().getLanguage();
+			configuration["readOnly"] = this.getReadOnly();
+			configuration["tabIndex"] = attributes["tab-index"];
+			configuration["title"] = this.getAttribute("title", false);
+			configuration["toolbarCanCollapse"] = this.getAttribute("toolbar-can-collapse", false);
+			configuration["uiColor"] = qx.theme.manager.Color.getInstance().resolve(this.getAttribute("ui-color", "background"));
+
+			var toolbarSpecification = this.getAttribute("toolbar", qookery.richtext.internal.RichTextComponent.DEFAULT_TOOLBAR);
+			if(toolbarSpecification) configuration["toolbar"] = toolbarSpecification.split(/\s*\|\s*/).reduce(function(a, s) {
+				a.push(s.split(/\s+/)); return a;
+			}, [ ]);
+
+			var removePluginsSpecification = this.getAttribute("remove-plugins");
+			if(removePluginsSpecification)
+				configuration["removePlugins"] = removePluginsSpecification.split(/\s+/).join(",");
+
+			// Create the wrapping widget
+			var widget = new qookery.richtext.internal.RichTextWidget(configuration);
+			widget.addListener("changeValue", function(event) {
+				if(this._disableValueEvents) return;
+				this._setValueSilently(event.getData());
+			}, this);
+			if(attributes["tab-index"] !== undefined) widget.setTabIndex(attributes["tab-index"]);
+
 			// Configure widget positioning by applying layout
 			this._applyLayoutAttributes(widget, attributes);
-			// Defer creation of CKEditor until after positioning is done
-			widget.addListenerOnce("appear", function(event) {
-				qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__createCkEditor, this);
-			}, this);
 			return widget;
 		},
 
 		_updateUI: function(value) {
-			// It is possible that we are not ready to accept values yet
-			if(!this.__ckEditor) return;
-			// Check incoming value, if not different from previous one ignore it
-			if(value === this.__previousValue) return;
-			// Store and set new value into CKEditor
-			this.__previousValue = value;
-			this.__ckEditor.setData(value);
+			this.getMainWidget().setValue(this._getLabelOf(value));
 		},
 
 		_applyReadOnly: function(readOnly) {
-			if(!this.__ckEditor) return;
-			this.__ckEditor.setReadOnly(readOnly);
+			this.getMainWidget().setReadOnly(readOnly);
 		},
 
 		_applyValid: function(valid) {
-			var mainWidget = this.getMainWidget();
-			valid ? mainWidget.removeState("invalid") : mainWidget.addState("invalid");
+			if(!valid) this.getMainWidget().addState("invalid"); else this.getMainWidget().removeState("invalid");
 		},
 
 		setInvalidMessage: function(invalidMessage) {
 			// Overriden to block default implementation
-		},
-
-		__createCkEditor: function() {
-			var widget = this.getMainWidget();
-			// Method might be called after widget destruction
-			if(widget.isDisposed()) return;
-			// Get underlying DOM element
-			var domElement = widget.getContentElement().getDomElement();
-			// Check that CKEditor is in a supported environment
-			if(!CKEDITOR.env.isCompatible) {
-				domElement.innerHTML = "<span style='color: red;'>Rich text editing is not supported in this environment. Please upgrade your browser or device.</span>";
-				return;
-			}
-			// Invoke CKEditor inline()
-			domElement.setAttribute("contenteditable", "true");
-			var config = {
-				language: qx.locale.Manager.getInstance().getLanguage(),
-				readOnly: this.getReadOnly(),
-				title: this.getAttribute("title", false),
-				toolbarCanCollapse: this.getAttribute("toolbar-can-collapse", false),
-				floatSpaceDockedOffsetY: 10
-			};
-			this.__ckEditor = CKEDITOR.inline(domElement, config);
-			// Insert current value into newly created editor
-			this._updateUI(this.getValue());
-			// Register change listener
-			this.__ckEditor.on("change", this.__onCkEditorChange, this);
-		},
-
-		__onCkEditorChange: function() {
-			// If the reason of this event is us, do nothing
-			if(this._disableValueEvents) return;
-			// Check incoming value, if not different from previous one ignore it
-			var data = this.__ckEditor.getData().trim();
-			var value = data.trim().length === 0 ? null : data;
-			if(value === this.__previousValue) return;
-			// Store value for later difference check, according to CKEditor manual
-			this.__previousValue = value;
-			// Update model
-			this.setValue(value);
 		}
-	},
-
-	destruct: function() {
-		// We have to behave ourselves and properly clean up our mess
-		if(this.__ckEditor) {
-			this.__ckEditor.destroy();
-			this.__ckEditor = null;
-		}
-		this.__previousValue = null;
 	}
 });

@@ -26,16 +26,34 @@ qx.Class.define("qookery.internal.components.SplitPaneComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "flexes": return "IntegerList";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Creation
+
 		create: function(attributes) {
 			attributes["column-count"] = "none";
 			this.base(arguments, attributes);
 		},
 
 		_createContainerWidget: function(attributes) {
-			var orientation = attributes["orientation"] ? attributes["orientation"] : "horizontal";
+			var orientation = this.getAttribute("orientation", "horizontal");
 			var pane = new qx.ui.splitpane.Pane(orientation);
 			this._applyLayoutAttributes(pane, attributes);
 			return pane;
+		},
+
+		add: function(childComponent, display) {
+			this.base(arguments, childComponent, "none");
+			var flexes = this.getAttribute("flexes");
+			var flex = flexes ? flexes[this.listChildren().length] : 0;
+			this.getMainWidget().add(childComponent.getMainWidget(), flex);
 		}
 	}
 });

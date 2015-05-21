@@ -34,9 +34,11 @@ qx.Class.define("qookerydemo.ui.Toolbar", {
 
 		var demoListMenu = new qx.ui.menu.Menu();
 		qookerydemo.Application.DEMOS.forEach(function(demoConfiguration) {
-			var button = new qx.ui.menu.Button(demoConfiguration["label"]);
+			var label = demoConfiguration["label"];
+			var button = new qx.ui.menu.Button(label);
 			button.addListener("execute", function() {
-				qx.core.Init.getApplication().loadDemo(demoConfiguration);
+				var demoId = demoConfiguration["id"];
+				qx.bom.History.getInstance().addToHistory(demoId, "Qookery Demo - " + label);
 			}, this);
 			demoListMenu.add(button);
 		}, this);

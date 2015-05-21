@@ -26,8 +26,11 @@
 	<import namespace="http://www.qookery.org/ns/Form" />
 
 	<element name="rich-text"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="remove-plugins" type="string" />
+		<attribute name="toolbar" type="string" />
 		<attribute name="toolbar-can-collapse" type="boolean" default="false" />
 		<attribute name="title" default="false"><simpleType><union memberTypes="boolean string" /></simpleType></attribute>
+		<attribute name="ui-color" type="token" default="background" />
 	</extension></complexContent></complexType></element>
 
 </schema>
