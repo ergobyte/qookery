@@ -150,8 +150,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				if(connectionLabel) this.setLabel(connectionLabel);
 			}
 			if(!this.getFormat()) {
-				var connectionFormat = modelProvider.getConnectionAttribute(connectionHandle, "format");
-				if(connectionFormat) this.setFormat(qookery.Qookery.getRegistry().createFormatFromSpecification(connectionFormat));
+				var formatSpecification = modelProvider.getConnectionAttribute(connectionHandle, "format");
+				if(formatSpecification) this.setFormat(qookery.Qookery.getRegistry().createFormat(formatSpecification));
 			}
 		},
 
@@ -301,7 +301,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		_transformFormat: function(value) {
 			if(qx.lang.Type.isString(value)) {
-				return qookery.Qookery.getRegistry().createFormatFromSpecification(value);
+				return qookery.Qookery.getRegistry().createFormat(value);
 			}
 			return value;
 		},

@@ -74,13 +74,13 @@ qx.Class.define("qookery.contexts.Qookery", {
 		/**
 		 * Create a new format instance
 		 *
-		 * @param formatterName {String} the symbolic name of the registered format class
+		 * @param specification {String} a valid format specification or a registered factory or format name
 		 * @param options {Map ? null} any number of options to pass to the format class constructor
 		 *
 		 * @return {qx.util.format.IFormat} new format instance or null if not available
 		 */
-		createFormat: function(formatterName, options) {
-			return qookery.Qookery.getRegistry().createFormat(formatterName, options);
+		createFormat: function(specification, options) {
+			return qookery.Qookery.getRegistry().createFormat(specification, options);
 		},
 
 		/**

@@ -159,37 +159,39 @@ qx.Class.define("qookery.internal.Registry", {
 
 		registerFormat: function(formatName, format) {
 			this.__formats[formatName] = format;
-		},
-
-		getFormat: function(formatName) {
-			return this.__formats[formatName];
+			format.dispose = function() {
+				// Registered formats are immortal
+			};
 		},
 
 		registerFormatFactory: function(factoryName, formatClass) {
 			this.__formatFactories[factoryName] = formatClass;
 		},
 
-		createFormat: function(formatName, options) {
-			var formatClass = this.__formatFactories[formatName];
-			if(!formatClass)
-				throw new Error(qx.lang.String.format("Unknown format '%1'", [ formatName ]));
-			return new formatClass(options);
+		getFormat: function(formatName) {
+			return this.__formats[formatName];
 		},
 
-		createFormatFromSpecification: function(formatSpecification) {
-			var formatName = formatSpecification;
-			var options = { };
-			var colonCharacterPos = formatSpecification.indexOf(":");
-			if(colonCharacterPos != -1) {
-				formatName = formatSpecification.slice(0, colonCharacterPos);
-				var optionsStr = formatSpecification.slice(colonCharacterPos + 1);
-				if(optionsStr) optionsStr.replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
+		createFormat: function(specification, options) {
+			var colonPos = specification.indexOf(":");
+			if(colonPos === -1 && options === undefined) {
+				var format = this.__formats[specification];
+				if(format) return format;
+			}
+			var factoryName = specification;
+			if(options === undefined) options = { };
+			if(colonPos !== -1) {
+				factoryName = specification.slice(0, colonPos);
+				specification.slice(colonPos + 1).replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
 					key = qx.lang.String.clean(key);
 					value = qx.lang.String.clean(value);
 					options[key] = value;
 				});
 			}
-			return this.createFormat(formatName, options);
+			var formatClass = this.__formatFactories[factoryName];
+			if(!formatClass)
+				throw new Error(qx.lang.String.format("Unknown format factory '%1'", [ factoryName ]));
+			return new formatClass(options);
 		},
 
 		// Maps

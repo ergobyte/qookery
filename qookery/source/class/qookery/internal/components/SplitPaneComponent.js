@@ -52,7 +52,7 @@ qx.Class.define("qookery.internal.components.SplitPaneComponent", {
 		add: function(childComponent, display) {
 			this.base(arguments, childComponent, "none");
 			var flexes = this.getAttribute("flexes");
-			var flex = flexes ? flexes[this.listChildren().length] : 0;
+			var flex = flexes ? flexes[this.listChildren().length - 1] : 0;
 			this.getMainWidget().add(childComponent.getMainWidget(), flex);
 		}
 	}

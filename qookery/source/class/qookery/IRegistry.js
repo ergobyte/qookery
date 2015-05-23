@@ -98,11 +98,6 @@ qx.Interface.define("qookery.IRegistry", {
 		registerFormat: function(formatName, format) { },
 
 		/**
-		 * Return a previously registered format
-		 */
-		getFormat: function(formatName) { },
-
-		/**
 		 * Register an IFormat factory for easy instance creation by XML authors
 		 *
 		 * @param factoryName {String} The name of the format class for easy referencing
@@ -111,26 +106,23 @@ qx.Interface.define("qookery.IRegistry", {
 		registerFormatFactory: function(factoryName, formatClass) { },
 
 		/**
-		 * Create a new instance of a registered format class
-		 *
-		 * @param factoryName {String} The name of the format class
-		 * @param options {Map} Options to pass to the format constructor
-		 *
-		 * @return {qx.util.format.IFormat} The newly created format instance
+		 * Return a previously registered format
 		 */
-		createFormat: function(factoryName, options) { },
+		getFormat: function(formatName) { },
 
 		/**
 		 * Parse a format specification
 		 *
 		 * <p>Format specification syntax is:</p>
-		 * <pre>{factoryName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]?</pre>
 		 *
-		 * @param formatSpecification {String} a specification according to above syntax
+		 * <pre>{formatName} | ( {factoryName} [ ':' {option1} '=' {value1} [ ',' {option2} '=' {value2} ]* ]? )</pre>
 		 *
-		 * @return {qx.util.format.IFormat} The newly created format instance
+		 * @param specification {String} a specification according to above syntax
+		 * @param options {Map} any additional options to pass to the format constructor - forces factory lookup if provided
+		 *
+		 * @return {qx.util.format.IFormat} the newly created format instance
 		 */
-		createFormatFromSpecification: function(formatSpecification) { },
+		createFormat: function(specification, options) { },
 
 		// Maps
 
@@ -151,7 +143,7 @@ qx.Interface.define("qookery.IRegistry", {
 		 */
 		getMap: function(mapName) { },
 
-		// Scripts
+		// Libraries
 
 		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) { },
 
