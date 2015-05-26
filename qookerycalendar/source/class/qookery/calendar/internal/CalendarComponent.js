@@ -31,16 +31,13 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		this.base(arguments, parentComponent);
 	},
 
-	events: {
-		"loaded": "qx.event.type.Event"
-	},
-
 	members: {
 
 		__domIdentifier: null,
 		__calendar: null,
 		__options: null,
-		__refetchPending: null,
+		__backgroundOperations: null,
+		__backgroundOperationsTimer: null,
 
 		// Metadata
 
@@ -88,6 +85,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		},
 
 		__createCalendar: function() {
+			// Create calendar
 			qx.lang.Object.mergeWith(this.__options, {
 				allDaySlot: this.getAttribute("all-day-slot", "true"),
 				aspectRatio: this.getAttribute("aspect-ratio", 1.35),
@@ -120,13 +118,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			});
 			this.__calendar = jQuery("#" + this.__domIdentifier).fullCalendar(this.__options);
 
-			this.getMainWidget().addListener("appear", function() {
-				if(!this.__refetchPending) return;
-				this.__refetchPending = false;
-				this.__calendar.fullCalendar("refetchEvents");
-			}, this);
-
-			this.fireEvent("loaded");
+			// Start background operations
+			this.__queueOperation("addEventSource");
 		},
 
 		// Component implementation
@@ -151,14 +144,9 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		},
 
 		executeAction: function(actionName, argumentMap) {
-			if(this.__calendar) switch(actionName) {
-			case "addEventSource":
-				return this.__calendar.fullCalendar("addEventSource", argumentMap["events"]);
+			switch(actionName) {
 			case "refetchEvents":
-				if(this.__isCalendarVisible())
-					this.__calendar.fullCalendar("refetchEvents");
-				else
-					this.__refetchPending = true;
+				this.__queueOperation("refetchEvents");
 				return;
 			}
 			return this.base(arguments, actionName, argumentMap);
@@ -168,6 +156,45 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		__isCalendarVisible: function() {
 			return jQuery("#" + this.__domIdentifier).is(":visible");
+		},
+
+		__queueOperation: function(operationName) {
+			if(!this.__backgroundOperations) this.__backgroundOperations = [ ];
+			else if(qx.lang.Array.contains(this.__backgroundOperations, operationName)) return;
+			this.__backgroundOperations.push(operationName);
+
+			if(this.__backgroundOperationsTimer) return;
+			this.__backgroundOperationsTimer = new qx.event.Timer(500);
+			this.__backgroundOperationsTimer.addListener("interval", this.__onBackgroundOperationInterval, this);
+			this.__backgroundOperationsTimer.start();
+		},
+
+		__onBackgroundOperationInterval: function() {
+			if(this.__backgroundOperations.length === 0) return;
+			if(!this.__isCalendarVisible()) return;
+			var operationName = this.__backgroundOperations.shift();
+			switch(operationName) {
+			case "addEventSource":
+				try {
+					// Work around a strange bug when fullcalendar is loaded in an invisible DOM element
+					this.__calendar.fullCalendar("gotoDate", this.getAttribute("default-date", new Date()));
+					this.__calendar.fullCalendar("addEventSource", { events: function(start, end, timezone, callback) {
+						this.executeAction("getEvents", {
+							start: start,
+							end: end,
+							timezone: timezone,
+							callback: callback
+						});
+					}.bind(this) });
+				}
+				catch(e) {
+					this.warn("Error adding event source to calendar", e);
+				}
+				return;
+			case "refetchEvents":
+				this.__calendar.fullCalendar("refetchEvents");
+				return;
+			}
 		}
 	},
 
@@ -176,5 +203,6 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			this.__calendar.fullCalendar("destroy");
 			this.__calendar = null;
 		}
+		this._disposeObjects("__backgroundOperationsTimer");
 	}
 });
