@@ -106,10 +106,11 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				value = this.constructor.nullItemModel;
 			var selectBox = this.getMainWidget();
 			var listItems = selectBox.getChildren();
+			var modelProvider = this.getForm().getModelProvider();
 			for(var i = 0; i < listItems.length; i++) {
 				var listItem = listItems[i];
 				var item = listItem.getModel();
-				if(!qookery.contexts.Model.areEqual(item, value)) continue;
+				if(!modelProvider.areEqual(item, value)) continue;
 				selectBox.setSelection([ listItem ]);
 				return;
 			}

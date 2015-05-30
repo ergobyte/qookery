@@ -26,6 +26,18 @@ qx.Class.define("qookery.contexts.Qookery", {
 
 	statics: {
 
+		// Methods ported from root Qookery static class
+
+		getOption: qookery.Qookery.getOption,
+
+		setOption: qookery.Qookery.setOption,
+
+		getRegistry: qookery.Qookery.getRegistry,
+
+		getService: qookery.Qookery.getService,
+
+		// Additional methods of use to XML authors
+
 		/**
 		 * Use resource loader to load a resource
 		 *
@@ -37,7 +49,8 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
 		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
-			return qookery.Qookery.getResourceLoader().loadResource(resourceUri, thisArg, successCallback, failCallback);
+			var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+			return resourceLoader.loadResource(resourceUri, thisArg, successCallback, failCallback);
 		},
 
 		/**
@@ -139,11 +152,12 @@ qx.Class.define("qookery.contexts.Qookery", {
 				}
 			};
 
+			var resourceLoader = qookery.Qookery.getService("ResourceLoader");
 			if(options["async"] === false) {
-				var xmlCode = qookery.Qookery.getResourceLoader().loadResource(formUrl, thisArg, null, failCallback);
+				var xmlCode = resourceLoader.loadResource(formUrl, thisArg, null, failCallback);
 				return createForm(xmlCode);
 			}
-			return qookery.Qookery.getResourceLoader().loadResource(formUrl, thisArg, createForm, failCallback);
+			return resourceLoader.loadResource(formUrl, thisArg, createForm, failCallback);
 		}
 	}
 });

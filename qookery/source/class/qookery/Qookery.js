@@ -21,12 +21,7 @@
  */
 qx.Class.define("qookery.Qookery", {
 
-	type: "singleton",
-	extend: qx.core.Object,
-
-	construct: function() {
-		this.base(arguments);
-	},
+	type: "static",
 
 	statics: {
 
@@ -45,12 +40,21 @@ qx.Class.define("qookery.Qookery", {
 		},
 
 		/**
-		 * Get the Qookery registry instance
+		 * Return the Qookery registry
 		 *
-		 * @return {qookery.IRegistry} the registry instance
+		 * @return {qookery.IRegistry} the registry
 		 */
 		getRegistry: function() {
 			return qookery.internal.Registry.getInstance();
+		},
+
+		/**
+		 * Return a service
+		 *
+		 * @return {Object} the instance of the required service or <code>null</code> if not available
+		 */
+		getService: function(serviceName) {
+			return qookery.internal.Registry.getInstance().getService(serviceName);
 		},
 
 		/**
@@ -84,24 +88,6 @@ qx.Class.define("qookery.Qookery", {
 		 */
 		createFormParser: function(variables) {
 			return new qookery.internal.FormParser(variables);
-		},
-
-		/**
-		 * Return the default model provider implementation
-		 *
-		 * @return {qookery.IModelProvider} A model provider implementation
-		 */
-		getModelProvider: function() {
-			return qookery.internal.Registry.getInstance().getModelProvider();
-		},
-
-		/**
-		 * Return the currently configured resource loader
-		 *
-		 * @return {qookery.IResourceLoader} Resource loader implementation
-		 */
-		getResourceLoader: function() {
-			return qookery.internal.Registry.getInstance().getResourceLoader();
 		}
 	}
 });

@@ -319,7 +319,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(!value) return "";
 			var format = this.getFormat();
 			if(format) return format.format(value);
-			var modelProvider = qookery.Qookery.getModelProvider();
+			var modelProvider = this.getForm().getModelProvider();
 			if(modelProvider) return modelProvider.getLabel(value).toString();
 			return value.toString();
 		},

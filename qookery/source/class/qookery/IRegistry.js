@@ -20,6 +20,23 @@ qx.Interface.define("qookery.IRegistry", {
 
 	members: {
 
+		// Services
+
+		/**
+		 * Register a new service
+		 *
+		 * @param serviceName {String} The symbolic name of the service
+		 * @param serviceClass {qx.Class|Object} singleton class of service or any object with a getInstance() member function
+		 */
+		registerService: function(serviceName, serviceClass) { },
+
+		/**
+		 * Return a service's instance
+		 *
+		 * @return {Object} the instance of the required service or <code>null</code> if not available
+		 */
+		getService: function(serviceName) { },
+
 		// Components
 
 		/**
@@ -74,18 +91,12 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Register a model provider, optionally setting it as the default one
 		 */
-		registerModelProvider: function(providerName, provider, setDefault) { },
+		registerModelProvider: function(providerName, providerClass, setDefault) { },
 
 		/**
 		 * Return a registered model provider
 		 */
 		getModelProvider: function(providerName) { },
-
-		// Resource loader
-
-		getResourceLoader: function() { },
-
-		setResourceLoader: function(loader) { },
 
 		// Formats
 

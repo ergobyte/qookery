@@ -121,10 +121,11 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			var radioButtonGroup = this.getMainWidget();
 			var selectionFound = false;
 			var buttons = radioButtonGroup.getChildren();
+			var modelProvider = this.getForm().getModelProvider();
 			for(var i = 0; i < buttons.length; i++) {
 				var button = buttons[i];
 				var model = button.getModel();
-				if(!qookery.contexts.Model.areEqual(model, value)) {
+				if(!modelProvider.areEqual(model, value)) {
 					button.setFocusable(false);
 				}
 				else {

@@ -25,9 +25,13 @@ qx.Class.define("qookery.internal.Registry", {
 	construct: function() {
 		this.base(arguments);
 
+		this.__services = { };
+		this.__services["Registry"] = this;
+		this.__services["ModelProvider"] = qookery.impl.DefaultModelProvider;
+		this.__services["ResourceLoader"] = qookery.impl.DefaultResourceLoader;
+
 		this.__modelProviders = { };
-		this.__modelProviders["default"] = new qookery.impl.DefaultModelProvider();
-		this.__defaultModelProvider = this.__modelProviders["default"];
+		this.__modelProviders["default"] = qookery.impl.DefaultModelProvider.getInstance();
 
 		this.__validators = { };
 		this.__validators["comparison"] = qookery.internal.validators.ComparisonValidator.getInstance();
@@ -85,9 +89,8 @@ qx.Class.define("qookery.internal.Registry", {
 
 	members: {
 
+		__services: null,
 		__modelProviders: null,
-		__resourceLoader: null,
-		__defaultModelProvider: null,
 		__validators: null,
 		__components: null,
 		__componentConstructorArgs: null,
@@ -96,32 +99,31 @@ qx.Class.define("qookery.internal.Registry", {
 		__libraries: null,
 		__commands: null,
 
+		// Services
+
+		registerService: function(serviceName, serviceClass) {
+			this.__services[serviceName] = serviceClass;
+		},
+
+		getService: function(serviceName) {
+			var serviceClass = this.__services[serviceName];
+			if(!serviceClass) return null;
+			return serviceClass.getInstance();
+		},
+
 		// Model providers
 
 		getModelProvider: function(providerName) {
-			if(!providerName) return this.__defaultModelProvider;
-			var provider = this.__modelProviders[providerName];
-			if(!provider)
+			if(!providerName) return this.getService("ModelProvider");
+			var providerClass = this.__modelProviders[providerName];
+			if(!providerClass)
 				throw new Error(qx.lang.String.format("Unknown model provider '%1' requested", [ providerName ]));
-			return provider;
+			return providerClass.getInstance();
 		},
 
-		registerModelProvider: function(providerName, provider, setDefault) {
-			this.__modelProviders[providerName] = provider;
-			if(setDefault) this.__defaultModelProvider = provider;
-		},
-
-		// Resource loader
-
-		getResourceLoader: function() {
-			if(!this.__resourceLoader)
-				this.__resourceLoader = new qookery.impl.DefaultResourceLoader();
-			return this.__resourceLoader;
-		},
-
-		setResourceLoader: function(loader) {
-			this._disposeObjects("__resourceLoader");
-			this.__resourceLoader = loader;
+		registerModelProvider: function(providerName, providerClass, setDefault) {
+			this.__modelProviders[providerName] = providerClass;
+			if(setDefault) this.registerService("ModelProvider", providerClass);
 		},
 
 		// Components
@@ -212,6 +214,14 @@ qx.Class.define("qookery.internal.Registry", {
 		},
 
 		loadLibrary: function(libraryName, callback, thisArg) {
+			if(qx.lang.Type.isArray(libraryName)) {
+				var libraries = libraryName;
+				libraryName = libraries.shift();
+				var originalCallback = callback;
+				if(libraries.length > 0) callback = function() {
+					qookery.internal.Registry.getInstance().loadLibrary(libraries, originalCallback, thisArg);
+				};
+			}
 			var library = this.__libraries[libraryName];
 			if(!library) throw new Error("Unable to load unknown library " + libraryName);
 			library.load(callback, thisArg);
@@ -226,12 +236,5 @@ qx.Class.define("qookery.internal.Registry", {
 		getCommand: function(commandName) {
 			return this.__commands[commandName];
 		}
-	},
-
-	destruct: function() {
-		this._disposeArray("__modelProviders");
-		this.__validators = null;
-		this.__components = null;
-		this.__formatFactories = null;
 	}
 });

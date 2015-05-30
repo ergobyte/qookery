@@ -106,10 +106,11 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 		__findItem: function(model) {
 			var items = this.getMainWidget().getChildren();
+			var modelProvider = this.getForm().getModelProvider();
 			for(var i = 0; i < items.length; i++) {
 				var item = items[i];
 				var model2 = item.getModel();
-				if(!qookery.contexts.Model.areEqual(model, model2)) continue;
+				if(!modelProvider.areEqual(model, model2)) continue;
 				return item;
 			}
 		}

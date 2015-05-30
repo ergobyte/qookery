@@ -18,6 +18,7 @@
 
 qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
+	type: "singleton",
 	extend: qx.core.Object,
 	implement: [ qookery.IResourceLoader ],
 

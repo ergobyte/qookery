@@ -18,6 +18,7 @@
 
 qx.Class.define("qookery.impl.DefaultModelProvider", {
 
+	type: "singleton",
 	extend: qx.core.Object,
 	implement: [ qookery.IModelProvider ],
 

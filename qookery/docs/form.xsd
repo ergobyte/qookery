@@ -414,19 +414,22 @@
 		<sequence>
 			<element name="import" minOccurs="0" maxOccurs="unbounded">
 				<annotation><documentation>
-					Import a Qooxdoo class within the form's scripting context
+					Inject a JavaScript object into the form's scripting context
 				</documentation></annotation>
 				<complexType>
-					<attribute name="class" type="q:qooxdoo-class-name" use="required">
+					<attribute name="class" type="q:qooxdoo-class-name">
 						<annotation><documentation>
-							The name of the Qooxdoo class to import
+							Name of a Qooxdoo static class to import. The key defaults to the class simple name (part after last dot).
 						</documentation></annotation>
 					</attribute>
 					<attribute name="key" type="q:javascript-identifier">
 						<annotation><documentation>
-							The name of the property to create in the scripting context -
-							if not set, the part of the class name after the last dot character
-							will be used.
+							The name of the property to create in the scripting context - if not set, a sane default name will be used
+						</documentation></annotation>
+					</attribute>
+					<attribute name="service" type="q:javascript-identifier">
+						<annotation><documentation>
+							Name of a Qookery service to import. The key defaults to the service's name.
 						</documentation></annotation>
 					</attribute>
 				</complexType>
