@@ -169,7 +169,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			this.getMainWidget().focus();
 		},
 
-		addEventHandler: function(eventName, clientCode, onlyOnce) {
+		addEventHandler: function(eventName, handlerArg, onlyOnce) {
 			var receiver = null;
 			if(qx.Class.supportsEvent(this.constructor, eventName)) {
 				receiver = this;
@@ -182,10 +182,9 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(!receiver)
 				throw new Error(qx.lang.String.format("Event '%1' not supported", [ eventName ]));
 
+			var handler = this._resolveHandlerArg(handlerArg);
 			var methodName = onlyOnce ? "addListenerOnce" : "addListener";
-			receiver[methodName](eventName, function(event) {
-				this.executeClientCode(clientCode, { "event": event });
-			}, this);
+			receiver[methodName](eventName, handler, this);
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {
@@ -326,6 +325,18 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				var widget = widgets[i];
 				widget.setVisibility(visibility);
 			}
+		},
+
+		_resolveHandlerArg: function(handlerArg) {
+			if(qx.lang.Type.isFunction(handlerArg)) {
+				return handlerArg;
+			}
+			if(qx.lang.Type.isString(handlerArg)) {
+				return function(event) {
+					this.executeClientCode(handlerArg, { "event": event });
+				};
+			}
+			throw new Error("Unsupported handler type");
 		}
 	},
 

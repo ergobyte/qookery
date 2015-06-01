@@ -124,23 +124,23 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		// Component implementation
 
-		addEventHandler: function(eventName, clientCode, onlyOnce) {
+		addEventHandler: function(eventName, handlerArg, onlyOnce) {
 			switch(eventName) {
 			case "select":
 				return this.__options[eventName] = function(start, end, jsEvent, view) {
-					this.executeClientCode(clientCode, { "start": start, "end": end, "view": view });
+					this.executeClientCode(handlerArg, { "start": start, "end": end, "view": view });
 				}.bind(this);
 			case "eventClick":
 				return this.__options[eventName] = function(calEvent, jsEvent, view) {
-					this.executeClientCode(clientCode, { "event": calEvent, "view": view });
+					this.executeClientCode(handlerArg, { "event": calEvent, "view": view });
 				}.bind(this);
 			case "eventResize":
 			case "eventDrop":
 				return this.__options[eventName] = function(calEvent, delta, revertFunc, jsEvent, ui, view) {
-					this.executeClientCode(clientCode, { "event": calEvent, "delta": delta, "revertFunc": revertFunc, "view": view });
+					this.executeClientCode(handlerArg, { "event": calEvent, "delta": delta, "revertFunc": revertFunc, "view": view });
 				}.bind(this);
 			}
-			this.base(arguments, eventName, clientCode, onlyOnce);
+			this.base(arguments, eventName, handlerArg, onlyOnce);
 		},
 
 		executeAction: function(actionName, argumentMap) {

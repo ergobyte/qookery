@@ -77,6 +77,15 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="overflow">
+		<restriction base="token">
+			<enumeration value="hidden" />
+			<enumeration value="visible" />
+			<enumeration value="scroll" />
+			<enumeration value="auto" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="qooxdoo-class-name">
 		<restriction base="token">
 			<pattern value="([a-zA-Z_$][0-9a-zA-Z_$]*\.)+[A-Z][0-9a-zA-Z_$]*" />
@@ -470,6 +479,8 @@
 
 	<element name="html"><complexType><complexContent><extension base="q:component">
 		<attribute name="html" type="string" />
+		<attribute name="overflow-x" type="q:overflow" />
+		<attribute name="overflow-y" type="q:overflow" />
 	</extension></complexContent></complexType></element>
 
 	<element name="iframe"><complexType><complexContent><extension base="q:component">

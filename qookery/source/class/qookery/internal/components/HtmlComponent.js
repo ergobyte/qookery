@@ -27,8 +27,12 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 	members: {
 
 		_createWidgets: function(attributes) {
-			var htmlText = attributes["html"] || null;
+			var htmlText = this.getAttribute("html", null);
 			var html = new qx.ui.embed.Html(htmlText);
+			var overflowX = this.getAttribute("overflow-x");
+			if(overflowX !== undefined) html.setOverflowX(overflowX);
+			var overflowY = this.getAttribute("overflow-y");
+			if(overflowY !== undefined) html.setOverflowY(overflowY);
 			this._applyLayoutAttributes(html, attributes);
 			return [ html ];
 		},
@@ -39,14 +43,6 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 
 		setHtml: function(html) {
 			this.getMainWidget().setHtml(html);
-		},
-
-		getOverflowY: function() {
-			return this.getMainWidget().getOverflowY();
-		},
-
-		setOverflowY: function(overflow) {
-			this.getMainWidget().setOverflowY(overflow);
 		},
 
 		getDomElement: function() {
