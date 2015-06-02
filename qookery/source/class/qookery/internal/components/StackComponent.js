@@ -53,8 +53,20 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 			var container = this.getMainWidget();
 			if(!container) return null;
 			var selection = container.getSelection();
-			if(!selection || selection.lenght == 0) return null;
+			if(!selection || selection.length === 0) return null;
 			return (selection[0]).getUserData("qookeryComponent");
+		},
+
+		selectNext: function() {
+			var container = this.getMainWidget();
+			var index = 0;
+			var children = container.getChildren();
+			var selection = container.getSelection();
+			if(selection && selection.length === 1) {
+				index = children.indexOf(selection[0]) + 1;
+				if(index >= children.length) index = 0;
+			}
+			container.setSelection([ children[index] ]);
 		},
 
 		_applyDynamic: function(dynamic) {

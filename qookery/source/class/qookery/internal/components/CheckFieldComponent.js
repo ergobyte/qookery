@@ -30,6 +30,15 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "check-box-label": return "ReplaceableString";
+			}
+			return this.base(arguments, attributeName);
+		},
+
 		// Creation
 
 		create: function(attributes) {
@@ -39,6 +48,9 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 
 		_createMainWidget: function(attributes) {
 			var checkBox = new qx.ui.form.CheckBox();
+			var label = this.getAttribute("check-box-label");
+			if(label !== undefined)
+				checkBox.setLabel(label);
 			checkBox.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());

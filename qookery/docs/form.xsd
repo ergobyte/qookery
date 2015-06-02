@@ -405,6 +405,7 @@
 
 	<element name="check-field"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="tri-state" type="boolean" default="false" />
+		<attribute name="check-box-label" type="string" />
 	</extension></complexContent></complexType></element>
 
 	<element name="component"><complexType><complexContent><extension base="q:component">

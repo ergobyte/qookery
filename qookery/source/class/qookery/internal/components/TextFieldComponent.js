@@ -55,6 +55,18 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 
 			var liveUpdate = this.getAttribute("live-update", false);
 			if(liveUpdate) {
+				widget.addListenerOnce("appear", function() {
+					var component = this;
+					var listener = function() {
+						component.setValue(this.value);
+					};
+					qx.bom.Event.addNativeListener(widget.getContentElement().getDomElement(), "paste", listener);
+					var disposeFunction = widget.dispose;
+					widget.dispose = function() {
+						qx.bom.Event.removeNativeListener(widget.getContentElement().getDomElement(), "paste", listener);
+						disposeFunction.call(widget);
+					}
+				}, this);
 				widget.addListener("blur", function(event) {
 					if(this._disableValueEvents) return;
 					var format = this.getFormat();
