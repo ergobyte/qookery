@@ -120,6 +120,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return defaultValue;
 		},
 
+		setAttribute: function(attributeName, value) {
+			throw new Error(qx.lang.String.format("Changing attribute '%1' is not supported", [ attributeName ]));
+		},
+
 		prepare: function(formParser, xmlElement) {
 			// Nothing is done here by default, components may override
 		},

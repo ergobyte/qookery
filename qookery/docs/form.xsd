@@ -437,6 +437,11 @@
 							The name of the property to create in the scripting context - if not set, a sane default name will be used
 						</documentation></annotation>
 					</attribute>
+					<attribute name="optional" type="boolean" default="false">
+						<annotation><documentation>
+							If true, no exception will be thrown in case importing was not possible
+						</documentation></annotation>
+					</attribute>
 					<attribute name="service" type="q:javascript-identifier">
 						<annotation><documentation>
 							Name of a Qookery service to import. The key defaults to the service's name.

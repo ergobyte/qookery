@@ -26,6 +26,9 @@ qx.Class.define("qookery.internal.Registry", {
 		this.base(arguments);
 
 		this.__services = { };
+		this.__services["Application"] = { getInstance: function() {
+			return qx.core.Init.getApplication();
+		} };
 		this.__services["Registry"] = this;
 		this.__services["ModelProvider"] = qookery.impl.DefaultModelProvider;
 		this.__services["ResourceLoader"] = qookery.impl.DefaultResourceLoader;
@@ -108,7 +111,15 @@ qx.Class.define("qookery.internal.Registry", {
 		getService: function(serviceName) {
 			var serviceClass = this.__services[serviceName];
 			if(!serviceClass) return null;
-			return serviceClass.getInstance();
+			try {
+				return serviceClass.getInstance();
+			}
+			catch(e) {
+				this.error("Error activating service", serviceName, e.stack);
+				// Service is defunct, remove it from array of available services
+				delete this.__services[serviceName];
+				return null;
+			}
 		},
 
 		// Model providers

@@ -55,6 +55,17 @@ qx.Interface.define("qookery.IComponent", {
 		getAttribute: function(attributeName, defaultValue) { },
 
 		/**
+		 * Set an attribute's value
+		 *
+		 * <p>NB: Few attributes are expected by implementations to be modified this way - be sure
+		 * to check component documentation for supported changes.</p>
+		 *
+		 * @param attributeName {String} the name of the attribute to change
+		 * @param value {any} the new attribute value
+		 */
+		setAttribute: function(attributeName, value) { },
+
+		/**
 		 * Called by the parser immediately after new instance construction
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
@@ -139,6 +150,16 @@ qx.Interface.define("qookery.IComponent", {
 		 * @param onlyOnce {Boolean} if <code>true</code>, the listener will be removed as soon as it triggered for the first time
 		 */
 		addEventHandler: function(eventName, handlerArg, onlyOnce) { },
+
+		/**
+		 * Execute Qookery scripting code on component
+		 *
+		 * @param clientCode {String} a valid Qookery script
+		 * @param argumentMap {Map} a map to be passed as arguments to the script
+		 *
+		 * @return the script result, if any
+		 */
+		executeClientCode: function(clientCode, argumentMap) { },
 
 		/**
 		 * Execute an action provided by this component

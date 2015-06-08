@@ -202,19 +202,25 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		__parseImport: function(formParser, importElement) {
-			var instance = null, key = formParser.getAttribute(importElement, "key");
+			var instance = null;
+			var key = formParser.getAttribute(importElement, "key");
+			var optional = formParser.getAttribute(importElement, "optional") === "true";
 			var className = formParser.getAttribute(importElement, "class");
 			if(className) {
 				instance = qx.Class.getByName(className);
-				if(!instance)
-					throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
+				if(!instance) {
+					if(!optional) throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
+					return;
+				}
 				if(!key) key = className.substring(className.lastIndexOf(".") + 1);
 			}
 			var serviceName = formParser.getAttribute(importElement, "service");
 			if(serviceName) {
 				instance = qookery.Qookery.getService(serviceName);
-				if(!instance)
-					throw new Error(qx.lang.String.format("Imported service '%1' not available", [ serviceName ]));
+				if(!instance) {
+					if(!optional) throw new Error(qx.lang.String.format("Imported service '%1' not available", [ serviceName ]));
+					return;
+				}
 				if(!key) key = serviceName;
 			}
 			if(!instance) throw new Error("Not enough arguments provided to <import> element");
