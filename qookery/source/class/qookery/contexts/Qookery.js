@@ -144,8 +144,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 					return formComponent;
 				}
 				catch(error) {
-					qx.log.Logger.error(this, qx.lang.String.format("Error creating form editor: %1", [ error ]));
-					qx.log.Logger.error(error.stack);
+					qx.log.Logger.error(this, "Error creating form editor", error);
 				}
 				finally {
 					parser.dispose();

@@ -37,7 +37,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		__columns: null,
 		__tableModel: null,
-		__selectedRowIndex: null,
 
 		// Metadata
 
@@ -63,16 +62,20 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					return new qx.ui.table.columnmodel.Resize(_table);
 				}
 			});
-			table.getSelectionModel().addListener("changeSelection", function(e) {
-				var selectionModel = e.getTarget();
-				var selectionRanges = selectionModel.getSelectedRanges();
-				if(selectionRanges.length == 0) {
-					this.__selectedRowIndex = null;
-					this.fireDataEvent("changeSelection", null);
-					return;
-				}
-				this.__selectedRowIndex = selectionRanges[0].minIndex;
-				this.fireDataEvent("changeSelection", this.getTableModel().getRowData(this.__selectedRowIndex));
+			var selectionMode;
+			switch(this.getAttribute("selection-mode", "single")) {
+			case "none": selectionMode = qx.ui.table.selection.Model.NO_SELECTION; break;
+			case "single": selectionMode = qx.ui.table.selection.Model.SINGLE_SELECTION; break;
+			case "single-interval": selectionMode = qx.ui.table.selection.Model.SINGLE_INTERVAL_SELECTION; break;
+			case "multiple-interval": selectionMode = qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION; break;
+			case "multiple-interval-toggle": selectionMode = qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE; break;
+			}
+			var selectionModel = table.getSelectionModel();
+			selectionModel.setSelectionMode(selectionMode);
+			selectionModel.addListener("changeSelection", function(event) {
+				var isSingleSelection = event.getTarget().getSelectionMode() === qx.ui.table.selection.Model.SINGLE_SELECTION;
+				var eventData = isSingleSelection ? this.getSelectedRowData() : this.getSelection();
+				this.fireDataEvent("changeSelection", eventData);
 			}, this);
 
 			this._applyLayoutAttributes(table, attributes);
@@ -176,18 +179,39 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			this.__columns = columns;
 		},
 
+		isSelectionEmpty: function() {
+			var selectionModel = this.getMainWidget().getSelectionModel();
+			return selectionModel.isSelectionEmpty();
+		},
+
+		getSelection: function() {
+			var selection = [ ];
+			if(!this.__tableModel) return selection;
+			var selectionModel = this.getMainWidget().getSelectionModel();
+			selectionModel.iterateSelection(function(rowIndex) {
+				var rowData = this.__tableModel.getRowData(rowIndex);
+				if(rowData !== null) selection.push(rowData);
+			}, this);
+			return selection;
+		},
+
+		getSingleSelection: function() {
+			var selection = this.getSelection();
+			if(selection.length !== 1) return null;
+			return selection[0];
+		},
+
 		getSelectedRowIndex: function() {
-			return this.__selectedRowIndex;
+			var selectedRowIndex = null;
+			this.getMainWidget().getSelectionModel().iterateSelection(function(rowIndex) {
+				selectedRowIndex = rowIndex;
+			});
+			return selectedRowIndex;
 		},
 
 		setSelectedRowIndex: function(rowIndex, setFocus) {
 			this.getMainWidget().getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
 			if(setFocus) this.getMainWidget().setFocusedCell(rowIndex, 0, true);
-		},
-
-		getSelectedRowData: function() {
-			if(this.__selectedRowIndex === null) return null;
-			return this.getTableModel().getRowData(this.__selectedRowIndex);
 		},
 
 		// Component overrides
@@ -217,6 +241,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		_applyRequired: function() {
 			// Overriden in order to prevent default handling
 			// TODO Qookery: Add a validator that checks that table is not empty
+		},
+
+		// Deprecated methods
+
+		getSelectedRowData: function() {
+			return this.getSingleSelection();
 		}
 	},
 

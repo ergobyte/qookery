@@ -41,8 +41,7 @@ qx.Class.define("qookerydemo.ui.ResultArea",
 				this.add(this.__formComponent.getMainWidget());
 			}
 			catch(e) {
-				this.error(qx.lang.String.format("Error creating form window: %1", [ e ]));
-				if(e.stack) { qx.log.Logger.error(e.stack); }
+				this.error("Error creating form window", e);
 			}
 			finally {
 				parser.dispose();

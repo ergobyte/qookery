@@ -71,8 +71,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 				this.openForm(this.__formComponent, model);
 			}
 			catch(e) {
-				this.error(qx.lang.String.format("Error creating form window: %1", [ e ]));
-				if(e.stack) qx.log.Logger.error(e.stack);
+				this.error("Error creating form window", e);
 			}
 			finally {
 				parser.dispose();

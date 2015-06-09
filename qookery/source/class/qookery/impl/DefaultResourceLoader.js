@@ -48,7 +48,7 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 				return result;
 			}
 			catch(e) {
-				qx.log.Logger.error(this, "I/O error loading resource", url, e.stack);
+				qx.log.Logger.error(this, "I/O error loading resource", url, e);
 				result = failCallback.call(thisArg, xhrRequest, url);
 			}
 			return result;

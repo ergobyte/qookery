@@ -49,7 +49,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				return data.length;
 			},
 			getRowData: function(data, index) {
-				return data[index];
+				var rowData = data[index];
+				if(rowData === undefined) return null;
+				return rowData;
 			},
 			appendRow: function(data, rowData) {
 				data.push(rowData);
@@ -73,7 +75,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				return data.getLength();
 			},
 			getRowData: function(data, index) {
-				return data.getItem(index);
+				var rowData = data.getItem(index);
+				if(rowData === undefined) return null;
+				return rowData;
 			},
 			appendRow: function(data, rowData) {
 				data.push(rowData);

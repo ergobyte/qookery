@@ -253,8 +253,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				return component;
 			}
 			catch(e) {
-				qx.log.Logger.error(this, qx.lang.String.format("Error creating form editor: %1", [ e ]));
-				qx.log.Logger.error(e.stack);
+				qx.log.Logger.error(this, "Error creating form editor", e);
 			}
 			finally {
 				formParser.dispose();

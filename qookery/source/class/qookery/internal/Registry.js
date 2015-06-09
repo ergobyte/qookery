@@ -115,7 +115,7 @@ qx.Class.define("qookery.internal.Registry", {
 				return serviceClass.getInstance();
 			}
 			catch(e) {
-				this.error("Error activating service", serviceName, e.stack);
+				this.error("Error activating service", serviceName, e);
 				// Service is defunct, remove it from array of available services
 				delete this.__services[serviceName];
 				return null;

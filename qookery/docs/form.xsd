@@ -142,6 +142,16 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="table-selection-mode">
+		<restriction base="token">
+			<enumeration value="none" />
+			<enumeration value="single" />
+			<enumeration value="single-interval" />
+			<enumeration value="multiple-interval" />
+			<enumeration value="multiple-interval-toggle" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="vertical-alignment">
 		<restriction base="token">
 			<enumeration value="top" />
@@ -596,6 +606,7 @@
 		<attribute name="column-visibility-button-visible" type="boolean" default="true" />
 		<attribute name="row-height" type="integer" default="20" />
 		<attribute name="show-cell-focus-indicator" type="boolean" default="true" />
+		<attribute name="selection-mode" type="q:table-selection-mode" default="single-selection" />
 		<attribute name="status-bar-visible" type="boolean" default="true" />
 	</extension></complexContent></complexType></element>
 

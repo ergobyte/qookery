@@ -46,7 +46,7 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 				return this.__formatFunction.apply(this, [ obj ]);
 			}
 			catch(e) {
-				this.error("Error applying custom format", e.stack);
+				this.error("Error applying custom format", e);
 				return "";
 			}
 		},
