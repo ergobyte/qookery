@@ -32,7 +32,7 @@
 	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
 
 	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
-	<condition property="qooxdoo.version" value="4.1"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.version" value="4.1.1"><not><isset property="qooxdoo.version" /></not></condition>
 	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
 
@@ -47,7 +47,6 @@
 				<arg line="--no-progress-indicator --stacktrace" />
 				<arg line="-m QOOXDOO_PATH:${qooxdoo.relativePath}" />
 				<arg line="-m APPLICATION:${build.applicationName}" />
-				<arg line="-m CORS_SERVER:${build.serverHost}" />
 				<arg line="-m PROJECT_HOME:${build.projectHome}" />
 				<exec-elements />
 				<arg value="@{job}" />

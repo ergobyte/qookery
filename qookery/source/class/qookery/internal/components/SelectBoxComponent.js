@@ -170,6 +170,12 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 					this.addItem(model, qx.data.Conversion.toString(label));
 				}
 			}
+		},
+
+		setSelection: function(itemNumber) {
+			var selectablesItems = this.getMainWidget().getSelectables(true);
+			if(selectablesItems.length == 0 || selectablesItems[itemNumber] == undefined)
+			this.getMainWidget().setSelection([selectablesItems[itemNumber]]);
 		}
 	}
 });

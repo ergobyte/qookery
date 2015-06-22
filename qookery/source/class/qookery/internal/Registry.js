@@ -225,6 +225,7 @@ qx.Class.define("qookery.internal.Registry", {
 		},
 
 		loadLibrary: function(libraryName, callback, thisArg) {
+			if(!libraryName) return callback.call(thisArg);
 			if(qx.lang.Type.isArray(libraryName)) {
 				var libraries = libraryName;
 				libraryName = libraries.shift();

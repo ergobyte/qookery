@@ -26,6 +26,17 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "source": return "ReplaceableString";
+			default: return this.base(arguments, attributeName);
+			}
+		},
+
+		// Creation
+
 		_createWidgets: function(attributes) {
 			var image = new qx.ui.basic.Image(attributes["source"]);
 			if(attributes["scale"] !== undefined) image.setScale(attributes["scale"]);
