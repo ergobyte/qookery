@@ -27,6 +27,7 @@ qx.Class.define("qookery.Qookery", {
 
 		OPTIONS: { },
 
+		OPTION_DEFAULT_LIVE_UPDATE: "default-live-update",
 		OPTION_DEFAULT_NATIVE_CONTEXT_MENU: "default-native-context-menu",
 
 		getOption: function(optionName, defaultValue) {

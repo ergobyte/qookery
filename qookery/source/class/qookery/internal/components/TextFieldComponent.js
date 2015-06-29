@@ -53,7 +53,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 				this._setValueSilently(value);
 			}, this);
 
-			var liveUpdate = this.getAttribute("live-update", false);
+			var liveUpdate = this.getAttribute("live-update", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LIVE_UPDATE, false));
 			if(liveUpdate) {
 				widget.addListenerOnce("appear", function() {
 					var component = this;

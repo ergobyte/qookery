@@ -45,6 +45,10 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			switch(attributeName) {
 			case "all-day-slot": return "Boolean";
 			case "aspect-ratio": return "Number";
+			case "button-text-today": return "ReplaceableString";
+			case "button-text-month": return "ReplaceableString";
+			case "button-text-week": return "ReplaceableString";
+			case "button-text-day": return "ReplaceableString";
 			case "default-all-day-event-duration": return "Integer";
 			case "editable": return "Boolean";
 			case "event-limit": return "Boolean";

@@ -231,9 +231,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(!messageId) return null;
 			var manager = qx.locale.Manager;
 			if(!manager) return messageId;
-			if(messageId.charAt(0) == ".")
+			if(messageId.charAt(0) === ".")
 				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
-			return manager.tr.apply(manager, arguments);
+			else if(messageId.charAt(0) === "$")
+				messageId = this.classname + messageId;
+			var formatArguments = qx.lang.Array.fromArguments(arguments, 1);
+			return qx.locale.Manager.getInstance().translate(messageId, formatArguments);
 		},
 
 		// Protected methods for internal use
