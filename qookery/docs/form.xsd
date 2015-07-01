@@ -92,6 +92,12 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="replaced-string">
+		<restriction base="string">
+			<pattern value="%.*" />
+		</restriction>
+	</simpleType>
+
 	<simpleType name="row-and-column-count">
 		<union memberTypes="integer">
 			<simpleType>

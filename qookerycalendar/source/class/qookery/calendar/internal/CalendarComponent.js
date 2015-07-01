@@ -50,6 +50,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "button-text-week": return "ReplaceableString";
 			case "button-text-day": return "ReplaceableString";
 			case "default-all-day-event-duration": return "Integer";
+			case "default-view": return "ReplaceableString";
 			case "editable": return "Boolean";
 			case "event-limit": return "Boolean";
 			case "first-day": return "Integer";
@@ -103,6 +104,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				defaultAllDayEventDuration: { days: this.getAttribute("default-all-day-event-duration", 1) },
 				defaultDate: this.getAttribute("default-date", undefined),
 				defaultTimedEventDuration: this.getAttribute("default-timed-event-duration", "02:00:00"),
+				defaultView: this.getAttribute("default-view", "month"),
 				editable: this.getAttribute("editable", false),
 				eventLimit: this.getAttribute("event-limit", false),
 				firstDay: this.getAttribute("first-day", 0),
@@ -130,10 +132,6 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		addEventHandler: function(eventName, handlerArg, onlyOnce) {
 			switch(eventName) {
-			case "select":
-				return this.__options[eventName] = function(start, end, jsEvent, view) {
-					this.executeClientCode(handlerArg, { "start": start, "end": end, "view": view });
-				}.bind(this);
 			case "eventClick":
 				return this.__options[eventName] = function(calEvent, jsEvent, view) {
 					this.executeClientCode(handlerArg, { "event": calEvent, "view": view });
@@ -142,6 +140,14 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "eventDrop":
 				return this.__options[eventName] = function(calEvent, delta, revertFunc, jsEvent, ui, view) {
 					this.executeClientCode(handlerArg, { "event": calEvent, "delta": delta, "revertFunc": revertFunc, "view": view });
+				}.bind(this);
+			case "select":
+				return this.__options[eventName] = function(start, end, jsEvent, view) {
+					this.executeClientCode(handlerArg, { "start": start, "end": end, "view": view });
+				}.bind(this);
+			case "viewRender":
+				return this.__options[eventName] = function(view, element) {
+					this.executeClientCode(handlerArg, { "view": view, "element": element });
 				}.bind(this);
 			}
 			this.base(arguments, eventName, handlerArg, onlyOnce);
