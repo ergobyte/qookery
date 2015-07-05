@@ -104,10 +104,10 @@ qx.Class.define("qookery.internal.FormParser", {
 				return new RegExp(text);
 			case "ReplaceableString":
 				if(text.length < 2) return text;
-				if(text.charAt(0) != "%") return text;
+				if(text.charAt(0) !== "%") return text;
 				if("%none" == text) return text;
-				if(text.charAt(1) == "{" && text.charAt(text.length-1) == "}") {
-					var expression = text.substring(2, text.length-1);
+				if(text.charAt(1) === "{" && text.charAt(text.length - 1) === "}") {
+					var expression = text.substring(2, text.length - 1);
 					return component.executeClientCode(qx.lang.String.format("return (%1);", [ expression ]));
 				}
 				var messageId = text.substring(1);

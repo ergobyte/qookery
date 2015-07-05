@@ -74,7 +74,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			selectionModel.setSelectionMode(selectionMode);
 			selectionModel.addListener("changeSelection", function(event) {
 				var isSingleSelection = event.getTarget().getSelectionMode() === qx.ui.table.selection.Model.SINGLE_SELECTION;
-				var eventData = isSingleSelection ? this.getSelectedRowData() : this.getSelection();
+				var eventData = isSingleSelection ? this.getSingleSelection() : this.getSelection();
 				this.fireDataEvent("changeSelection", eventData);
 			}, this);
 

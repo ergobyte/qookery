@@ -42,6 +42,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			switch(attributeName) {
 			case "keep-sorted": return "Boolean";
 			case "map": return "String";
+			case "null-item-label": "ReplaceableString";
 			}
 			return this.base(arguments, attributeName);
 		},

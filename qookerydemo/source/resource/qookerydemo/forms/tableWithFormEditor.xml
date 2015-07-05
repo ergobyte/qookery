@@ -39,7 +39,7 @@
 		<button label="Edit Password" id="editButton" enabled="false">
 			<script event="execute">
 				$.Qookery.openWindow($("#editor"), {
-					model: $.QookeryDemo.cloneModel($("#passwords").getSelectedRowData()),
+					model: $.QookeryDemo.cloneModel($("#passwords").getSingleSelection()),
 					onClose: function(result) {
 						if(!result) return;
 						$("#passwords").getTableModel().replaceRow(

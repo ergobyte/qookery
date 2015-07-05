@@ -78,7 +78,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"filter": "RegularExpression",
 
 			"label": "ReplaceableString",
-			"null-item-label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
 			"title": "ReplaceableString",
 			"tool-tip-text": "ReplaceableString"
@@ -130,7 +129,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		create: function(attributes) {
 			// Attention: Base method must be called early when overriden
-			this.__id = attributes["id"];
+			this.__id = attributes["id"] || null;
 			this.__attributes = attributes;
 
 			this._widgets = this._createWidgets(attributes);
@@ -237,6 +236,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				messageId = this.classname + messageId;
 			var formatArguments = qx.lang.Array.fromArguments(arguments, 1);
 			return qx.locale.Manager.getInstance().translate(messageId, formatArguments);
+		},
+
+		toString: function() {
+			return this.classname + "[" + (this.__id || this.$$hash) + "]";
 		},
 
 		// Protected methods for internal use
