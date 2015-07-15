@@ -61,11 +61,6 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 						component.setValue(this.value);
 					};
 					qx.bom.Event.addNativeListener(widget.getContentElement().getDomElement(), "paste", listener);
-					var disposeFunction = widget.dispose;
-					widget.dispose = function() {
-						qx.bom.Event.removeNativeListener(widget.getContentElement().getDomElement(), "paste", listener);
-						disposeFunction.call(widget);
-					}
 				}, this);
 				widget.addListener("blur", function(event) {
 					if(this._disableValueEvents) return;

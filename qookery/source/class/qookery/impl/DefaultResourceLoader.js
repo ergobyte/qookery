@@ -44,6 +44,9 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 			};
 			try {
 				xhrRequest.open("GET", resourceUri, asynchronous);
+				// When debugging, disable browser cache
+				if(qx.core.Environment.get("qx.debug"))
+					xhrRequest.setRequestHeader("If-Modified-Since", "Thu, 1 Jan 1970 00:00:00 GMT");
 				xhrRequest.send();
 				return result;
 			}
