@@ -22,6 +22,10 @@
 			name="http://www.qookery.org/ns/Form"
 			uri="form.xsd" />
 
+	<uri id="q-ace"
+			name="http://www.qookery.org/ns/Form/Ace"
+			uri="../../org.qookery.ace/docs/form-ace.xsd" />
+
 	<uri id="q-rt"
 			name="http://www.qookery.org/ns/Form/RichText"
 			uri="../../org.qookery.richtext/docs/form-richtext.xsd" />

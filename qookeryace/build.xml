@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="Qookery ACE" basedir="." default="Download">
+
+	<property name="ace.version" value="1.1.8" />
+	<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${ace.version}/src-min" />
+	<property name="ace.target" location="../qookeryace/source/resource/qookery/lib/ace" />
+
+	<target name="Download-Init">
+		<condition property="build.aceAvailable">
+			<available type="file" file="${ace.target}/ace.js" />
+		</condition>
+	</target>
+
+	<target name="Download" depends="Download-Init" unless="build.aceAvailable" description="Download ACE">
+		<mkdir dir="${ace.target}" />
+		<get dest="${ace.target}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="${ace.downloadBase}/ace.js" />
+			<url url="${ace.downloadBase}/mode-json.js" />
+			<url url="${ace.downloadBase}/mode-textile.js" />
+			<url url="${ace.downloadBase}/mode-xml.js" />
+		</get>
+	</target>
+
+	<target name="Clean" description="Clean up target directory">
+		<delete dir="${ace.target}" />
+	</target>
+
+</project>

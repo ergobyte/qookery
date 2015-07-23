@@ -219,23 +219,30 @@ qx.Class.define("qookery.internal.Registry", {
 
 		// Libraries
 
-		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) {
-			if(this.__libraries[libraryName]) return; // Prevent redefinition
-			this.__libraries[libraryName] = new qookery.internal.util.Library(libraryName, resourceUris, dependencies, postLoadCallback);
+		getLibrary: function(name, required) {
+			var library = this.__libraries[name];
+			if(library === undefined && required === true)
+				throw new Error("Required library " + name + " not found");
+			return library;
 		},
 
-		loadLibrary: function(libraryName, callback, thisArg) {
-			if(!libraryName) return callback.call(thisArg);
-			if(qx.lang.Type.isArray(libraryName)) {
-				var libraries = libraryName;
-				libraryName = libraries.shift();
+		registerLibrary: function(name, resourceUris, dependencies, postLoadCallback) {
+			if(this.__libraries[name]) return; // Prevent redefinition
+			this.__libraries[name] = new qookery.internal.util.Library(name, resourceUris, dependencies, postLoadCallback);
+		},
+
+		loadLibrary: function(name, callback, thisArg) {
+			if(!name) return callback.call(thisArg);
+			if(qx.lang.Type.isArray(name)) {
+				var libraries = name;
+				name = libraries.shift();
 				var originalCallback = callback;
 				if(libraries.length > 0) callback = function() {
 					qookery.internal.Registry.getInstance().loadLibrary(libraries, originalCallback, thisArg);
 				};
 			}
-			var library = this.__libraries[libraryName];
-			if(!library) throw new Error("Unable to load unknown library " + libraryName);
+			var library = this.__libraries[name];
+			if(!library) throw new Error("Unable to load unknown library " + name);
 			library.load(callback, thisArg);
 		},
 

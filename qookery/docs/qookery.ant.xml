@@ -90,6 +90,7 @@
 	<target name="Qooxdoo-SymLinks" unless="build.qooxdooInstalled">
 		<symlink link="${qooxdoo.relativePath}" resource="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" overwrite="true" />
 		<symlink link="${qooxdoo.path}/component/library/qookery" resource="${git.repository.qookery}/qookery" overwrite="true" />
+		<symlink link="${qooxdoo.path}/component/library/qookeryace" resource="${git.repository.qookery}/qookeryace" overwrite="true" />
 		<symlink link="${qooxdoo.path}/component/library/qookeryrichtext" resource="${git.repository.qookery}/qookeryrichtext" overwrite="true" />
 		<symlink link="${qooxdoo.path}/component/library/qookerycalendar" resource="${git.repository.qookery}/qookerycalendar" overwrite="true" />
 	</target>

@@ -21,8 +21,8 @@ qx.Class.define("qookery.internal.util.Library", {
 	extend: Object,
 	include: [ qx.core.MLogging ],
 
-	construct: function(libraryName, resourceUris, dependencies, postLoadCallback) {
-		this.__libraryName = libraryName;
+	construct: function(name, resourceUris, dependencies, postLoadCallback) {
+		this.__name = name;
 		this.__resourceUris = resourceUris;
 		this.__dependencies = dependencies;
 		this.__isLoaded = false;
@@ -32,12 +32,22 @@ qx.Class.define("qookery.internal.util.Library", {
 
 	members: {
 
-		__libraryName: null,
+		__name: null,
 		__resourceUris: null,
 		__dependencies: null,
 		__isLoaded: null,
 		__callbacks: null,
 		__postLoadCallback: null,
+
+		getName: function() {
+			return this.__name;
+		},
+
+		addResourceUri: function(resourceUri) {
+			if(this.__isLoaded)
+				throw new Error("Adding resource URIs to an already loaded library is not possible");
+			this.__resourceUris.push(resourceUri);
+		},
 
 		isLoaded: function() {
 			return this.__isLoaded;
@@ -113,7 +123,7 @@ qx.Class.define("qookery.internal.util.Library", {
 
 			// We are done loading, mark our success
 			this.__isLoaded = true;
-			this.debug("Loaded", this.__libraryName);
+			this.debug("Loaded", this.__name);
 
 			// Invoke any waiting callbacks
 			this.__callbacks.forEach(function(callback) { callback(); });

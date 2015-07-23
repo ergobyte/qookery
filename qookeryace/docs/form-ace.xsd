@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		xmlns:q="http://www.qookery.org/ns/Form"
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		xmlns:xml="http://www.w3.org/XML/1998/namespace"
+		targetNamespace="http://www.qookery.org/ns/Form/Ace"
+		elementFormDefault="qualified">
+
+	<import namespace="http://www.qookery.org/ns/Form" />
+
+	<element name="editor"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="h-scroll-bar-always-visible" default="false" />
+		<attribute name="highlight-active-line" default="true" />
+		<attribute name="mode" type="token" use="required" />
+		<attribute name="show-gutter" type="boolean" default="true" />
+		<attribute name="tab-size" type="nonNegativeInteger" default="4" />
+		<attribute name="use-soft-tabs" type="boolean" default="false" />
+		<attribute name="use-wrap-mode" type="boolean" default="false" />
+		<attribute name="v-scroll-bar-always-visible" default="false" />
+	</extension></complexContent></complexType></element>
+
+</schema>
