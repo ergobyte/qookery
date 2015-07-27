@@ -59,6 +59,7 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 		},
 
 		getLabel: function(object, labelType) {
+			if(qx.lang.Type.isString(object)) return object;
 			return qx.data.Conversion.toString(object);
 		},
 

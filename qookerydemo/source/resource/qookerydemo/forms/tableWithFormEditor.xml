@@ -50,8 +50,10 @@
 		</button>
 		<button label="Remove Password" id="removeButton" enabled="false">
 			<script event="execute">
-				if($("#passwords").getSelectedRowIndex() == undefined) return;
-				$("#passwords").getTableModel().removeRow($("#passwords").getSelectedRowIndex());
+				var selectedRowIndex = $("#passwords").getSelectedRowIndex();
+				if(selectedRowIndex == null) return;
+				$("#passwords").getTableModel().removeRow(selectedRowIndex);
+				$("#passwords").getMainWidget().getSelectionModel().resetSelection();
 			</script>
 		</button>
 	</composite>
