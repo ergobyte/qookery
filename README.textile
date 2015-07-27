@@ -1,0 +1,58 @@
+h1. Qookery: Declarative UI Building for Qooxdoo
+
+h2(#about). About
+
+The Qookery library allows "Qooxdoo":http://qooxdoo.org/ programmers to declare and run user interfaces through an easy to master XML language.
+
+This project is a spinoff of "WAFFLE", the client-side web application framework used within Ergobyte for its cloud products.
+
+It is currently under heavy development; code and APIs will change frequently, without warning and in unpredictable ways. Use with caution!
+
+h2(#demo). Live demo
+
+You can discover Qookery and experiment with its features by visiting our interactive live demo
+
+* "Qookery Demo and Playground":/content/waffle/qookerydemo/index.html
+
+h2(#examples). Real-life Examples
+
+Ergobyte account management interface is built on top of Qookery. Each and every interface element, from the browser window up, is built declaratively using Qookery forms. You may read the source code of each form by using a browser debugging tool to track network requests.
+
+* "Ergobyte Electronic Services":https://www.ergobyte.net/
+
+h2(#documentation). Documentation
+
+The API documentation as generated from class files is under construction. 
+
+You might want to have a look at the form's XML schema, which is the normative reference of the language:
+
+* "Form XML Schema":https://github.com/ergobyte/qookery/blob/master/qookery/docs/form.xsd
+
+h2(#group). Discussion group
+
+A discussion group is available here:
+
+* "Discussion Group":http://groups.google.com/forum/?fromgroups#!forum/qookery
+
+h2(#source). Source code
+
+The project's source code is hosted on GitHub
+
+* "Source Code":https://github.com/ergobyte/qookery
+* "Issue Tracker":https://github.com/ergobyte/qookery/issues
+
+h2(#license). License
+
+Qookery is licensed under the Apache License, Version 2.0.
+
+h2(#contact). Contact
+
+For requests and comments, please contact the project's contributors:
+
+* "George Nikolaidis":https://github.com/gnikolaidis - gnikolaidis@ergobyte.gr
+* "Joseph Karras":https://github.com/joskar - jkarr@ergobyte.gr
+
+h2(#links). See also
+
+* Qookery.org - "www.qookery.org":http://www.qookery.org/
+* Ergobyte Informatics S.A. - "www.ergobyte.gr":https://www.ergobyte.gr/portal/ergobyte/en/home
