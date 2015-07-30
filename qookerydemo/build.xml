@@ -21,7 +21,7 @@
 	<property name="build.projectHome" location="." />
 	<property name="build.projectName" value="qookerydemo" />
 
-	<import file="../qookery/docs/qookery.ant.xml" as="qookery" />
+	<import file="../build.xml" as="qookery" />
 	<import file="../qookeryrichtext/build.xml" as="richtext" />
 	<import file="../qookerycalendar/build.xml" as="calendar" />
 

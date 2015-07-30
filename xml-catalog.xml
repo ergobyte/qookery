@@ -20,22 +20,22 @@
 
 	<uri id="q"
 			name="http://www.qookery.org/ns/Form"
-			uri="form.xsd" />
+			uri="qookery/docs/form.xsd" />
 
 	<uri id="q-ace"
 			name="http://www.qookery.org/ns/Form/Ace"
-			uri="../../org.qookery.ace/docs/form-ace.xsd" />
+			uri="qookeryace/docs/form-ace.xsd" />
 
-	<uri id="q-rt"
-			name="http://www.qookery.org/ns/Form/RichText"
-			uri="../../org.qookery.richtext/docs/form-richtext.xsd" />
-
-	<uri id="q-cal"
+	<uri id="q-calendar"
 			name="http://www.qookery.org/ns/Form/Calendar"
-			uri="../../org.qookery.calendar/docs/form-calendar.xsd" />
+			uri="qookerycalendar/docs/form-calendar.xsd" />
 
 	<uri id="q-mobile"
 			name="http://www.qookery.org/ns/Form/Mobile"
-			uri="../../org.qookery.mobile/docs/form-mobile.xsd" />
+			uri="qookerymobile/docs/form-mobile.xsd" />
+
+	<uri id="q-richtext"
+			name="http://www.qookery.org/ns/Form/RichText"
+			uri="qookeryrichtext/docs/form-richtext.xsd" />
 
 </catalog>

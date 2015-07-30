@@ -1,15 +1,17 @@
 {
 	"info": {
-		"name": "qookery.ace",
-		"summary": "Ajax.org Cloud9 Editor (ACE) component for Qookery",
-		"description": "Allows easy integration of ACE into Qookery forms",
+		"name": "Qookery ACE",
+		"description": "Ajax.org Cloud9 Editor (ACE) component for Qookery",
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" }
 		],
-		"version" : "trunk",
-		"qooxdoo-versions": [ "4.0.1" ]
+		"version": "master",
+		"qooxdoo-versions": [ "4.1.1" ],
+		"download": "https://github.com/ergobyte/qookery/releases/download/#{version}/qookery.tar.gz",
+		"checksum": "#{sha1-checksum}",
+		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/#{version}/qookery"
 	},
 	"provides": {
 		"namespace": "qookery.ace",

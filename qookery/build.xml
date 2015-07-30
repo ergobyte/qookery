@@ -21,10 +21,11 @@
 	<property name="build.projectHome" location="." />
 	<property name="build.projectName" value="qookery" />
 
-	<import file="docs/qookery.ant.xml" as="qookery" />
+	<import file="../build.xml" as="qookery" />
 
 	<target name="Api" depends="qookery.Api-Run" description="Generate and view the Qookery API" />
 	<target name="Clean" depends="qookery.Clean" description="Clean up any intermediate files produced by build" />
 	<target name="Lint" depends="qookery.Lint" description="Perform syntactic checks on library" />
+	<target name="ValidateManifest" depends="qookery.ValidateManifest" description="Validate Manifest.json" />
 
 </project>

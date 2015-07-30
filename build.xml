@@ -16,7 +16,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="Qookery Common Build File">
+<project name="Qookery Base">
 
 	<property environment="env" />
 
@@ -53,6 +53,40 @@
 			</exec>
 		</sequential>
 	</macrodef>
+
+	<macrodef name="package-contribution">
+		<attribute name="project" />
+		<sequential>
+			<loadfile property="version" srcfile="VERSION" />
+			<tar destfile="release/@{project}.tar.gz" compression="gzip">
+				<tarfileset dir=".">
+					<include name="@{project}/source/**" />
+					<exclude name="@{project}/source/script/**" />
+					<exclude name="@{project}/source/resource/qookery/lib/**" />
+					<include name="@{project}/Manifest.json" />
+				</tarfileset>
+				<tarfileset dir="." prefix="@{project}">
+					<include name="LICENSE" />
+					<include name="NOTICE" />
+				</tarfileset>
+			</tar>
+			<checksum file="release/@{project}.tar.gz" algorithm="sha1" property="sha1-checksum" />
+			<copy file="@{project}/Manifest.json" tofile="release/@{project}.json" overwrite="true" />
+			<replace file="release/@{project}.json">
+				<replacefilter token="&quot;version&quot;: &quot;master&quot;" value="&quot;version&quot;: &quot;${version}&quot;" />
+				<replacefilter token="#{sha1-checksum}" value="${sha1-checksum}" />
+				<replacefilter token="#{version}" value="${version}" />
+			</replace>
+		</sequential>
+	</macrodef>
+
+	<!-- Package -->
+
+	<target name="Release" description="Package projects for release">
+		<delete dir="release" />
+		<package-contribution project="qookery" />
+		<package-contribution project="qookerymobile" />
+	</target>
 
 	<!-- Initialization -->
 
@@ -178,6 +212,10 @@
 
 	<target name="Lint" depends="Init, Qooxdoo">
 		<call-generator-py job="lint" />
+	</target>
+
+	<target name="ValidateManifest" depends="Init, Qooxdoo">
+		<call-generator-py job="validate-manifest" />
 	</target>
 
 	<!-- Python HTTP server -->

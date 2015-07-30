@@ -352,7 +352,7 @@
 		<choice minOccurs="0" maxOccurs="unbounded">
 			<element ref="q:script" />
 			<group ref="q:components" />
-			<any namespace="##other" />
+			<any namespace="##other" processContents="lax" />
 		</choice>
 	</extension></complexContent></complexType>
 
@@ -478,7 +478,7 @@
 			<choice minOccurs="0" maxOccurs="unbounded">
 				<element ref="q:script" />
 				<group ref="q:components" />
-				<any namespace="##other" />
+				<any namespace="##other" processContents="lax" />
 			</choice>
 		</sequence>
 		<attribute ref="xml:base" />

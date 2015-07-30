@@ -10,8 +10,8 @@
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "stylkarr@gmail.com" },
 			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" }
 		],
-		"version" : "trunk",
-		"qooxdoo-versions": [ "4.0.1" ]
+		"version": "master",
+		"qooxdoo-versions": [ "4.1.1" ]
 	},
 	"provides": {
 		"namespace": "qookerydemo",

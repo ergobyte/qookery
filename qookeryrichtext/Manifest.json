@@ -9,8 +9,11 @@
 			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" }
 		],
-		"version" : "trunk",
-		"qooxdoo-versions": [ "4.0.1" ]
+		"version" : "#{version}",
+		"qooxdoo-versions": [ "4.1.1" ],
+		"download": "https://github.com/ergobyte/qookery/releases/download/#{version}/qookery.tar.gz",
+		"checksum": "#{sha1-checksum}",
+		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/#{version}/qookery"
 	},
 	"provides": {
 		"namespace": "qookery.richtext",

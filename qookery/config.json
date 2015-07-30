@@ -6,7 +6,8 @@
 	"export": [
 		"api",
 		"api-data",
-		"lint"
+		"lint",
+		"validate-manifest"
 	],
 	"config-warnings": {
 		"job-shadowing": [ "lint" ]

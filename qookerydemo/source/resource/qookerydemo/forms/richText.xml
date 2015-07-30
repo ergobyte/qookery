@@ -8,8 +8,8 @@
 
 	<q-rt:rich-text width="200" height="200" label="First CKEditor" connect="comments" tab-index="1001" />
 
-	<text-area connect="comments"  tab-index="1002" label="HTML" />
+	<text-area connect="comments" tab-index="1002" label="HTML" />
 
-	<q-rt:rich-text width="200" height="100" label="Additional CKEditor" connect="description"  tab-index="1003" />
+	<q-rt:rich-text width="200" height="100" label="Additional CKEditor" connect="description" tab-index="1003" />
 
 </form>

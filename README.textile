@@ -8,11 +8,11 @@ This project is a spinoff of "WAFFLE", the client-side web application framework
 
 It is currently under heavy development; code and APIs will change frequently, without warning and in unpredictable ways. Use with caution!
 
-h2(#demo). Live demo
+h2(#demo). Live Demo
 
 You can discover Qookery and experiment with its features by visiting our interactive live demo
 
-* "Qookery Demo and Playground":/content/waffle/qookerydemo/index.html
+* "Qookery Demo and Playground":http://www.qookery.org/content/waffle/qookerydemo/index.html
 
 h2(#examples). Real-life Examples
 
@@ -28,13 +28,13 @@ You might want to have a look at the form's XML schema, which is the normative r
 
 * "Form XML Schema":https://github.com/ergobyte/qookery/blob/master/qookery/docs/form.xsd
 
-h2(#group). Discussion group
+h2(#group). Discussion Group
 
 A discussion group is available here:
 
 * "Discussion Group":http://groups.google.com/forum/?fromgroups#!forum/qookery
 
-h2(#source). Source code
+h2(#source). Source Code
 
 The project's source code is hosted on GitHub
 
@@ -54,5 +54,5 @@ For requests and comments, please contact the project's contributors:
 
 h2(#links). See also
 
-* Qookery.org - "www.qookery.org":http://www.qookery.org/
+* Qookery Home - "www.qookery.org":http://www.qookery.org/
 * Ergobyte Informatics S.A. - "www.ergobyte.gr":https://www.ergobyte.gr/portal/ergobyte/en/home

@@ -24,9 +24,9 @@
 		"libraries": {
 			"library": [
 				{ "manifest": "${QOOXDOO_PATH}/framework/Manifest.json" },
-				{ "manifest": "${QOOXDOO_PATH}/component/library/qookery/Manifest.json" },
-				{ "manifest": "${QOOXDOO_PATH}/component/library/qookerycalendar/Manifest.json" },
-				{ "manifest": "${QOOXDOO_PATH}/component/library/qookeryrichtext/Manifest.json" }
+				{ "manifest": "../qookery/Manifest.json" },
+				{ "manifest": "../qookerycalendar/Manifest.json" },
+				{ "manifest": "../qookeryrichtext/Manifest.json" }
 			]
 		},
 		"includes": {
