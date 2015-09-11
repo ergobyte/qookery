@@ -36,7 +36,8 @@ qx.Class.define("qookerydemo.Application", {
 			{ id: "multipleConnections", label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
 			{ id: "xInclude", label: "XInclude", formFile: "xInclude.xml" },
 			{ id: "richText", label: "Extension: Rich Text", formFile: "richText.xml", modelFile: "carConfiguration.json" },
-			{ id: "calendar", label: "Extension: Calendar", formFile: "calendar.xml" }
+			{ id: "calendar", label: "Extension: Calendar", formFile: "calendar.xml" },
+			{ id: "maps", label: "Extension: Maps", formFile: "maps.xml", modelFile: "carConfiguration.json" }
 		]
 	},
 

@@ -128,11 +128,12 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.selection.moveCursorFileStart();
 			renderer.scrollToX(0);
 			renderer.scrollToY(0);
+
+			this.executeAction("initializeEditor", { editor: editor });
 		},
 
 		__onChange: function(event) {
 			if(this.__ignoreChangeEvents) return;
-			if(!event.data.text) return; // Quick check that this is a text modifying event
 			var text = this.__editor.getSession().getValue();
 			this._setValueSilently(text);
 		}

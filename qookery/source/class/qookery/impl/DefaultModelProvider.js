@@ -58,6 +58,16 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			throw new Error("Unsupported object types for comparison");
 		},
 
+		convertFrom: function(value, className) {
+			// No conversion performed by default
+			return value;
+		},
+
+		convertTo: function(object, className) {
+			// No conversion performed by default
+			return object;
+		},
+
 		getLabel: function(object, labelType) {
 			if(qx.lang.Type.isString(object)) return object;
 			return qx.data.Conversion.toString(object);

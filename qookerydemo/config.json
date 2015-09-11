@@ -26,6 +26,7 @@
 				{ "manifest": "${QOOXDOO_PATH}/framework/Manifest.json" },
 				{ "manifest": "../qookery/Manifest.json" },
 				{ "manifest": "../qookerycalendar/Manifest.json" },
+				{ "manifest": "../qookerymaps/Manifest.json" },
 				{ "manifest": "../qookeryrichtext/Manifest.json" }
 			]
 		},

@@ -1,8 +1,7 @@
 {
 	"info": {
-		"name": "qookery.calendar",
-		"summary": "Calendar component for Qookery",
-		"description": "Allows easy integration of fullcalendar.io into Qookery forms",
+		"name": "Qookery Maps",
+		"description": "Components wrapping Google Maps functionality",
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
@@ -16,7 +15,7 @@
 		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/#{version}/qookery"
 	},
 	"provides": {
-		"namespace": "qookery.calendar",
+		"namespace": "qookery.maps",
 		"encoding": "utf-8",
 		"class": "source/class",
 		"resource": "source/resource",

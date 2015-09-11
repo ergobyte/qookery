@@ -95,11 +95,11 @@ qx.Class.define("qookery.internal.FormParser", {
 			case "Integer":
 				return parseInt(text, 10);
 			case "IntegerList":
-				var value = text.split(/\W+/);
-				value.forEach(function(element, index) { value[index] = parseInt(element, 10); });
-				return value;
+				return text.split(/\W+/).map(function(element) { return parseInt(element, 10); });
 			case "Number":
 				return qx.data.Conversion.toNumber(text);
+			case "NumberList":
+				return text.split(/\s+/).map(function(element) { return qx.data.Conversion.toNumber(element); });
 			case "RegularExpression":
 				return new RegExp(text);
 			case "ReplaceableString":

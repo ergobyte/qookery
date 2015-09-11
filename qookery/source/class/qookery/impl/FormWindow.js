@@ -40,12 +40,12 @@ qx.Class.define("qookery.impl.FormWindow", {
 		this.setLayout(new qx.ui.layout.Grow());
 		this.set({ modal: true, showMinimize: false, showMaximize: false, contentPadding: 10 });
 		if(options) {
-			if(options["icon"]) this.setIcon(options["icon"]);
-			if(options["caption"]) this.setCaption(options["caption"]);
-			if(options["allowClose"]) this.setAllowClose(options["allowClose"]);
-			if(options["onClose"]) this.__onClose = options["onClose"].bind(thisArg);
-			if(options["showMaximize"]) this.setShowMaximize(options["showMaximize"]);
-			if(options["openMaximized"]) this.maximize();
+			if(options["icon"] !== undefined) this.setIcon(options["icon"]);
+			if(options["caption"] !== undefined) this.setCaption(options["caption"]);
+			if(options["allowClose"] !== undefined) this.setAllowClose(options["allowClose"]);
+			if(options["onClose"] !== undefined) this.__onClose = options["onClose"].bind(thisArg);
+			if(options["showMaximize"] !== undefined) this.setShowMaximize(options["showMaximize"]);
+			if(options["openMaximized"] === true) this.maximize();
 		}
 	},
 

@@ -30,6 +30,10 @@
 			name="http://www.qookery.org/ns/Form/Calendar"
 			uri="qookerycalendar/docs/form-calendar.xsd" />
 
+	<uri id="q-maps"
+			name="http://www.qookery.org/ns/Form/Maps"
+			uri="qookerymaps/docs/form-maps.xsd" />
+
 	<uri id="q-mobile"
 			name="http://www.qookery.org/ns/Form/Mobile"
 			uri="qookerymobile/docs/form-mobile.xsd" />

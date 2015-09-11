@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Google Maps demo
+-->
+<form xmlns="http://www.qookery.org/ns/Form"
+		xmlns:q-maps="http://www.qookery.org/ns/Form/Maps"
+		column-count="1" column-flexes="1">
+
+	<q-maps:map-location id="map1" width="400" height="250" center="39 22" connect="lastSaleCoordinates" />
+
+	<q-maps:map-location id="map2" width="400" height="250" center="39 22" connect="lastSaleCoordinates" />
+
+</form>

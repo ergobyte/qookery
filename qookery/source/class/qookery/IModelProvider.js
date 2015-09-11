@@ -65,6 +65,30 @@ qx.Interface.define("qookery.IModelProvider", {
 		compare: function(object1, object2) { },
 
 		/**
+		 * Convert values from component specific to model objects
+		 *
+		 * <p>Provider is expected to convert given component specific value to a model object.</p>
+		 *
+		 * @param value {any} component-specific value
+		 * @param className {String} the name of the value's class
+		 *
+		 * @return {any} value if no conversion needed, conversion result, or <code>null</code> if conversion was attempted but failed
+		 */
+		convertFrom: function(value, className) { },
+
+		/**
+		 * Convert values from model objects to component specific values
+		 *
+		 * <p>Provider is expected to convert given model object into an object of the required class for component specific needs.</p>
+		 *
+		 * @param object {any} model object
+		 * @param className {String} the name of the wanted value's class
+		 *
+		 * @return {any} input if no conversion needed, conversion result, or <code>null</code> if conversion was attempted but failed
+		 */
+		convertTo: function(object, className) { },
+
+		/**
 		 * Return a human-friendly label for a model object
 		 *
 		 * @param object {any} model object - it may not be <code>null</code>

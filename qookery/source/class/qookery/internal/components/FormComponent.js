@@ -84,6 +84,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		focus: function() {
+			// Do not handle form focus on touch devices - this is a hack to prevent the virtual keyboard from
+			// popping up when the XML author sets the focus to text fields (and other components)
+			if(qx.core.Environment.get("device.touch")) return;
 			this.executeAction("onFocusReceived");
 		},
 
