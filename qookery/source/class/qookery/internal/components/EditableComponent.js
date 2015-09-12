@@ -327,8 +327,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		/**
 		 * Perform all operation about align, width and height for a label
 		 *
-		 * @param widget {qx.ui.basic.Label} A label widget
-		 * @param attributes {keyValuePairList} The instruction about the label apperance
+		 * @param widget {qx.ui.basic.Label} label widget
+		 * @param attributes {keyValuePairList} instructions about the label apperance
 		 */
 		_setupLabelAppearance: function(labelWidget, attributes) {
 			var currentWidth = labelWidget.getWidth();

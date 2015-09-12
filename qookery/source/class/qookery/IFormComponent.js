@@ -53,7 +53,7 @@ qx.Interface.define("qookery.IFormComponent", {
 		 *
 		 * @param componentId {String} the unique identifier of the requested component
 		 *
-		 * @return {qookery.IComponent} The component or <code>null</cide> if not found
+		 * @return {qookery.IComponent} component or <code>null</code> if not found
 		 */
 		getComponent: function(componentId) { },
 
@@ -98,8 +98,8 @@ qx.Interface.define("qookery.IFormComponent", {
 		/**
 		 * Register a value within the client scripting context
 		 *
-		 * @param key {String} The name of the user context
-		 * @param userContext {Object} A qooxdoo class with the desired functionality
+		 * @param key {String} name of the user context
+		 * @param userContext {Object} qooxdoo class with the desired functionality
 		 */
 		registerUserContext: function(key, userContext) { },
 

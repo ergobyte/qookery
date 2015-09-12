@@ -5,6 +5,7 @@
 	],
 	"export": [
 		"api",
+		"api-verify",
 		"api-data",
 		"lint",
 		"validate-manifest"
@@ -19,10 +20,21 @@
 			"qookery.*"
 		],
 		"API_EXCLUDE": [
-			"qookery.internal.*", "qx.*"
+			"qookery.impl.*", "qookery.internal.*", "qx.*"
 		]
 	},
 	"jobs": {
+		"api-verify": {
+			"desc" : "creates an Apiviewer while checking internal links. Also creates an XML sitemap with a link for each class",
+			"extend": [ "api" ],
+			"api": {
+				"verify": [ "links", "statistics" ],
+				"sitemap": {
+					"link-uri": "http://www.qookery.org/content/waffle/qookeryapi/index.html#%s",
+					"file": "api/sitemap.xml"
+				}
+			}
+		},
 		"lint": {
 			"lint-check": {
 				"ignore-no-loop-block": true

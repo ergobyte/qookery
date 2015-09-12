@@ -29,10 +29,10 @@ qx.Interface.define("qookery.IResourceLoader", {
 		 * <p>Calls to this method imply synchronous loading when no success
 		 * callback has been set</p>
 		 *
-		 * @param resourceUrl {String} The URL of the needed resource
-		 * @param thisArg {Object ? null} An optional context for callbacks, may be <code>null</code>
-		 * @param successCallback {Function} An optional function to be called on asynchronous load success
-		 * @param failCallback {Function} An optional function to be called on asynchronous load failure
+		 * @param resourceUrl {String} URL of the needed resource
+		 * @param thisArg {Object ? null} optional context for callbacks, may be <code>null</code>
+		 * @param successCallback {Function} optional function to be called on asynchronous load success
+		 * @param failCallback {Function} optional function to be called on asynchronous load failure
 		 */
 		loadResource: function(resourceUrl, thisArg, successCallback, failCallback) { }
 	}

@@ -2,31 +2,46 @@ h1. Qookery: Declarative UI Building for Qooxdoo
 
 h2(#about). About
 
-The Qookery library allows "Qooxdoo":http://qooxdoo.org/ programmers to declare and run user interfaces through an easy to master XML language.
+The Qookery library helps "Qooxdoo":http://qooxdoo.org/ programmers declare and run user interfaces through an easy to master XML language.
 
 This project is a spinoff of "WAFFLE", the client-side web application framework used within Ergobyte for its cloud products.
 
-It is currently under heavy development; code and APIs will change frequently, without warning and in unpredictable ways. Use with caution!
+It is currently under heavy development; code and APIs may change frequently.
 
 h2(#demo). Live Demo
 
-You can discover Qookery and experiment with its features by visiting our interactive live demo
+You can discover Qookery and experiment with its features by visiting its interactive live demo
 
 * "Qookery Demo and Playground":http://www.qookery.org/content/waffle/qookerydemo/index.html
 
 h2(#examples). Real-life Examples
 
-Ergobyte account management interface is built on top of Qookery. Each and every interface element, from the browser window up, is built declaratively using Qookery forms. You may read the source code of each form by using a browser debugging tool to track network requests.
+Below rich Internet applications are using Qookery for their UI needs almost exclusively. All interface elements, from the browser's window up, are assembled and laid out declaratively via Qookery forms. 
 
-* "Ergobyte Electronic Services":https://www.ergobyte.net/
+* "Ergobyte Electronic Services":https://www.ergobyte.net/ - Ergobyte customer account management interface
+* "Γαληνός Office":https://office.galinos.gr/ - Full featured medical practice management system by Ergobyte, providing patient management, appointment scheduling, customizable health records, document management, reporting etc.
+
+You may study their forms' XML source code by firing up your browser's developer tools and track network requests as you use the applications.
+
+h2(#tutorials). Tutorials
+
+A short introductory tutorial is available:
+
+* "Getting Started with Qookery":http://www.qookery.org/portal/qookery/en/getting-started
 
 h2(#documentation). Documentation
 
-The API documentation as generated from class files is under construction. 
+The documentation is generated from class files and is under construction. 
 
-You might want to have a look at the form's XML schema, which is the normative reference of the language:
+* "API Documentation":http://www.qookery.org/content/waffle/qookeryapi/index.html
 
-* "Form XML Schema":https://github.com/ergobyte/qookery/blob/master/qookery/docs/form.xsd
+You might want to have a look at the XML schemata, which are the normative reference of the language:
+
+* "Main Schema":https://github.com/ergobyte/qookery/blob/master/qookery/docs/form.xsd
+* "Extension: Ajax.org Cloud9 Editor (ACE)":https://github.com/ergobyte/qookery/blob/master/qookeryace/docs/form-ace.xsd
+* "Extension: CKeditor":https://github.com/ergobyte/qookery/blob/master/qookeryrichtext/docs/form-richtext.xsd
+* "Extension: FullCalendar.io":https://github.com/ergobyte/qookery/blob/master/qookerycalendar/docs/form-calendar.xsd
+* "Extension: Google Maps":https://github.com/ergobyte/qookery/blob/master/qookerymaps/docs/form-maps.xsd
 
 h2(#group). Discussion Group
 

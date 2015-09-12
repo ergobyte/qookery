@@ -25,6 +25,10 @@ qx.Interface.define("qookery.IValidator", {
 
 		/**
 		 * Create a validation function
+		 *
+		 * @param component {qookery.IComponent} component that will receive the new validation
+		 * @param invalidMessage {String?} message that will be displayed when validation fails
+		 * @param options {Map?} optional map with validator-specific arguments
 		 */
 		createValidation: function(component, invalidMessage, options) { }
 	}

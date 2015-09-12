@@ -41,8 +41,8 @@ qx.Class.define("qookery.contexts.Qookery", {
 		/**
 		 * Use resource loader to load a resource
 		 *
-		 * @param resourceUri {String} the URI of the resource to load
-		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
+		 * @param resourceUri {String} URI of the resource to load
+		 * @param thisArg {Object ? null} object to set as <code>this</code> for callbacks
 		 * @param successCallback {Function} callback to call after successful load
 		 * @param failCallback {Function} callback to call in case load fails
 		 *
@@ -59,13 +59,13 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param form {String|qookery.IFormComponent} URL of the XML form to load, or a form component
 		 * @param options {Map ? null} any of FormWindow options in addition to any of those below
 		 *		<ul>
-		 *		<li>model {any} an optional model to load into the form</li>
+		 *		<li>model {any} optional model to load into the form</li>
 		 *		<li>variables {Map ? null} optional variables to pass to the form parser</li>
-		 *		<li>onClose {Function ? null} a callback that will receive the form's result property when window is closed</li>
+		 *		<li>onClose {Function ? null} callback that will receive the form's result property when window is closed</li>
 		 *		</ul>
-		 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
+		 * @param thisArg {Object ? null} object to set as <code>this</code> for callbacks
 		 *
-		 * @return {qookery.impl.FormWindow} the newly opened form window
+		 * @return {qookery.impl.FormWindow} newly opened form window
 		 */
 		openWindow: function(form, options, thisArg) {
 			if(!options) options = { };
@@ -87,7 +87,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		/**
 		 * Create a new format instance
 		 *
-		 * @param specification {String} a valid format specification or a registered factory or format name
+		 * @param specification {String} valid format specification or a registered factory or format name
 		 * @param options {Map ? null} any number of options to pass to the format class constructor
 		 *
 		 * @return {qx.util.format.IFormat} new format instance or null if not available
@@ -99,8 +99,8 @@ qx.Class.define("qookery.contexts.Qookery", {
 		/**
 		 * Programmatically create a new Qookery component
 		 *
-		 * @param parentComponent {qookery.IContainerComponent} the parent component to hold new component
-		 * @param componentName {String} the qualified or symbolic name of the new component's implementation class
+		 * @param parentComponent {qookery.IContainerComponent} parent component to hold new component
+		 * @param componentName {String} qualified or symbolic name of the new component's implementation class
 		 * @param attributes {Map ? null} any number of attributes understood by new component implementation
 		 *
 		 * @return {qookery.IComponent} newly created component
@@ -116,13 +116,13 @@ qx.Class.define("qookery.contexts.Qookery", {
 		/**
 		 * Load a Qookery form from a URL
 		 *
-		 * @param formUrl {String} the URI of the resource to load
-		 * @param thisArg {Object} an object to set as <code>this</code> for callbacks
+		 * @param formUrl {String} URI of the resource to load
+		 * @param thisArg {Object} object to set as <code>this</code> for callbacks
 		 * @param options {Map ? null} operation options
 		 *	<ul>
 		 *		<li>async {Boolean} if <code>true</code> load asynchronously - this is the default
 		 *		<li>fail {Function} callback to call in case load fails</li>
-		 *		<li>model {Object} the form model</li>
+		 *		<li>model {Object} form model</li>
 		 *		<li>success {Function} callback to call after successful load</li>
 		 *		<li>variables {Object ? null} variables that will be available in xml <code> $.variableName</code></li>
 		 *	</ul>

@@ -266,8 +266,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		/**
 		 * Apply common attributes to a widget
 		 *
-		 * @param widget {qx.ui.core.Widget} Widget to receive layout properties
-		 * @param attributes {Object} Layouting instructions as provided by the XML parser
+		 * @param widget {qx.ui.core.Widget} widget to receive layout properties
+		 * @param attributes {Object} layouting instructions as provided by the XML parser
 		 */
 		_applyLayoutAttributes: function(widget, attributes) {
 

@@ -16,11 +16,20 @@
 	limitations under the License.
 */
 
+/**
+ * Instances of this class pack helpful information about discovered validation errors
+ */
 qx.Class.define("qookery.util.ValidationError", {
 
 	extend: Object,
-	include: [ qx.core.MAssert ],
 
+	/**
+	 * Construct a new validation error
+	 *
+	 * @param source {any} value that represents the source of error
+	 * @param message {String?} error message
+	 * @param cause {Array?} array of underlying errors
+	 */
 	construct : function(source, message, cause) {
 		this.__source = source;
 		this.__message = message;
@@ -36,7 +45,7 @@ qx.Class.define("qookery.util.ValidationError", {
 		/**
 		 * Return the source of this error, if available
 		 *
-		 * @return {any} a value that represents the source of error, may be <code>null</code>
+		 * @return {any} value that represents the source of error, may be <code>null</code>
 		 */
 		getSource: function() {
 			return this.__source;
@@ -45,16 +54,16 @@ qx.Class.define("qookery.util.ValidationError", {
 		/**
 		 * Return a message for this error
 		 *
-		 * @return {String} an error message, may be <code>null</code>
+		 * @return {String} error message, may be <code>null</code>
 		 */
 		getMessage: function() {
 			return this.__message;
 		},
 
 		/**
-		 * Return an array of errors that are the cause of this error
+		 * Return an array of errors that are the underlying cause of this error
 		 *
-		 * @return {Array} an array of errors or <code>null</code> if not available
+		 * @return {Array} array of underlying errors or <code>null</code> if not set
 		 */
 		getCause: function() {
 			return this.__cause;

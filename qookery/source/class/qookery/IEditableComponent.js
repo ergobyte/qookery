@@ -56,7 +56,7 @@ qx.Interface.define("qookery.IEditableComponent", {
 		 *
 		 * <p>This method will first disconnect an existing connection made a previous call.</p>
 		 *
-		 * @param propertyPath {String} A valid model property path
+		 * @param propertyPath {String} valid model property path
 		 */
 		connect: function(propertyPath) { },
 
@@ -70,7 +70,7 @@ qx.Interface.define("qookery.IEditableComponent", {
 		/**
 		 * Add a validation to this component
 		 *
-		 * @param validationType {String} name of a registered Qookery validator
+		 * @param validatorType {String} name of a registered Qookery validator
 		 * @param invalidMessage {String?null} error message to use in case of validation failure, <code>null</code> for default one(s)
 		 * @param options {Map?null} validator specific options
 		 *

@@ -16,6 +16,9 @@
 	limitations under the License.
 */
 
+/**
+ * Facility that handles registration of various Qookery artifacts under well known symbolic names
+ */
 qx.Interface.define("qookery.IRegistry", {
 
 	members: {
@@ -25,13 +28,15 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Register a new service
 		 *
-		 * @param serviceName {String} The symbolic name of the service
+		 * @param serviceName {String} symbolic name of the service
 		 * @param serviceClass {qx.Class|Object} singleton class of service or any object with a getInstance() member function
 		 */
 		registerService: function(serviceName, serviceClass) { },
 
 		/**
 		 * Return a service's instance
+		 *
+		 * @param serviceName {String} symbolic name of the service
 		 *
 		 * @return {Object} the instance of the required service or <code>null</code> if not available
 		 */
@@ -42,16 +47,16 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Register a new component type
 		 *
-		 * @param componentQName {String} The qualified name of the component to register
-		 * @param componentClass {qx.Class} The class that implements (at least) qookery.IComponent
-		 * @param constructorArg {Object} Optional constructor argument
+		 * @param componentQName {String} qualified name of the component to register
+		 * @param componentClass {qx.Class} class that implements (at least) qookery.IComponent
+		 * @param constructorArg {Object} optional constructor argument
 		 */
 		registerComponentType: function(componentQName, componentClass, constructorArg) { },
 
 		/**
 		 * Check if a component type is available
 
-		 * @param componentQName {String} Qualified name of a possibly registered component type
+		 * @param componentQName {String} qualified name of a possibly registered component type
 		 *
 		 * @return {boolean} <code>true</code> in case the component type is available
 		 */
@@ -60,10 +65,10 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Create a new component instance
 		 *
-		 * @param componentQName {String} Qualified name of a registered component type
-		 * @param parentComponent {IComponent?null} Component that will contain new component
+		 * @param componentQName {String} qualified name of a registered component type
+		 * @param parentComponent {IComponent?null} component that will contain new component
 		 *
-		 * @return {IComponent} Newly created component, an exception is thrown on error
+		 * @return {IComponent} newly created component, an exception is thrown on error
 		 */
 		createComponent: function(componentQName, parentComponent) { },
 
@@ -80,7 +85,7 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Get a previously registered validator by name
 		 *
-		 * @param name {String} The name of the validator
+		 * @param name {String} name of the validator
 		 *
 		 * @return {qookery.IValidator} the validator or <code>undefined</code> if not found
 		 */
@@ -90,11 +95,17 @@ qx.Interface.define("qookery.IRegistry", {
 
 		/**
 		 * Register a model provider, optionally setting it as the default one
+		 *
+		 * @param providerName {String} symbolic name of provider
+		 * @param providerClass {qx.Class} class of the provider
+		 * @param setDefault {Boolean} if <code>true</code>, provider will be set as the default one
 		 */
 		registerModelProvider: function(providerName, providerClass, setDefault) { },
 
 		/**
 		 * Return a registered model provider
+		 *
+		 * @param providerName {String} symbolic name of provider
 		 */
 		getModelProvider: function(providerName) { },
 
@@ -103,21 +114,23 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Register an IFormat under a symbolic name
 		 *
-		 * @param formatName {String} The symbolic name of the format for easy referencing
-		 * @param format {qx.util.format.IFormat} The format class
+		 * @param formatName {String} symbolic name of the format for easy referencing
+		 * @param format {qx.util.format.IFormat} format class
 		 */
 		registerFormat: function(formatName, format) { },
 
 		/**
 		 * Register an IFormat factory for easy instance creation by XML authors
 		 *
-		 * @param factoryName {String} The name of the format class for easy referencing
-		 * @param formatClass {qx.Class} The format class
+		 * @param factoryName {String} name of the format class for easy referencing
+		 * @param formatClass {qx.Class} format class
 		 */
 		registerFormatFactory: function(factoryName, formatClass) { },
 
 		/**
 		 * Return a previously registered format
+		 *
+		 * @param formatName {String} symbolic name of the wanted format
 		 */
 		getFormat: function(formatName) { },
 
@@ -140,24 +153,39 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Register a map
 		 *
-		 * @param mapName {String} The symbolic name of the map for subsequent access
-		 * @param map {Map} The map object
+		 * @param mapName {String} symbolic name of the map for subsequent access
+		 * @param map {Map} map object
 		 */
 		registerMap: function(mapName, map) { },
 
 		/**
 		 * Return a registered map
 		 *
-		 * @param mapName {String} The name of the map sought
+		 * @param mapName {String} symbolic name of the map sought
 		 *
-		 * @return {Map} The map object or <code>null</code> if map was not found
+		 * @return {Map} map object or <code>null</code> if map was not found
 		 */
 		getMap: function(mapName) { },
 
 		// Libraries
 
+		/**
+		 * Register a library for future use
+		 *
+		 * @param libraryName {String} symbolic name of the library
+		 * @param resourceUris {Array?} array of URIs of resources to load when library is used for the first time
+		 * @param dependencies {Array?} array of names of other libraries that must be loaded prior to this one
+		 * @param postLoadCallback {Function?} function that will be called when loading finished for further library initialization
+		 */
 		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) { },
 
+		/**
+		 * Request library for usage, loading it if needed
+		 *
+		 * @param libraryName {String} symbolic name of the library
+		 * @param callback {Function} function that will be called as soon as library is ready for usage
+		 * @param thisArg {any} optional <code>this</code> argument for callback
+		 */
 		loadLibrary: function(libraryName, callback, thisArg) { }
 	}
 });

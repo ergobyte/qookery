@@ -92,7 +92,7 @@ qx.Interface.define("qookery.IComponent", {
 		 * @param formParser {qookery.IFormParser} requesting form parser
 		 * @param xmlElement {qx.dom.Element} XML element
 		 *
-		 * @retun {Boolean} <code>true</code> in case component understood and parsed element
+		 * @return {Boolean} <code>true</code> in case component understood and parsed element
 		 */
 		parseCustomElement: function(formParser, xmlElement) { },
 
@@ -101,6 +101,7 @@ qx.Interface.define("qookery.IComponent", {
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
 		 *
+		 * @param formParser {qookery.IFormParser} the parser that is invoking this method
 		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
 		setup: function(formParser, attributes) { },
@@ -127,7 +128,7 @@ qx.Interface.define("qookery.IComponent", {
 		/**
 		 * Return a list of widgets that are handled by this component
 		 *
-		 * @param filterName {String} If set, one of 'topMost', 'main' to restrict resulting list
+		 * @param filterName {String} if set, one of 'topMost', 'main' to restrict resulting list
 		 *
 		 * @return {qx.ui.core.Widget[]} widget list - an empty array if none found
 		 */
@@ -177,8 +178,8 @@ qx.Interface.define("qookery.IComponent", {
 		/**
 		 * Check whether the action exist or not.
 		 *
-		 * @param actionName {String} The name of the action
-		 * @return {Boolean} Whether the action exist
+		 * @param actionName {String} the name of the action
+		 * @return {Boolean} whether the action exists
 		 */
 		isActionSupported: function(actionName) { },
 

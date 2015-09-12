@@ -32,7 +32,7 @@
 	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
 
 	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
-	<condition property="qooxdoo.version" value="4.1.1"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.version" value="5.0"><not><isset property="qooxdoo.version" /></not></condition>
 	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
 
@@ -74,8 +74,8 @@
 			<copy file="@{project}/Manifest.json" tofile="release/@{project}.json" overwrite="true" />
 			<replace file="release/@{project}.json">
 				<replacefilter token="&quot;version&quot;: &quot;master&quot;" value="&quot;version&quot;: &quot;${version}&quot;" />
-				<replacefilter token="#{sha1-checksum}" value="${sha1-checksum}" />
-				<replacefilter token="#{version}" value="${version}" />
+				<replacefilter token="%{sha1-checksum}" value="${sha1-checksum}" />
+				<replacefilter token="%{version}" value="${version}" />
 			</replace>
 		</sequential>
 	</macrodef>
@@ -85,7 +85,11 @@
 	<target name="Release" description="Package projects for release">
 		<delete dir="release" />
 		<package-contribution project="qookery" />
+		<package-contribution project="qookeryace" />
+		<package-contribution project="qookerycalendar" />
+		<package-contribution project="qookerymaps" />
 		<package-contribution project="qookerymobile" />
+		<package-contribution project="qookeryrichtext" />
 	</target>
 
 	<!-- Initialization -->
@@ -184,25 +188,19 @@
 
 	<!-- API -->
 
-	<target name="Api-Init" depends="Init">
-		<uptodate property="build.sourceUpToDate" targetfile="api/script/apidata.json">
-			<srcfiles dir="source" />
-			<srcfiles file="config.json" />
-		</uptodate>
-		<uptodate property="build.apiUpToDate" targetfile="api/script/apiviewer.js">
-			<srcfiles file="config.json" />
-		</uptodate>
-	</target>
-
-	<target name="Api-Data" depends="Api-Init, Qooxdoo" unless="build.sourceUpToDate">
+	<target name="Api-Data" depends="Qooxdoo" unless="build.sourceUpToDate">
 		<call-generator-py job="api-data" />
 	</target>
 
-	<target name="Api-Application" depends="Api-Init, Qooxdoo" unless="build.apiUpToDate">
-		<call-generator-py job="api" />
+	<target name="Api-Application" depends="Api-Data, Qooxdoo" unless="build.apiUpToDate">
+		<call-generator-py job="api-verify" />
+		<loadfile property="version" srcfile="../VERSION" />
+		<replace file="api/script/apiviewer.js">
+			<replacefilter token="/ergobyte/qookery/tree/%{version}" value="/ergobyte/qookery/tree/${version}" />
+		</replace>
 	</target>
 
-	<target name="Api-Run" depends="Api-Data, Api-Application, PythonHttp-Start">
+	<target name="Api-Run" depends="Api-Application, PythonHttp-Start">
 		<exec executable="${build.browser}">
 			<arg value="http://${build.serverHost}/local/${build.gitRepositoryName}/${build.projectName}/api/" />
 		</exec>
