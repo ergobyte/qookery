@@ -113,8 +113,8 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 			map.addListener("click", function(event) {
 				var data = {
-					x: event.latLng.lng().toFixed(6),
-					y: event.latLng.lat().toFixed(6)
+					x: event.latLng.lng(),
+					y: event.latLng.lat()
 				};
 				this.fireDataEvent("tap", data);
 				if(this.isReadOnly()) return;
@@ -124,13 +124,10 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 			map.addListener("center_changed", function(event) {
 				var data = {
-					x: map.getCenter().lng().toFixed(6),
-					y: map.getCenter().lat().toFixed(6)
-				};
-				this.fireDataEvent("changeCenter", {
 					x: map.getCenter().lng(),
 					y: map.getCenter().lat()
-				});
+				};
+				this.fireDataEvent("changeCenter", data);
 			}.bind(this));
 
 			map.addListener("zoom_changed", function() {

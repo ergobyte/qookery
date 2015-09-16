@@ -180,9 +180,9 @@ qx.Interface.define("qookery.IRegistry", {
 		registerLibrary: function(libraryName, resourceUris, dependencies, postLoadCallback) { },
 
 		/**
-		 * Request library for usage, loading it if needed
+		 * Request one or more libraries for usage, loading them if needed
 		 *
-		 * @param libraryName {String} symbolic name of the library
+		 * @param libraryNames {String|Array?} symbolic name(s) of libraries to load - may be empty
 		 * @param callback {Function} function that will be called as soon as library is ready for usage
 		 * @param thisArg {any} optional <code>this</code> argument for callback
 		 */
