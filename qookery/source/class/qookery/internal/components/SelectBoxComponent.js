@@ -118,10 +118,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
-			var mainWidget = this.getMainWidget();
-			if(!mainWidget) return;
-			if(readOnly) mainWidget.addState("disabled");
-			else mainWidget.removeState("disabled");
+			this.getMainWidget().setEnabled(!readOnly);
 		},
 
 		addItem: function(model, label, icon) {
@@ -175,8 +172,8 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		setSelection: function(itemNumber) {
 			var selectablesItems = this.getMainWidget().getSelectables(true);
-			if(selectablesItems.length == 0 || selectablesItems[itemNumber] == undefined)
-			this.getMainWidget().setSelection([selectablesItems[itemNumber]]);
+			if(!selectablesItems || selectablesItems[itemNumber] === undefined) return;
+			this.getMainWidget().setSelection([ selectablesItems[itemNumber] ]);
 		}
 	}
 });

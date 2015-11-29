@@ -24,7 +24,7 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__children = [ ];
-		this.__flexes = [];
+		this.__flexes = [ ];
 	},
 
 	members: {

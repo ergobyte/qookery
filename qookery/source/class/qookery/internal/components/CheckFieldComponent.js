@@ -74,6 +74,10 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 			this.getMainWidget().setValue(value);
 		},
 
+		_applyReadOnly: function(readOnly) {
+			this.getMainWidget().setEnabled(!readOnly);
+		},
+
 		// Internals
 
 		__applyTriState: function(triState) {

@@ -30,6 +30,13 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 
 	members: {
 
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "dynamic": return "Boolean";
+			default: return this.base(arguments, attributeName);
+			}
+		},
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			if(attributes["dynamic"] !== undefined) this.setDynamic(attributes["dynamic"]);
