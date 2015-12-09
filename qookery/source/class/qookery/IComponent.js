@@ -48,9 +48,9 @@ qx.Interface.define("qookery.IComponent", {
 		 * in order to request that an exception is thrown when value is missing.</p>
 		 *
 		 * @param attributeName {String} the name of the wanted attribute
-		 * @param defaultValue {any} value to return when attribute is missing
+		 * @param defaultValue {any} value to return instead of <code>undefined</code> when attribute is missing
 		 *
-		 * @return {any} attribute's value or <code>null</code> if undefined
+		 * @return {any} attribute's value or <code>undefined</code> if attribute is missing
 		 */
 		getAttribute: function(attributeName, defaultValue) { },
 

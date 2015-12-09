@@ -59,6 +59,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__connections: null,
 		__clientCodeContext: null,
 		__operationQueue: null,
+		__disposeList: null,
 
 		// Creation
 
@@ -157,6 +158,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		registerUserContext: function(key, userContext) {
 			var clientCodeContext = this.getClientCodeContext();
 			clientCodeContext[key] = userContext;
+		},
+
+		addToDisposeList: function(disposable) {
+			if(!this.__disposeList) this.__disposeList = [ ];
+			this.__disposeList.push(disposable);
 		},
 
 		// Validation
@@ -309,6 +315,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	destruct: function() {
 		for(var i = 0; i < this.__connections.length; i++) this.__connections[i].disconnect();
+		this._disposeArray("__disposeList");
 		this.__components = null;
 		this.__validations = null;
 		this.__userContextMap = null;

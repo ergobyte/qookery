@@ -57,8 +57,20 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 			this._applyLayoutAttributes(atom, attributes);
 		},
 
+		getLabel: function() {
+			return this.getMainWidget().getLabel(label);
+		},
+
 		setLabel: function(label) {
 			this.getMainWidget().setLabel(label);
+		},
+
+		getIcon: function() {
+			return this.getMainWidget().getIcon();
+		},
+
+		setIcon: function(icon) {
+			this.getMainWidget().setIcon(icon);
 		}
 	}
 });

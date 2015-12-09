@@ -33,7 +33,7 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			var id2 = this.identityOf(object2);
 			if(id1 !== undefined && id2 !== undefined) {
 				if(qx.lang.Type.isArray(id1) && qx.lang.Type.isArray(id2))
-					return qx.lang.Array.equals(id1, id2);
+					return qx.lang.Object.equals(id1, id2);
 				return id1 == id2;
 			}
 			return object1 === object2;
