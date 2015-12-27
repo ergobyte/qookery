@@ -97,6 +97,7 @@ qx.Class.define("qookery.internal.Registry", {
 		__validators: null,
 		__components: null,
 		__componentConstructorArgs: null,
+		__formats: null,
 		__formatFactories: null,
 		__maps: null,
 		__libraries: null,

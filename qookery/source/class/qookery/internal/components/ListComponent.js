@@ -27,6 +27,8 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 	members: {
 
+		__listItemsMap: null,
+
 		_createMainWidget: function(attributes) {
 			var list = new qx.ui.form.List();
 			list.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));

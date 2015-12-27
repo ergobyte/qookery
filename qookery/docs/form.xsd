@@ -45,6 +45,10 @@
 		<restriction base="nonNegativeInteger" />
 	</simpleType>
 
+	<simpleType name="javascript-expression">
+		<restriction base="string" />
+	</simpleType>
+
 	<simpleType name="javascript-identifier">
 		<restriction base="token">
 			<pattern value="[a-zA-Z_$][0-9a-zA-Z_$]*" />
@@ -281,7 +285,9 @@
 		<attribute name="row-span" type="integer" default="1" />
 		<attribute name="col-span" type="integer" default="1" />
 		<!-- Parsing flow -->
-		<attribute name="skip-if" type="string" />
+		<attribute name="skip-if" type="q:javascript-expression"><annotation><documentation>
+			Deprecation warning: This attribute will be removed in a future version, you are advised to use flow-control elements instead
+		</documentation></annotation></attribute>
 	</complexType>
 
 	<complexType name="atom-component.attributes"><complexContent><extension base="q:component.attributes">
@@ -350,9 +356,7 @@
 
 	<complexType name="container-component"><complexContent><extension base="q:container-component.attributes">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<element ref="q:script" />
-			<group ref="q:components" />
-			<any namespace="##other" processContents="lax" />
+			<group ref="q:statements" />
 		</choice>
 	</extension></complexContent></complexType>
 
@@ -374,10 +378,28 @@
 		</sequence>
 	</extension></complexContent></complexType>
 
-	<!-- Component elements -->
+	<!-- Element groups -->
+
+	<group name="statements">
+		<annotation><documentation>Elements that may appear in a statement block</documentation></annotation>
+		<choice>
+			<element ref="q:script" />
+			<group ref="q:components" />
+			<group ref="q:flow-control-statements" />
+			<any namespace="##other" processContents="lax" />
+		</choice>
+	</group>
+
+	<group name="flow-control-statements">
+		<annotation><documentation>Elements that control the parsing flow</documentation></annotation>
+		<choice>
+			<element ref="q:else" />
+			<element ref="q:if" />
+		</choice>
+	</group>
 
 	<group name="components">
-		<annotation><documentation>Index of all components defined by Qookery</documentation></annotation>
+		<annotation><documentation>Component elements defined by Qookery</documentation></annotation>
 		<choice>
 			<element ref="q:button" />
 			<element ref="q:check-field" />
@@ -414,6 +436,8 @@
 			<element ref="q:virtual-tree" />
 		</choice>
 	</group>
+
+	<!-- Component elements -->
 
 	<element name="button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="command" type="token" />
@@ -476,9 +500,7 @@
 			</element>
 			<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
 			<choice minOccurs="0" maxOccurs="unbounded">
-				<element ref="q:script" />
-				<group ref="q:components" />
-				<any namespace="##other" processContents="lax" />
+				<group ref="q:statements" />
 			</choice>
 		</sequence>
 		<attribute ref="xml:base" />
@@ -675,7 +697,31 @@
 		<attribute name="white-space" type="string" />
 	</complexType></element>
 
-	<!-- Statement elements -->
+	<!-- Statement block non-component elements -->
+
+	<element name="else">
+		<annotation><documentation>
+			Conditional parsing of children elements when previous conditions failed, optionally depending on evaluation of JS expression
+		</documentation></annotation>
+		<complexType>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<group ref="q:statements" />
+			</choice>
+			<attribute name="expression" type="q:javascript-expression" use="optional" />
+		</complexType>
+	</element>
+
+	<element name="if">
+		<annotation><documentation>
+			Conditional parsing of children elements depending on evaluation of JS expression
+		</documentation></annotation>
+		<complexType>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<group ref="q:statements" />
+			</choice>
+			<attribute name="expression" type="q:javascript-expression" use="required" />
+		</complexType>
+	</element>
 
 	<element name="script">
 		<annotation><documentation>
@@ -714,6 +760,25 @@
 					</documentation></annotation></attribute>
 				</extension>
 			</simpleContent>
+		</complexType>
+	</element>
+
+	<element name="switch">
+		<annotation><documentation>
+			Evaluate a JS expression and continue parsing with first matching statement block
+		</documentation></annotation>
+		<complexType>
+			<sequence>
+				<element name="case" minOccurs="0" maxOccurs="unbounded">
+					<complexType>
+						<choice minOccurs="0" maxOccurs="unbounded">
+							<group ref="q:statements" />
+						</choice>
+						<attribute name="expression" type="q:javascript-expression" use="optional" />
+					</complexType>
+				</element>
+			</sequence>
+			<attribute name="expression" type="q:javascript-expression" use="required" />
 		</complexType>
 	</element>
 

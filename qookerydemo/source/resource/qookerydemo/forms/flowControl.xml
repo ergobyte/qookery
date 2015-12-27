@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Flow control example
+-->
+<form xmlns="http://www.qookery.org/ns/Form">
+
+	<label label="This demo runs" />
+
+	<if expression="qx.core.Environment.get('device.type') == 'mobile'">
+		<if expression="qx.core.Environment.get('device.pixelRatio') > 1">
+			<label label="somewhat squeezed on a mobile device" />
+		</if>
+		<else>
+			<label label="confortably on a mobile device" />
+		</else>
+	</if>
+	<else expression="qx.core.Environment.get('device.type') == 'tablet'">
+		<label label="on a tablet device" />
+	</else>
+	<else>
+		<label label="on a desktop device" />
+	</else>
+
+	<switch expression="qx.core.Environment.get('browser.name')">
+		<case expression="'chrome'">
+			<label label="in a Chrome-compatible browser" />
+		</case>
+		<case expression="'firefox'">
+			<label label="in a Firefox-compatible browser" />
+		</case>
+		<case>
+			<label label="in an unknown browser" />
+		</case>
+	</switch>
+
+</form>

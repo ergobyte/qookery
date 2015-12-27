@@ -108,7 +108,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				if("%none" == text) return text;
 				if(text.charAt(1) === "{" && text.charAt(text.length - 1) === "}") {
 					var expression = text.substring(2, text.length - 1);
-					return component.executeClientCode(qx.lang.String.format("return (%1);", [ expression ]));
+					return this.__evaluateExpression(component, expression);
 				}
 				var messageId = text.substring(1);
 				return component["tr"](messageId);
@@ -154,10 +154,9 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Check conditionals
 
-			var skipIfClientCode = this.getAttribute(componentElement, "skip-if");
-			if(skipIfClientCode) {
-				if(parentComponent == null) throw new Error("skip-if attribute needs a parent component");
-				var skip = parentComponent.executeClientCode(qx.lang.String.format("return (%1);", [ skipIfClientCode ]));
+			var skipIfExpression = this.getAttribute(componentElement, "skip-if");
+			if(skipIfExpression) {
+				var skip = this.__evaluateExpression(parentComponent, skipIfExpression);
 				if(skip) return null;
 			}
 
@@ -205,6 +204,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseStatementBlock: function(blockElement, component) {
 			if(!qx.dom.Element.hasChildren(blockElement)) return;
+			var selectionMade = false;
 			var children = qx.dom.Hierarchy.getChildElements(blockElement);
 			for(var i = 0; i < children.length; i++) {
 				var statementElement = children[i];
@@ -213,18 +213,27 @@ qx.Class.define("qookery.internal.FormParser", {
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 				var elementQName = this.__resolveQName(elementName);
 
-				// First check the registry for same-name component
+				// First consult the component registry
 				if(this.constructor.REGISTRY.isComponentTypeAvailable(elementQName)) {
 					this.__parseComponent(statementElement, component);
 					continue;
 				}
 
 				// Then check a number of special elements known by parser
-				if(elementQName === "{http://www.qookery.org/ns/Form}script") {
+				switch(elementQName) {
+				case "{http://www.qookery.org/ns/Form}else":
+					if(selectionMade) continue;
+					// Fall through
+				case "{http://www.qookery.org/ns/Form}if":
+					selectionMade = this.__parseIfElse(statementElement, component);
+					continue;
+				case "{http://www.qookery.org/ns/Form}script":
 					this.__parseScript(statementElement, component);
 					continue;
-				}
-				if(elementQName === "{http://www.w3.org/2001/XInclude}include") {
+				case "{http://www.qookery.org/ns/Form}switch":
+					this.__parseSwitch(statementElement, component);
+					continue;
+				case "{http://www.w3.org/2001/XInclude}include":
 					this.__parseXInclude(statementElement, component);
 					continue;
 				}
@@ -258,6 +267,16 @@ qx.Class.define("qookery.internal.FormParser", {
 			finally {
 				formParser.dispose();
 			}
+		},
+
+		__parseIfElse: function(selectionElement, component) {
+			var expression = this.getAttribute(selectionElement, "expression");
+			if(expression) {
+				var result = this.__evaluateExpression(component, expression);
+				if(!result) return false;
+			}
+			this.__parseStatementBlock(selectionElement, component);
+			return true;
 		},
 
 		__parseScript: function(scriptElement, component) {
@@ -309,6 +328,27 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(execute) component.executeClientCode(clientCode);
 		},
 
+		__parseSwitch: function(switchElement, component) {
+			if(!qx.dom.Element.hasChildren(switchElement)) return;
+			var switchExpression = this.getAttribute(switchElement, "expression");
+			var switchResult = this.__evaluateExpression(component, switchExpression);
+			var children = qx.dom.Hierarchy.getChildElements(switchElement);
+			for(var i = 0; i < children.length; i++) {
+				var caseElement = children[i];
+				var elementName = qx.dom.Node.getName(caseElement);
+				if(elementName !== "case")
+					throw new Error(qx.lang.String.format("Unexpected element in switch block: %1", [ qx.dom.Node.getText(switchElement) ]));
+				var caseExpression = this.getAttribute(caseElement, "expression");
+				if(caseExpression) {
+					var caseResult = this.__evaluateExpression(component, caseExpression);
+					if(caseResult != switchResult) continue;
+				}
+				this.__parseStatementBlock(caseElement, component);
+				return true;
+			}
+			return false;
+		},
+
 		__resolveQName: function(qname) {
 			var colonPos = qname.indexOf(":");
 			if(colonPos === -1)
@@ -319,6 +359,12 @@ qx.Class.define("qookery.internal.FormParser", {
 				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
 			var localPart = qname.substring(colonPos + 1);
 			return "{" + namespaceUri + "}" + localPart;
+		},
+
+		__evaluateExpression: function(component, expression) {
+			if(!component) throw new Error("Illegal attempt to evaluate an expression without a parent component");
+			var clientCode = "return (" + expression + ");";
+			return component.executeClientCode(clientCode);
 		}
 	},
 

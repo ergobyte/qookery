@@ -34,6 +34,7 @@ qx.Class.define("qookerydemo.Application", {
 			{ id: "tableWithFormEditor", label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
 			{ id: "masterDetails", label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
 			{ id: "multipleConnections", label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
+			{ id: "flowControl", label: "Flow Control", formFile: "flowControl.xml" },
 			{ id: "xInclude", label: "XInclude", formFile: "xInclude.xml" },
 			{ id: "richText", label: "Extension: CKeditor", formFile: "richText.xml", modelFile: "carConfiguration.json" },
 			{ id: "calendar", label: "Extension: FullCalendar.io", formFile: "calendar.xml" },
