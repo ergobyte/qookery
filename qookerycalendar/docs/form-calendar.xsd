@@ -56,6 +56,10 @@
 		<attribute name="selectable" type="boolean" default="false" />
 		<attribute name="slot-duration" type="time" default="00:30:00" />
 		<attribute name="time-format" type="string" default="h(:mm)t" />
+		<attribute name="timezone"><simpleType><union memberTypes="token"><simpleType><restriction base="token">
+			<enumeration value="local" />
+			<enumeration value="UTC" />
+		</restriction></simpleType></union></simpleType></attribute>
 	</extension></complexContent></complexType></element>
 
 </schema>

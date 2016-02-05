@@ -44,6 +44,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			switch(attributeName) {
 			case "column-visibility-button-visible": return "Boolean";
 			case "flex": return "Integer";
+			case "header-cells-visible": return "Boolean";
 			case "header-click": return "ReplaceableString";
 			case "header-icon": return "String";
 			case "row-height": return "Number";
@@ -87,6 +88,8 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				table.setStatusBarVisible(attributes["status-bar-visible"]);
 			if(attributes["show-cell-focus-indicator"] !== undefined)
 				table.setShowCellFocusIndicator(attributes["show-cell-focus-indicator"]);
+			if(attributes["header-cells-visible"] !== undefined)
+				table.setHeaderCellsVisible(attributes["header-cells-visible"]);
 			return table;
 		},
 

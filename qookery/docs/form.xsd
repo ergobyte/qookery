@@ -632,6 +632,7 @@
 			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="column-visibility-button-visible" type="boolean" default="true" />
+		<attribute name="header-cells-visible" type="boolean" default="true" />
 		<attribute name="row-height" type="integer" default="20" />
 		<attribute name="show-cell-focus-indicator" type="boolean" default="true" />
 		<attribute name="selection-mode" type="q:table-selection-mode" default="single" />

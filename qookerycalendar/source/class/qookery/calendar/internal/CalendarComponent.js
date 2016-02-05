@@ -120,7 +120,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				scrollTime: this.getAttribute("scroll-time", "06:00:00"),
 				selectable: this.getAttribute("selectable", false),
 				slotDuration: this.getAttribute("slot-duration", "00:30:00"),
-				timeFormat: this.getAttribute("time-format", "h(:mm)t")
+				timeFormat: this.getAttribute("time-format", "h(:mm)t"),
+				timezone: this.getAttribute("timezone", false)
 			});
 			this.__calendar = jQuery("#" + this.__domIdentifier).fullCalendar(this.__options);
 
