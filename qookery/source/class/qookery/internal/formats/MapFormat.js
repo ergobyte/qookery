@@ -19,7 +19,7 @@
 qx.Class.define("qookery.internal.formats.MapFormat", {
 
 	extend: qx.core.Object,
-	implement: [qx.util.format.IFormat],
+	implement: [ qx.util.format.IFormat ],
 
 	construct: function(options) {
 		this.base(arguments);
@@ -33,12 +33,14 @@ qx.Class.define("qookery.internal.formats.MapFormat", {
 
 		__map: null,
 
-		format: function(obj) {
-			return this.__map[obj] || obj;
+		format: function(key) {
+			var value = this.__map[key];
+			if(value === undefined) return key;
+			return value;
 		},
 
-		parse: function(str) {
-			return str;
+		parse: function(text) {
+			return text;
 		}
 	}
 });

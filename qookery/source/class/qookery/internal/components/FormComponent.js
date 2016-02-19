@@ -168,7 +168,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Validation
 
 		validate: function() {
-			if(this.__queueOperation(this.validate)) return;
+			if(this.__queueOperation(this.validate)) return null;
 			var baseError = this.base(arguments);
 			var actionError = this.executeAction("validate");
 			if(baseError == null && actionError == null) {

@@ -35,8 +35,8 @@ qx.Class.define("qookery.mobile.components.DateFieldComponent", {
 			this.base(arguments, attributes);
 			if(!this.getFormat()) {
 				var defaultFormat = qookery.contexts.Qookery.createFormat("date", {
-						format: qx.locale.Date.getDateFormat("short")
-					});
+					format: qx.locale.Date.getDateFormat("short")
+				});
 				this.setFormat(defaultFormat);
 			}
 		},

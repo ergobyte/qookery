@@ -29,8 +29,9 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 		},
 
 		areEqual: function(object1, object2) {
-			var id1 = this.identityOf(object1);
-			var id2 = this.identityOf(object2);
+			if(object1 instanceof Date && object2 instanceof Date)
+				return object1.getTime() === object2.getTime();
+			var id1 = this.identityOf(object1), id2 = this.identityOf(object2);
 			if(id1 !== undefined && id2 !== undefined) {
 				if(qx.lang.Type.isArray(id1) && qx.lang.Type.isArray(id2))
 					return qx.lang.Object.equals(id1, id2);
