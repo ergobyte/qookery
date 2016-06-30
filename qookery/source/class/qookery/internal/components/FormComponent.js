@@ -241,7 +241,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var languageCode = qx.xml.Element.getAttributeNS(translationElement, "http://www.w3.org/XML/1998/namespace", "lang");
 			if(!languageCode) throw new Error("Language code missing");
 			var messages = { };
-			var prefix = this.getTranslationPrefix();
+			var prefix = this.getTranslationPrefix() || this.getId();
 			var children = qx.dom.Hierarchy.getChildElements(translationElement);
 			for(var i = 0; i < children.length; i++) {
 				var messageElement = children[i];

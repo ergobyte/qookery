@@ -84,12 +84,12 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			// Invoke CKEditor inline()
 			domElement.setAttribute("contenteditable", "true");
 			this.__ckEditor = CKEDITOR.inline(domElement, this.__configuration);
-
-			// Register listeners
-			this.__ckEditor.on("change", this.__onCkEditorChange, this);
+			// Defer further setup after instance is ready
 			this.__ckEditor.on("instanceReady", function() {
 				// Insert current value into newly created editor
 				this.__setCkEditorData(this.getValue());
+				// Register value change listener
+				this.__ckEditor.on("change", this.__onCkEditorChange, this);
 			}, this);
 			this.setFocusable(true);
 		},

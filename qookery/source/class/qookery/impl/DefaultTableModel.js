@@ -271,18 +271,19 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			var connectionSpecification = column["connect"];
-			if(!connectionSpecification) return null;
-			// Property paths are not supported yet
-			row.set(connectionSpecification, value);
-			if(this.hasListener("dataChanged")) {
-				this.fireDataEvent("dataChanged", {
-					firstColumn: columnIndex,
-					lastColumn: columnIndex,
-					firstRow: rowIndex,
-					lastRow: rowIndex
-				});
-			}
+			// TODO Qookery: Property paths are not supported yet
+			var propertyName = column["connect"];
+			if(!propertyName) return null;
+			if(this.__hasProperty(row, propertyName))
+				row.set(propertyName, value);
+			else
+				row[propertyName] = value;
+			if(this.hasListener("dataChanged")) this.fireDataEvent("dataChanged", {
+				firstColumn: columnIndex,
+				lastColumn: columnIndex,
+				firstRow: rowIndex,
+				lastRow: rowIndex
+			});
 		},
 
 		getValueById: function(columnId, rowIndex) {
@@ -336,9 +337,10 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		__readColumnValue: function(column, row) {
-			var connectionSpecification = column["connect"];
-			if(!connectionSpecification) return null;
-			var value = qx.data.SingleValueBinding.resolvePropertyChain(row, connectionSpecification);
+			// TODO Qookery: Property paths are not supported yet, see qx.data.SingleValueBinding.resolvePropertyChain()
+			var propertyName = column["connect"];
+			if(!propertyName) return null;
+			var value = this.__hasProperty(row, propertyName) ? row.get(propertyName) : row[propertyName];
 			if(value === undefined || value === null) return null;
 			var mapName = column["map"];
 			if(mapName) {
@@ -346,6 +348,13 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				if(map) return map[value];
 			}
 			return value;
+		},
+
+		__hasProperty: function(row, propertyName) {
+			if(!row || !row.classname) return false;
+			var clazz = qx.Class.getByName(row.classname);
+			if(!clazz) return false;
+			return !!qx.Class.getByProperty(clazz, propertyName);
 		}
 	}
 });

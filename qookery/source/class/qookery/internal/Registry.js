@@ -258,6 +258,10 @@ qx.Class.define("qookery.internal.Registry", {
 
 		getCommand: function(commandName) {
 			return this.__commands[commandName];
+		},
+
+		listCommands: function() {
+			return Object.keys(this.__commands);
 		}
 	}
 });

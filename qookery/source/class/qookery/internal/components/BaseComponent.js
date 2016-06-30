@@ -231,7 +231,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			var manager = qx.locale.Manager;
 			if(!manager) return messageId;
 			if(messageId.charAt(0) === ".")
-				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
+				messageId = (this.getForm().getTranslationPrefix() || this.getForm().getId() || "") + messageId;
 			else if(messageId.charAt(0) === "$")
 				messageId = this.classname + messageId;
 			var formatArguments = qx.lang.Array.fromArguments(arguments, 1);
