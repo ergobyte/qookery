@@ -25,7 +25,17 @@
 
 	<import namespace="http://www.qookery.org/ns/Form" />
 
-	<element name="map-location"><complexType><complexContent><extension base="q:editable-component">
+	<element name="map-location"><complexType><complexContent><extension base="q:editable-component.attributes">
+		<sequence>
+			<element name="toolbar-button" minOccurs="0" maxOccurs="unbounded"><complexType>
+				<sequence>
+					<element ref="q:script" />
+				</sequence>
+				<attribute name="label" type="string" />
+				<attribute name="icon" type="anyURI" />
+			</complexType></element>
+			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
 		<attribute name="center"><simpleType><list itemType="decimal" /></simpleType></attribute>
 		<attribute name="map-type" default="roadmap"><simpleType><restriction base="token">
 			<enumeration value="roadmap"/>
@@ -34,6 +44,7 @@
 			<enumeration value="terrain"/>
 		</restriction></simpleType></attribute>
 		<attribute name="zoom" type="positiveInteger" default="6" />
+		<attribute name="disable-toolbar" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
 
 </schema>

@@ -19,7 +19,7 @@
 <project name="Qookery Calendar" basedir="." default="Download">
 
 	<property name="fullcalendar.version" value="2.1.1" />
-	<property name="fullcalendar.zipFilename" value="fullcalendar-2.1.1.zip" />
+	<property name="fullcalendar.zipFilename" value="fullcalendar-${fullcalendar.version}.zip" />
 	<property name="fullcalendar.downloadUrl" value="https://github.com/arshaw/fullcalendar/releases/download/v${fullcalendar.version}/${fullcalendar.zipFilename}" />
 	<property name="fullcalendar.temp" location="/tmp/" />
 	<property name="fullcalendar.target" location="../qookerycalendar/source/resource/qookery/lib" />

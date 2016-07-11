@@ -21,11 +21,17 @@
  */
 qx.Bootstrap.define("qookery.maps.Bootstrap", {
 
+	statics: {
+		OPTION_MAP_API_KEY: "OPTION_MAP_API_KEY"
+	},
+
 	defer: function() {
 		var registry = qookery.Qookery.getRegistry();
 		registry.registerLibrary("googleLoader", [ "js@//www.google.com/jsapi" ]);
 		registry.registerLibrary("googleMaps", null, [ "googleLoader" ], function(callback) {
-			google.load("maps", "3", { other_params: "sensor=false", callback: callback });
+			var apiKey = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTION_MAP_API_KEY);
+			var other_parameters = qx.util.Uri.toParameter(apiKey ? { sensor: false, key: apiKey } : { sensor: false }, false);
+			google.load("maps", "3", { other_params: other_parameters, callback: callback });
 			return false;
 		});
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Maps}map-location", qookery.maps.internal.MapLocationComponent);
