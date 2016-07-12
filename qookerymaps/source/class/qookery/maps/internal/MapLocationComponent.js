@@ -25,7 +25,6 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__toolbarButtonDescriptors = [ ];
 	},
 
 	events: {
@@ -50,6 +49,8 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			case "map-type": return "String";
 			case "zoom": return "Integer";
 			case "disable-toolbar": return "Boolean";
+			case "allow-maximize": return "Boolean";
+			case "draggable-marker": return "Boolean";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -85,36 +86,6 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			return widget;
 		},
 
-		parseCustomElement: function(formParser, xmlElement) {
-			var elementName = qx.dom.Node.getName(xmlElement);
-			switch(elementName) {
-			case "q-maps:toolbar-button":
-				var toolbarButtonAttributes = formParser.parseAttributes(this, xmlElement);
-				var toolBarButtonDescriptor = {
-					icon: toolbarButtonAttributes["icon"],
-					label: toolbarButtonAttributes["label"]
-				};
-
-				if(qx.dom.Element.hasChildren(xmlElement)) {
-					var toolbarButtonChildElements = qx.dom.Hierarchy.getChildElements(xmlElement);
-					for(var i = 0; i < toolbarButtonChildElements.length; i++) {
-						var toolbarButtonChildElement = toolbarButtonChildElements[i];
-						var childElementName = qx.dom.Node.getName(toolbarButtonChildElement);
-
-						if(childElementName == "script") {
-							var attributes = formParser.parseAttributes(this, toolbarButtonChildElement);
-							if(attributes && attributes["event"] === "execute") {
-								toolBarButtonDescriptor["script"] = qx.dom.Node.getText(toolbarButtonChildElement);
-							}
-						}
-					}
-				}
-				this.__toolbarButtonDescriptors.push(toolBarButtonDescriptor);
-				return true;
-			}
-			return false;
-		},
-
 		// Component implementation
 
 		_updateUI: function(value) {
@@ -148,7 +119,22 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			var widget = this.getMainWidget();
 			if(widget.isDisposed()) return;
 
-			var map = this.__map = new google.maps.Map(widget.getContentElement().getDomElement(), {
+			var domElement = widget.getContentElement().getDomElement();
+			domElement.setAttribute("contenteditable", "true");
+			domElement.addEventListener("paste", function(event) {
+				event.stopPropagation();
+				event.preventDefault();
+
+				var clipboardData = event.clipboardData || window.clipboardData;
+				var pastedData = clipboardData ? clipboardData.getData("Text") : null;
+				var latLng = this.__parsePastedData(pastedData);
+				if(latLng) {
+					this.setValue(this.__latLngToValue(latLng));
+					this.__map.setCenter(latLng);
+				}
+			}.bind(this), false);
+
+			var map = this.__map = new google.maps.Map(domElement, {
 				mapTypeId: this.getAttribute("map-type", "roadmap"),
 				zoom: this.getAttribute("zoom", 6)
 			});
@@ -174,7 +160,9 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 					y: event.latLng.lat()
 				};
 				this.fireDataEvent("tap", data);
+				this.focus();
 				if(this.isReadOnly()) return;
+				if(this.getAttribute("draggable-marker", false) && this.getValue() != null) return;
 				var value = this.__latLngToValue(event.latLng);
 				this.setValue(value);
 			}.bind(this));
@@ -210,8 +198,8 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 				if(this.isReadOnly()) return;
 				var value = this.__latLngToValue(event.latLng);
 				this._setValueSilently(value);
+				this.__openPopup();
 			}.bind(this));
-			this.__openPopup();
 		},
 
 		__destroyMarker: function() {
@@ -233,6 +221,15 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			var modelProvider = this.getForm().getModelProvider();
 			var coordinates = modelProvider.convertTo(value, "Coordinates");
 			return new google.maps.LatLng(coordinates.latitude, coordinates.longitude);
+		},
+
+		__parsePastedData: function(pastedData) {
+			if(!pastedData) return;
+			pastedData = pastedData.trim().replace(/\s+/g, " ");
+			if(!/\-?[0-9][0-9]?.[0-9]+\s\-?[0-9][0-9]?.[0-9]+/.test(pastedData)) return;
+			var latLngParts = pastedData.split(" ");
+			var latLng = new google.maps.LatLng({ lat: parseFloat(latLngParts[0]), lng: parseFloat(latLngParts[1]) });
+			return latLng;
 		},
 
 		// Popup
@@ -257,17 +254,13 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			}
 
 			this.__closeTimeoutId = qx.lang.Function.delay(function() {
-				if(this.__popup) {
-					this.__popup.hide();
-				}
+				if(this.__popup) this.__popup.hide();
 			}, 200, this);
 		},
 
 		__createPopup: function() {
 			this.addListener("changeValue", function(event) {
-				if(event.getData() == null) {
-					this.__popup.hide();
-				}
+				if(event.getData() == null) this.__popup.hide();
 			}, this);
 
 			var layout = new qx.ui.layout.HBox(5);
@@ -280,22 +273,23 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 				if(this.__closeTimeoutId) clearTimeout(this.__closeTimeoutId);
 			}, this)
 
-			this.__toolbarButtonDescriptors.forEach(function(descriptor) {
-				var toolbarButton = new qx.ui.toolbar.Button(descriptor["label"], descriptor["icon"]);
-				toolbarButton.setAppearance("tool-button");
-				toolbarButton.addListener("execute", function(event) {
-					this.executeClientCode(descriptor["script"], { event: event });
+			if(this.getAttribute("allow-maximize", false) && this.isActionSupported("maximize")) {
+				var fullScreenButton = new qx.ui.toolbar.Button("Μεγιστοποίηση", "waffle/icons/material-18/ic_fullscreen_grey600_18dp.png");
+				fullScreenButton.setAppearance("tool-button");
+				fullScreenButton.addListener("execute", function() {
+					this.__popup.hide();
+					this.executeAction("maximize");
 				}, this);
-				popup.add(toolbarButton);
-			}.bind(this));
+				popup.add(fullScreenButton);
+			}
 
 			var clearButton = new qx.ui.toolbar.Button("Διαγραφή", "waffle/icons/material-18/ic_clear_all_grey600_18dp.png");
 			clearButton.setAppearance("tool-button");
 			clearButton.addListener("execute", function() {
 				this.setValue(null);
 			}, this);
-
 			popup.add(clearButton);
+
 			return popup;
 		}
 	},
