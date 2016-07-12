@@ -49,7 +49,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			case "center": return "NumberList";
 			case "map-type": return "String";
 			case "zoom": return "Integer";
-			case "disable-popup": return "Boolean";
+			case "disable-toolbar": return "Boolean";
 			}
 			return this.base(arguments, attributeName);
 		},

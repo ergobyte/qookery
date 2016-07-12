@@ -337,10 +337,11 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		__readColumnValue: function(column, row) {
-			// TODO Qookery: Property paths are not supported yet, see qx.data.SingleValueBinding.resolvePropertyChain()
-			var propertyName = column["connect"];
-			if(!propertyName) return null;
-			var value = this.__hasProperty(row, propertyName) ? row.get(propertyName) : row[propertyName];
+			var specification = column["connect"];
+			if(!specification) return null;
+			var value = specification.indexOf(".") != -1 ?
+					qx.data.SingleValueBinding.resolvePropertyChain(row, specification) :
+					this.__hasProperty(row, specification) ? row.get(specification) : row[specification];
 			if(value === undefined || value === null) return null;
 			var mapName = column["map"];
 			if(mapName) {

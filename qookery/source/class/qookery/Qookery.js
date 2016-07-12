@@ -28,12 +28,12 @@ qx.Class.define("qookery.Qookery", {
 		/**
 		 * Option: Default value of <code>live-update</code> attribute for components that support it
 		 */
-		OPTION_DEFAULT_LIVE_UPDATE: "default-live-update",
+		OPTION_DEFAULT_LIVE_UPDATE: "q:default-live-update",
 
 		/**
 		 * Option: Default value of <code>native-context-menu</code> attribute for components that support it
 		 */
-		OPTION_DEFAULT_NATIVE_CONTEXT_MENU: "default-native-context-menu",
+		OPTION_DEFAULT_NATIVE_CONTEXT_MENU: "q:default-native-context-menu",
 
 		/**
 		 * Service: currently running Qooxdoo application

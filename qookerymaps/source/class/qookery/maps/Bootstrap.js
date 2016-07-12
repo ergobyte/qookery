@@ -22,16 +22,21 @@
 qx.Bootstrap.define("qookery.maps.Bootstrap", {
 
 	statics: {
-		OPTION_MAP_API_KEY: "OPTION_MAP_API_KEY"
+
+		/**
+		 * Option: An API key as provided by Google for accessing the Google Maps Javascript API
+		 */
+		OPTIONS_GOOGLE_API_KEY: "q-maps:google-api-key"
 	},
 
 	defer: function() {
 		var registry = qookery.Qookery.getRegistry();
 		registry.registerLibrary("googleLoader", [ "js@//www.google.com/jsapi" ]);
 		registry.registerLibrary("googleMaps", null, [ "googleLoader" ], function(callback) {
-			var apiKey = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTION_MAP_API_KEY);
-			var other_parameters = qx.util.Uri.toParameter(apiKey ? { sensor: false, key: apiKey } : { sensor: false }, false);
-			google.load("maps", "3", { other_params: other_parameters, callback: callback });
+			var loaderParameter = { sensor: false };
+			var apiKey = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY);
+			if(apiKey) loaderParameter["key"] = apiKey;
+			google.load("maps", "3", { other_params: qx.util.Uri.toParameter(loaderParameter, false), callback: callback });
 			return false;
 		});
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Maps}map-location", qookery.maps.internal.MapLocationComponent);
