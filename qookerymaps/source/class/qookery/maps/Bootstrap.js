@@ -35,7 +35,7 @@ qx.Bootstrap.define("qookery.maps.Bootstrap", {
 		registry.registerLibrary("googleMaps", null, [ "googleLoader" ], function(callback) {
 			var loaderParameter = { sensor: false };
 			var apiKey = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY);
-			if(apiKey) loaderParameter["key"] = apiKey;
+			if(apiKey != null) loaderParameter["key"] = apiKey;
 			google.load("maps", "3", { other_params: qx.util.Uri.toParameter(loaderParameter, false), callback: callback });
 			return false;
 		});

@@ -50,6 +50,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			case "zoom": return "Integer";
 			case "disable-toolbar": return "Boolean";
 			case "allow-maximize": return "Boolean";
+			case "allow-paste": return "Boolean";
 			case "draggable-marker": return "Boolean";
 			}
 			return this.base(arguments, attributeName);
@@ -119,22 +120,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			var widget = this.getMainWidget();
 			if(widget.isDisposed()) return;
 
-			var domElement = widget.getContentElement().getDomElement();
-			domElement.setAttribute("contenteditable", "true");
-			domElement.addEventListener("paste", function(event) {
-				event.stopPropagation();
-				event.preventDefault();
-
-				var clipboardData = event.clipboardData || window.clipboardData;
-				var pastedData = clipboardData ? clipboardData.getData("Text") : null;
-				var latLng = this.__parsePastedData(pastedData);
-				if(latLng) {
-					this.setValue(this.__latLngToValue(latLng));
-					this.__map.setCenter(latLng);
-				}
-			}.bind(this), false);
-
-			var map = this.__map = new google.maps.Map(domElement, {
+			var map = this.__map = new google.maps.Map(widget.getContentElement().getDomElement(), {
 				mapTypeId: this.getAttribute("map-type", "roadmap"),
 				zoom: this.getAttribute("zoom", 6)
 			});
@@ -159,7 +145,6 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 					x: event.latLng.lng(),
 					y: event.latLng.lat()
 				};
-				this.fireDataEvent("tap", data);
 				this.focus();
 				if(this.isReadOnly()) return;
 				if(this.getAttribute("draggable-marker", false) && this.getValue() != null) return;
@@ -223,15 +208,6 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			return new google.maps.LatLng(coordinates.latitude, coordinates.longitude);
 		},
 
-		__parsePastedData: function(pastedData) {
-			if(!pastedData) return;
-			pastedData = pastedData.trim().replace(/\s+/g, " ");
-			if(!/\-?[0-9][0-9]?.[0-9]+\s\-?[0-9][0-9]?.[0-9]+/.test(pastedData)) return;
-			var latLngParts = pastedData.split(" ");
-			var latLng = new google.maps.LatLng({ lat: parseFloat(latLngParts[0]), lng: parseFloat(latLngParts[1]) });
-			return latLng;
-		},
-
 		// Popup
 
 		__openPopup: function() {
@@ -283,12 +259,22 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 				popup.add(fullScreenButton);
 			}
 
-			var clearButton = new qx.ui.toolbar.Button("Διαγραφή", "waffle/icons/material-18/ic_clear_all_grey600_18dp.png");
-			clearButton.setAppearance("tool-button");
-			clearButton.addListener("execute", function() {
+			if(this.getAttribute("allow-edit", false) && this.isActionSupported("edit")) {
+				var pasteButton = new qx.ui.toolbar.Button("Επεξεργασία", "waffle/icons/material-18/ic_create_grey600_18dp.png");
+				pasteButton.setAppearance("tool-button");
+				pasteButton.addListener("execute", function() {
+					this.__popup.hide();
+					this.executeAction("edit");
+				}, this);
+				popup.add(pasteButton);
+			}
+
+			var deleteButton = new qx.ui.toolbar.Button("Διαγραφή", "waffle/icons/material-18/ic_clear_all_grey600_18dp.png");
+			deleteButton.setAppearance("tool-button");
+			deleteButton.addListener("execute", function() {
 				this.setValue(null);
 			}, this);
-			popup.add(clearButton);
+			popup.add(deleteButton);
 
 			return popup;
 		}
