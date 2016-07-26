@@ -110,6 +110,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			var aceContainer = aceWidget.getContentElement().getDomElement();
 
 			var editor = this.__editor = ace.edit(aceContainer);
+			editor.setReadOnly(this.isReadOnly());
 			editor.setHighlightActiveLine(this.getAttribute("highlight-active-line", true));
 			editor.on("change", this.__onChange.bind(this));
 

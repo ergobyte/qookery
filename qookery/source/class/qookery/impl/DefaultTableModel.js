@@ -263,7 +263,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			if(!row) return null;
 			var column = this.getColumn(columnIndex);
 			if(!column) return null;
-			return this.__readColumnValue(column, row);
+			return this.__readCellValue(column, row);
 		},
 
 		setValue: function(columnIndex, rowIndex, value) {
@@ -328,27 +328,12 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		__sortData: function(column, ascending) {
 			if(!this.__data) return;
 			this.__data.sort(function(row1, row2) {
-				var value1 = this.__readColumnValue(column, row1);
-				var value2 = this.__readColumnValue(column, row2);
+				var value1 = this.__readCellValue(column, row1);
+				var value2 = this.__readCellValue(column, row2);
 				var comparison = (value1 > value2) ? 1 : ((value1 == value2) ? 0 : -1);
 				var signum = ascending ? 1 : -1;
 				return signum * comparison;
 			}.bind(this));
-		},
-
-		__readColumnValue: function(column, row) {
-			var specification = column["connect"];
-			if(!specification) return null;
-			var value = specification.indexOf(".") != -1 ?
-					qx.data.SingleValueBinding.resolvePropertyChain(row, specification) :
-					this.__hasProperty(row, specification) ? row.get(specification) : row[specification];
-			if(value === undefined || value === null) return null;
-			var mapName = column["map"];
-			if(mapName) {
-				var map = qookery.Qookery.getRegistry().getMap(mapName);
-				if(map) return map[value];
-			}
-			return value;
 		},
 
 		__hasProperty: function(row, propertyName) {
@@ -356,6 +341,38 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 			var clazz = qx.Class.getByName(row.classname);
 			if(!clazz) return false;
 			return !!qx.Class.getByProperty(clazz, propertyName);
+		},
+
+		/**
+		 * Read a cell's value, attempting a number of methods in sequence
+		 *
+		 * <ol>
+		 * <li>In case a dot appears in the connection specification, resolve as a QX property chain</li>
+		 * <li>In case the row is a qx.lang.Object with a properly named property, get its value</li>
+		 * <li>In case a getter method is available, invoke it</li>
+		 * <li>Fallback to direct reading of the JavaScript object key</li>
+		 * </ol>
+		 */
+		__readCellValue: function(column, row) {
+			// The read function, once computed, could be cached in the column definition to improve performance
+			var specification = column["connect"];
+			if(!specification) return null;
+			var value;
+			if(specification.indexOf(".") != -1)
+				value = qx.data.SingleValueBinding.resolvePropertyChain(row, specification);
+			else if(this.__hasProperty(row, specification))
+				value = row.get(specification);
+			else if(qx.lang.Type.isFunction(row["get" + qx.lang.String.firstUp(specification)]))
+				value = row["get" + qx.lang.String.firstUp(specification)]();
+			else
+				value = row[specification];
+			if(value == null) return null;
+			var mapName = column["map"];
+			if(mapName) {
+				var map = qookery.Qookery.getRegistry().getMap(mapName);
+				if(map) return map[value];
+			}
+			return value;
 		}
 	}
 });
