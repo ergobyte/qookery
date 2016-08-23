@@ -227,7 +227,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				return null;
 			}
 			else {
-				var message = this.tr("qookery.internal.components.EditableComponent.componentError", this.getLabel());
+				var componentLabel = this.getLabel() || "";
+				var message = this.tr("qookery.internal.components.EditableComponent.componentError", componentLabel);
 				var error = new qookery.util.ValidationError(this, message, errors);
 				this.setValid(false);
 				this.setInvalidMessage(error.getFormattedMessage());

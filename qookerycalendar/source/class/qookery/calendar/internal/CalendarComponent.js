@@ -92,7 +92,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		__createCalendar: function() {
 			// Create calendar
 			qx.lang.Object.mergeWith(this.__options, {
-				allDaySlot: this.getAttribute("all-day-slot", "true"),
+				allDaySlot: this.getAttribute("all-day-slot", true),
 				aspectRatio: this.getAttribute("aspect-ratio", 1.35),
 				axisFormat: this.getAttribute("axis-format", "h(:mm)a"),
 				buttonText: {
@@ -161,6 +161,12 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				return;
 			}
 			return this.base(arguments, actionName, argumentMap);
+		},
+
+		// Public APIs
+
+		getDate: function() {
+			return jQuery("#" + this.__domIdentifier).fullCalendar("getDate");
 		},
 
 		// Internals

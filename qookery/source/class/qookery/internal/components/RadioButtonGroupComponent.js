@@ -23,9 +23,12 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
+		this.__children = [ ];
 	},
 
 	members: {
+
+		__children: null,
 
 		// Metadata
 
@@ -95,12 +98,11 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			if(!qx.Class.hasInterface(radioButton.constructor, qx.ui.form.IRadioItem))
 				throw new Error("<radio-button-group> supports only components with main widgets implementing IRadioItem");
 			this.getMainWidget().add(radioButton);
+			this.__children.push(childComponent);
 		},
 
 		listChildren: function() {
-			return this.getMainWidget().getChildren().map(function(widget) {
-				return widget.getUserData("qookeryComponent");
-			});
+			return this.__children;
 		},
 
 		remove: function(component) {
@@ -152,5 +154,9 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		__removeAllGroupItems: function() {
 			this.getMainWidget().removeAll();
 		}
+	},
+
+	destruct: function() {
+		this._disposeArray("__children");
 	}
 });

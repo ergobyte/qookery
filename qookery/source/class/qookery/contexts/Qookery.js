@@ -70,7 +70,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		openWindow: function(form, options, thisArg) {
 			if(!options) options = { };
 			var window = new qookery.impl.FormWindow(null, null, options, thisArg);
-			if(qx.Class.implementsInterface(form, qookery.IFormComponent)) {
+			if(qx.Class.hasInterface(form.constructor, qookery.IFormComponent)) {
 				if(options["variables"]) {
 					for(var key in options["variables"]) {
 						form.setVariable(key, options["variables"][key]);
@@ -111,6 +111,28 @@ qx.Class.define("qookery.contexts.Qookery", {
 			component.create(attributes);
 			component.setup(null, attributes);
 			return component;
+		},
+
+		/**
+		 * Iterate all components under the hierarchy starting with given component
+		 *
+		 * @param component {qookery.IComponent} the component to start descending from
+		 * @param callback {Function} a function that will be called with each encountered component
+		 */
+		descendComponents: function(component, callback) {
+			callback(component);
+			if(!(qx.Class.hasInterface(component.constructor, qookery.IContainerComponent))) return;
+			var childComponents = component.listChildren();
+			for(var i = 0; i < childComponents.length; i++) {
+				qookery.contexts.Qookery.descendComponents(childComponents[i], callback);
+			}
+		},
+
+		setPropertyRecursively: function(component, propertyName, propertyValue) {
+			qookery.contexts.Qookery.descendComponents(component, function(c) {
+				if(!qx.Class.hasProperty(c.constructor, propertyName)) return;
+				c.set(propertyName, propertyValue);
+			});
 		},
 
 		/**
