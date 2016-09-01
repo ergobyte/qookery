@@ -291,41 +291,56 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			var execute = true;
 
-			var componentId = this.getAttribute(scriptElement, "component");
-			if(componentId) {
-				component = component.getForm().getComponent(componentId);
-				if(!component)
-					throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
+			var components = [ component ];
+			var componentIds = this.getAttribute(scriptElement, "component");
+			if(componentIds) {
+				var form = component.getForm();
+				components.length = 0;
+				componentIds.split(/\s+/).forEach(function(componentId) {
+					var component = form.getComponent(componentId);
+					if(!component)
+						throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
+					components.push(component);
+				});
 			}
 
 			var eventNames = this.getAttribute(scriptElement, "event");
 			if(eventNames) {
 				var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
 				eventNames.split(/\s+/).forEach(function(eventName) {
-					component.addEventHandler(eventName, clientCode, onlyOnce);
+					components.forEach(function(component) {
+						component.addEventHandler(eventName, clientCode, onlyOnce);
+					});
 				});
 				execute = this.getAttribute(scriptElement, "execute") === "true";
 			}
 
 			var actionName = this.getAttribute(scriptElement, "action");
 			if(actionName) {
-				component.setAction(actionName, clientCode);
+				components.forEach(function(component) {
+					component.setAction(actionName, clientCode);
+				});
 				execute = this.getAttribute(scriptElement, "execute") === "true";
 			}
 
 			var functionName = this.getAttribute(scriptElement, "name");
 			if(functionName) {
 				var argumentNames = this.getAttribute(scriptElement, "arguments");
-				if(argumentNames) argumentNames = argumentNames.split(/\s+/);
-				component.getForm().getClientCodeContext()[functionName] = function() {
-					var argumentMap = { };
-					if(argumentNames) for(var i = 0; i < argumentNames.length; i++)
-						argumentMap[argumentNames[i]] = arguments[i];
-					return component.executeClientCode(clientCode, argumentMap);
-				};
+				if(argumentNames)
+					argumentNames = argumentNames.split(/\s+/);
+				components.forEach(function(component) {
+					component.getForm().getClientCodeContext()[functionName] = function() {
+						var argumentMap = { };
+						if(argumentNames) for(var i = 0; i < argumentNames.length; i++)
+							argumentMap[argumentNames[i]] = arguments[i];
+						return component.executeClientCode(clientCode, argumentMap);
+					}
+				});
 				execute = this.getAttribute(scriptElement, "execute") === "true";
 			}
-			if(execute) component.executeClientCode(clientCode);
+			if(execute) components.forEach(function(component) {
+				component.executeClientCode(clientCode);
+			});
 		},
 
 		__parseSwitch: function(switchElement, component) {

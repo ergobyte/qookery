@@ -54,6 +54,5 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 		execute: function() {
 			this.getMainWidget().execute();
 		}
-
 	}
 });
