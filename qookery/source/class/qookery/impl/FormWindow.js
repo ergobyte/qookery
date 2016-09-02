@@ -45,6 +45,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 			if(options["allowClose"] !== undefined) this.setAllowClose(options["allowClose"]);
 			if(options["onClose"] !== undefined) this.__onClose = options["onClose"].bind(thisArg);
 			if(options["showMaximize"] !== undefined) this.setShowMaximize(options["showMaximize"]);
+			if(options["contentPadding"] !== undefined) this.setContentPadding(options["contentPadding"]);
 			if(options["openMaximized"] === true) this.maximize();
 		}
 	},
