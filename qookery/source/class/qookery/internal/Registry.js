@@ -109,6 +109,10 @@ qx.Class.define("qookery.internal.Registry", {
 			this.__services[serviceName] = serviceClass;
 		},
 
+		unregisterService: function(serviceName) {
+			delete this.__services[serviceName];
+		},
+
 		getService: function(serviceName) {
 			var serviceClass = this.__services[serviceName];
 			if(!serviceClass) return null;
