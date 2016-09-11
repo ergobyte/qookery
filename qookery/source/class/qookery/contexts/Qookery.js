@@ -167,6 +167,8 @@ qx.Class.define("qookery.contexts.Qookery", {
 				}
 				catch(error) {
 					qx.log.Logger.error(this, "Error creating form editor", error);
+					if(failCallback)
+						failCallback.call(thisArg);
 				}
 				finally {
 					parser.dispose();

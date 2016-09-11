@@ -152,7 +152,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
 				}
 
-				var cellRenderer = new qookery.internal.util.DefaultCellRenderer(column, column["format"]);
+				var cellRenderer = new qookery.internal.components.table.CellRenderer(column);
 				columnModel.setDataCellRenderer(i, cellRenderer);
 			}
 			this.base(arguments, formParser, attributes);

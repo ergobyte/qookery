@@ -16,35 +16,29 @@
 	limitations under the License.
 */
 
-/**
- * Extend this class if you want to create a new component that bind a value.
- */
-qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
+qx.Class.define("qookery.internal.components.table.CellRenderer", {
 
 	extend: qx.ui.table.cellrenderer.Abstract,
 
 	statics: {
-		cssKeys: {
-			"text-align": null,
-			"color": null,
-			"font-family": null,
-			"font-style": null,
-			"font-weight": null,
-			"line-height": null,
-			"white-space": null
-		}
+
+		CSS_KEYS: [
+			"text-align", "color", "font-family", "font-style", "font-weight", "line-height", "white-space"
+		]
 	},
 
-	construct: function(column, formatSpecification) {
+	construct: function(column) {
 		this.base(arguments);
 		this.__column = column;
-		this.__format = formatSpecification ? qookery.Qookery.getRegistry().createFormat(formatSpecification) : null;
+		this.__format = column["format"] ? qookery.Qookery.getRegistry().createFormat(column["format"]) : null;
+		this.__map = column["map"] ? qookery.Qookery.getRegistry().getMap(column["map"]) : null;
 	},
 
 	members: {
 
 		__column: null,
 		__format: null,
+		__map: null,
 
 		_getContentHtml: function(cellInfo) {
 			var text = this._formatValue(cellInfo);
@@ -54,19 +48,19 @@ qx.Class.define("qookery.internal.util.DefaultCellRenderer", {
 		_formatValue: function(cellInfo) {
 			var value = cellInfo.value;
 			if(value == null) return "";
-			if(this.__format) return this.__format.format(value);
+			if(this.__format) value = this.__format.format(value);
+			if(this.__map) value = Object.ifNull(this.__map[value], value);
 			return qookery.Qookery.getService("ModelProvider").getLabel(value, "short");
 		},
 
 		_getCellStyle: function(cellInfo) {
-			var style = [];
-			for(var key in this.constructor.cssKeys) {
-				var value = this.__column[key];
-				if(!value) value = this.constructor.cssKeys[key];
-				if(!value) continue;
-				style.push(key, ":", value, ";");
-			}
-			return style.join("");
+			var column = this.__column;
+			return this.constructor.CSS_KEYS.reduce(function(cellStyle, key) {
+				var value = column[key];
+				if(value != null)
+					cellStyle += key + ":" + value + ";";
+				return cellStyle;
+			}, "");
 		}
 	},
 
