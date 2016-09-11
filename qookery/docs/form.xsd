@@ -18,12 +18,10 @@
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
 		xmlns:q="http://www.qookery.org/ns/Form"
-		xmlns:xi="http://www.w3.org/2001/XInclude"
 		xmlns:xml="http://www.w3.org/XML/1998/namespace"
 		targetNamespace="http://www.qookery.org/ns/Form"
 		elementFormDefault="qualified">
 
-	<import namespace="http://www.w3.org/2001/XInclude" />
 	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
 
 	<!-- Simple types -->
@@ -511,10 +509,12 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="group-box"><complexType><complexContent><extension base="q:container-component">
+		<attribute name="icon" type="anyURI" />
 		<attribute name="legend-position" default="middle"><simpleType><restriction base="token">
 			<enumeration value="middle" />
 			<enumeration value="top" />
 		</restriction></simpleType></attribute>
+		<attribute name="text-align" type="q:horizontal-alignment" default="left" />
 	</extension></complexContent></complexType></element>
 
 	<element name="hover-button"><complexType><complexContent><extension base="q:atom-component.attributes">

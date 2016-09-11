@@ -27,8 +27,11 @@ qx.Class.define("qookery.internal.components.GroupBoxComponent", {
 	members: {
 
 		_createContainerWidget: function(attributes) {
-			var groupBox = new qx.ui.groupbox.GroupBox(attributes["label"]);
+			var groupBox = new qx.ui.groupbox.GroupBox(this.getAttribute("label"), this.getAttribute("icon"));
 			groupBox.setLegendPosition(this.getAttribute("legend-position", "middle"));
+			var label = groupBox.getChildControl("legend").getChildControl("label");
+			label.setAllowGrowX(true);
+			label.setTextAlign(this.getAttribute("text-align", "left"));
 			this._applyLayoutAttributes(groupBox, attributes);
 			return groupBox;
 		},

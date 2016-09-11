@@ -216,13 +216,15 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		removeRow: function(rowIndex) {
-			if(!this.__accessor.removeRow(this.__data, rowIndex)) return;
+			var row = this.__accessor.removeRow(this.__data, rowIndex);
+			if(row == null) return;
 			this.fireDataEvent("dataChanged", {
 				firstColumn: 0,
 				lastColumn: this.getColumnCount() - 1,
 				firstRow: rowIndex,
 				lastRow: this.getRowCount() - 1
 			});
+			return row;
 		},
 
 		moveRowUp: function(rowIndex) {

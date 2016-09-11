@@ -114,13 +114,30 @@ qx.Class.define("qookery.contexts.Qookery", {
 		},
 
 		/**
+		 * Ascend the form hierarchy, starting from given form
+		 *
+		 * @param form {qookery.IFormComponent} the form to start ascending from
+		 * @param callback {Function} a function that will be called with each encountered form
+		 *			- a non-undefined return value breaks the ascension
+		 */
+		ascendForms: function(form, callback) {
+			while(form != null && !form.isDisposed()) {
+				var result = callback(form);
+				if(result !== undefined) return result;
+				form = form.getParentForm();
+			}
+		},
+
+		/**
 		 * Iterate all components under the hierarchy starting with given component
 		 *
 		 * @param component {qookery.IComponent} the component to start descending from
 		 * @param callback {Function} a function that will be called with each encountered component
+		 *			- a non-undefined return value breaks the ascension
 		 */
 		descendComponents: function(component, callback) {
-			callback(component);
+			var result = callback(component);
+			if(result !== undefined) return result;
 			if(!(qx.Class.hasInterface(component.constructor, qookery.IContainerComponent))) return;
 			var childComponents = component.listChildren();
 			for(var i = 0; i < childComponents.length; i++) {
@@ -128,6 +145,13 @@ qx.Class.define("qookery.contexts.Qookery", {
 			}
 		},
 
+		/**
+		 * Starting from given component, descend all children altering the value of a component property
+		 *
+		 * @param component {qookery.IComponent} the component to start descending from
+		 * @param propertyName {String} the name of the property to set
+		 * @param propertyValue {any} the new value to set
+		 */
 		setPropertyRecursively: function(component, propertyName, propertyValue) {
 			qookery.contexts.Qookery.descendComponents(component, function(c) {
 				if(!qx.Class.hasProperty(c.constructor, propertyName)) return;

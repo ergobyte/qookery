@@ -217,6 +217,10 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			if(setFocus) this.getMainWidget().setFocusedCell(rowIndex, 0, true);
 		},
 
+		selectAll: function() {
+			this.getMainWidget().getSelectionModel().setSelectionInterval(0, this.getTableModel().getRowCount() - 1);
+		},
+
 		// Component overrides
 
 		_updateUI: function(value) {
