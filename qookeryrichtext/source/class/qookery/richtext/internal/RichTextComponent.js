@@ -83,6 +83,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
+			this.base(arguments, readOnly);
 			this.getMainWidget().setReadOnly(readOnly);
 		},
 

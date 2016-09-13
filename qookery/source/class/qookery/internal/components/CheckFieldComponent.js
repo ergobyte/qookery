@@ -75,6 +75,7 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
+			this.base(arguments, readOnly);
 			this.getMainWidget().setEnabled(!readOnly);
 		},
 

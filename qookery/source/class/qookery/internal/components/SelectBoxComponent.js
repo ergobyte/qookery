@@ -118,6 +118,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
+			this.base(arguments, readOnly);
 			this.getMainWidget().setEnabled(!readOnly);
 		},
 

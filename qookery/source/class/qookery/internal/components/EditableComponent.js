@@ -290,7 +290,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
-			// Subclasses should override to implement the read only property
+			// Subclasses should extend this method to implement the read only property
+			var labelWidget = this.getLabelWidget();
+			if(labelWidget) {
+				if(readOnly) labelWidget.addState("readOnly"); else labelWidget.removeState("readOnly");
+			}
 		},
 
 		// Transform methods

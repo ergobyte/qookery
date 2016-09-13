@@ -103,6 +103,7 @@ qx.Class.define("qookery.internal.components.TextFieldComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
+			this.base(arguments, readOnly);
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget) return;
 			mainWidget.setReadOnly(readOnly);

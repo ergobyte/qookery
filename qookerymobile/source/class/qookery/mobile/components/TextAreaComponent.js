@@ -52,6 +52,7 @@ qx.Class.define("qookery.mobile.components.TextAreaComponent", {
 		},
 
 		_applyReadOnly: function(readOnly) {
+			this.base(arguments, readOnly);
 			var mainWidget = this.getMainWidget();
 			if(!mainWidget) return;
 			mainWidget.setReadOnly(readOnly);

@@ -621,7 +621,14 @@
 		<attribute name="dynamic" type="boolean" />
 	</extension></complexContent></complexType></element>
 
-	<element name="tab-view" type="q:container-component" />
+	<element name="tab-view"><complexType><complexContent><extension base="q:container-component">
+		<attribute name="bar-position" default="top"><simpleType><restriction base="token">
+			<enumeration value="left" />
+			<enumeration value="right" />
+			<enumeration value="top" />
+			<enumeration value="bottom" />
+		</restriction></simpleType></attribute>
+	</extension></complexContent></complexType></element>
 
 	<element name="tab-view-page" type="q:container-component" />
 

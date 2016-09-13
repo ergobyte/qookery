@@ -26,6 +26,17 @@ qx.Class.define("qookery.internal.components.TabViewComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "bar-position": return "String";
+			default: return this.base(arguments, attributeName);
+			}
+		},
+
+		// Construction
+
 		create: function(attributes) {
 			attributes["column-count"] = "none";
 			this.base(arguments, attributes);
@@ -33,6 +44,7 @@ qx.Class.define("qookery.internal.components.TabViewComponent", {
 
 		_createContainerWidget: function(attributes) {
 			var tabView = new qx.ui.tabview.TabView();
+			tabView.setBarPosition(this.getAttribute("bar-position", "top"));
 			this._applyLayoutAttributes(tabView, attributes);
 			return tabView;
 		},
