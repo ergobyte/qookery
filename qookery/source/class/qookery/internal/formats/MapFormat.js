@@ -33,10 +33,11 @@ qx.Class.define("qookery.internal.formats.MapFormat", {
 
 		__map: null,
 
-		format: function(key) {
-			var value = this.__map[key];
-			if(value === undefined) return key;
-			return value;
+		format: function(value) {
+			if(value == null) return "";
+			var mappedValue = this.__map[value];
+			if(mappedValue != null) value = mappedValue;
+			return qx.data.Conversion.toString(value);
 		},
 
 		parse: function(text) {
