@@ -94,11 +94,15 @@ qx.Class.define("qookery.Qookery", {
 		 * Return a service
 		 *
 		 * @param serviceName {String} symbolic name of the service
+		 * @param required {Boolean} if <code>true</code>, throw an exception when service is not found
 		 *
 		 * @return {Object} the instance of the required service or <code>null</code> if not available
 		 */
-		getService: function(serviceName) {
-			return qookery.internal.Registry.getInstance().getService(serviceName);
+		getService: function(serviceName, required) {
+			var service = qookery.internal.Registry.getInstance().getService(serviceName);
+			if(service == null && required)
+				throw new Error("Required service '" + serviceName + "' is not available");
+			return service;
 		},
 
 		/**

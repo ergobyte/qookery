@@ -48,7 +48,12 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 		_formatValue: function(cellInfo) {
 			var value = cellInfo.value;
 			if(value == null) return "";
-			if(this.__format) value = this.__format.format(value);
+			if(this.__format) try {
+				value = this.__format.format(value);
+			}
+			catch(e) {
+				this.warn("Error formatting cell value", e);
+			}
 			if(this.__map) value = Object.ifNull(this.__map[value], value);
 			return qookery.Qookery.getService("ModelProvider").getLabel(value, "short");
 		},
