@@ -33,7 +33,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 	properties: {
 		value: { init: null, inheritable: true, nullable: true, apply: "_applyValue", transform: "_transformValue", event: "changeValue" },
 		label: { check: "String", inheritable: true, nullable: true, apply: "_applyLabel" },
-		toolTip: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTip" },
+		toolTipText: { check: "String", inheritable: true, nullable: true, apply: "_applyToolTipText" },
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
 		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" },
 		format: { check: "qx.util.format.IFormat", inheritable: true, nullable: true, init: null, apply: "_applyFormat", transform: "_transformFormat" },
@@ -147,11 +147,15 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			// Subclasses may extend or override below functionality to support more attributes
 			if(!this.getLabel()) {
 				var connectionLabel = modelProvider.getConnectionAttribute(connectionHandle, "label");
-				if(connectionLabel) this.setLabel(connectionLabel);
+				if(connectionLabel != null) this.setLabel(connectionLabel);
 			}
 			if(!this.getFormat()) {
 				var formatSpecification = modelProvider.getConnectionAttribute(connectionHandle, "format");
-				if(formatSpecification) this.setFormat(qookery.Qookery.getRegistry().createFormat(formatSpecification));
+				if(formatSpecification != null) this.setFormat(qookery.Qookery.getRegistry().createFormat(formatSpecification));
+			}
+			if(!this.getToolTipText()) {
+				var toolTipText = modelProvider.getConnectionAttribute(connectionHandle, "tool-tip-text");
+				if(toolTipText != null) this.setToolTipText(toolTipText);
 			}
 		},
 
@@ -271,9 +275,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			labelWidget.setValue(label);
 		},
 
-		_applyToolTip: function(toolTip) {
+		_applyToolTipText: function(toolTipText) {
 			var mainWidget = this.getMainWidget();
-			if(mainWidget) mainWidget.setToolTip(toolTip);
+			if(!mainWidget) return;
+			mainWidget.setToolTipText(toolTipText);
 		},
 
 		_applyRequired: function(required) {

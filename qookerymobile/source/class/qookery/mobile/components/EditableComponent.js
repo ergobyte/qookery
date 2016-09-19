@@ -53,7 +53,7 @@ qx.Class.define("qookery.mobile.components.EditableComponent", {
 			}
 		},
 
-		_applyToolTip: function(toolTip) {
+		_applyToolTipText: function(toolTipText) {
 			// Mobile does not support tooltips
 		},
 
