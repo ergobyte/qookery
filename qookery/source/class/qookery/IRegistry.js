@@ -21,7 +21,54 @@
  */
 qx.Interface.define("qookery.IRegistry", {
 
+	statics: {
+
+		// Constants
+
+		// .	Partitions
+
+		P_COMMAND: "Command",
+		P_COMPONENT: "Component",
+		P_FORMAT: "Format",
+		P_FORMAT_FACTORY: "FormatFactory",
+		P_LIBRARY: "Library",
+		P_MAP: "Map",
+		P_MODEL_PROVIDER: "ModelProvider",
+		P_SERVICE: "Service",
+		P_VALIDATOR: "Validator"
+	},
+
 	members: {
+
+		// Elements
+
+		/**
+		 * Retrieve an element from the registry
+		 *
+		 * @param partitionName {String} the name of the partition to look up
+		 * @param elementName {String} the name of the element to find in partition
+		 * @param required {Boolean?} if <code>true</code>, throw an exception when not found
+		 *
+		 * @return {any} the element or <code>undefined</code>
+		 */
+		get: function(partitionName, elementName, required) { },
+
+		/**
+		 * Put an element into the registry
+		 *
+		 * @param partitionName {String} the name of the partition to look up
+		 * @param elementName {String} the name of the element to put in the partition
+		 * @param element {any} the element itself, <code>undefined</code> is not a valid value
+		 */
+		put: function(partitionName, elementName, element) { },
+
+		/**
+		 * Remove an element from the registry
+		 *
+		 * @param partitionName {String} the name of the partition to look up
+		 * @param elementName {String} the name of the element to remove from the partition
+		 */
+		remove: function(partitionName, elementName) { },
 
 		// Services
 

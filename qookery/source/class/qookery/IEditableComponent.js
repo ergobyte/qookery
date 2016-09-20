@@ -32,7 +32,7 @@ qx.Interface.define("qookery.IEditableComponent", {
 		label: { check: "String", nullable: true },
 
 		/** Tooltip text to display when the user hovers the mouse over the component's interactive widgets */
-		toolTip: { check: "String", nullable: true },
+		toolTipText: { check: "String", nullable: true },
 
 		/** Whether the component's value is required */
 		required: { check: "Boolean", nullable: false, init: false },

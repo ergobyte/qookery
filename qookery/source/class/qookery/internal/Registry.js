@@ -24,141 +24,156 @@ qx.Class.define("qookery.internal.Registry", {
 
 	construct: function() {
 		this.base(arguments);
+		this.__partitions = { };
+		var partition = null;
 
-		this.__services = { };
-		this.__services["Application"] = { getInstance: function() {
+		partition = this.__createPartition(qookery.IRegistry.P_SERVICE);
+		partition["Application"] = { getInstance: function() {
 			return qx.core.Init.getApplication();
 		} };
-		this.__services["Registry"] = this;
-		this.__services["ModelProvider"] = qookery.impl.DefaultModelProvider;
-		this.__services["ResourceLoader"] = qookery.impl.DefaultResourceLoader;
+		partition["Registry"] = this;
+		partition["ModelProvider"] = qookery.impl.DefaultModelProvider;
+		partition["ResourceLoader"] = qookery.impl.DefaultResourceLoader;
 
-		this.__modelProviders = { };
-		this.__modelProviders["default"] = qookery.impl.DefaultModelProvider.getInstance();
+		partition = this.__createPartition(qookery.IRegistry.P_MODEL_PROVIDER);
+		partition["default"] = qookery.impl.DefaultModelProvider.getInstance();
 
-		this.__validators = { };
-		this.__validators["comparison"] = qookery.internal.validators.ComparisonValidator.getInstance();
-		this.__validators["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
-		this.__validators["string"] = qookery.internal.validators.StringValidator.getInstance();
+		partition = this.__createPartition(qookery.IRegistry.P_VALIDATOR);
+		partition["comparison"] = qookery.internal.validators.ComparisonValidator.getInstance();
+		partition["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
+		partition["string"] = qookery.internal.validators.StringValidator.getInstance();
 
-		this.__components = { };
-		this.__components["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
-		this.__components["{http://www.qookery.org/ns/Form}check-field"] = qookery.internal.components.CheckFieldComponent;
-		this.__components["{http://www.qookery.org/ns/Form}composite"] = qookery.internal.components.CompositeComponent;
-		this.__components["{http://www.qookery.org/ns/Form}date-field"] = qookery.internal.components.DateFieldComponent;
-		this.__components["{http://www.qookery.org/ns/Form}form"] = qookery.internal.components.FormComponent;
-		this.__components["{http://www.qookery.org/ns/Form}group-box"] = qookery.internal.components.GroupBoxComponent;
-		this.__components["{http://www.qookery.org/ns/Form}hover-button"] = qookery.internal.components.HoverButtonComponent;
-		this.__components["{http://www.qookery.org/ns/Form}html"] = qookery.internal.components.HtmlComponent;
-		this.__components["{http://www.qookery.org/ns/Form}iframe"] = qookery.internal.components.IframeComponent;
-		this.__components["{http://www.qookery.org/ns/Form}image"] = qookery.internal.components.ImageComponent;
-		this.__components["{http://www.qookery.org/ns/Form}label"] = qookery.internal.components.LabelComponent;
-		this.__components["{http://www.qookery.org/ns/Form}list"] = qookery.internal.components.ListComponent;
-		this.__components["{http://www.qookery.org/ns/Form}password-field"] = qookery.internal.components.PasswordFieldComponent;
-		this.__components["{http://www.qookery.org/ns/Form}progress-bar"] = qookery.internal.components.ProgressBarComponent;
-		this.__components["{http://www.qookery.org/ns/Form}radio-button"] = qookery.internal.components.RadioButtonComponent;
-		this.__components["{http://www.qookery.org/ns/Form}radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
-		this.__components["{http://www.qookery.org/ns/Form}scroll"] = qookery.internal.components.ScrollComponent;
-		this.__components["{http://www.qookery.org/ns/Form}select-box"] = qookery.internal.components.SelectBoxComponent;
-		this.__components["{http://www.qookery.org/ns/Form}separator"] = qookery.internal.components.SeparatorComponent;
-		this.__components["{http://www.qookery.org/ns/Form}slider"] = qookery.internal.components.SliderComponent;
-		this.__components["{http://www.qookery.org/ns/Form}spacer"] = qookery.internal.components.SpacerComponent;
-		this.__components["{http://www.qookery.org/ns/Form}spinner"] = qookery.internal.components.SpinnerComponent;
-		this.__components["{http://www.qookery.org/ns/Form}split-pane"] = qookery.internal.components.SplitPaneComponent;
-		this.__components["{http://www.qookery.org/ns/Form}stack"] = qookery.internal.components.StackComponent;
-		this.__components["{http://www.qookery.org/ns/Form}tab-view"] = qookery.internal.components.TabViewComponent;
-		this.__components["{http://www.qookery.org/ns/Form}tab-view-page"] = qookery.internal.components.TabViewPageComponent;
-		this.__components["{http://www.qookery.org/ns/Form}table"] = qookery.internal.components.TableComponent;
-		this.__components["{http://www.qookery.org/ns/Form}text-area"] = qookery.internal.components.TextAreaComponent;
-		this.__components["{http://www.qookery.org/ns/Form}text-field"] = qookery.internal.components.TextFieldComponent;
-		this.__components["{http://www.qookery.org/ns/Form}toggle-button"] = qookery.internal.components.ToggleButtonComponent;
-		this.__components["{http://www.qookery.org/ns/Form}tool-bar"] = qookery.internal.components.ToolBarComponent;
-		this.__components["{http://www.qookery.org/ns/Form}virtual-tree"] = qookery.internal.components.VirtualTreeComponent;
+		partition = this.__createPartition(qookery.IRegistry.P_COMPONENT);
+		partition["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
+		partition["{http://www.qookery.org/ns/Form}check-field"] = qookery.internal.components.CheckFieldComponent;
+		partition["{http://www.qookery.org/ns/Form}composite"] = qookery.internal.components.CompositeComponent;
+		partition["{http://www.qookery.org/ns/Form}date-field"] = qookery.internal.components.DateFieldComponent;
+		partition["{http://www.qookery.org/ns/Form}form"] = qookery.internal.components.FormComponent;
+		partition["{http://www.qookery.org/ns/Form}group-box"] = qookery.internal.components.GroupBoxComponent;
+		partition["{http://www.qookery.org/ns/Form}hover-button"] = qookery.internal.components.HoverButtonComponent;
+		partition["{http://www.qookery.org/ns/Form}html"] = qookery.internal.components.HtmlComponent;
+		partition["{http://www.qookery.org/ns/Form}iframe"] = qookery.internal.components.IframeComponent;
+		partition["{http://www.qookery.org/ns/Form}image"] = qookery.internal.components.ImageComponent;
+		partition["{http://www.qookery.org/ns/Form}label"] = qookery.internal.components.LabelComponent;
+		partition["{http://www.qookery.org/ns/Form}list"] = qookery.internal.components.ListComponent;
+		partition["{http://www.qookery.org/ns/Form}password-field"] = qookery.internal.components.PasswordFieldComponent;
+		partition["{http://www.qookery.org/ns/Form}progress-bar"] = qookery.internal.components.ProgressBarComponent;
+		partition["{http://www.qookery.org/ns/Form}radio-button"] = qookery.internal.components.RadioButtonComponent;
+		partition["{http://www.qookery.org/ns/Form}radio-button-group"] = qookery.internal.components.RadioButtonGroupComponent;
+		partition["{http://www.qookery.org/ns/Form}scroll"] = qookery.internal.components.ScrollComponent;
+		partition["{http://www.qookery.org/ns/Form}select-box"] = qookery.internal.components.SelectBoxComponent;
+		partition["{http://www.qookery.org/ns/Form}separator"] = qookery.internal.components.SeparatorComponent;
+		partition["{http://www.qookery.org/ns/Form}slider"] = qookery.internal.components.SliderComponent;
+		partition["{http://www.qookery.org/ns/Form}spacer"] = qookery.internal.components.SpacerComponent;
+		partition["{http://www.qookery.org/ns/Form}spinner"] = qookery.internal.components.SpinnerComponent;
+		partition["{http://www.qookery.org/ns/Form}split-pane"] = qookery.internal.components.SplitPaneComponent;
+		partition["{http://www.qookery.org/ns/Form}stack"] = qookery.internal.components.StackComponent;
+		partition["{http://www.qookery.org/ns/Form}tab-view"] = qookery.internal.components.TabViewComponent;
+		partition["{http://www.qookery.org/ns/Form}tab-view-page"] = qookery.internal.components.TabViewPageComponent;
+		partition["{http://www.qookery.org/ns/Form}table"] = qookery.internal.components.TableComponent;
+		partition["{http://www.qookery.org/ns/Form}text-area"] = qookery.internal.components.TextAreaComponent;
+		partition["{http://www.qookery.org/ns/Form}text-field"] = qookery.internal.components.TextFieldComponent;
+		partition["{http://www.qookery.org/ns/Form}toggle-button"] = qookery.internal.components.ToggleButtonComponent;
+		partition["{http://www.qookery.org/ns/Form}tool-bar"] = qookery.internal.components.ToolBarComponent;
+		partition["{http://www.qookery.org/ns/Form}virtual-tree"] = qookery.internal.components.VirtualTreeComponent;
 
 		this.__componentConstructorArgs = { };
 
-		this.__formats = { };
+		partition = this.__createPartition(qookery.IRegistry.P_FORMAT);
 
-		this.__formatFactories = { };
-		this.__formatFactories["custom"] = qookery.internal.formats.CustomFormat;
-		this.__formatFactories["date"] = qookery.internal.formats.DateFormat;
-		this.__formatFactories["map"] = qookery.internal.formats.MapFormat;
-		this.__formatFactories["number"] = qookery.internal.formats.NumberFormat;
+		partition = this.__createPartition(qookery.IRegistry.P_FORMAT_FACTORY);
+		partition["custom"] = qookery.internal.formats.CustomFormat;
+		partition["date"] = qookery.internal.formats.DateFormat;
+		partition["map"] = qookery.internal.formats.MapFormat;
+		partition["number"] = qookery.internal.formats.NumberFormat;
 
-		this.__maps = { };
-		this.__libraries = { };
-		this.__commands = { };
+		partition = this.__createPartition(qookery.IRegistry.P_MAP);
+		partition = this.__createPartition(qookery.IRegistry.P_LIBRARY);
+		partition = this.__createPartition(qookery.IRegistry.P_COMMAND);
 	},
 
 	members: {
 
-		__services: null,
-		__modelProviders: null,
-		__validators: null,
-		__components: null,
+		__partitions: null,
+
 		__componentConstructorArgs: null,
-		__formats: null,
-		__formatFactories: null,
-		__maps: null,
-		__libraries: null,
-		__commands: null,
+
+		// Partition contents
+
+		get: function(partitionName, elementName, required) {
+			var partition = this.__getPartition(partitionName);
+			var element = partition[elementName];
+			if(element === undefined && required === true)
+				throw new Error("Require element '" + elementName + "' not found in partition '" + partitionName + "'");
+			return element;
+		},
+
+		put: function(partitionName, elementName, element) {
+			if(element === undefined)
+				throw new Error("Illegal call to put() with an undefined element");
+			var partition = this.__getPartition(partitionName);
+			var previousElement = partition[elementName];
+			if(previousElement)
+				this.debug("Registration of element '" + elementName + "' in partition '" + partitionName + "' replaced existing element");
+			partition[elementName] = element;
+		},
+
+		remove: function(partitionName, elementName) {
+			var partition = this.__getPartition(partitionName);
+			delete partition[elementName];
+		},
 
 		// Services
 
-		registerService: function(serviceName, serviceClass) {
-			this.__services[serviceName] = serviceClass;
-		},
-
-		unregisterService: function(serviceName) {
-			delete this.__services[serviceName];
-		},
-
 		getService: function(serviceName) {
-			var serviceClass = this.__services[serviceName];
-			if(!serviceClass) return null;
+			var serviceClass = this.get(qookery.IRegistry.P_SERVICE, serviceName);
+			if(serviceClass == null) return null;
 			try {
 				return serviceClass.getInstance();
 			}
 			catch(e) {
 				this.error("Error activating service", serviceName, e);
 				// Service is defunct, remove it from array of available services
-				delete this.__services[serviceName];
+				this.remove(qookery.IRegistry.P_SERVICE, serviceName);
 				return null;
 			}
+		},
+
+		registerService: function(serviceName, serviceClass) {
+			this.put(qookery.IRegistry.P_SERVICE, serviceName, serviceClass);
+		},
+
+		unregisterService: function(serviceName) {
+			this.remove(qookery.IRegistry.P_SERVICE, serviceName);
 		},
 
 		// Model providers
 
 		getModelProvider: function(providerName) {
-			if(!providerName) return this.getService("ModelProvider");
-			var providerClass = this.__modelProviders[providerName];
-			if(!providerClass)
-				throw new Error(qx.lang.String.format("Unknown model provider '%1' requested", [ providerName ]));
+			if(providerName == null) return this.getService("ModelProvider");
+			var providerClass = this.get(qookery.IRegistry.P_MODEL_PROVIDER, providerName, true);
 			return providerClass.getInstance();
 		},
 
 		registerModelProvider: function(providerName, providerClass, setDefault) {
-			this.__modelProviders[providerName] = providerClass;
+			this.put(qookery.IRegistry.P_MODEL_PROVIDER, providerName, providerClass);
 			if(setDefault) this.registerService("ModelProvider", providerClass);
 		},
 
 		// Components
 
 		isComponentTypeAvailable: function(componentQName) {
-			var componentClass = this.__components[componentQName];
-			return componentClass !== undefined;
+			return this.get(qookery.IRegistry.P_COMPONENT, componentQName) !== undefined;
 		},
 
 		registerComponentType: function(componentQName, componentClass, constructorArg) {
-			this.__components[componentQName] = componentClass;
+			this.put(qookery.IRegistry.P_COMPONENT, componentQName, componentClass);
 			if(constructorArg)
 				this.__componentConstructorArgs[componentQName] = constructorArg;
 		},
 
 		createComponent: function(componentQName, parentComponent) {
-			var componentClass = this.__components[componentQName];
-			if(!componentClass)
-				throw new Error(qx.lang.String.format("Unknown component '%1'", [ componentQName ]));
+			var componentClass = this.get(qookery.IRegistry.P_COMPONENT, componentQName, true);
 			var constructorArg = this.__componentConstructorArgs[componentQName];
 			return new componentClass(parentComponent, constructorArg);
 		},
@@ -166,34 +181,34 @@ qx.Class.define("qookery.internal.Registry", {
 		// Validators
 
 		registerValidator: function(name, validator) {
-			this.__validators[name] = validator;
+			this.put(qookery.IRegistry.P_VALIDATOR, name, validator);
 		},
 
 		getValidator: function(name) {
-			return this.__validators[name];
+			return this.get(qookery.IRegistry.P_VALIDATOR, name);
 		},
 
 		// Formats
 
+		getFormat: function(formatName) {
+			return this.get(qookery.IRegistry.P_FORMAT, formatName);
+		},
+
 		registerFormat: function(formatName, format) {
-			this.__formats[formatName] = format;
+			this.put(qookery.IRegistry.P_FORMAT, formatName, format);
 			format.dispose = function() {
 				// Registered formats are immortal
 			};
 		},
 
 		registerFormatFactory: function(factoryName, formatClass) {
-			this.__formatFactories[factoryName] = formatClass;
-		},
-
-		getFormat: function(formatName) {
-			return this.__formats[formatName];
+			this.put(qookery.IRegistry.P_FORMAT_FACTORY, factoryName, formatClass);
 		},
 
 		createFormat: function(specification, options) {
 			var colonPos = specification.indexOf(":");
 			if(colonPos === -1 && options === undefined) {
-				var format = this.__formats[specification];
+				var format = this.get(qookery.IRegistry.P_FORMAT, specification);
 				if(format) return format;
 			}
 			var factoryName = specification;
@@ -206,34 +221,29 @@ qx.Class.define("qookery.internal.Registry", {
 					options[key] = value;
 				});
 			}
-			var formatClass = this.__formatFactories[factoryName];
-			if(!formatClass)
-				throw new Error(qx.lang.String.format("Unknown format factory '%1'", [ factoryName ]));
+			var formatClass = this.get(qookery.IRegistry.P_FORMAT_FACTORY, factoryName, true);
 			return new formatClass(options);
 		},
 
 		// Maps
 
-		registerMap: function(mapName, map) {
-			this.__maps[mapName] = map;
+		getMap: function(mapName) {
+			return this.get(qookery.IRegistry.P_MAP, mapName);
 		},
 
-		getMap: function(mapName) {
-			return this.__maps[mapName];
+		registerMap: function(mapName, map) {
+			this.put(qookery.IRegistry.P_MAP, mapName, map);
 		},
 
 		// Libraries
 
 		getLibrary: function(name, required) {
-			var library = this.__libraries[name];
-			if(library === undefined && required === true)
-				throw new Error("Required library " + name + " not found");
-			return library;
+			return this.get(qookery.IRegistry.P_LIBRARY, name, required);
 		},
 
 		registerLibrary: function(name, resourceUris, dependencies, postLoadCallback) {
-			if(this.__libraries[name]) return; // Prevent redefinition
-			this.__libraries[name] = new qookery.internal.util.Library(name, resourceUris, dependencies, postLoadCallback);
+			var library = new qookery.internal.util.Library(name, resourceUris, dependencies, postLoadCallback);
+			this.put(qookery.IRegistry.P_LIBRARY, name, library);
 		},
 
 		loadLibrary: function(libraryNames, callback, thisArg) {
@@ -249,23 +259,37 @@ qx.Class.define("qookery.internal.Registry", {
 				}
 			}
 			if(!libraryName) return callback.call(thisArg);
-			var library = this.__libraries[libraryName];
-			if(!library) throw new Error("Unable to load unknown library " + libraryName);
+			var library = this.get(qookery.IRegistry.P_LIBRARY, libraryName, true);
 			library.load(callback, thisArg);
 		},
 
 		// Commands
 
-		registerCommand: function(commandName, command) {
-			this.__commands[commandName] = command;
+		getCommand: function(commandName) {
+			return this.get(qookery.IRegistry.P_COMMAND, commandName);
 		},
 
-		getCommand: function(commandName) {
-			return this.__commands[commandName];
+		registerCommand: function(commandName, command) {
+			this.put(qookery.IRegistry.P_COMMAND, commandName, command);
 		},
 
 		listCommands: function() {
-			return Object.keys(this.__commands);
+			return Object.keys(this.__getPartition(qookery.IRegistry.P_COMMAND));
+		},
+
+		// Internals
+
+		__getPartition: function(name) {
+			var partition = this.__partitions[name];
+			if(partition === undefined) throw new Error("Unknown partition '" + name + "'");
+			return partition;
+		},
+
+		__createPartition: function(name) {
+			var partition = this.__partitions[name];
+			if(partition !== undefined) throw new Error("Partition '" + name + "' is already defined");
+			this.__partitions[name] = partition = { };
+			return partition;
 		}
 	}
 });
