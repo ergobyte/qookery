@@ -179,6 +179,10 @@
 
 	<!-- Global attributes -->
 
+	<attribute name="class" type="q:qooxdoo-class-name"><annotation><documentation>
+		The name of a Qooxdoo class to associate with element
+	</documentation></annotation></attribute>
+
 	<attribute name="flex" type="q:flex"><annotation><documentation>
 		The relative weight for computing the size of the user interface holding element's contents
 	</documentation></annotation></attribute>

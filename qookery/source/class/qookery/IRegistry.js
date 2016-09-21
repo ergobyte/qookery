@@ -27,16 +27,16 @@ qx.Interface.define("qookery.IRegistry", {
 
 		// .	Partitions
 
-		P_CELL_RENDERER: "CellRenderer",
-		P_COMMAND: "Command",
-		P_COMPONENT: "Component",
-		P_FORMAT: "Format",
-		P_FORMAT_FACTORY: "FormatFactory",
-		P_LIBRARY: "Library",
-		P_MAP: "Map",
-		P_MODEL_PROVIDER: "ModelProvider",
-		P_SERVICE: "Service",
-		P_VALIDATOR: "Validator"
+		P_CELL_RENDERER: "cell-renderer",
+		P_COMMAND: "command",
+		P_COMPONENT: "component",
+		P_FORMAT: "format",
+		P_FORMAT_FACTORY: "format-factory",
+		P_LIBRARY: "library",
+		P_MAP: "map",
+		P_MODEL_PROVIDER: "model-provider",
+		P_SERVICE: "service",
+		P_VALIDATOR: "validator"
 	},
 
 	members: {
