@@ -27,6 +27,7 @@ qx.Interface.define("qookery.IRegistry", {
 
 		// .	Partitions
 
+		P_CELL_RENDERER: "CellRenderer",
 		P_COMMAND: "Command",
 		P_COMPONENT: "Component",
 		P_FORMAT: "Format",
@@ -40,6 +41,17 @@ qx.Interface.define("qookery.IRegistry", {
 
 	members: {
 
+		// Partitions
+
+		/**
+		 * Create a new partition in the registry
+		 *
+		 * @param partitionName {String} the name of the partition to create
+		 *
+		 * @throws {Error} in case the partition already exists or the name is not acceptable
+		 */
+		createPartition: function(partitionName) { },
+
 		// Elements
 
 		/**
@@ -52,6 +64,15 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @return {any} the element or <code>undefined</code>
 		 */
 		get: function(partitionName, elementName, required) { },
+
+		/**
+		 * Return a list of the names of all elements registered in a partition
+		 *
+		 * @param partitionName {String} the name of the partition to look up
+		 *
+		 * @return {Array} an array of element names
+		 */
+		keys: function(partitionName) { },
 
 		/**
 		 * Put an element into the registry
@@ -96,9 +117,8 @@ qx.Interface.define("qookery.IRegistry", {
 		 *
 		 * @param componentQName {String} qualified name of the component to register
 		 * @param componentClass {qx.Class} class that implements (at least) qookery.IComponent
-		 * @param constructorArg {Object} optional constructor argument
 		 */
-		registerComponentType: function(componentQName, componentClass, constructorArg) { },
+		registerComponentType: function(componentQName, componentClass) { },
 
 		/**
 		 * Check if a component type is available

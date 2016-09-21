@@ -684,6 +684,18 @@
 	</complexType></element>
 
 	<element name="table-column"><complexType>
+		<attribute name="cell-renderer" default="model"><simpleType><restriction base="token">
+			<enumeration value="boolean" />
+			<enumeration value="date" />
+			<enumeration value="debug" />
+			<enumeration value="default" />
+			<enumeration value="html" />
+			<enumeration value="image" />
+			<enumeration value="model" />
+			<enumeration value="number" />
+			<enumeration value="password" />
+			<enumeration value="string" />
+		</restriction></simpleType></attribute>
 		<attribute name="color" type="string" />
 		<attribute name="connect" type="string" />
 		<attribute name="flex" type="q:flex" />
@@ -693,6 +705,7 @@
 		<attribute name="format" type="q:format-specification" />
 		<attribute name="header-icon" type="string" />
 		<attribute name="header-click" type="string" />
+		<attribute name="height" type="string" />
 		<attribute name="label" type="string" />
 		<attribute name="line-height" type="string" />
 		<attribute name="map" type="token" />

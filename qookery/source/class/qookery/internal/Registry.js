@@ -77,28 +77,61 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["{http://www.qookery.org/ns/Form}tool-bar"] = qookery.internal.components.ToolBarComponent;
 		partition["{http://www.qookery.org/ns/Form}virtual-tree"] = qookery.internal.components.VirtualTreeComponent;
 
-		this.__componentConstructorArgs = { };
-
-		partition = this.__createPartition(qookery.IRegistry.P_FORMAT);
-
 		partition = this.__createPartition(qookery.IRegistry.P_FORMAT_FACTORY);
 		partition["custom"] = qookery.internal.formats.CustomFormat;
 		partition["date"] = qookery.internal.formats.DateFormat;
 		partition["map"] = qookery.internal.formats.MapFormat;
 		partition["number"] = qookery.internal.formats.NumberFormat;
 
-		partition = this.__createPartition(qookery.IRegistry.P_MAP);
-		partition = this.__createPartition(qookery.IRegistry.P_LIBRARY);
-		partition = this.__createPartition(qookery.IRegistry.P_COMMAND);
+		partition = this.__createPartition(qookery.IRegistry.P_CELL_RENDERER);
+		partition["boolean"] = function(column) {
+			return new qx.ui.table.cellrenderer.Boolean();
+		};
+		partition["date"] = function(column) {
+			return new qx.ui.table.cellrenderer.Date(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
+		};
+		partition["debug"] = function(column) {
+			return new qx.ui.table.cellrenderer.Debug();
+		};
+		partition["default"] = function(column) {
+			return new qx.ui.table.cellrenderer.Default();
+		};
+		partition["html"] = function(column) {
+			return new qx.ui.table.cellrenderer.Html(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
+		};
+		partition["image"] = function(column) {
+			return new qx.ui.table.cellrenderer.Image(column["width"], column["height"]);
+		};
+		partition["model"] = function(column) {
+			return new qookery.internal.components.table.CellRenderer(column);
+		};
+		partition["number"] = function(column) {
+			return new qx.ui.table.cellrenderer.Number(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
+		};
+		partition["password"] = function(column) {
+			return new qx.ui.table.cellrenderer.Password();
+		};
+		partition["string"] = function(column) {
+			return new qx.ui.table.cellrenderer.String(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
+		};
+
+		this.__createPartition(qookery.IRegistry.P_COMMAND);
+		this.__createPartition(qookery.IRegistry.P_FORMAT);
+		this.__createPartition(qookery.IRegistry.P_LIBRARY);
+		this.__createPartition(qookery.IRegistry.P_MAP);
 	},
 
 	members: {
 
 		__partitions: null,
 
-		__componentConstructorArgs: null,
+		// Partitions
 
-		// Partition contents
+		createPartition: function(partitionName) {
+			this.__createPartition(partitionName);
+		},
+
+		// Elements
 
 		get: function(partitionName, elementName, required) {
 			var partition = this.__getPartition(partitionName);
@@ -106,6 +139,11 @@ qx.Class.define("qookery.internal.Registry", {
 			if(element === undefined && required === true)
 				throw new Error("Require element '" + elementName + "' not found in partition '" + partitionName + "'");
 			return element;
+		},
+
+		keys: function(partitionName) {
+			var partition = this.__getPartition(partitionName);
+			return Object.keys(partition);
 		},
 
 		put: function(partitionName, elementName, element) {
@@ -166,16 +204,13 @@ qx.Class.define("qookery.internal.Registry", {
 			return this.get(qookery.IRegistry.P_COMPONENT, componentQName) !== undefined;
 		},
 
-		registerComponentType: function(componentQName, componentClass, constructorArg) {
+		registerComponentType: function(componentQName, componentClass) {
 			this.put(qookery.IRegistry.P_COMPONENT, componentQName, componentClass);
-			if(constructorArg)
-				this.__componentConstructorArgs[componentQName] = constructorArg;
 		},
 
 		createComponent: function(componentQName, parentComponent) {
 			var componentClass = this.get(qookery.IRegistry.P_COMPONENT, componentQName, true);
-			var constructorArg = this.__componentConstructorArgs[componentQName];
-			return new componentClass(parentComponent, constructorArg);
+			return new componentClass(parentComponent);
 		},
 
 		// Validators
@@ -271,10 +306,6 @@ qx.Class.define("qookery.internal.Registry", {
 
 		registerCommand: function(commandName, command) {
 			this.put(qookery.IRegistry.P_COMMAND, commandName, command);
-		},
-
-		listCommands: function() {
-			return Object.keys(this.__getPartition(qookery.IRegistry.P_COMMAND));
 		},
 
 		// Internals

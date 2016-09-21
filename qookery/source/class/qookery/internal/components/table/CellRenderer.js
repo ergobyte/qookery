@@ -55,7 +55,8 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 				this.warn("Error formatting cell value", e);
 			}
 			if(this.__map) value = Object.ifNull(this.__map[value], value);
-			return qookery.Qookery.getService("ModelProvider").getLabel(value, "short");
+			var label = qookery.Qookery.getService("ModelProvider").getLabel(value, "short");
+			return Object.ifNull(label, "");
 		},
 
 		_getCellStyle: function(cellInfo) {

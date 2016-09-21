@@ -23,7 +23,7 @@ qx.Class.define("qookery.impl.WrapperComponent", {
 
 	extend: qookery.internal.components.BaseComponent,
 
-	construct: function(parentComponent, widgetClass) {
+	construct: function(widgetClass, parentComponent) {
 		this.base(arguments, parentComponent);
 		this.__widgetClass = widgetClass;
 	},
