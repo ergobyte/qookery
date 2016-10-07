@@ -35,6 +35,7 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "check-box-label": return "ReplaceableString";
+			case "tri-state": return "Boolean";
 			}
 			return this.base(arguments, attributeName);
 		},

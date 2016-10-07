@@ -30,6 +30,10 @@ qx.Class.define("qookery.internal.components.SpacerComponent", {
 			var spacer = new qx.ui.core.Spacer();
 			this._applyLayoutAttributes(spacer, attributes);
 			return [ spacer ];
+		},
+
+		_applyEnabled: function(enabled) {
+			// Not supported
 		}
 	}
 });

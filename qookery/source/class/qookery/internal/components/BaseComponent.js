@@ -63,7 +63,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"required": "Boolean",
 			"scale": "Boolean",
 			"status-bar-visible": "Boolean",
-			"tri-state": "Boolean",
 
 			"width": "Size",
 			"height": "Size",
@@ -79,7 +78,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			"label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
-			"title": "ReplaceableString",
 			"tool-tip-text": "ReplaceableString"
 		}
 	},
@@ -251,7 +249,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			var manager = qx.locale.Manager;
 			if(!manager) return messageId;
 			if(messageId.charAt(0) === ".")
-				messageId = (this.getForm().getTranslationPrefix() || this.getForm().getId() || "") + messageId;
+				messageId = (this.getForm().getTranslationPrefix() || "") + messageId;
 			else if(messageId.charAt(0) === "$")
 				messageId = this.classname + messageId;
 			var formatArguments = qx.lang.Array.fromArguments(arguments, 1);
@@ -259,7 +257,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		toString: function() {
-			return this.classname + "[" + (this.__id || this.$$hash) + "]";
+			var hash = this.__id || this.$$hash;
+			var form = this.getForm();
+			if(form != null && form.getId() != null)
+				hash = form.getId() + "#" + hash;
+			return this.classname + "[" + hash + "]";
 		},
 
 		// Protected methods for internal use

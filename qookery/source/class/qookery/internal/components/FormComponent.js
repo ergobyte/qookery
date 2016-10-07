@@ -61,11 +61,22 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__operationQueue: null,
 		__disposeList: null,
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "title": return "ReplaceableString";
+			}
+			return this.base(arguments, attributeName);
+		},
+
 		// Creation
 
 		prepare: function(formParser, xmlElement) {
 			this.__variables = formParser.getVariables() || { };
 			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
+			if(!this.__translationPrefix)
+				this.__translationPrefix = formParser.getAttribute(xmlElement, "id");
 			this.__enableOperationQueuing();
 		},
 
@@ -79,7 +90,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		setup: function(formParser, attributes) {
 			var title = this.getAttribute("title");
-			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
+			if(title)
+				this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
 			this.__flushOperationQueue();
 			return this.base(arguments, formParser, attributes);
 		},
@@ -250,7 +262,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var languageCode = qx.xml.Element.getAttributeNS(translationElement, "http://www.w3.org/XML/1998/namespace", "lang");
 			if(!languageCode) throw new Error("Language code missing");
 			var messages = { };
-			var prefix = this.getTranslationPrefix() || this.getId();
+			var prefix = this.getTranslationPrefix();
 			var children = qx.dom.Hierarchy.getChildElements(translationElement);
 			for(var i = 0; i < children.length; i++) {
 				var messageElement = children[i];
