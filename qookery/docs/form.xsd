@@ -177,6 +177,16 @@
 		</restriction>
 	</simpleType>
 
+	<!-- Attribute groups -->
+
+	<attributeGroup name="content-padding">
+		<attribute name="content-padding"><simpleType><list itemType="integer" /></simpleType></attribute>
+		<attribute name="content-padding-bottom" type="integer" default="0" />
+		<attribute name="content-padding-left" type="integer" default="0" />
+		<attribute name="content-padding-right" type="integer" default="0" />
+		<attribute name="content-padding-top" type="integer" default="0" />
+	</attributeGroup>
+
 	<!-- Global attributes -->
 
 	<attribute name="class" type="q:qooxdoo-class-name"><annotation><documentation>
@@ -519,6 +529,7 @@
 			<enumeration value="top" />
 		</restriction></simpleType></attribute>
 		<attribute name="text-align" type="q:horizontal-alignment" default="left" />
+		<attributeGroup ref="q:content-padding" />
 	</extension></complexContent></complexType></element>
 
 	<element name="hover-button"><complexType><complexContent><extension base="q:atom-component.attributes">
@@ -575,7 +586,9 @@
 		<attribute name="spacing" type="nonNegativeInteger" default="5" />
 	</extension></complexContent></complexType></element>
 
-	<element name="scroll" type="q:container-component" />
+	<element name="scroll"><complexType><complexContent><extension base="q:container-component">
+		<attributeGroup ref="q:content-padding" />
+	</extension></complexContent></complexType></element>
 
 	<element name="select-box"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
@@ -614,6 +627,7 @@
 		<attribute name="page-step" type="integer" default="10" />
 		<attribute name="single-step" type="decimal" default="1" />
 		<attribute name="text-align" type="q:horizontal-alignment" />
+		<attributeGroup ref="q:content-padding" />
 	</extension></complexContent></complexType></element>
 
 	<element name="split-pane"><complexType><complexContent><extension base="q:container-component">
@@ -632,6 +646,7 @@
 			<enumeration value="top" />
 			<enumeration value="bottom" />
 		</restriction></simpleType></attribute>
+		<attributeGroup ref="q:content-padding" />
 	</extension></complexContent></complexType></element>
 
 	<element name="tab-view-page" type="q:container-component" />

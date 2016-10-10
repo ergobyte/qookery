@@ -26,21 +26,41 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "content-padding": return "IntegerList";
+			case "content-padding-bottom": return "Integer";
+			case "content-padding-left": return "Integer";
+			case "content-padding-right": return "Integer";
+			case "content-padding-top": return "Integer";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		_createMainWidget: function(attributes) {
-			var widget = new qx.ui.form.Spinner();
-			this._applyLayoutAttributes(widget, attributes);
-			widget.setMinimum(this.getAttribute("minimum", 0));
-			widget.setMaximum(this.getAttribute("maximum", 100));
-			widget.setPageStep(this.getAttribute("page-step", 10));
-			widget.setSingleStep(this.getAttribute("single-step", 1));
-			widget.addListener("changeValue", function(event) {
+			var spinner = new qx.ui.form.Spinner();
+			this._applyLayoutAttributes(spinner, attributes);
+			spinner.setMinimum(this.getAttribute("minimum", 0));
+			spinner.setMaximum(this.getAttribute("maximum", 100));
+			spinner.setPageStep(this.getAttribute("page-step", 10));
+			spinner.setSingleStep(this.getAttribute("single-step", 1));
+			spinner.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				var value = event.getData();
 				if(value !== null) value = parseInt(value, 10);
 				this._setValueSilently(value);
 			}, this);
-			widget.getChildControl("textfield").setTextAlign(this.getAttribute("text-align", null));
-			return widget;
+			spinner.getChildControl("textfield").setTextAlign(this.getAttribute("text-align", null));
+			if(attributes["content-padding"] !== undefined) spinner.setContentPadding(attributes["content-padding"]);
+			if(attributes["content-padding-top"] !== undefined) spinner.setContentPaddingTop(attributes["content-padding-top"]);
+			if(attributes["content-padding-right"] !== undefined) spinner.setContentPaddingRight(attributes["content-padding-right"]);
+			if(attributes["content-padding-bottom"] !== undefined) spinner.setContentPaddingBottom(attributes["content-padding-bottom"]);
+			if(attributes["content-padding-left"] !== undefined) spinner.setContentPaddingLeft(attributes["content-padding-left"]);
+			return spinner;
 		},
 
 		_updateUI: function(value) {

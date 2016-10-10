@@ -106,6 +106,12 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 			this.getMainWidget().removeAll();
 		},
 
+		setSelection: function(itemNumber) {
+			var selectablesItems = this.getMainWidget().getSelectables(true);
+			if(!selectablesItems || selectablesItems[itemNumber] === undefined) return;
+			this.getMainWidget().setSelection([ selectablesItems[itemNumber] ]);
+		},
+
 		__findItem: function(model) {
 			var items = this.getMainWidget().getChildren();
 			var modelProvider = this.getForm().getModelProvider();
