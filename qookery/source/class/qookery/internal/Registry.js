@@ -276,6 +276,12 @@ qx.Class.define("qookery.internal.Registry", {
 			return this.get(qookery.IRegistry.P_LIBRARY, name, required);
 		},
 
+		isLibraryLoaded: function(name) {
+			var library = this.get(qookery.IRegistry.P_LIBRARY, name, false);
+			if(library == null) return false;
+			return library.isLoaded();
+		},
+
 		registerLibrary: function(name, resourceUris, dependencies, postLoadCallback) {
 			var library = new qookery.internal.util.Library(name, resourceUris, dependencies, postLoadCallback);
 			this.put(qookery.IRegistry.P_LIBRARY, name, library);

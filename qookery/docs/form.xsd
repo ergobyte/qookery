@@ -407,6 +407,7 @@
 		<choice>
 			<element ref="q:else" />
 			<element ref="q:if" />
+			<element ref="q:switch" />
 		</choice>
 	</group>
 
