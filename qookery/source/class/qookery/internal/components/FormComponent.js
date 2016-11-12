@@ -312,7 +312,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Miscellaneous implementations
 
 		toString: function() {
-			var hash = this.__id || this.$$hash;
+			var hash = this.getId() || this.$$hash;
 			return this.classname + "[" + hash + "]";
 		},
 

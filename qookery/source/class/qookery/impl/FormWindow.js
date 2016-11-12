@@ -53,7 +53,6 @@ qx.Class.define("qookery.impl.FormWindow", {
 	members: {
 
 		__formComponent: null,
-		__buttonsContainer: null,
 		__disposeForm: false,
 		__onClose: null,
 

@@ -21,7 +21,7 @@
  */
 qx.Class.define("qookery.util.ValidationError", {
 
-	extend: Object,
+	extend: Error,
 
 	/**
 	 * Construct a new validation error
@@ -34,6 +34,14 @@ qx.Class.define("qookery.util.ValidationError", {
 		this.__source = source;
 		this.__message = message;
 		this.__cause = cause;
+		Object.defineProperties(this, {
+			"message": {
+				enumerable: false,
+				get: function() {
+					return this.getFormattedMessage();
+				}
+			}
+		});
 	},
 
 	members: {
