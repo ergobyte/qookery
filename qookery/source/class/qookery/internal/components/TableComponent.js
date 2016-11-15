@@ -170,6 +170,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		},
 
 		setTableModel: function(tableModel) {
+			// FIXME Qookery: memory leak, the previous table model is not being disposed
 			this.__tableModel = tableModel;
 		},
 

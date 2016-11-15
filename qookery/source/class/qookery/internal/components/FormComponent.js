@@ -52,12 +52,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__variables: null,
 		__translationPrefix: null,
 		__components: null,
 		__modelProvider: null,
 		__connections: null,
-		__clientCodeContext: null,
+		__scriptingContext: null,
 		__operationQueue: null,
 		__disposeList: null,
 
@@ -73,7 +72,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Creation
 
 		prepare: function(formParser, xmlElement) {
-			this.__variables = formParser.getVariables() || { };
+			this.__scriptingContext = this.$ = this.__createScriptingContext(formParser.getVariables());
 			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
 			if(!this.__translationPrefix)
 				this.__translationPrefix = formParser.getAttribute(xmlElement, "id");
@@ -110,8 +109,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		getParentForm: function() {
-			var parentForm = this.__variables["parentForm"];
-			if(parentForm !== undefined) return parentForm;
+			var parentForm = this.getVariable("parentForm");
+			if(parentForm != null) return parentForm;
 			var parentComponent = this.getParent();
 			if(!parentComponent) return null;
 			return parentComponent.getForm();
@@ -128,13 +127,13 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Variables
 
 		getVariable: function(variableName, defaultValue) {
-			var value = this.__variables[variableName];
+			var value = this.__scriptingContext[variableName];
 			if(value !== undefined) return value;
 			return defaultValue;
 		},
 
 		setVariable: function(variableName, value) {
-			this.__variables[variableName] = value;
+			this.__scriptingContext[variableName] = value;
 		},
 
 		getVariableRecursively: function(variableName) {
@@ -154,31 +153,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__components[componentId] = component;
 		},
 
-		// Client script context
+		// Client scripting context
 
 		getClientCodeContext: function() {
-			if(this.__clientCodeContext != null) return this.__clientCodeContext;
-			var form = this;
-			var context = function(selector) {
-				if(!selector)
-					throw new Error("$() without a selector is not supported");
-				if(selector.charAt(0) == "#")
-					return form.getComponent(selector.substr(1));
-				return null;
-			};
-			context["form"] = this;
-			context["parent"] = function() {
-				var parentForm = this.getParentForm();
-				if(!parentForm) return undefined;
-				return parentForm.getClientCodeContext();
-			}.bind(this);
-			qx.lang.Object.mergeWith(context, this.__variables, false);
-			return this.__clientCodeContext = context;
-		},
-
-		registerUserContext: function(key, userContext) {
-			var clientCodeContext = this.getClientCodeContext();
-			clientCodeContext[key] = userContext;
+			return this.__scriptingContext;
 		},
 
 		addToDisposeList: function(disposable) {
@@ -221,8 +199,31 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			case "translation":
 				this.__parseTranslation(formParser, xmlElement);
 				return true;
+			case "variable":
+				this.__parseVariable(formParser, xmlElement);
+				return true;
 			}
 			return false;
+		},
+
+		// Internals
+
+		__createScriptingContext: function(variables) {
+			var context = function(selector) {
+				if(selector == null) {
+					return this;
+				}
+				if(selector === ":parent") {
+					return this.getParentForm();
+				}
+				if(selector.charAt(0) == "#") {
+					return this.getComponent(selector.substr(1));
+				}
+				return null;
+			}.bind(this);
+			context["form"] = this;
+			if(variables != null) qx.lang.Object.mergeWith(context, variables, false);
+			return context;
 		},
 
 		__parseBind: function(formParser, bindElement) {
@@ -254,7 +255,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				if(!key) key = serviceName;
 			}
 			if(!instance) throw new Error("Not enough arguments provided to <import> element");
-			this.registerUserContext(key, instance);
+			this.setVariable(key, instance);
 		},
 
 		__parseTranslation: function(formParser, translationElement) {
@@ -277,12 +278,29 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		},
 
+		__parseVariable: function(formParser, variableElement) {
+			var name = formParser.getAttribute(variableElement, "name");
+			if(name == null)
+				throw new Error("Variable name is required");
+			if(this.__scriptingContext[name] !== undefined) return;
+			var defaultValue;
+			var defaultClientCode = formParser.getAttribute(variableElement, "default");
+			if(defaultClientCode != null)
+				defaultValue = this.executeClientCode(qx.lang.String.format("return (%1);", [ defaultClientCode ]));
+			if(defaultValue === undefined) defaultValue = null;
+			this.__scriptingContext[name] = defaultValue;
+			if(defaultValue != null) return;
+			var isRequired = formParser.getAttribute(variableElement, "required") === "true";
+			if(!isRequired) return;
+			throw new Error("Required variable " + name + " has not been defined");
+		},
+
 		// Operations
 
 		close: function(result) {
 			if(this.isDisposed()) return;
-			if(result !== undefined) this.__variables["result"] = result;
-			this.fireDataEvent("close", this.__variables["result"]);
+			if(result !== undefined) this.__scriptingContext["result"] = result;
+			this.fireDataEvent("close", result);
 		},
 
 		// Model connection
@@ -348,9 +366,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__validations = null;
 		this.__userContextMap = null;
 		this.__registration = null;
-		this.__clientCodeContext = null;
+		this.__scriptingContext = null;
 		this.__translationPrefix = null;
-		this.__variables = null;
 		this.debug("Destructed form");
 	}
 });

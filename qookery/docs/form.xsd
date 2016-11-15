@@ -23,6 +23,7 @@
 		elementFormDefault="qualified">
 
 	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
+	<import namespace="http://www.w3.org/2001/XMLSchema" />
 
 	<!-- Simple types -->
 
@@ -329,7 +330,7 @@
 			</documentation></annotation>
 		</attribute>
 		<attribute name="format" type="q:format-specification" />
-		<attribute name="initialize" type="string" />
+		<attribute name="initialize" type="q:javascript-expression" />
 		<attribute name="live-validate" default="false">
 			<annotation><documentation>
 				When set, component's value changes will automatically trigger component or form validation
@@ -512,6 +513,7 @@
 				</complexType>
 			</element>
 			<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
+			<element ref="q:variable" minOccurs="0" maxOccurs="unbounded" />
 			<choice minOccurs="0" maxOccurs="unbounded">
 				<group ref="q:statements" />
 			</choice>
@@ -840,6 +842,26 @@
 				</element>
 			</sequence>
 			<attribute ref="xml:lang" use="required" />
+		</complexType>
+	</element>
+
+	<element name="variable">
+		<annotation><documentation>
+			Define a form variable, with optional default value
+		</documentation></annotation>
+		<complexType>
+			<sequence>
+				<element ref="documentation" minOccurs="0" maxOccurs="1"></element>
+			</sequence>
+			<attribute name="name" type="q:javascript-identifier"><annotation><documentation>
+				The name of the variable to register into the form context ("$")
+			</documentation></annotation></attribute>
+			<attribute name="default" type="q:javascript-expression"><annotation><documentation>
+				An expression that provides a default value, in case variable was not set during parser initialization
+			</documentation></annotation></attribute>
+			<attribute name="required" type="boolean"><annotation><documentation>
+				When true, a non-null value is required for form parsing to continue
+			</documentation></annotation></attribute>
 		</complexType>
 	</element>
 

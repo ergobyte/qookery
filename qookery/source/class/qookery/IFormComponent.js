@@ -96,14 +96,6 @@ qx.Interface.define("qookery.IFormComponent", {
 		getClientCodeContext: function() { },
 
 		/**
-		 * Register a value within the client scripting context
-		 *
-		 * @param key {String} name of the user context
-		 * @param userContext {Object} qooxdoo class with the desired functionality
-		 */
-		registerUserContext: function(key, userContext) { },
-
-		/**
 		 * Add a disposable to the list of objects that will be disposed automatically with form
 		 *
 		 * @param disposable {any} any object that has a <code>dispose</code> member function
