@@ -27,16 +27,19 @@ qx.Class.define("qookery.internal.formats.MapFormat", {
 		this.__map = qookery.internal.Registry.getInstance().getMap(mapName);
 		if(!this.__map)
 			throw new Error(qx.lang.String.format("Map '%1' not registered", [ mapName ]));
+		this.__fallback = options["fallback"];
 	},
 
 	members: {
 
 		__map: null,
+		__fallback: null,
 
 		format: function(value) {
 			if(value == null) return "";
 			var mappedValue = this.__map[value];
 			if(mappedValue != null) value = mappedValue;
+			else if(this.__fallback != null) value = this.__fallback;
 			return qx.data.Conversion.toString(value);
 		},
 

@@ -329,10 +329,11 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 		__sortData: function(column, ascending) {
 			if(!this.__data) return;
+			var modelProvider = this.__component.getForm().getModelProvider();
 			this.__data.sort(function(row1, row2) {
 				var value1 = this.__readCellValue(column, row1);
 				var value2 = this.__readCellValue(column, row2);
-				var comparison = (value1 > value2) ? 1 : ((value1 == value2) ? 0 : -1);
+				var comparison = modelProvider.compare(value1, value2);
 				var signum = ascending ? 1 : -1;
 				return signum * comparison;
 			}.bind(this));

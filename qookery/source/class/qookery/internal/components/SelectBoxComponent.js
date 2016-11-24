@@ -28,13 +28,10 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 	},
 
 	statics: {
-		nullItemModel: new String("null")
+		__NULL_ITEM_MODEL: new String()
 	},
 
 	members: {
-
-		__nullItemLabel: "",
-		__keepSorted: null,
 
 		// Metadata
 
@@ -49,12 +46,6 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		// Construction
 
-		create: function(attributes) {
-			this.base(arguments, attributes);
-			this.__nullItemLabel = this.getAttribute("null-item-label");
-			this.__keepSorted = this.getAttribute("keep-sorted", true);
-		},
-
 		_createMainWidget: function(attributes) {
 			var selectBox = new qx.ui.form.SelectBox();
 			selectBox.setFormat(this.__getListItemLabel.bind(this));
@@ -62,7 +53,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;
-				if(model === this.constructor.nullItemModel) model = null;
+				if(model === this.constructor.__NULL_ITEM_MODEL) model = null;
 				this.setValue(model);
 			}, this);
 			selectBox.addListener("keypress", function(event) {
@@ -96,15 +87,16 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		__getListItemLabel: function(listItem) {
-			if(!listItem) return "";
+			if(listItem == null) return "";
 			var model = listItem.getModel();
-			if(model === this.constructor.nullItemModel) return this.__nullItemLabel;
+			if(model === this.constructor.__NULL_ITEM_MODEL)
+				return this.getAttribute("null-item-label", "");
 			return listItem.getLabel();
 		},
 
 		_updateUI: function(value) {
-			if(value == null && this.__nullItemLabel !== undefined)
-				value = this.constructor.nullItemModel;
+			if(value == null)
+				value = this.constructor.__NULL_ITEM_MODEL;
 			var selectBox = this.getMainWidget();
 			var listItems = selectBox.getChildren();
 			var modelProvider = this.getForm().getModelProvider();
@@ -115,6 +107,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				selectBox.setSelection([ listItem ]);
 				return;
 			}
+			selectBox.resetSelection();
 		},
 
 		_applyReadOnly: function(readOnly) {
@@ -126,31 +119,35 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			if(!label) label = this._getLabelOf(model);
 			var item = new qx.ui.form.ListItem(label, icon, model);
 			var selectBox = this.getMainWidget();
-			if(this.__keepSorted) {
-				var insertionIndex = 0, existingItems = selectBox.getChildren(), lastIndex = existingItems.length;
-				while(insertionIndex < lastIndex) {
-					var existingItem = existingItems[insertionIndex];
+			if(this.getAttribute("keep-sorted", true)) {
+				var existingItems = selectBox.getChildren();
+				for(var index = 0; index < existingItems.length; index++) {
+					var existingItem = existingItems[index];
+					if(existingItem.getModel() === this.constructor.__NULL_ITEM_MODEL) continue;
 					if(existingItem.getLabel() > label) break;
-					insertionIndex++;
 				}
-				selectBox.addAt(item, insertionIndex);
+				selectBox.addAt(item, index);
 			}
 			else selectBox.add(item);
 		},
 
 		addNullItem: function() {
-			var listItem = new qx.ui.form.ListItem(this.__nullItemLabel, null, this.constructor.nullItemModel);
+			var label = this.getAttribute("null-item-label", "");
+			var listItem = new qx.ui.form.ListItem(label, null, this.constructor.__NULL_ITEM_MODEL);
 			this.getMainWidget().add(listItem);
 		},
 
 		removeAllItems: function() {
-			this.getMainWidget().removeAll();
+			this.getMainWidget().removeAll().forEach(function(item) { item.destroy(); });
+		},
+
+		getItems: function() {
+			return this.getMainWidget().getChildren();
 		},
 
 		setItems: function(items) {
-			var selectBox = this.getMainWidget();
-			selectBox.removeAll();
-			if(this.__nullItemLabel !== undefined) {
+			this.removeAllItems();
+			if(this.getAttribute("null-item-label") !== undefined) {
 				this.addNullItem();
 			}
 			if(items instanceof qx.data.Array) {
@@ -158,8 +155,11 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			}
 			if(qx.lang.Type.isArray(items)) {
 				for(var i = 0; i < items.length; i++) {
-					var model = items[i];
-					this.addItem(model);
+					var item = items[i];
+					if(item instanceof qx.ui.form.ListItem)
+						this.getMainWidget().add(item);
+					else
+						this.addItem(item);
 				}
 				return;
 			}
