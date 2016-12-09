@@ -720,6 +720,7 @@
 		</restriction></simpleType></attribute>
 		<attribute name="color" type="string" />
 		<attribute name="connect" type="string" />
+		<attribute name="editable" type="boolean" default="false" />
 		<attribute name="flex" type="q:flex" />
 		<attribute name="font-family" />
 		<attribute name="font-style" />

@@ -12,11 +12,8 @@
 	<table id="passwords" connect="passwords" label="%none">
 		<table-model class="qookery.impl.DefaultTableModel" />
 		<table-column connect="serial" label="Serial #" width="S" text-align="center" />
-		<table-column connect="username" label="Username" width="1*" />
-		<table-column connect="password" label="Password" width="1*" />
-		<script event="cellDbltap">
-			$("#editButton").execute();
-		</script>
+		<table-column connect="username" label="Username" width="1*" editable="true" />
+		<table-column connect="password" label="Password" width="1*" editable="true" />
 		<script event="changeSelection">
 			var enabled = event.getData() !== null;
 			$("#editButton").setEnabled(enabled);

@@ -57,6 +57,8 @@ qx.Class.define("qookerydemo.Application", {
 				qx.log.appender.Console;
 			}
 
+			qookery.Qookery.setOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY, "AIzaSyB6WP2UY69lxzzLtpdTw4GVBlXRyLF4_Pw");
+
 			this.__pendingComponents = [ qookerydemo.ui.XmlEditor, qookerydemo.ui.JsonEditor ];
 			this.__toolbar = new qookerydemo.ui.Toolbar();
 			this.__xmlEditor = new qookerydemo.ui.XmlEditor();

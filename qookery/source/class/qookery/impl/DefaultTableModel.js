@@ -175,7 +175,8 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		isColumnEditable: function(columnIndex) {
-			return false;
+			var editable = this.getColumn(columnIndex)["editable"];
+			return editable !== undefined ? editable : false;
 		},
 
 		isColumnSortable: function(columnIndex) {
@@ -262,25 +263,20 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 		getValue: function(columnIndex, rowIndex) {
 			var row = this.getRowData(rowIndex);
-			if(!row) return null;
+			if(row == null) return null;
 			var column = this.getColumn(columnIndex);
-			if(!column) return null;
+			if(column == null) return null;
 			return this.__readCellValue(column, row);
 		},
 
 		setValue: function(columnIndex, rowIndex, value) {
 			var row = this.getRowData(rowIndex);
-			if(!row) return null;
+			if(row == null) return;
 			var column = this.getColumn(columnIndex);
-			if(!column) return null;
-			// TODO Qookery: Property paths are not supported yet
-			var propertyName = column["connect"];
-			if(!propertyName) return null;
-			if(this.__hasProperty(row, propertyName))
-				row.set(propertyName, value);
-			else
-				row[propertyName] = value;
-			if(this.hasListener("dataChanged")) this.fireDataEvent("dataChanged", {
+			if(column == null) return;
+			var modified = this.__writeCellValue(column, row, value);
+			if(!modified) return;
+			this.fireDataEvent("dataChanged", {
 				firstColumn: columnIndex,
 				lastColumn: columnIndex,
 				firstRow: rowIndex,
@@ -355,20 +351,27 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		 * <li>In case a getter method is available, invoke it</li>
 		 * <li>Fallback to direct reading of the JavaScript object key</li>
 		 * </ol>
+		 *
+		 * @return {any} the cell's value or <code>null</code> if not available
 		 */
 		__readCellValue: function(column, row) {
 			// The read function, once computed, could be cached in the column definition to improve performance
 			var specification = column["connect"];
-			if(!specification) return null;
+			if(specification == null)
+				return null;
 			var value;
-			if(specification.indexOf(".") != -1)
+			if(specification.indexOf(".") !== -1) {
 				value = qx.data.SingleValueBinding.resolvePropertyChain(row, specification);
-			else if(this.__hasProperty(row, specification))
+			}
+			else if(this.__hasProperty(row, specification)) {
 				value = row.get(specification);
-			else if(qx.lang.Type.isFunction(row["get" + qx.lang.String.firstUp(specification)]))
+			}
+			else if(qx.lang.Type.isFunction(row["get" + qx.lang.String.firstUp(specification)])) {
 				value = row["get" + qx.lang.String.firstUp(specification)]();
-			else
+			}
+			else {
 				value = row[specification];
+			}
 			if(value == null) return null;
 			var mapName = column["map"];
 			if(mapName) {
@@ -376,6 +379,38 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 				if(map) return map[value];
 			}
 			return value;
+		},
+
+		/**
+		 * Write a cell's value, attempting a number of methods in sequence
+		 *
+		 * <ol>
+		 * <li>In case the row is a qx.lang.Object with a properly named property, set its value</li>
+		 * <li>In case a setter method is available, invoke it</li>
+		 * <li>Fallback to direct writing of the JavaScript object key</li>
+		 * </ol>
+		 *
+		 * @return {Boolean} <code>true</code> if cell's value was modified
+		 */
+		__writeCellValue: function(column, row, value) {
+			var specification = column["connect"];
+			if(specification == null) {
+				return false;
+			}
+			if(specification.indexOf(".") !== -1) {
+				this.warn("Writing value of columns with property paths is not supported yet");
+				return false;
+			}
+			if(this.__hasProperty(row, specification)) {
+				row.set(specification, value);
+			}
+			else if(qx.lang.Type.isFunction(row["set" + qx.lang.String.firstUp(specification)])) {
+				row["set" + qx.lang.String.firstUp(specification)](value);
+			}
+			else {
+				row[specification] = value;
+			}
+			return true;
 		}
 	}
 });

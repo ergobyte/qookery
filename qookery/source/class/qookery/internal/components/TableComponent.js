@@ -115,9 +115,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				throw new Error("Table must have at least one column");
 			var table = this.getMainWidget();
 			var tableModel = this.getTableModel();
-			if(tableModel.setup && typeof(tableModel.setup) == "function") {
+			if(qx.lang.Type.isFunction(tableModel["setup"])) {
 				// Give model a chance to perform last minute changes
-				tableModel.setup(table, this.__columns);
+				tableModel["setup"].call(tableModel, table, this.__columns);
 			}
 			table.setTableModel(tableModel);
 			var columnModel = table.getTableColumnModel();
@@ -184,13 +184,13 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		// Public methods
 
 		getTableModel: function() {
-			if(!this.__tableModel)
+			if(this.__tableModel == null)
 				this.__tableModel = new qookery.impl.DefaultTableModel(this);
 			return this.__tableModel;
 		},
 
 		setTableModel: function(tableModel) {
-			// FIXME Qookery: memory leak, the previous table model is not being disposed
+			if(this.__tableModel != null) this.__tableModel.dispose();
 			this.__tableModel = tableModel;
 		},
 
@@ -238,7 +238,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		setSelectedRowIndex: function(rowIndex, setFocus) {
 			this.getMainWidget().getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
-			if(setFocus) this.getMainWidget().setFocusedCell(rowIndex, 0, true);
+			if(setFocus) this.getMainWidget().setFocusedCell(0, rowIndex, true);
 		},
 
 		selectAll: function() {
