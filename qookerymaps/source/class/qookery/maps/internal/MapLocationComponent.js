@@ -30,6 +30,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 	events: {
 		"changeZoom": "qx.event.type.Data",
 		"changeCenter": "qx.event.type.Data",
+		"clickMarker": "qx.event.type.Event",
 		"ready": "qx.event.type.Event"
 	},
 
@@ -60,7 +61,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 		_createMainWidget: function(attributes) {
 			var widget = new qx.ui.core.Widget();
-			widget.setAppearance("textfield");
+			widget.setAppearance("maplocation");
 			widget.setFocusable(true);
 			widget.setKeepFocus(false);
 			widget.setCursor("pointer");
@@ -184,6 +185,9 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 				var value = this.__latLngToValue(event.latLng);
 				this._setValueSilently(value);
 				this.__openPopup();
+			}.bind(this));
+			this.__marker.addListener("click", function(event) {
+				this.fireEvent("clickMarker");
 			}.bind(this));
 		},
 

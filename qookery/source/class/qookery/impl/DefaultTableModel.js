@@ -175,11 +175,13 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		isColumnEditable: function(columnIndex) {
+			if(columnIndex == null) return false;
 			var editable = this.getColumn(columnIndex)["editable"];
 			return editable !== undefined ? editable : false;
 		},
 
 		isColumnSortable: function(columnIndex) {
+			if(columnIndex == null) return false;
 			var sortable = this.getColumn(columnIndex)["sortable"];
 			return sortable !== undefined ? sortable : true;
 		},

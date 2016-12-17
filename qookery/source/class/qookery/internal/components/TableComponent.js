@@ -43,6 +43,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "column-visibility-button-visible": return "Boolean";
+			case "editable": return "Boolean";
 			case "flex": return "Integer";
 			case "header-cells-visible": return "Boolean";
 			case "header-click": return "ReplaceableString";
