@@ -61,6 +61,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		// Construction
 
 		create: function(attributes) {
+			this.setAction("refetchEvents", function() { this.__queueOperation("refetchEvents"); });
 			this.__domIdentifier = "calendar-" + this.toHashCode();
 			this.__options = {
 				handleWindowResize: false
@@ -154,15 +155,6 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			this.base(arguments, eventName, handlerArg, onlyOnce);
 		},
 
-		executeAction: function(actionName, argumentMap) {
-			switch(actionName) {
-			case "refetchEvents":
-				this.__queueOperation("refetchEvents");
-				return;
-			}
-			return this.base(arguments, actionName, argumentMap);
-		},
-
 		// Public APIs
 
 		getDate: function() {
@@ -196,12 +188,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 					// Work around a strange bug when fullcalendar is loaded in an invisible DOM element
 					this.__calendar.fullCalendar("gotoDate", this.getAttribute("default-date", new Date()));
 					this.__calendar.fullCalendar("addEventSource", { events: function(start, end, timezone, callback) {
-						this.executeAction("getEvents", {
-							start: start,
-							end: end,
-							timezone: timezone,
-							callback: callback
-						});
+						this.executeAction("getEvents", start, end, timezone, callback);
 					}.bind(this) });
 				}
 				catch(e) {

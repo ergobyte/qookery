@@ -145,8 +145,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			// Nothing to do here, override if needed
 		},
 
-		setAction: function(actionName, clientCode) {
-			this.__actions[actionName] = clientCode;
+		setAction: function(actionName, scriptFunction) {
+			this.__actions[actionName] = scriptFunction;
 		},
 
 		listWidgets: function(filterName) {
@@ -188,6 +188,30 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			receiver[methodName](eventName, handler, this);
 		},
 
+		executeAction: function(actionName, varargs) {
+			var scriptFunction = this.__actions[actionName];
+			if(scriptFunction == null) return null;
+			var functionArguments = Array.prototype.slice.call(arguments);
+			functionArguments[0] = this.getForm().getClientCodeContext();
+			try {
+				return scriptFunction.apply(this, functionArguments);
+			}
+			catch(error) {
+				this.__handleScriptError(error, scriptFunction.toString());
+			}
+		},
+
+		executeScriptFunction: function(scriptFunction, varargs) {
+			var functionArguments = Array.prototype.slice.call(arguments);
+			functionArguments[0] = this.getForm().getClientCodeContext();
+			try {
+				return scriptFunction.apply(this, functionArguments);
+			}
+			catch(error) {
+				this.__handleScriptError(error, scriptFunction.toString());
+			}
+		},
+
 		executeClientCode: function(clientCode, argumentMap) {
 			var clientCodeContext = this.getForm().getClientCodeContext();
 			try {
@@ -200,35 +224,8 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				return clientFunction.apply(this, values);
 			}
 			catch(error) {
-				if(error instanceof qx.core.AssertionError) throw error;
-				var lineNumber = null;
-				var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
-				if(stackTraceLines) for(var i = 0; i < stackTraceLines.length; i++) {
-					var stackTraceLine = stackTraceLines[i];
-					// Below line is browser implementation specific, it can be improved to handle more browsers
-					var match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
-					if(!match) continue;
-					lineNumber = parseInt(match[1]);
-					break;
-				}
-				if(lineNumber != null) {
-					var startIndex = 0;
-					for(var i = 3; i < lineNumber; i++) {
-						var newLineIndex = clientCode.indexOf("\n", startIndex);
-						if(newLineIndex === -1) break;
-						startIndex = newLineIndex + 1;
-					}
-					this.error("Error executing client code at line", match[1], ":", error["message"], "\n\n", clientCode.substr(startIndex, 250), "\n\n", error);
-				}
-				else
-					this.error("Error executing client code:", error["message"], "\n\n", clientCode.substr(0, 250), "\n\n", error);
+				this.__handleScriptError(error, clientCode);
 			}
-		},
-
-		executeAction: function(actionName, argumentMap) {
-			var clientCode = this.__actions[actionName];
-			if(!clientCode) return null;
-			return this.executeClientCode(clientCode, argumentMap);
 		},
 
 		isActionSupported: function(actionName) {
@@ -369,6 +366,31 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				};
 			}
 			throw new Error("Unsupported handler type");
+		},
+
+		__handleScriptError: function(error, sourceCode) {
+			if(error instanceof qx.core.AssertionError) throw error;
+			var lineNumber = null;
+			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
+			if(stackTraceLines) for(var i = 0; i < stackTraceLines.length; i++) {
+				var stackTraceLine = stackTraceLines[i];
+				// Below line is browser implementation specific, it can be improved to handle more browsers
+				var match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
+				if(!match) continue;
+				lineNumber = parseInt(match[1]);
+				break;
+			}
+			if(sourceCode != null && lineNumber != null) {
+				var startIndex = 0;
+				for(var i = 3; i < lineNumber; i++) {
+					var newLineIndex = sourceCode.indexOf("\n", startIndex);
+					if(newLineIndex === -1) break;
+					startIndex = newLineIndex + 1;
+				}
+				this.error("Error executing client code at line", match[1], ":", error["message"], "\n\n", sourceCode.substr(startIndex, 250), "\n\n", error);
+			}
+			else
+				this.error("Error executing client code at line", lineNumber != null ? lineNumber : "1", ":", error["message"], "\n\n", error);
 		}
 	},
 

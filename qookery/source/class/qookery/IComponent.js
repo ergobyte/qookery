@@ -169,11 +169,11 @@ qx.Interface.define("qookery.IComponent", {
 		 * in which case <code>null</code> is returned.</p>
 		 *
 		 * @param actionName {String} one the actions provided by component
-		 * @param argumentMap {Map} optional name-value map to be passed as call arguments
+		 * @param varargs {any} any number of arguments that will be passed to action's function
 		 *
 		 * @return {any} the action's execution result
 		 */
-		executeAction: function(actionName, argumentMap) { },
+		executeAction: function(actionName, varargs) { },
 
 		/**
 		 * Check whether the action exist or not.

@@ -130,7 +130,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			renderer.scrollToX(0);
 			renderer.scrollToY(0);
 
-			this.executeAction("initializeEditor", { editor: editor });
+			this.executeAction("initializeEditor", editor);
 		},
 
 		__onChange: function(event) {
