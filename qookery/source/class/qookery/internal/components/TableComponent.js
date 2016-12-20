@@ -256,14 +256,14 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			}
 		},
 
-		addEventHandler: function(eventName, handlerArg, onlyOnce) {
+		addEventHandler: function(eventName, handler, onlyOnce) {
 			switch(eventName) {
 			case "dataChanged":
 				var methodName = onlyOnce ? "addListenerOnce" : "addListener";
-				this.getTableModel()[methodName]("dataChanged", this._resolveHandlerArg(handlerArg), this);
+				this.getTableModel()[methodName]("dataChanged", handler, this);
 				return;
 			}
-			this.base(arguments, eventName, handlerArg, onlyOnce);
+			this.base(arguments, eventName, handler, onlyOnce);
 		},
 
 		_applyValid: function() {

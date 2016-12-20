@@ -261,7 +261,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				return component;
 			}
 			catch(e) {
-				qx.log.Logger.error(this, "Error creating form editor", e);
+				this.error("Error creating form editor", e);
 			}
 			finally {
 				formParser.dispose();
@@ -279,63 +279,71 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseScript: function(scriptElement, component) {
-			var clientCode = this.getNodeText(scriptElement);
-
+			// Load source code
+			var sourceCode = this.getNodeText(scriptElement);
 			var scriptUrl = this.getAttribute(scriptElement, "source");
 			if(scriptUrl != null)
-				clientCode = qookery.Qookery.getService("ResourceLoader").loadResource(scriptUrl);
-
-			if(clientCode == null)
+				sourceCode = qookery.Qookery.getService("ResourceLoader").loadResource(scriptUrl);
+			if(sourceCode == null)
 				throw new Error("Empty <script> element");
 
-			var execute = true;
-
-			var components = [ component ];
-			var componentIds = this.getAttribute(scriptElement, "component");
-			if(componentIds != null) {
-				var form = component.getForm();
-				components.length = 0;
-				componentIds.split(/\s+/).forEach(function(componentId) {
-					var component = form.getComponent(componentId);
-					if(!component)
-						throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
-					components.push(component);
-				});
+			// Compile script function
+			var functionConstructorArgs = [ "$" ];
+			var argumentNames = this.getAttribute(scriptElement, "arguments");
+			if(argumentNames != null) {
+				Array.prototype.push.apply(functionConstructorArgs, argumentNames.split(/\s+/));
+			}
+			else if(this.getAttribute(scriptElement, "event") != null) {
+				// For backward compatibility, add the implied "event" argument
+				functionConstructorArgs.push("event");
+			}
+			functionConstructorArgs.push(sourceCode);
+			var scriptFunction; try {
+				scriptFunction = Function.apply(null, functionConstructorArgs);
+			}
+			catch(e) {
+				throw new Error("Error compiling script '" + sourceCode.truncate(50) + "': " + e.message);
 			}
 
+			// Preload some XML attributes
+			var actionNames = this.getAttribute(scriptElement, "action");
+			var functionNames = this.getAttribute(scriptElement, "name");
 			var eventNames = this.getAttribute(scriptElement, "event");
-			if(eventNames != null) {
-				var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
-				eventNames.split(/\s+/).forEach(function(eventName) {
-					components.forEach(function(component) {
-						component.addEventHandler(eventName, clientCode, onlyOnce);
-					});
-				});
-				execute = this.getAttribute(scriptElement, "execute") === "true";
-			}
+			var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
+			var execute = this.getAttribute(scriptElement, "execute") === "true";
+			if(actionNames == null && functionNames == null && eventNames == null) execute = true;
 
-			var actionName = this.getAttribute(scriptElement, "action");
-			var functionName = this.getAttribute(scriptElement, "name");
-			if(actionName != null || functionName != null) {
-				var argumentNames = this.getAttribute(scriptElement, "arguments", "");
-				var constructorArgs = argumentNames.split(/\s+/);
-				constructorArgs.unshift("$");
-				constructorArgs.push(clientCode);
-				var scriptFunction = Function.apply(null, constructorArgs);
-				components.forEach(function(component) {
-					if(functionName != null) component.getForm().getClientCodeContext()[functionName] = function() {
-						return component.executeScriptFunction(scriptFunction, arguments);
-					};
-					if(actionName != null) {
-						component.setAction(actionName, scriptFunction);
+			// Create list of target components
+			var componentIds = this.getAttribute(scriptElement, "component");
+			var components = componentIds == null ? [ component ] :
+				componentIds.split(/\s+/).map(function(componentId) {
+					return component.getForm().getComponent(componentId, true);
+				});
+
+			// Apply requested operations to all target components
+			for(var i = 0; i < components.length; i++) {
+				var component = components[i];
+				var componentFunction = function() {
+					var scriptArguments = Array.prototype.slice.call(arguments);
+					scriptArguments.unshift(component.getForm().getClientCodeContext());
+					try {
+						return scriptFunction.apply(component, scriptArguments);
 					}
+					catch(error) {
+						component.handleScriptError(error, scriptFunction.toString());
+					}
+				}
+				if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
+					component.getForm().getClientCodeContext()[functionName] = componentFunction;
 				});
-				execute = this.getAttribute(scriptElement, "execute") === "true";
-			}
-
-			if(execute) components.forEach(function(component) {
-				component.executeClientCode(clientCode);
-			});
+				if(actionNames != null) actionNames.split(/\s+/).forEach(function(actionName) {
+					component.setAction(actionName, componentFunction);
+				});
+				if(eventNames != null) eventNames.split(/\s+/).forEach(function(eventName) {
+					component.addEventHandler(eventName, componentFunction, onlyOnce);
+				});
+				if(execute) componentFunction();
+			};
 		},
 
 		__parseSwitch: function(switchElement, component) {

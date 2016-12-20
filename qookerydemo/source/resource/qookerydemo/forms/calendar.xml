@@ -77,7 +77,7 @@
 			]);
 		</script>
 
-		<script event="eventClick">
+		<script event="eventClick" arguments="event jsEvent view">
 			alert(event.title);
 		</script>
 

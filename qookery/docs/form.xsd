@@ -775,10 +775,9 @@
 		<complexType>
 			<simpleContent>
 				<extension base="string">
-					<attribute name="action" type="token"><annotation><documentation>
-						The name of the action the script is a handler for.
-						Mutually exclusive with <code>event</code> and <code>name</code>.
-					</documentation></annotation></attribute>
+					<attribute name="action"><annotation><documentation>
+						The name(s) of the action(s) the script is a handler for.
+					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
 					<attribute name="arguments"><annotation><documentation>
 						A list of JavaScript argument names to use for generated function body
 					</documentation></annotation><simpleType><list itemType="q:javascript-identifier" /></simpleType></attribute>
@@ -788,17 +787,16 @@
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
 					<attribute name="event"><annotation><documentation>
 						The name(s) of the component's event(s) the script should be attached to.
-						Mutually exclusive with <code>action</code> and <code>name</code>.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
 					<attribute name="execute" type="boolean"><annotation><documentation>
-						If true, execute script immediately in addition to any other performed attachments/registrations
+						If true, execute script immediately in addition to any other performed attachments/registrations.
+						This attribute is false by default, unless no action, function and event registration is requested.
 					</documentation></annotation></attribute>
-					<attribute name="name" type="q:javascript-identifier"><annotation><documentation>
-						The name of the function to register into the form context ("$") for later execution of script.
-						Mutually exclusive with <code>action</code> and <code>event</code>.
-					</documentation></annotation></attribute>
+					<attribute name="name"><annotation><documentation>
+						The name(s) of the function(s) to register into the form context ("$") for later execution of script.
+					</documentation></annotation><simpleType><list itemType="q:javascript-identifier" /></simpleType></attribute>
 					<attribute name="once" type="boolean" default="false"><annotation><documentation>
-						Remove the script from the component after it has been run once (implemented only for "event" scripts)
+						Unregister the script after it has been run once (currently implemented only for event registrations)
 					</documentation></annotation></attribute>
 					<attribute name="source" type="anyURI"><annotation><documentation>
 						The URL to the script that will be attached.

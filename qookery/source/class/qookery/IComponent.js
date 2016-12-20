@@ -147,10 +147,10 @@ qx.Interface.define("qookery.IComponent", {
 		 * Add an event handler to this component
 		 *
 		 * @param eventName {String} the name of the event to listen to
-		 * @param handlerArg {Function|String} a function or Qookery client scripting code to execute when the event is triggered
+		 * @param handler {Function} a function to execute when the event is triggered
 		 * @param onlyOnce {Boolean} if <code>true</code>, the listener will be removed as soon as it triggered for the first time
 		 */
-		addEventHandler: function(eventName, handlerArg, onlyOnce) { },
+		addEventHandler: function(eventName, handler, onlyOnce) { },
 
 		/**
 		 * Execute Qookery scripting code on component

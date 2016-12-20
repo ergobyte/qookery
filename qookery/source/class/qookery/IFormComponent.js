@@ -52,10 +52,11 @@ qx.Interface.define("qookery.IFormComponent", {
 		 * Return a component registered within this form
 		 *
 		 * @param componentId {String} the unique identifier of the requested component
+		 * @param required {Boolean?} if <code>true</code>, throw an error in case component is not found
 		 *
 		 * @return {qookery.IComponent} component or <code>null</code> if not found
 		 */
-		getComponent: function(componentId) { },
+		getComponent: function(componentId, required) { },
 
 		/**
 		 * Return the form's model provider if set, or the default one otherwise

@@ -170,7 +170,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			this.getMainWidget().focus();
 		},
 
-		addEventHandler: function(eventName, handlerArg, onlyOnce) {
+		addEventHandler: function(eventName, handler, onlyOnce) {
 			var receiver = null;
 			if(qx.Class.supportsEvent(this.constructor, eventName)) {
 				receiver = this;
@@ -183,33 +183,15 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(!receiver)
 				throw new Error(qx.lang.String.format("Event '%1' not supported", [ eventName ]));
 
-			var handler = this._resolveHandlerArg(handlerArg);
 			var methodName = onlyOnce ? "addListenerOnce" : "addListener";
 			receiver[methodName](eventName, handler, this);
 		},
 
 		executeAction: function(actionName, varargs) {
-			var scriptFunction = this.__actions[actionName];
-			if(scriptFunction == null) return null;
-			var functionArguments = Array.prototype.slice.call(arguments);
-			functionArguments[0] = this.getForm().getClientCodeContext();
-			try {
-				return scriptFunction.apply(this, functionArguments);
-			}
-			catch(error) {
-				this.__handleScriptError(error, scriptFunction.toString());
-			}
-		},
-
-		executeScriptFunction: function(scriptFunction, varargs) {
-			var functionArguments = Array.prototype.slice.call(arguments);
-			functionArguments[0] = this.getForm().getClientCodeContext();
-			try {
-				return scriptFunction.apply(this, functionArguments);
-			}
-			catch(error) {
-				this.__handleScriptError(error, scriptFunction.toString());
-			}
+			var actionFunction = this.__actions[actionName];
+			if(actionFunction == null) return null;
+			var actionArguments = Array.prototype.slice.call(arguments, 1);
+			return actionFunction.apply(this, actionArguments);
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {
@@ -224,8 +206,33 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				return clientFunction.apply(this, values);
 			}
 			catch(error) {
-				this.__handleScriptError(error, clientCode);
+				this.handleScriptError(error, clientCode);
 			}
+		},
+
+		handleScriptError: function(error, sourceCode) {
+			if(error instanceof qx.core.AssertionError) throw error;
+			var lineNumber = null;
+			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
+			if(stackTraceLines) for(var i = 0; i < stackTraceLines.length; i++) {
+				var stackTraceLine = stackTraceLines[i];
+				// Below line is browser implementation specific, it can be improved to handle more browsers
+				var match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
+				if(!match) continue;
+				lineNumber = parseInt(match[1]);
+				break;
+			}
+			if(sourceCode != null && lineNumber != null) {
+				var startIndex = 0;
+				for(var i = 3; i < lineNumber; i++) {
+					var newLineIndex = sourceCode.indexOf("\n", startIndex);
+					if(newLineIndex === -1) break;
+					startIndex = newLineIndex + 1;
+				}
+				this.error("Error executing client code at line", match[1], ":", error["message"], "\n\n", sourceCode.substr(startIndex, 250), "\n\n", error);
+			}
+			else
+				this.error("Error executing client code at line", lineNumber != null ? lineNumber : "1", ":", error["message"], "\n\n", error);
 		},
 
 		isActionSupported: function(actionName) {
@@ -354,43 +361,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				var widget = widgets[i];
 				widget.setVisibility(visibility);
 			}
-		},
-
-		_resolveHandlerArg: function(handlerArg) {
-			if(qx.lang.Type.isFunction(handlerArg)) {
-				return handlerArg;
-			}
-			if(qx.lang.Type.isString(handlerArg)) {
-				return function(event) {
-					this.executeClientCode(handlerArg, { "event": event });
-				};
-			}
-			throw new Error("Unsupported handler type");
-		},
-
-		__handleScriptError: function(error, sourceCode) {
-			if(error instanceof qx.core.AssertionError) throw error;
-			var lineNumber = null;
-			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
-			if(stackTraceLines) for(var i = 0; i < stackTraceLines.length; i++) {
-				var stackTraceLine = stackTraceLines[i];
-				// Below line is browser implementation specific, it can be improved to handle more browsers
-				var match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
-				if(!match) continue;
-				lineNumber = parseInt(match[1]);
-				break;
-			}
-			if(sourceCode != null && lineNumber != null) {
-				var startIndex = 0;
-				for(var i = 3; i < lineNumber; i++) {
-					var newLineIndex = sourceCode.indexOf("\n", startIndex);
-					if(newLineIndex === -1) break;
-					startIndex = newLineIndex + 1;
-				}
-				this.error("Error executing client code at line", match[1], ":", error["message"], "\n\n", sourceCode.substr(startIndex, 250), "\n\n", error);
-			}
-			else
-				this.error("Error executing client code at line", lineNumber != null ? lineNumber : "1", ":", error["message"], "\n\n", error);
 		}
 	},
 
