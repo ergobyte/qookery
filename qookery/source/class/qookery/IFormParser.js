@@ -24,7 +24,7 @@ qx.Interface.define("qookery.IFormParser", {
 	members: {
 
 		/**
-		 * Return variables user passed to this parser, if any
+		 * Return variables user passed to this parser
 		 *
 		 * @return {Map} any number of user variables
 		 */

@@ -91,7 +91,7 @@
 
 	<simpleType name="qooxdoo-class-name">
 		<restriction base="token">
-			<pattern value="([a-zA-Z_$][0-9a-zA-Z_$]*\.)+[A-Z][0-9a-zA-Z_$]*" />
+			<pattern value="([a-zA-Z_$][0-9a-zA-Z_$]*\.)*[A-Z][0-9a-zA-Z_$]*" />
 		</restriction>
 	</simpleType>
 
@@ -483,22 +483,25 @@
 				<complexType>
 					<attribute name="class" type="q:qooxdoo-class-name">
 						<annotation><documentation>
-							Name of a Qooxdoo static class to import. The key defaults to the class simple name (part after last dot).
-						</documentation></annotation>
-					</attribute>
-					<attribute name="key" type="q:javascript-identifier">
-						<annotation><documentation>
-							The name of the property to create in the scripting context - if not set, a sane default name will be used
+							Name of a Qooxdoo static class to import via qx.Class.getByName().
+							Mutually exclusive with the 'service' attribute.
 						</documentation></annotation>
 					</attribute>
 					<attribute name="optional" type="boolean" default="false">
 						<annotation><documentation>
-							If true, no exception will be thrown in case importing was not possible
+							If true, no exception will be thrown in case importing was not possible.
 						</documentation></annotation>
 					</attribute>
-					<attribute name="service" type="q:javascript-identifier">
+					<attribute name="service" type="q:qooxdoo-class-name">
 						<annotation><documentation>
-							Name of a Qookery service to import. The key defaults to the service's name.
+							Name of a service to import by using the parser's service resolver or qooxdoo.Qooxdoo.getService() if unset.
+							Mutually exclusive with the 'class' attribute.
+						</documentation></annotation>
+					</attribute>
+					<attribute name="variable" type="q:javascript-identifier" use="optional">
+						<annotation><documentation>
+							The name of the variable to create into the scripting context for imported object.
+							If not set, the last segment of the import's dot-separated name will be used.
 						</documentation></annotation>
 					</attribute>
 				</complexType>

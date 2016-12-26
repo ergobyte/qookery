@@ -57,7 +57,7 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 		// Creation
 
 		prepare: function(formParser, xmlElement) {
-			this.__variables = formParser.getVariables() || { };
+			this.__variables = formParser.getVariables();
 			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
 		},
 

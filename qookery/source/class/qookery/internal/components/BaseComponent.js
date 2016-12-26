@@ -206,33 +206,9 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 				return clientFunction.apply(this, values);
 			}
 			catch(error) {
-				this.handleScriptError(error, clientCode);
+				qookery.util.Debug.logScriptError(this, clientCode, error);
+				throw error;
 			}
-		},
-
-		handleScriptError: function(error, sourceCode) {
-			if(error instanceof qx.core.AssertionError) throw error;
-			var lineNumber = null;
-			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
-			if(stackTraceLines) for(var i = 0; i < stackTraceLines.length; i++) {
-				var stackTraceLine = stackTraceLines[i];
-				// Below line is browser implementation specific, it can be improved to handle more browsers
-				var match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
-				if(!match) continue;
-				lineNumber = parseInt(match[1]);
-				break;
-			}
-			if(sourceCode != null && lineNumber != null) {
-				var startIndex = 0;
-				for(var i = 3; i < lineNumber; i++) {
-					var newLineIndex = sourceCode.indexOf("\n", startIndex);
-					if(newLineIndex === -1) break;
-					startIndex = newLineIndex + 1;
-				}
-				this.error("Error executing client code at line", match[1], ":", error["message"], "\n\n", sourceCode.substr(startIndex, 250), "\n\n", error);
-			}
-			else
-				this.error("Error executing client code at line", lineNumber != null ? lineNumber : "1", ":", error["message"], "\n\n", error);
 		},
 
 		isActionSupported: function(actionName) {

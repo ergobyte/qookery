@@ -132,7 +132,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return defaultValue;
 		},
 
-		setVariable: function(variableName, value) {
+		setVariable: function(variableName, value, replace) {
+			if(replace === false && this.__scriptingContext.hasOwnProperty(variableName))
+				throw new Error("Variable '" + variableName + "' has already been set");
 			this.__scriptingContext[variableName] = value;
 		},
 
@@ -236,29 +238,28 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		__parseImport: function(formParser, importElement) {
-			var instance = null;
-			var key = formParser.getAttribute(importElement, "key");
-			var optional = formParser.getAttribute(importElement, "optional") === "true";
+			var instance = null, name = null;
 			var className = formParser.getAttribute(importElement, "class");
-			if(className) {
+			if(className != null) {
 				instance = qx.Class.getByName(className);
-				if(!instance) {
-					if(!optional) throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
-					return;
-				}
-				if(!key) key = className.substring(className.lastIndexOf(".") + 1);
+				name = className;
 			}
 			var serviceName = formParser.getAttribute(importElement, "service");
-			if(serviceName) {
-				instance = qookery.Qookery.getService(serviceName);
-				if(!instance) {
-					if(!optional) throw new Error(qx.lang.String.format("Imported service '%1' not available", [ serviceName ]));
-					return;
-				}
-				if(!key) key = serviceName;
+			if(serviceName != null) {
+				instance = formParser.resolveService(serviceName);
+				name = serviceName;
 			}
-			if(!instance) throw new Error("Not enough arguments provided to <import> element");
-			this.setVariable(key, instance);
+			if(name == null) {
+				throw new Error("Invalid <import> element");
+			}
+			if(instance == null && formParser.getAttribute(importElement, "optional") !== "true") {
+				throw new Error("Unable to resolve required import '" + name + "'");
+			}
+			var variableName = formParser.getAttribute(importElement, "variable");
+			if(variableName == null) {
+				variableName = name.substring(name.lastIndexOf(".") + 1);
+			}
+			this.setVariable(variableName, instance, false);
 		},
 
 		__parseTranslation: function(formParser, translationElement) {

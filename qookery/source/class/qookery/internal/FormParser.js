@@ -32,10 +32,15 @@ qx.Class.define("qookery.internal.FormParser", {
 		NAMED_SIZES: { "XXS": 28, "XS": 46, "S": 74, "M": 120, "L": 194, "XL": 314, "XXL": 508 }
 	},
 
-	construct: function(variables) {
+	construct: function(variables, serviceResolver) {
 		this.base(arguments);
+		if(qx.core.Environment.get("qx.debug")) {
+			this.assertMap(variables);
+			this.assertFunction(serviceResolver);
+		}
 		this.__namespaces = { };
 		this.__variables = variables;
+		this.__serviceResolver = serviceResolver;
 	},
 
 	members: {
@@ -43,6 +48,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		__defaultNamespace: null,
 		__namespaces: null,
 		__variables: null,
+		__serviceResolver: null,
 
 		// IFormParser implementation
 
@@ -146,6 +152,10 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		resolveNamespacePrefix: function(prefix) {
 			return this.__namespaces[prefix];
+		},
+
+		resolveService: function(serviceName) {
+			return this.__serviceResolver(serviceName);
 		},
 
 		// Internal methods
@@ -252,7 +262,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			formUrl = this.parseValue(parentComponent, "ReplaceableString", formUrl);
 			var xmlString = qookery.Qookery.getService("ResourceLoader").loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
-			var formParser = new qookery.internal.FormParser(this.__variables);
+			var formParser = new qookery.internal.FormParser(this.__variables, this.__serviceResolver);
 			try {
 				var component = formParser.parseXmlDocument(xmlDocument, parentComponent);
 				var xmlIdAttribute = xIncludeElement.attributes["xml:id"];
@@ -321,8 +331,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				});
 
 			// Apply requested operations to all target components
-			for(var i = 0; i < components.length; i++) {
-				var component = components[i];
+			components.forEach(function(component) {
 				var componentFunction = function() {
 					var scriptArguments = Array.prototype.slice.call(arguments);
 					scriptArguments.unshift(component.getForm().getClientCodeContext());
@@ -330,7 +339,8 @@ qx.Class.define("qookery.internal.FormParser", {
 						return scriptFunction.apply(component, scriptArguments);
 					}
 					catch(error) {
-						component.handleScriptError(error, scriptFunction.toString());
+						qookery.util.Debug.logScriptError(component, scriptFunction.toString(), error);
+						throw error;
 					}
 				}
 				if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
@@ -343,7 +353,7 @@ qx.Class.define("qookery.internal.FormParser", {
 					component.addEventHandler(eventName, componentFunction, onlyOnce);
 				});
 				if(execute) componentFunction();
-			};
+			}, this);
 		},
 
 		__parseSwitch: function(switchElement, component) {

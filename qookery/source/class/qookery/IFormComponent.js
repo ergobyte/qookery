@@ -84,8 +84,9 @@ qx.Interface.define("qookery.IFormComponent", {
 		 *
 		 * @param variableName {String} the name of the variable
 		 * @param value {any} the new variable value
+		 * @param replace {Boolean ? true} if set to <code>false</code>, attempt to set an existing variable will throw an error
 		 */
-		setVariable: function(variableName, value) { },
+		setVariable: function(variableName, value, replace) { },
 
 		// Scripting
 

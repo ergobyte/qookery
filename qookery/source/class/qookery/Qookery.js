@@ -131,11 +131,16 @@ qx.Class.define("qookery.Qookery", {
 		 * </pre>
 
 		 * @param variables {Map ? null} optional variables to pass to generated forms
+		 * @param serviceResolver {Function ? null} an optional function that will be used to resolve services
 		 *
 		 * @return {qookery.IFormParser} newly created instance of form parser
 		 */
-		createFormParser: function(variables) {
-			return new qookery.internal.FormParser(variables);
+		createFormParser: function(variables, serviceResolver) {
+			if(variables == null) variables = { };
+			if(serviceResolver == null) serviceResolver = function(serviceName) {
+				return qookery.Qookery.getService(serviceName, false);
+			};
+			return new qookery.internal.FormParser(variables, serviceResolver);
 		}
 	}
 });
