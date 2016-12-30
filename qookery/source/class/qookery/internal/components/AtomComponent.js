@@ -54,6 +54,10 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 			if(attributes["icon-position"] !== undefined) atom.setIconPosition(attributes["icon-position"]);
 			if(attributes["label"] !== undefined) atom.setLabel(attributes["label"]);
 			if(attributes["rich"] !== undefined) atom.setRich(attributes["rich"]);
+			if(attributes["text-align"] !== undefined) {
+				atom.getChildControl("label").setAllowGrowX(true);
+				atom.getChildControl("label").setTextAlign(attributes["text-align"]);
+			}
 			this._applyLayoutAttributes(atom, attributes);
 		},
 

@@ -308,6 +308,7 @@
 		<attribute name="icon" type="anyURI" />
 		<attribute name="icon-position" type="q:icon-position" default="left" />
 		<attribute name="rich" type="boolean" default="false" />
+		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType>
 
 	<complexType name="container-component.attributes"><complexContent><extension base="q:component.attributes">
