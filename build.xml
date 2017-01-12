@@ -32,7 +32,7 @@
 	<property name="pythonhttp.root" value="${build.root}/pythonhttp" />
 
 	<property name="qooxdoo.root" value="${build.root}/qooxdoo" />
-	<condition property="qooxdoo.version" value="5.0.1"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.version" value="5.0.2"><not><isset property="qooxdoo.version" /></not></condition>
 	<property name="qooxdoo.path" value="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
 
@@ -118,8 +118,16 @@
 	</target>
 
 	<target name="Qooxdoo-DownloadSdk" unless="build.qooxdooInstalled">
+		<loadresource property="qooxdoo.version.underscores">
+			<propertyresource name="qooxdoo.version" />
+			<filterchain>
+				<tokenfilter>
+					<replaceregex pattern="\." replace="_" flags="g" />
+				</tokenfilter>
+			</filterchain>
+		</loadresource>
 		<get dest="${qooxdoo.root}" skipExisting="true" verbose="on" httpusecaches="no">
-			<url url="http://downloads.sourceforge.net/qooxdoo/qooxdoo-${qooxdoo.version}-sdk.zip" />
+			<url url="https://github.com/qooxdoo/qooxdoo/releases/download/release_${qooxdoo.version.underscores}/qooxdoo-${qooxdoo.version}-sdk.zip" />
 		</get>
 		<unzip src="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk.zip" dest="${qooxdoo.root}/" />
 		<chmod dir="${qooxdoo.root}/qooxdoo-${qooxdoo.version}-sdk/tool/bin" includes="*.py" perm="+x" />

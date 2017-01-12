@@ -10,7 +10,7 @@
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" }
 		],
 		"version": "master",
-		"qooxdoo-versions": [ "5.0.1" ],
+		"qooxdoo-versions": [ "5.0.2" ],
 		"download": "https://github.com/ergobyte/qookery/releases/download/%{version}/qookery.tar.gz",
 		"checksum": "%{sha1-checksum}",
 		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/%{version}/qookery"
