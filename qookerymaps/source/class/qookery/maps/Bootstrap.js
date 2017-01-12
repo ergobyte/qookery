@@ -33,10 +33,10 @@ qx.Bootstrap.define("qookery.maps.Bootstrap", {
 		var registry = qookery.Qookery.getRegistry();
 		registry.registerLibrary("googleLoader", [ "js@//www.google.com/jsapi" ]);
 		registry.registerLibrary("googleMaps", null, [ "googleLoader" ], function(callback) {
-			var loaderParameter = { sensor: false };
+			var parameters = { };
 			var apiKey = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY);
-			if(apiKey != null) loaderParameter["key"] = apiKey;
-			google.load("maps", "3", { other_params: qx.util.Uri.toParameter(loaderParameter, false), callback: callback });
+			if(apiKey != null) parameters["key"] = apiKey;
+			google.load("maps", "3", { other_params: qx.util.Uri.toParameter(parameters, false), callback: callback });
 			return false;
 		});
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Maps}map-location", qookery.maps.internal.MapLocationComponent);

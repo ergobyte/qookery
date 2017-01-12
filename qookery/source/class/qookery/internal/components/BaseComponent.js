@@ -275,52 +275,52 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			// Layout
 
-			if(undefined !== attributes["row-span"]) widget.setLayoutProperties({ rowSpan: attributes["row-span"] });
-			if(undefined !== attributes["col-span"]) widget.setLayoutProperties({ colSpan: attributes["col-span"] });
+			if(attributes["row-span"] !== undefined) widget.setLayoutProperties({ rowSpan: attributes["row-span"] });
+			if(attributes["col-span"] !== undefined) widget.setLayoutProperties({ colSpan: attributes["col-span"] });
 
 			// Size and position
 
-			if(undefined !== attributes["width"]) widget.setWidth(attributes["width"]);
-			if(undefined !== attributes["height"]) widget.setHeight(attributes["height"]);
-			if(undefined !== attributes["min-width"]) widget.setMinWidth(attributes["min-width"]);
-			if(undefined !== attributes["min-height"]) widget.setMinHeight(attributes["min-height"]);
-			if(undefined !== attributes["max-width"]) widget.setMaxWidth(attributes["max-width"]);
-			if(undefined !== attributes["max-height"]) widget.setMaxHeight(attributes["max-height"]);
+			if(attributes["width"] !== undefined) widget.setWidth(attributes["width"]);
+			if(attributes["height"] !== undefined) widget.setHeight(attributes["height"]);
+			if(attributes["min-width"] !== undefined) widget.setMinWidth(attributes["min-width"]);
+			if(attributes["min-height"] !== undefined) widget.setMinHeight(attributes["min-height"]);
+			if(attributes["max-width"] !== undefined) widget.setMaxWidth(attributes["max-width"]);
+			if(attributes["max-height"] !== undefined) widget.setMaxHeight(attributes["max-height"]);
 
-			if(undefined !== attributes["align-x"]) widget.setAlignX(attributes["align-x"]);
-			if(undefined !== attributes["align-y"]) widget.setAlignY(attributes["align-y"]);
+			if(attributes["align-x"] !== undefined) widget.setAlignX(attributes["align-x"]);
+			if(attributes["align-y"] !== undefined) widget.setAlignY(attributes["align-y"]);
 
-			if(undefined !== attributes["allow-stretch"]) { var v = attributes["allow-stretch"]; widget.setAllowStretchX(v); widget.setAllowStretchY(v); }
-			if(undefined !== attributes["allow-stretch-x"]) widget.setAllowStretchX(attributes["allow-stretch-x"]);
-			if(undefined !== attributes["allow-stretch-y"]) widget.setAllowStretchY(attributes["allow-stretch-y"]);
+			if(attributes["allow-stretch"] !== undefined) { var v = attributes["allow-stretch"]; widget.setAllowStretchX(v); widget.setAllowStretchY(v); }
+			if(attributes["allow-stretch-x"] !== undefined) widget.setAllowStretchX(attributes["allow-stretch-x"]);
+			if(attributes["allow-stretch-y"] !== undefined) widget.setAllowStretchY(attributes["allow-stretch-y"]);
 
-			if(undefined !== attributes["margin"]) widget.setMargin(attributes["margin"]);
-			if(undefined !== attributes["margin-top"]) widget.setMarginTop(attributes["margin-top"]);
-			if(undefined !== attributes["margin-right"]) widget.setMarginRight(attributes["margin-right"]);
-			if(undefined !== attributes["margin-bottom"]) widget.setMarginBottom(attributes["margin-bottom"]);
-			if(undefined !== attributes["margin-left"]) widget.setMarginLeft(attributes["margin-left"]);
+			if(attributes["margin"] !== undefined) widget.setMargin(attributes["margin"]);
+			if(attributes["margin-top"] !== undefined) widget.setMarginTop(attributes["margin-top"]);
+			if(attributes["margin-right"] !== undefined) widget.setMarginRight(attributes["margin-right"]);
+			if(attributes["margin-bottom"] !== undefined) widget.setMarginBottom(attributes["margin-bottom"]);
+			if(attributes["margin-left"] !== undefined) widget.setMarginLeft(attributes["margin-left"]);
 
-			if(undefined !== attributes["padding"]) widget.setPadding(attributes["padding"]);
-			if(undefined !== attributes["padding-top"]) widget.setPaddingTop(attributes["padding-top"]);
-			if(undefined !== attributes["padding-right"]) widget.setPaddingRight(attributes["padding-right"]);
-			if(undefined !== attributes["padding-bottom"]) widget.setPaddingBottom(attributes["padding-bottom"]);
-			if(undefined !== attributes["padding-left"]) widget.setPaddingLeft(attributes["padding-left"]);
+			if(attributes["padding"] !== undefined) widget.setPadding(attributes["padding"]);
+			if(attributes["padding-top"] !== undefined) widget.setPaddingTop(attributes["padding-top"]);
+			if(attributes["padding-right"] !== undefined) widget.setPaddingRight(attributes["padding-right"]);
+			if(attributes["padding-bottom"] !== undefined) widget.setPaddingBottom(attributes["padding-bottom"]);
+			if(attributes["padding-left"] !== undefined) widget.setPaddingLeft(attributes["padding-left"]);
 
 			// Appearance
 
-			if(undefined !== attributes["appearance"]) widget.setAppearance(attributes["appearance"]);
-			if(undefined !== attributes["cursor"]) widget.setCursor(attributes["cursor"]);
-			if(undefined !== attributes["decorator"]) widget.setDecorator(attributes["decorator"]);
-			if(undefined !== attributes["font"]) widget.setFont(attributes["font"]);
-			if(undefined !== attributes["text-color"]) widget.setTextColor(attributes["text-color"]);
-			if(undefined !== attributes["background-color"]) widget.setBackgroundColor(attributes["background-color"]);
-			if(undefined !== attributes["tool-tip-text"]) widget.setToolTipText(attributes["tool-tip-text"]);
-			if(undefined !== attributes["tool-tip-icon"]) widget.setToolTipIcon(attributes["tool-tip-icon"]);
+			if(attributes["appearance"] !== undefined) widget.setAppearance(attributes["appearance"]);
+			if(attributes["cursor"] !== undefined) widget.setCursor(attributes["cursor"]);
+			if(attributes["decorator"] !== undefined) widget.setDecorator(attributes["decorator"]);
+			if(attributes["font"] !== undefined) widget.setFont(attributes["font"]);
+			if(attributes["text-color"] !== undefined) widget.setTextColor(attributes["text-color"]);
+			if(attributes["background-color"] !== undefined) widget.setBackgroundColor(attributes["background-color"]);
+			if(attributes["tool-tip-text"] !== undefined) widget.setToolTipText(attributes["tool-tip-text"]);
+			if(attributes["tool-tip-icon"] !== undefined) widget.setToolTipIcon(attributes["tool-tip-icon"]);
 
 			// Miscellaneous
 
-			if(undefined !== attributes["tab-index"]) widget.setTabIndex(attributes["tab-index"]);
-			if(undefined !== attributes["focusable"]) widget.setFocusable(attributes["focusable"]);
+			if(attributes["tab-index"] !== undefined) widget.setTabIndex(attributes["tab-index"]);
+			if(attributes["focusable"] !== undefined) widget.setFocusable(attributes["focusable"]);
 		},
 
 		_applyEnabled: function(enabled) {

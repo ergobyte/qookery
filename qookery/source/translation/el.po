@@ -23,6 +23,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "qookery.internal.validators.ArrayValidator.minimumLength"
+msgstr "Δεν υπάρχουν αρκετά στοιχεία στον πίνακα, απαιτούνται τουλάχιστον %1"
+
+msgid "qookery.internal.validators.ArrayValidator.maximumLength"
+msgstr "Υπάρχουν περισσότερα από %1 στοιχεία στον πίνακα"
+
 msgid "qookery.internal.validators.ComparisonValidator.eq"
 msgstr "H τιμή πρέπει να ισούται με %1"
 

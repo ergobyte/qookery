@@ -223,6 +223,10 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return selection;
 		},
 
+		resetSelection: function() {
+			this.getMainWidget().getSelectionModel().resetSelection();
+		},
+
 		getSingleSelection: function() {
 			var selection = this.getSelection();
 			if(selection.length !== 1) return null;

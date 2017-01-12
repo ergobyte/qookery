@@ -39,6 +39,7 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["default"] = qookery.impl.DefaultModelProvider.getInstance();
 
 		partition = this.__createPartition(qookery.IRegistry.P_VALIDATOR);
+		partition["array"] = qookery.internal.validators.ArrayValidator.getInstance();
 		partition["comparison"] = qookery.internal.validators.ComparisonValidator.getInstance();
 		partition["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
 		partition["string"] = qookery.internal.validators.StringValidator.getInstance();

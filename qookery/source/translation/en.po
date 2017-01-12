@@ -23,6 +23,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "qookery.internal.validators.ArrayValidator.minimumLength"
+msgstr "Not enough elements in array, at least %1 are needed"
+
+msgid "qookery.internal.validators.ArrayValidator.maximumLength"
+msgstr "Number of elements in array exceed maximum allowed of %1"
+
 msgid "qookery.internal.validators.ComparisonValidator.eq"
 msgstr "Value must be equal to %1"
 
