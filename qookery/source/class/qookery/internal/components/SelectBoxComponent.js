@@ -110,9 +110,22 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			selectBox.resetSelection();
 		},
 
+		_applyEnabled: function(enabled) {
+			var labelWidget = this.getLabelWidget();
+			if(labelWidget != null)
+				labelWidget.setEnabled(enabled);
+			this.__updateEnabled();
+		},
+
 		_applyReadOnly: function(readOnly) {
 			this.base(arguments, readOnly);
-			this.getMainWidget().setEnabled(!readOnly);
+			this.__updateEnabled();
+		},
+
+		__updateEnabled: function() {
+			var isEnabled = this.getEnabled();
+			var isReadOnly = this.getReadOnly();
+			this.getMainWidget().setEnabled(isEnabled && !isReadOnly);
 		},
 
 		addItem: function(model, label, icon) {
