@@ -16,7 +16,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="Qookery Calendar" basedir="." default="Download">
+<project name="qookery.calendar" basedir="." default="Download">
 
 	<property name="fullcalendar.version" value="2.1.1" />
 	<property name="fullcalendar.zipFilename" value="fullcalendar-${fullcalendar.version}.zip" />

@@ -47,7 +47,7 @@ h2(#group). Discussion Group
 
 A discussion group is available here:
 
-* "Discussion Group":http://groups.google.com/forum/?fromgroups#!forum/qookery
+* "Discussion Group":https://groups.google.com/forum/?fromgroups#!forum/qookery
 
 h2(#source). Source Code
 
@@ -70,4 +70,4 @@ For requests and comments, please contact the project's contributors:
 h2(#links). See also
 
 * Qookery Home - "www.qookery.org":http://www.qookery.org/
-* Ergobyte Informatics S.A. - "www.ergobyte.gr":https://www.ergobyte.gr/portal/ergobyte/en/home
+* Ergobyte Informatics S.A. - "www.ergobyte.gr":https://www.ergobyte.gr/

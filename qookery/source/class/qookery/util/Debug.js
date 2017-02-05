@@ -29,6 +29,11 @@ qx.Class.define("qookery.util.Debug", {
 		 * Attempt to log a warning about an error that occurred inside a script
 		 *
 		 * <p>Implementation is browser-specific and can be improved to handle more browsers</p>
+		 *
+		 * @param object {any} an object that is the context of the log message
+		 * @param sourceCode {String} the script's source code
+		 * @param error {Error} exception thrown while running script
+		 * @return {undefined}
 		 */
 		logScriptError: function(object, sourceCode, error) {
 			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);

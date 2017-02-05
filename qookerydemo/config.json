@@ -7,7 +7,8 @@
 		"build",
 		"clean",
 		"lint",
-		"source"
+		"source",
+		"validate-manifest"
 	],
 	"config-warnings": {
 		"job-shadowing": [ "libraries", "includes" ]

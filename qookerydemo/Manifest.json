@@ -3,6 +3,7 @@
 		"name": "qookerydemo",
 		"summary": "Demo runner for Qookery",
 		"description": "Provides a demonstration and testing environment for Qookery developers and users.",
+		"category": [ "utility" ],
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [

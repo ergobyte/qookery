@@ -249,7 +249,7 @@ qx.Interface.define("qookery.IRegistry", {
 		/**
 		 * Request one or more libraries for usage, loading them if needed
 		 *
-		 * @param libraryNames {String|Array?} symbolic name(s) of libraries to load - may be empty
+		 * @param libraryName {String|Array?} symbolic name(s) of libraries to load - may be empty
 		 * @param callback {Function} function that will be called as soon as library is ready for usage
 		 * @param thisArg {any} optional <code>this</code> argument for callback
 		 */

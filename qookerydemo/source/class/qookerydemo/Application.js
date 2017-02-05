@@ -82,17 +82,17 @@ qx.Class.define("qookerydemo.Application", {
 
 			qx.bom.History.getInstance().addListener("request", function(event) {
 				var demoId = event.getData();
-				if(!demoId) return;
+				if(demoId == null) { return; }
 				this.loadDemo(demoId);
 			}, this);
 		},
 
 		onComponentReady: function(component) {
 			qx.lang.Array.remove(this.__pendingComponents, component);
-			if(this.__pendingComponents.length > 0) return;
+			if(this.__pendingComponents.length > 0) { return; }
 
 			var initialDemoId = qx.bom.History.getInstance().getState();
-			if(!initialDemoId) initialDemoId = "helloWorld";
+			if(initialDemoId == null) { initialDemoId = "helloWorld"; }
 			this.loadDemo(initialDemoId);
 			qx.dom.Element.remove(document.getElementById("splash"));
 		},
@@ -101,8 +101,9 @@ qx.Class.define("qookerydemo.Application", {
 			var demoConfiguration = qookerydemo.Application.DEMOS.filter(function(configuration) {
 				return configuration["id"] === demoId;
 			})[0];
-			if(!demoConfiguration)
+			if(demoConfiguration == null) {
 				throw new Error("Demo " + demoId + " not found");
+			}
 			var formFile = demoConfiguration["formFile"];
 			var formUrl = "resource/qookerydemo/forms/" + formFile;
 			qookery.contexts.Qookery.loadResource(formUrl, this, function(data) {

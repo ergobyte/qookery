@@ -29,24 +29,24 @@
 	</module>
 
 	<module name="NewlineAtEndOfFile">
-		<property name="fileExtensions" value="css, html, js, po, project, py, txt, xml, xsd" />
+		<property name="fileExtensions" value="css, html, js, json, po, project, py, txt, xml, xsd" />
 		<property name="lineSeparator" value="lf" />
 	</module>
 
 	<module name="RegexpSingleline">
-		<property name="fileExtensions" value="css, html, js, po, project, py, txt, xml, xsd" />
+		<property name="fileExtensions" value="css, html, js, json, po, project, py, txt, xml, xsd" />
 		<property name="format" value="\s+$"/>
 		<property name="message" value="Trailing whitespace" />
 	</module>
 
 	<module name="RegexpSingleline">
-		<property name="fileExtensions" value="css, html, js, po, project, py, txt, xml, xsd" />
+		<property name="fileExtensions" value="css, html, js, json, po, project, py, txt, xml, xsd" />
 		<property name="format" value="( [ \t]| [ \t] )"/>
 		<property name="message" value="Whitespace inconsistency" />
 	</module>
 
 	<module name="RegexpMultiline">
-		<property name="fileExtensions" value="css, html, js, po, project, py, txt, xml, xsd" />
+		<property name="fileExtensions" value="css, html, js, json, po, project, py, txt, xml, xsd" />
 		<property name="format" value="^\n\n" />
 		<property name="message" value="Two consecutive new-lines" />
 	</module>

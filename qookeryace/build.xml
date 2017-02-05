@@ -16,7 +16,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="Qookery ACE" basedir="." default="Download">
+<project name="qookery.ace" basedir="." default="Download">
 
 	<property name="ace.version" value="1.1.8" />
 	<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${ace.version}/src-min" />

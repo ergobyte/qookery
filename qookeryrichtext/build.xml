@@ -16,7 +16,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="Qookery Rich Text" basedir="." default="Download">
+<project name="qookery.richtext" basedir="." default="Download">
 
 	<property name="ckeditor.version" value="4.4.7" />
 	<property name="ckeditor.package" value="standard" />
@@ -39,7 +39,7 @@
 		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
 	</target>
 
-	<target name="Clean" description="Clean up target directory">
+	<target name="Clean">
 		<delete dir="${ckeditor.target}" />
 	</target>
 
