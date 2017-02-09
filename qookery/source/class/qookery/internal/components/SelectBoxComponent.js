@@ -95,9 +95,14 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		_updateUI: function(value) {
-			if(value == null)
-				value = this.constructor.__NULL_ITEM_MODEL;
 			var selectBox = this.getMainWidget();
+			if(value == null) {
+				value = this.constructor.__NULL_ITEM_MODEL;
+				selectBox.addState("showingPlaceholder");
+			}
+			else {
+				selectBox.removeState("showingPlaceholder");
+			}
 			var listItems = selectBox.getChildren();
 			var modelProvider = this.getForm().getModelProvider();
 			for(var i = 0; i < listItems.length; i++) {

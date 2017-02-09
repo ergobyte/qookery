@@ -35,6 +35,7 @@
 			<url url="${ace.downloadBase}/mode-json.js" />
 			<url url="${ace.downloadBase}/mode-textile.js" />
 			<url url="${ace.downloadBase}/mode-xml.js" />
+			<url url="${ace.downloadBase}/worker-json.js" />
 		</get>
 	</target>
 

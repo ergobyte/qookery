@@ -176,6 +176,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 		isColumnEditable: function(columnIndex) {
 			if(columnIndex == null) return false;
+			if(this.__component.getReadOnly()) return false;
 			var editable = this.getColumn(columnIndex)["editable"];
 			return editable !== undefined ? editable : false;
 		},
