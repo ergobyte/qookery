@@ -31,7 +31,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		focusable: { refine: true, init: true },
 		selectable: { refine: true, init: true },
 		readOnly: { nullable: false, init: false },
-		value: { nullable: true, check: "String", event: "changeValue", apply: "__setCkEditorData" }
+		value: { nullable: true, check: "String", event: "changeValue", apply: "__setCkEditorText" }
 	},
 
 	construct: function(configuration) {
@@ -87,7 +87,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			// Defer further setup after instance is ready
 			this.__ckEditor.on("instanceReady", function() {
 				// Insert current value into newly created editor
-				this.__setCkEditorData(this.getValue());
+				this.__setCkEditorText(this.getValue());
 				// Register value change listener
 				this.__ckEditor.on("change", this.__onCkEditorChange, this);
 			}, this);
@@ -95,29 +95,27 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		},
 
 		__onCkEditorChange: function() {
-			// Check incoming value, if not different from previous one ignore it
-			var data = this.__ckEditor.getData();
-			// Update model
+			var text = this.__ckEditor.getData();
 			this.__disableValueUpdate = true;
 			try {
-				this.setValue(data);
+				this.setValue(text);
 			}
 			finally {
 				this.__disableValueUpdate = false;
 			}
 		},
 
-		__setCkEditorData: function(data) {
+		__setCkEditorText: function(text) {
 			// It is possible that we are not ready to accept values yet
-			if(!this.__ckEditor || this.__disableValueUpdate) return;
+			if(this.__ckEditor == null || this.__disableValueUpdate) return;
 			// Store and set new value into CKEditor
-			this.__ckEditor.setData(data);
+			this.__ckEditor.setData(text);
 		}
 	},
 
 	destruct: function() {
 		// We have to behave ourselves and properly clean up our mess
-		if(this.__ckEditor) {
+		if(this.__ckEditor != null) {
 			this.__ckEditor.destroy();
 			this.__ckEditor = null;
 		}

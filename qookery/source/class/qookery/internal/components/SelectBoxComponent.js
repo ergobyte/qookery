@@ -95,24 +95,31 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		_updateUI: function(value) {
-			var selectBox = this.getMainWidget();
-			if(value == null) {
+			if(value == null)
 				value = this.constructor.__NULL_ITEM_MODEL;
-				selectBox.addState("showingPlaceholder");
-			}
-			else {
-				selectBox.removeState("showingPlaceholder");
-			}
+			var matchingItem = null;
+			var selectBox = this.getMainWidget();
 			var listItems = selectBox.getChildren();
 			var modelProvider = this.getForm().getModelProvider();
 			for(var i = 0; i < listItems.length; i++) {
 				var listItem = listItems[i];
 				var item = listItem.getModel();
 				if(!modelProvider.areEqual(item, value)) continue;
-				selectBox.setSelection([ listItem ]);
-				return;
+				matchingItem = listItem;
+				break;
 			}
-			selectBox.resetSelection();
+			var showingPlaceholder = true;
+			if(matchingItem != null) {
+				selectBox.setSelection([ matchingItem ]);
+				showingPlaceholder = value === this.constructor.__NULL_ITEM_MODEL;
+			}
+			else {
+				selectBox.resetSelection();
+			}
+			if(showingPlaceholder)
+				selectBox.addState("showingPlaceholder");
+			else
+				selectBox.removeState("showingPlaceholder");
 		},
 
 		_applyEnabled: function(enabled) {
