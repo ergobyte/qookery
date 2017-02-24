@@ -57,6 +57,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__modelProvider: null,
 		__connections: null,
 		__scriptingContext: null,
+		__serviceResolver: null,
 		__operationQueue: null,
 		__disposeList: null,
 
@@ -72,6 +73,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Creation
 
 		prepare: function(formParser, xmlElement) {
+			this.__serviceResolver = formParser.getServiceResolver();
 			this.__scriptingContext = this.$ = this.__createScriptingContext(formParser.getVariables());
 			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
 			if(!this.__translationPrefix)
@@ -124,6 +126,21 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.__modelProvider;
 		},
 
+		// Services
+
+		resolveService: function(serviceName) {
+			var resolver = this.__serviceResolver;
+			if(resolver == null)
+				throw new Error("Service resolver is not available");
+			var service = resolver(serviceName);
+			if(service != null)
+				return service;
+			var parentForm = this.getParentForm();
+			if(parentForm != null)
+				return parentForm.resolveService(serviceName);
+			return null;
+		},
+
 		// Variables
 
 		getVariable: function(variableName, defaultValue) {
@@ -160,8 +177,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Client scripting context
 
-		getClientCodeContext: function() {
-			return this.__scriptingContext;
+		getScriptingContext: function() {
+			var context = this.__scriptingContext;
+			if(context == null)
+				throw new Error("Scripting context is not available");
+			return context;
 		},
 
 		addToDisposeList: function(disposable) {
@@ -246,7 +266,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 			var serviceName = formParser.getAttribute(importElement, "service");
 			if(serviceName != null) {
-				instance = formParser.resolveService(serviceName);
+				instance = this.resolveService(serviceName);
 				name = serviceName;
 			}
 			if(name == null) {
@@ -371,6 +391,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		this.__userContextMap = null;
 		this.__registration = null;
 		this.__scriptingContext = null;
+		this.__serviceResolver = null;
 		this.__translationPrefix = null;
 		this.debug("Destructed form");
 	}

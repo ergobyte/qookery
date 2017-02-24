@@ -31,6 +31,13 @@ qx.Interface.define("qookery.IFormParser", {
 		getVariables: function() { },
 
 		/**
+		 * Return the service resolver used by parser
+		 *
+		 * @return {Function} function that is being used to resolve services
+		 */
+		getServiceResolver: function() { },
+
+		/**
 		 * Parse and generate a Qookery form
 		 *
 		 * @param xmlDocument {qx.xml.Document} input DOM XML document structured according to the form.xsd schema

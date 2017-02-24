@@ -56,6 +56,10 @@ qx.Class.define("qookery.internal.FormParser", {
 			return this.__variables;
 		},
 
+		getServiceResolver: function() {
+			return this.__serviceResolver;
+		},
+
 		parseXmlDocument: function(xmlDocument, parentComponent) {
 			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
 			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
@@ -152,10 +156,6 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		resolveNamespacePrefix: function(prefix) {
 			return this.__namespaces[prefix];
-		},
-
-		resolveService: function(serviceName) {
-			return this.__serviceResolver(serviceName);
 		},
 
 		// Internal methods
@@ -334,7 +334,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			components.forEach(function(component) {
 				var componentFunction = function() {
 					var scriptArguments = Array.prototype.slice.call(arguments);
-					scriptArguments.unshift(component.getForm().getClientCodeContext());
+					scriptArguments.unshift(component.getForm().getScriptingContext());
 					try {
 						return scriptFunction.apply(component, scriptArguments);
 					}
@@ -344,7 +344,7 @@ qx.Class.define("qookery.internal.FormParser", {
 					}
 				}
 				if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
-					component.getForm().getClientCodeContext()[functionName] = componentFunction;
+					component.getForm().getScriptingContext()[functionName] = componentFunction;
 				});
 				if(actionNames != null) actionNames.split(/\s+/).forEach(function(actionName) {
 					component.setAction(actionName, componentFunction);

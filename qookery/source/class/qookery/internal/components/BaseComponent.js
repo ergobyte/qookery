@@ -195,7 +195,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {
-			var clientCodeContext = this.getForm().getClientCodeContext();
+			var clientCodeContext = this.getForm().getScriptingContext();
 			try {
 				argumentMap = argumentMap || { };
 				var keys = Object.keys(argumentMap);

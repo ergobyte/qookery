@@ -96,6 +96,8 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 		__onCkEditorChange: function() {
 			var text = this.__ckEditor.getData();
+			// Couldn't figure out a way to prevent CKEditor from inserting spurious non-breaking spaces - removing manually
+			text = text.replace(/(&nbsp;|\u00A0|\u202F)+/g, " ");
 			this.__disableValueUpdate = true;
 			try {
 				this.setValue(text);

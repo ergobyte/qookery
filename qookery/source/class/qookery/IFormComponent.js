@@ -68,6 +68,19 @@ qx.Interface.define("qookery.IFormComponent", {
 		 */
 		getParentForm: function() { },
 
+		// Services
+
+		/**
+		 * Attempt to resolve a service by using installed service resolver
+		 *
+		 * <p>This method will delegate the request to parent form if service is unavailable</p>
+		 *
+		 * @param serviceName {String} the name of wanted service
+		 *
+		 * @return {any} required service or <code>null</code> if not available
+		 */
+		resolveService: function(serviceName) { },
+
 		// Variables
 
 		/**
@@ -95,7 +108,7 @@ qx.Interface.define("qookery.IFormComponent", {
 		 *
 		 * @return {Object} a suitable JavaScript context
 		 */
-		getClientCodeContext: function() { },
+		getScriptingContext: function() { },
 
 		/**
 		 * Add a disposable to the list of objects that will be disposed automatically with form

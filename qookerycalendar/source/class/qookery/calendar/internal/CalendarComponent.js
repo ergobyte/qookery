@@ -152,8 +152,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		// Internals
 
-		__isCalendarVisible: function() {
-			return jQuery("#" + this.__domIdentifier).is(":visible");
+		__isCalendarSeeable: function() {
+			return this.getMainWidget().isSeeable();
 		},
 
 		__queueOperation: function(operationName) {
@@ -169,7 +169,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		__onBackgroundOperationInterval: function() {
 			if(this.__backgroundOperations.length === 0) return;
-			if(!this.__isCalendarVisible()) return;
+			if(!this.__isCalendarSeeable()) return;
 			var operationName = this.__backgroundOperations.shift();
 			switch(operationName) {
 			case "addEventSource":
