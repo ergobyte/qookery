@@ -171,29 +171,36 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 		},
 
 		setItems: function(items) {
-			this.removeAllItems();
-			if(this.getAttribute("null-item-label") !== undefined) {
-				this.addNullItem();
-			}
-			if(items instanceof qx.data.Array) {
-				items = items.toArray();
-			}
-			if(qx.lang.Type.isArray(items)) {
-				for(var i = 0; i < items.length; i++) {
-					var item = items[i];
-					if(item instanceof qx.ui.form.ListItem)
-						this.getMainWidget().add(item);
-					else
-						this.addItem(item);
+			this._disableValueEvents = true;
+			try {
+				this.removeAllItems();
+				if(this.getAttribute("null-item-label") !== undefined) {
+					this.addNullItem();
 				}
-				return;
-			}
-			if(qx.lang.Type.isObject(items)) {
-				for(var model in items) {
-					var label = items[model];
-					this.addItem(model, qx.data.Conversion.toString(label));
+				if(items instanceof qx.data.Array) {
+					items = items.toArray();
+				}
+				if(qx.lang.Type.isArray(items)) {
+					for(var i = 0; i < items.length; i++) {
+						var item = items[i];
+						if(item instanceof qx.ui.form.ListItem)
+							this.getMainWidget().add(item);
+						else
+							this.addItem(item);
+					}
+					return;
+				}
+				if(qx.lang.Type.isObject(items)) {
+					for(var model in items) {
+						var label = items[model];
+						this.addItem(model, qx.data.Conversion.toString(label));
+					}
 				}
 			}
+			finally {
+				this._disableValueEvents = false;
+			}
+			this._updateUI(this.getValue());
 		},
 
 		setSelection: function(itemNumber) {
