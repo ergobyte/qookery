@@ -21,9 +21,9 @@ qx.Class.define("qookery.internal.util.Library", {
 	extend: Object,
 	include: [ qx.core.MLogging ],
 
-	construct: function(name, resourceUris, dependencies, postLoadCallback) {
+	construct: function(name, resourceNames, dependencies, postLoadCallback) {
 		this.__name = name;
-		this.__resourceUris = resourceUris;
+		this.__resourceNames = resourceNames;
 		this.__dependencies = dependencies;
 		this.__isLoaded = false;
 		this.__callbacks = [ ];
@@ -33,7 +33,7 @@ qx.Class.define("qookery.internal.util.Library", {
 	members: {
 
 		__name: null,
-		__resourceUris: null,
+		__resourceNames: null,
 		__dependencies: null,
 		__isLoaded: null,
 		__callbacks: null,
@@ -43,10 +43,10 @@ qx.Class.define("qookery.internal.util.Library", {
 			return this.__name;
 		},
 
-		addResourceUri: function(resourceUri) {
+		addResource: function(resourceName) {
 			if(this.__isLoaded)
 				throw new Error("Adding resource URIs to an already loaded library is not possible");
-			this.__resourceUris.push(resourceUri);
+			this.__resourceNames.push(resourceName);
 		},
 
 		isLoaded: function() {
@@ -77,7 +77,7 @@ qx.Class.define("qookery.internal.util.Library", {
 				return this.__loadNextDependency();
 
 			// In case there are needed resources, load them
-			if(this.__resourceUris && this.__resourceUris.length > 0)
+			if(this.__resourceNames && this.__resourceNames.length > 0)
 				return this.__loadNextResource();
 
 			// Invoke the post-load callback, if set
@@ -105,32 +105,32 @@ qx.Class.define("qookery.internal.util.Library", {
 		},
 
 		__loadNextResource: function() {
-			var resourceUri = this.__resourceUris.shift();
+			var resourceName = this.__resourceNames.shift();
 			// Create the request
 			var resourceType = null;
-			var atSignPosition = resourceUri.indexOf("@");
+			var atSignPosition = resourceName.indexOf("@");
 			if(atSignPosition !== -1 && atSignPosition <= 3) {
-				resourceType = resourceUri.substring(0, atSignPosition);
-				resourceUri = resourceUri.substring(atSignPosition + 1);
+				resourceType = resourceName.substring(0, atSignPosition);
+				resourceName = resourceName.substring(atSignPosition + 1);
 			}
-			else if(qx.lang.String.endsWith(resourceUri, ".js")) {
+			else if(qx.lang.String.endsWith(resourceName, ".js")) {
 				resourceType = "js";
 			}
-			else if(qx.lang.String.endsWith(resourceUri, ".css")) {
+			else if(qx.lang.String.endsWith(resourceName, ".css")) {
 				resourceType = "css";
 			}
 
-			var absoluteUri = resourceUri.charAt(0) === "/" ? resourceUri :
-					qx.util.ResourceManager.getInstance().toUri(resourceUri);
+			var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+			var resourceUri = resourceLoader.resolveResourceUri(resourceName);
 
 			switch(resourceType) {
 			case "js":
 				var scriptRequest = new qx.bom.request.Script();
 				scriptRequest.onload = this.__loadLibrary.bind(this);
 				scriptRequest.onerror = function() {
-					this.error("Error loading script from", absoluteUri);
+					this.error("Error loading script from", resourceUri);
 				}.bind(this);
-				scriptRequest.open("GET", absoluteUri);
+				scriptRequest.open("GET", resourceUri);
 				scriptRequest.send();
 				break;
 			case "css":
@@ -138,7 +138,7 @@ qx.Class.define("qookery.internal.util.Library", {
 				var linkElement = document.createElement("link");
 				linkElement.type = "text/css";
 				linkElement.rel = "stylesheet";
-				linkElement.href = absoluteUri;
+				linkElement.href = resourceUri;
 				// Retrieve the HEAD element
 				var headElement = document.getElementsByTagName("head")[0];
 				// Begin loading the stylesheet
