@@ -30,7 +30,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		appearance: { refine: true, init: "textfield" },
 		focusable: { refine: true, init: true },
 		selectable: { refine: true, init: true },
-		readOnly: { nullable: false, init: false },
+		readOnly: { nullable: false, init: false, apply: "__applyReadOnly" },
 		value: { nullable: true, check: "String", event: "changeValue", apply: "__setCkEditorText" }
 	},
 
@@ -46,6 +46,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			this.__ckEditor.focus();
 		}, this);
 		this.addListener("keypress", function(event) {
+			if(this.getReadOnly()) return;
 			// Absolutely horrible workaround to a yet unknown bug with space keypress
 			if(event.getKeyIdentifier() === "Space")
 				this.__ckEditor.insertText(" ");
@@ -90,6 +91,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 				this.__setCkEditorText(this.getValue());
 				// Register value change listener
 				this.__ckEditor.on("change", this.__onCkEditorChange, this);
+				this.__ckEditor.setReadOnly(this.getReadOnly());
 			}, this);
 			this.setFocusable(true);
 		},
@@ -112,6 +114,20 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			if(this.__ckEditor == null || this.__disableValueUpdate) return;
 			// Store and set new value into CKEditor
 			this.__ckEditor.setData(text);
+		},
+
+		__applyReadOnly: function(value) {
+			var element = this.getContentElement();
+			element.setAttribute("readOnly", value);
+			if(this.__ckEditor != null) this.__ckEditor.setReadOnly(value);
+			if(value == true) {
+				this.addState("readonly");
+				this.setFocusable(false);
+			}
+			else {
+				this.removeState("readonly");
+				this.setFocusable(true);
+			}
 		}
 	},
 
