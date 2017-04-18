@@ -744,6 +744,7 @@
 		<attribute name="visibility" type="q:visibility" default="visible" />
 		<attribute name="width" type="string" />
 		<attribute name="white-space" type="string" />
+		<attribute name="cell-renderer-callback" type="string" />
 	</complexType></element>
 
 	<!-- Statement block non-component elements -->

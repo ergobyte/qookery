@@ -84,35 +84,35 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["map"] = qookery.internal.formats.MapFormat;
 		partition["number"] = qookery.internal.formats.NumberFormat;
 
-		partition = this.__createPartition(qookery.IRegistry.P_CELL_RENDERER);
-		partition["boolean"] = function(column) {
+		partition = this.__createPartition(qookery.IRegistry.P_CELL_RENDERER_FACTORY);
+		partition["boolean"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Boolean();
 		};
-		partition["date"] = function(column) {
+		partition["date"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Date(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["debug"] = function(column) {
+		partition["debug"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Debug();
 		};
-		partition["default"] = function(column) {
+		partition["default"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Default();
 		};
-		partition["html"] = function(column) {
+		partition["html"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Html(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["image"] = function(column) {
+		partition["image"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Image(column["width"], column["height"]);
 		};
-		partition["model"] = function(column) {
-			return new qookery.internal.components.table.CellRenderer(column);
+		partition["model"] = function(component, column) {
+			return new qookery.internal.components.table.CellRenderer(component, column);
 		};
-		partition["number"] = function(column) {
+		partition["number"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Number(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["password"] = function(column) {
+		partition["password"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Password();
 		};
-		partition["string"] = function(column) {
+		partition["string"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.String(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
 
@@ -313,6 +313,16 @@ qx.Class.define("qookery.internal.Registry", {
 
 		registerCommand: function(commandName, command) {
 			this.put(qookery.IRegistry.P_COMMAND, commandName, command);
+		},
+
+		// Cell renders
+
+		getCellRendererFactory: function(cellRendererName, required) {
+			return this.get(qookery.IRegistry.P_CELL_RENDERER_FACTORY, cellRendererName, required);
+		},
+
+		registerCellRendererFactory: function(cellRendererName, cellRendererFactory) {
+			this.put(qookery.IRegistry.P_CELL_RENDERER_FACTORY, cellRendererName, cellRendererFactory);
 		},
 
 		// Internals

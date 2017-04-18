@@ -27,11 +27,17 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 		]
 	},
 
-	construct: function(column) {
+	construct: function(component, column) {
 		this.base(arguments);
 		this.__column = column;
-		this.__format = column["format"] ? qookery.Qookery.getRegistry().createFormat(column["format"]) : null;
-		this.__map = column["map"] ? qookery.Qookery.getRegistry().getMap(column["map"]) : null;
+		this.__component = component;
+		this.__format = column["format"] != null ? qookery.Qookery.getRegistry().createFormat(column["format"]) : null;
+		this.__map = column["map"] != null ? qookery.Qookery.getRegistry().getMap(column["map"]) : null;
+		var callbackName = column["cell-renderer-callback"] || null;
+		if(callbackName != null && !component.isActionSupported(callbackName))
+			throw new Error(qx.lang.String.format("Cell render callback '%1' is not supported by component '%2'", [ callbackName, component.toString() ]));
+		else
+			this.__callbackName = callbackName;
 	},
 
 	members: {
@@ -39,6 +45,8 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 		__column: null,
 		__format: null,
 		__map: null,
+		__callbackName: null,
+		__component: null,
 
 		_getContentHtml: function(cellInfo) {
 			var text = this._formatValue(cellInfo);
@@ -66,12 +74,29 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 
 		_getCellStyle: function(cellInfo) {
 			var column = this.__column;
-			return this.constructor.CSS_KEYS.reduce(function(cellStyle, key) {
+
+			var style = qookery.internal.components.table.CellRenderer.CSS_KEYS.reduce(function(cellStyle, key) {
 				var value = column[key];
+				if(value != null)
+					cellStyle[key] = value;
+				return cellStyle;
+			}, { });
+
+			if(this.__callbackName != null) {
+				var result = this.__component.executeAction(this.__callbackName, cellInfo);
+				if(result != null) qx.lang.Object.mergeWith(style, result, true);
+			}
+
+			return qookery.internal.components.table.CellRenderer.CSS_KEYS.reduce(function(cellStyle, key) {
+				var value = style[key];
 				if(value != null)
 					cellStyle += key + ":" + value + ";";
 				return cellStyle;
 			}, "");
+		},
+
+		getColumn: function() {
+			return this.__column;
 		}
 	},
 
