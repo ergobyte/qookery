@@ -171,7 +171,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		},
 
 		getColumnName: function(columnIndex) {
-			return this.getColumn(columnIndex)["label"];
+			return this.getColumn(columnIndex)["label"] || "";
 		},
 
 		isColumnEditable: function(columnIndex) {
