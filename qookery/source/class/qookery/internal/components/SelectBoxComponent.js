@@ -188,9 +188,8 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 						else
 							this.addItem(item);
 					}
-					return;
 				}
-				if(qx.lang.Type.isObject(items)) {
+				else if(qx.lang.Type.isObject(items)) {
 					for(var model in items) {
 						var label = items[model];
 						this.addItem(model, qx.data.Conversion.toString(label));

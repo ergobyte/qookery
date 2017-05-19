@@ -41,6 +41,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			case "h-scroll-bar-always-visible":
 			case "highlight-active-line":
 			case "show-gutter":
+			case "show-print-margin":
 			case "use-soft-tabs":
 			case "use-wrap-mode":
 			case "v-scroll-bar-always-visible":
@@ -112,6 +113,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			var editor = this.__editor = ace.edit(aceContainer);
 			editor.setReadOnly(this.isReadOnly());
 			editor.setHighlightActiveLine(this.getAttribute("highlight-active-line", true));
+			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
 			editor.on("change", this.__onChange.bind(this));
 
 			var renderer = editor.renderer;
