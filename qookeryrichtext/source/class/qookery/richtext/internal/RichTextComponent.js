@@ -39,6 +39,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			switch(attributeName) {
 			case "title": return "Boolean";
 			case "toolbar-can-collapse": return "Boolean";
+			case "custom-config": return "String";
 			default: return this.base(arguments, attributeName); }
 		},
 
@@ -64,6 +65,13 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			var removePluginsSpecification = this.getAttribute("remove-plugins");
 			if(removePluginsSpecification)
 				configuration["removePlugins"] = removePluginsSpecification.split(/\s+/).join(",");
+
+			var customConfigResource = this.getAttribute("custom-config", null);
+			if(customConfigResource != null) {
+				var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+				var resolvedConfigUri = resourceLoader.resolveResourceUri(customConfigResource);
+				configuration["customConfig"] = resolvedConfigUri;
+			}
 
 			// Create the wrapping widget
 			var widget = new qookery.richtext.internal.RichTextWidget(configuration);

@@ -31,6 +31,7 @@
 		<attribute name="toolbar-can-collapse" type="boolean" default="false" />
 		<attribute name="title" default="false"><simpleType><union memberTypes="boolean string" /></simpleType></attribute>
 		<attribute name="ui-color" type="token" default="background" />
+		<attribute name="custom-config" type="anyURI" />
 	</extension></complexContent></complexType></element>
 
 </schema>
