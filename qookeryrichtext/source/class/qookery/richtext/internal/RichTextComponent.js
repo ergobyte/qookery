@@ -57,11 +57,6 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			configuration["toolbarCanCollapse"] = this.getAttribute("toolbar-can-collapse", false);
 			configuration["uiColor"] = qx.theme.manager.Color.getInstance().resolve(this.getAttribute("ui-color", "background"));
 
-			var toolbarSpecification = this.getAttribute("toolbar", qookery.richtext.internal.RichTextComponent.DEFAULT_TOOLBAR);
-			if(toolbarSpecification) configuration["toolbar"] = toolbarSpecification.split(/\s*\|\s*/).reduce(function(a, s) {
-				a.push(s.split(/\s+/)); return a;
-			}, [ ]);
-
 			var removePluginsSpecification = this.getAttribute("remove-plugins");
 			if(removePluginsSpecification)
 				configuration["removePlugins"] = removePluginsSpecification.split(/\s+/).join(",");
@@ -71,6 +66,12 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 				var resourceLoader = qookery.Qookery.getService("ResourceLoader");
 				var resolvedConfigUri = resourceLoader.resolveResourceUri(customConfigResource);
 				configuration["customConfig"] = resolvedConfigUri;
+			}
+			else {
+				var toolbarSpecification = this.getAttribute("toolbar", qookery.richtext.internal.RichTextComponent.DEFAULT_TOOLBAR);
+				if(toolbarSpecification) configuration["toolbar"] = toolbarSpecification.split(/\s*\|\s*/).reduce(function(a, s) {
+					a.push(s.split(/\s+/)); return a;
+				}, [ ]);
 			}
 
 			// Create the wrapping widget
