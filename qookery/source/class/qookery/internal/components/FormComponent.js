@@ -155,13 +155,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__scriptingContext[variableName] = value;
 		},
 
-		getVariableRecursively: function(variableName) {
-			return qookery.contexts.Qookery.ascendForms(this, function(f) {
-				var value = f.getVariable(variableName);
-				if(value !== undefined) return value;
-			})
-		},
-
 		// Component registration
 
 		getComponent: function(componentId, required) {

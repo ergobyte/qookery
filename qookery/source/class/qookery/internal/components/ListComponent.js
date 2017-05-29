@@ -29,11 +29,23 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 		__listItemsMap: null,
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "spacing": return "Integer";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		_createMainWidget: function(attributes) {
 			var list = new qx.ui.form.List();
 			list.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));
 			list.setScrollbarY(this.getAttribute("scrollbar-y", "auto"));
 			list.setSelectionMode(this.getAttribute("selection-mode", "single"));
+			list.setSpacing(this.getAttribute("spacing", 0));
 			list.addListener("changeSelection", function(event) {
 				if(this._disableValueEvents) return;
 				var selection = event.getData();
@@ -82,6 +94,11 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 		addItem: function(model, label, icon) {
 			if(!label) label = this._getLabelOf(model);
 			var item = new qx.ui.form.ListItem(label, icon, model);
+			var textAlign = this.getAttribute("text-align", null);
+			if(textAlign != null) {
+				item.getChildControl("label").setAllowGrowX(true);
+				item.getChildControl("label").setTextAlign(textAlign);
+			}
 			this.getMainWidget().add(item);
 		},
 
