@@ -569,6 +569,7 @@
 		<attribute name="scrollbar-x" type="q:scrollbar-policy" default="auto" />
 		<attribute name="scrollbar-y" type="q:scrollbar-policy" default="auto" />
 		<attribute name="selection-mode" type="q:selection-mode" default="single" />
+		<attribute name="orientation" type="q:orientation" default="vertical" />
 		<attribute name="spacing" type="nonNegativeInteger" default="0" />
 		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType></element>

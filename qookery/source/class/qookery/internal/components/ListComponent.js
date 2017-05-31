@@ -34,6 +34,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "spacing": return "Integer";
+			case "orientation": return "String";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -45,6 +46,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 			list.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));
 			list.setScrollbarY(this.getAttribute("scrollbar-y", "auto"));
 			list.setSelectionMode(this.getAttribute("selection-mode", "single"));
+			list.setOrientation(this.getAttribute("orientation", "vertical"));
 			list.setSpacing(this.getAttribute("spacing", 0));
 			list.addListener("changeSelection", function(event) {
 				if(this._disableValueEvents) return;
@@ -108,7 +110,8 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 			if(qx.lang.Type.isArray(items)) {
 				for(var i = 0; i < items.length; i++) {
 					var model = items[i];
-					this.addItem(model);
+					var label = this._getLabelOf(model);
+					this.addItem(model, label);
 				}
 			}
 			else if(qx.lang.Type.isObject(items)) {

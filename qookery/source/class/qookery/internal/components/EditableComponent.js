@@ -322,16 +322,19 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		 * Ask model provider to return a human friendly label for value
 		 *
 		 * @param value {any} the value for which a label is needed
+		 * @param labelType {String?} optional symbolic name of needed label type
 		 *
 		 * @return {String} produced label for user interface needs
 		 */
-		_getLabelOf: function(value) {
-			if(!value) return "";
+		_getLabelOf: function(value, labelType) {
+			if(value == null) return "";
 			var format = this.getFormat();
-			if(format) return format.format(value);
+			if(format != null)
+				return format.format(value);
 			var modelProvider = this.getForm().getModelProvider();
-			if(modelProvider) return modelProvider.getLabel(value);
-			return value.toString();
+			if(modelProvider != null)
+				return modelProvider.getLabel(value, labelType);
+			return qx.data.Conversion.toString(value);
 		},
 
 		/**

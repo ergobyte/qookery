@@ -66,7 +66,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		setItems: function(items) {
 			this.__removeAllGroupItems();
-			if(!items) return;
+			if(items == null) return;
 			if(items instanceof qx.data.Array) {
 				items = items.toArray();
 			}
@@ -116,7 +116,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		// Internals
 
 		_updateUI: function(value) {
-			if(!value) {
+			if(value == null) {
 				this.getMainWidget().resetSelection();
 				return;
 			}
@@ -136,7 +136,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 					selectionFound = true;
 				}
 			}
-			if(selectionFound) return;
+			if(selectionFound != null) return;
 			radioButtonGroup.resetSelection();
 			if(buttons.length > 0) buttons[0].setFocusable(true);
 		},
@@ -146,7 +146,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 			groupItem.setModel(model);
 			groupItem.setFocusable(false);
 			var tabIndex = this.getAttribute("tab-index");
-			if(tabIndex)
+			if(tabIndex != null)
 				groupItem.setTabIndex(tabIndex);
 			this.getMainWidget().add(groupItem);
 		},
