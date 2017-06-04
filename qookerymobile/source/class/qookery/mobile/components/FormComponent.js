@@ -239,8 +239,8 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 
 		// Model connection
 
-		addConnection: function(target, targetPropertyPath, modelPropertyPath) {
-			var connection = new qookery.internal.util.Connection(target, targetPropertyPath, modelPropertyPath);
+		addConnection: function(editableComponent, modelPropertyPath) {
+			var connection = new qookery.internal.util.Connection(editableComponent, modelPropertyPath);
 			this.__connections.push(connection);
 			connection.connect(this.getModel()); // Attempt model connection immediately
 			return connection;

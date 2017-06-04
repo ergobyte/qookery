@@ -33,42 +33,27 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 	members: {
 
 		__children: null,
-		__currentRow: 0,
-		__currentColumn: 0,
-
 		__layout: null,
-		__columnCount: 1,
-		__rowArray: null,
+
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "layout": return "String";
+			case "reverse": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.__columnCount = attributes["column-count"] || 1;
-			if(this.__columnCount === "none") return;
-			if(this.__columnCount !== "auto") {
-				this.__rowArray = [ ];
-				for(var i = 0; i < this.__columnCount; i++) this.__rowArray.push(0);
-			}
-			this.__layout = new qx.ui.layout.Grid();
-			var spacing = attributes["spacing"];
-			if(spacing !== undefined) {
-				this.__layout.setSpacingX(spacing);
-				this.__layout.setSpacingY(spacing);
-			}
-			else {
-				var spacingX = attributes["spacing-x"];
-				this.__layout.setSpacingX(spacingX !== undefined ? spacingX : 10);
-				var spacingY = attributes["spacing-y"];
-				this.__layout.setSpacingY(spacingY !== undefined ? spacingY : 10);
-			}
-			var columnFlexes = attributes["column-flexes"];
-			if(columnFlexes) qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
-				this.__layout.setColumnFlex(index, parseInt(columnFlex, 10));
-			}, this);
-			var rowFlexes = attributes["row-flexes"];
-			if(rowFlexes) qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
-				this.__layout.setRowFlex(index, parseInt(rowFlex, 10));
-			}, this);
-			this.getMainWidget().setLayout(this.__layout);
+			var layoutName = this.getAttribute("layout", "grid");
+			if(layoutName === "none") return;
+			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
+			var layout = this.__layout = layoutFactory.createLayout(attributes);
+			this.getMainWidget().setLayout(layout);
 		},
 
 		_createWidgets: function(attributes) {
@@ -83,71 +68,28 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			return this.__children;
 		},
 
-		/**
-		 * Add a component as a child of this component
-		 *
-		 * @param childComponent {qookery.IComponent} the component to add to this component
-		 *
-		 * @throw an exception is thrown in case this component does not support children
-		 */
-		add: function(childComponent, display) {
-			this.__children.push(childComponent);
-			if(display == "none") return;
+		add: function(component) {
+			this._addChildComponent(component);
 			var container = this.getMainWidget();
-			var widgets = childComponent.listWidgets();
+			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
-				if(this.__layout != null) {
-					var layoutProperties = widget.getLayoutProperties();
-					var colSpan = layoutProperties["colSpan"] || 1;
-					var rowSpan = layoutProperties["rowSpan"] || 1;
-					if(this.__columnCount == "auto") {
-						widget.setLayoutProperties({
-							row: 0,
-							column: this.__currentColumn,
-							colSpan: colSpan
-						});
-						this.__currentColumn += colSpan;
-					}
-					else {
-						while(this.__rowArray[this.__currentColumn] > 0) {
-							this.__rowArray[this.__currentColumn]--;
-							this.__currentColumn++;
-							if(this.__currentColumn >= this.__columnCount) {
-								this.__currentColumn = 0;
-								this.__currentRow++;
-							}
-						}
-						widget.setLayoutProperties({
-							row: this.__currentRow,
-							column: this.__currentColumn,
-							colSpan: colSpan,
-							rowSpan: rowSpan
-						});
-						for(var j = 0; j < colSpan; j++) {
-							this.__rowArray[this.__currentColumn] += rowSpan - 1;
-							this.__currentColumn++;
-						}
-						if(this.__currentColumn >= this.__columnCount) {
-							this.__currentColumn = 0;
-							this.__currentRow++;
-						}
-					}
-				}
+				if(this.__layout != null && qx.lang.Type.isFunction(this.__layout.configureWidget))
+					this.__layout.configureWidget(widget);
 				container.add(widget);
 			}
 		},
 
-		remove: function(childComponent) {
+		remove: function(component) {
 			var container = this.getMainWidget();
-			var widgets = childComponent.listWidgets();
+			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++)
 				container.remove(widgets[i]);
 		},
 
-		contains: function(childComponent) {
+		contains: function(component) {
 			var container = this.getMainWidget();
-			var widgets = childComponent.listWidgets();
+			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++)
 				if(container.indexOf(widgets[i]) != -1) return true;
 			return false;
@@ -166,6 +108,12 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			if(errors.length == 0) return null;
 			if(errors.length == 1) return errors[0];
 			return new qookery.util.ValidationError(this, null, errors);
+		},
+
+		// Internals
+
+		_addChildComponent: function(component) {
+			this.__children.push(component);
 		}
 	},
 

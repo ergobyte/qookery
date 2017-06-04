@@ -32,6 +32,7 @@ qx.Interface.define("qookery.IRegistry", {
 		P_COMPONENT: "component",
 		P_FORMAT: "format",
 		P_FORMAT_FACTORY: "format-factory",
+		P_LAYOUT_FACTORY: "layout-factory",
 		P_LIBRARY: "library",
 		P_MAP: "map",
 		P_MODEL_PROVIDER: "model-provider",

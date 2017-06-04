@@ -26,6 +26,16 @@ qx.Class.define("qookery.Qookery", {
 	statics: {
 
 		/**
+		 * Option: Default value of <code>spacing-x</code> attribute for layout managers that support it
+		 */
+		OPTION_DEFAULT_LAYOUT_SPACING_X: "q:default-layout-spacing-x",
+
+		/**
+		 * Option: Default value of <code>spacing-y</code> attribute for layout managers that support it
+		 */
+		OPTION_DEFAULT_LAYOUT_SPACING_Y: "q:default-layout-spacing-y",
+
+		/**
 		 * Option: Default value of <code>live-update</code> attribute for components that support it
 		 */
 		OPTION_DEFAULT_LIVE_UPDATE: "q:default-live-update",

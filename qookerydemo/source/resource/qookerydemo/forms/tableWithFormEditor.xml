@@ -2,7 +2,7 @@
 <!--
 	A table with row addition, removal and editing in a separate form
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="1 0" row-flexes="0 1">
+<form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="1 0" row-flexes="0 1" spacing="10">
 
 	<import class="qookery.contexts.Qookery" />
 	<import class="qookerydemo.contexts.QookeryDemo" />
@@ -55,9 +55,9 @@
 		</button>
 	</composite>
 
-	<form display="none" id="editor" column-flexes="1" title="Password Editor">
+	<form display="none" id="editor" column-flexes="1" title="Password Editor" spacing="10">
 
-		<composite column-count="2" column-flexes="0 1">
+		<composite column-count="2" column-flexes="0 1" spacing="5">
 			<text-field label="Serial #" connect="serial" read-only="true" appearance="label" />
 			<text-field label="User name" required="true" connect="username" />
 			<password-field label="Password" required="true" connect="password" />

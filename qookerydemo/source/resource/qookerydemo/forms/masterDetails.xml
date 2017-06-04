@@ -2,7 +2,7 @@
 <!--
 	A "master-details" layout
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" row-flexes="0 1 0">
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" row-flexes="0 1 0" spacing="10">
 
 	<table connect="passwords" label="Secure® Password Manager">
 		<table-model class="qookery.impl.DefaultTableModel" />
@@ -14,7 +14,7 @@
 		</script>
 	</table>
 
-	<form id="subForm" column-count="2" column-flexes="0 1">
+	<form id="subForm" column-count="2" column-flexes="0 1" spacing="5">
 		<text-field connect="serial" label="Serial Number" read-only="true" />
 		<text-field connect="username" label="Username" read-only="true" />
 		<text-field connect="password" label="Password" read-only="true" />

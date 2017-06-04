@@ -61,9 +61,8 @@ qx.Class.define("qookery.mobile.components.ContainerComponent", {
 			return this.__children;
 		},
 
-		add: function(childComponent, display) {
+		add: function(childComponent) {
 			this.__children.push(childComponent);
-			if(display == "none") return;
 			var container = this.getMainWidget();
 			var widgets = childComponent.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {

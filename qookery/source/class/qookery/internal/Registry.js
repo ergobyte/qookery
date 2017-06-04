@@ -44,6 +44,14 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["notNull"] = qookery.internal.validators.NotNullValidator.getInstance();
 		partition["string"] = qookery.internal.validators.StringValidator.getInstance();
 
+		partition = this.__createPartition(qookery.IRegistry.P_LAYOUT_FACTORY);
+		partition["basic"] = qookery.internal.layouts.BasicLayoutFactory.getInstance();
+		partition["flow"] = qookery.internal.layouts.FlowLayoutFactory.getInstance();
+		partition["grid"] = qookery.internal.layouts.GridLayoutFactory.getInstance();
+		partition["grow"] = qookery.internal.layouts.GrowLayoutFactory.getInstance();
+		partition["h-box"] = qookery.internal.layouts.HBoxLayoutFactory.getInstance();
+		partition["v-box"] = qookery.internal.layouts.VBoxLayoutFactory.getInstance();
+
 		partition = this.__createPartition(qookery.IRegistry.P_COMPONENT);
 		partition["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
 		partition["{http://www.qookery.org/ns/Form}check-field"] = qookery.internal.components.CheckFieldComponent;

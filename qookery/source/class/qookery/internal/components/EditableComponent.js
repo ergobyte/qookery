@@ -134,7 +134,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		connect: function(propertyPath) {
 			this.disconnect();
-			this.__connection = this.getForm().addConnection(this, "value", propertyPath, true);
+			this.__connection = this.getForm().addConnection(this, propertyPath);
 		},
 
 		disconnect: function() {
@@ -256,6 +256,11 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		_applyValue: function(value) {
+			if(this.__connection != null) {
+				var model = this.getForm().getModel();
+				if(model != null)
+					this.__connection.setModelValue(model, value);
+			}
 			if(this._disableValueEvents || this.isDisposed()) return;
 			this._disableValueEvents = true;
 			try {

@@ -38,7 +38,7 @@ qx.Class.define("qookery.internal.components.SplitPaneComponent", {
 		// Creation
 
 		create: function(attributes) {
-			attributes["column-count"] = "none";
+			attributes["layout"] = "none";
 			this.base(arguments, attributes);
 		},
 
@@ -49,8 +49,8 @@ qx.Class.define("qookery.internal.components.SplitPaneComponent", {
 			return pane;
 		},
 
-		add: function(childComponent, display) {
-			this.base(arguments, childComponent, "none");
+		add: function(childComponent) {
+			this._addChildComponent(childComponent);
 			var flexes = this.getAttribute("flexes");
 			var flex = flexes ? flexes[this.listChildren().length - 1] : 0;
 			this.getMainWidget().add(childComponent.getMainWidget(), flex);

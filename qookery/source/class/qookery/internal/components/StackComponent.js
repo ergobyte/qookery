@@ -45,7 +45,7 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 		_createContainerWidget: function(attributes) {
 			var stack = new qx.ui.container.Stack();
 			this._applyLayoutAttributes(stack, attributes);
-			attributes["column-count"] = "none";
+			attributes["layout"] = "none";
 			return stack;
 		},
 

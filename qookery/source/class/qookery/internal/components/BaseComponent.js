@@ -27,8 +27,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 	statics: {
 
-		baseAttributeTypes: {
-			"col-span": "Integer",
+		__ATTRIBUTE_TYPES: {
 			"margin-bottom": "Integer",
 			"margin-left": "Integer",
 			"margin-right": "Integer",
@@ -43,7 +42,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"padding-top": "Integer",
 			"page-step": "Integer",
 			"row-height": "Integer",
-			"row-span": "Integer",
 			"single-step": "Integer",
 			"spacing": "Integer",
 			"spacing-x": "Integer",
@@ -78,7 +76,30 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			"label": "ReplaceableString",
 			"placeholder": "ReplaceableString",
-			"tool-tip-text": "ReplaceableString"
+			"tool-tip-text": "ReplaceableString",
+
+			// Layout item properties
+			"col-span": "Number",
+			"column": "Number",
+			"flex": "Number",
+			"left": "Number",
+			"line-break": "Boolean",
+			"row": "Number",
+			"row-span": "Number",
+			"stretch": "Boolean",
+			"top": "Number"
+		},
+
+		__LAYOUT_ITEM_PROPERTY_MAP: {
+			"col-span": "colSpan",
+			"column": "column",
+			"flex": "flex",
+			"left": "left",
+			"line-break": "lineBreak",
+			"row": "row",
+			"row-span": "rowSpan",
+			"stretch": "stretch",
+			"top": "top"
 		}
 	},
 
@@ -216,7 +237,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		getAttributeType: function(attributeName) {
-			return qookery.internal.components.BaseComponent.baseAttributeTypes[attributeName];
+			return qookery.internal.components.BaseComponent.__ATTRIBUTE_TYPES[attributeName];
 		},
 
 		validate: function() {
@@ -273,11 +294,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		 */
 		_applyLayoutAttributes: function(widget, attributes) {
 
-			// Layout
-
-			if(attributes["row-span"] !== undefined) widget.setLayoutProperties({ rowSpan: attributes["row-span"] });
-			if(attributes["col-span"] !== undefined) widget.setLayoutProperties({ colSpan: attributes["col-span"] });
-
 			// Size and position
 
 			if(attributes["width"] !== undefined) widget.setWidth(attributes["width"]);
@@ -321,6 +337,18 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			if(attributes["tab-index"] !== undefined) widget.setTabIndex(attributes["tab-index"]);
 			if(attributes["focusable"] !== undefined) widget.setFocusable(attributes["focusable"]);
+
+			// Layout item properties
+
+			var layoutProperties = null;
+			for(var attributeName in attributes) {
+				var propertyName = qookery.internal.components.BaseComponent.__LAYOUT_ITEM_PROPERTY_MAP[attributeName];
+				if(propertyName == null) continue;
+				if(layoutProperties == null) layoutProperties = { };
+				layoutProperties[propertyName] = attributes[attributeName];
+			}
+			if(layoutProperties != null)
+				widget.setLayoutProperties(layoutProperties);
 		},
 
 		_applyEnabled: function(enabled) {

@@ -20,30 +20,36 @@ qx.Class.define("qookery.internal.util.Connection", {
 
 	extend: Object,
 
-	construct: function(target, targetPropertyPath, sourcePropertyPath) {
-		this.__target = target;
-		this.__targetPropertyPath = targetPropertyPath;
-		this.__sourcePropertyPath = sourcePropertyPath;
+	construct: function(editableComponent, propertyPath) {
+		this.__editableComponent = editableComponent;
+		this.__propertyPath = propertyPath;
 	},
 
 	members: {
 
-		__target: null,
-		__targetPropertyPath: null,
-		__sourcePropertyPath: null,
+		__editableComponent: null,
+		__propertyPath: null,
 		__disconnectCallback: null,
 
-		connect: function(source) {
+		connect: function(model) {
 			this.disconnect();
 			if(qx.core.ObjectRegistry.inShutDown) return;
-			var target = this.__target;
-			if(source == null || target == null) return;
-			var forwardBindingId = source.bind(this.__sourcePropertyPath, target, this.__targetPropertyPath);
-			var reverseBindingId = target.bind(this.__targetPropertyPath, source, this.__sourcePropertyPath);
+			var editableComponent = this.__editableComponent;
+			if(model == null || editableComponent == null) return;
+			var bindingId = model.bind(this.__propertyPath, editableComponent, "value");
 			this.__disconnectCallback = function() {
-				qx.data.SingleValueBinding.removeBindingFromObject(source, forwardBindingId);
-				qx.data.SingleValueBinding.removeBindingFromObject(target, reverseBindingId);
+				if(model.isDisposed()) return;
+				qx.data.SingleValueBinding.removeBindingFromObject(model, bindingId);
 			};
+		},
+
+		setModelValue: function(model, value) {
+			var segments = this.__propertyPath.split(".");
+			for(var i = 0; i < segments.length - 1; i++) {
+				model = model["get" + qx.lang.String.firstUp(segments[i])]();
+				if(model == null) return;
+			}
+			model["set" + qx.lang.String.firstUp(segments[segments.length - 1])](value);
 		},
 
 		disconnect: function() {
@@ -52,10 +58,15 @@ qx.Class.define("qookery.internal.util.Connection", {
 			this.__disconnectCallback = null;
 		},
 
-		equals: function(connection) {
-			return	connection.__target == this.__target &&
-					connection.__targetPropertyPath == this.__targetPropertyPath &&
-					connection.__sourcePropertyPath == this.__sourcePropertyPath;
+		equals: function(other) {
+			return other.__editableComponent === this.__editableComponent &&
+					other.__propertyPath == this.__propertyPath;
+		},
+
+		__getPropertyChainArray: function(propertyChain) {
+			return propertyChain.replace(/\[/g, ".[").split(".").filter(function(name) {
+				return name !== "";
+			});
 		}
 	}
 });

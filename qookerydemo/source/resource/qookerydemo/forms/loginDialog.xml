@@ -2,11 +2,11 @@
 <!--
 	A simple login dialog in Qookery
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
+<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" spacing="10">
 
 	<!-- Form fields -->
 
-	<composite column-count="2" column-flexes="0 1">
+	<composite column-count="2" column-flexes="0 1" spacing="5">
 		<text-field id="username" label="User name" required="true" connect="username" />
 		<password-field id="password" label="Password" required="true" connect="password" />
 	</composite>

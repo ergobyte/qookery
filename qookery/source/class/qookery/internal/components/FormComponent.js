@@ -234,12 +234,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				if(selector === ":parent") {
 					return this.getParentForm();
 				}
-				if(selector.charAt(0) == "#") {
+				if(selector.charAt(0) === "#") {
 					return this.getComponent(selector.substr(1));
 				}
 				return null;
 			}.bind(this);
-			context["form"] = this;
+			context["form"] = this; // Deprecated, use $() instead
 			if(variables != null) qx.lang.Object.mergeWith(context, variables, false);
 			return context;
 		},
@@ -256,6 +256,19 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(className != null) {
 				instance = qx.Class.getByName(className);
 				name = className;
+			}
+			var formName = formParser.getAttribute(importElement, "form");
+			if(formName != null) {
+				var form = this;
+				do {
+					if(form.getId() === formName) {
+						instance = form;
+						break;
+					}
+					form = form.getParentForm();
+				}
+				while(form != null);
+				name = formName;
 			}
 			var serviceName = formParser.getAttribute(importElement, "service");
 			if(serviceName != null) {
@@ -322,8 +335,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Model connection
 
-		addConnection: function(target, targetPropertyPath, modelPropertyPath) {
-			var connection = new qookery.internal.util.Connection(target, targetPropertyPath, modelPropertyPath);
+		addConnection: function(editableComponent, modelPropertyPath) {
+			var connection = new qookery.internal.util.Connection(editableComponent, modelPropertyPath);
 			this.__connections.push(connection);
 			connection.connect(this.getModel()); // Attempt model connection immediately
 			return connection;
