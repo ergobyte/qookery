@@ -16,7 +16,7 @@
 	<composite column-count="auto" max-width="100" align-x="right" column-flexes="1">
 		<button id="loginButton" label="Login">
 			<script event="execute">
-				if($.form.validate()) return;
+				if($.Form.validate()) return;
 				var username = $("#username").getValue();
 				var password = $("#password").getValue();
 				alert("Thank you " + username + ", your password has been safely stored in plaintext on a floppy disk.");

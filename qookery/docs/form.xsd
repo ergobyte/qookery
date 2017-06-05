@@ -316,10 +316,6 @@
 		<attribute name="row-span" type="positiveInteger" default="1" />
 		<attribute name="stretch" type="boolean" default="false" />
 		<attribute name="top" type="nonNegativeInteger" default="0" />
-		<!-- Deprecated attributes -->
-		<attribute name="skip-if" type="q:javascript-expression"><annotation><documentation>
-			Deprecation warning: This attribute will be removed in a future version, you are advised to use flow-control elements instead
-		</documentation></annotation></attribute>
 	</complexType>
 
 	<complexType name="atom-component.attributes"><complexContent><extension base="q:component.attributes">

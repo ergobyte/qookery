@@ -22,12 +22,9 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__listItemsMap = { };
 	},
 
 	members: {
-
-		__listItemsMap: null,
 
 		// Metadata
 
@@ -123,7 +120,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 		},
 
 		removeAllItems: function() {
-			this.getMainWidget().removeAll();
+			this.getMainWidget().removeAll().forEach(function(widget) { widget.dispose(); });
 		},
 
 		setSelection: function(itemNumber) {

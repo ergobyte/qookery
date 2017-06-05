@@ -135,18 +135,16 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 			if(this.__clientCodeContext != null) return this.__clientCodeContext;
 			var form = this;
 			var context = function(selector) {
-				if(!selector)
-					throw new Error("$() without a selector is not supported");
-				if(selector.charAt(0) == "#")
+				if(selector == null) {
+					return this;
+				}
+				if(selector.charAt(0) == "#") {
 					return form.getComponent(selector.substr(1));
+				}
 				return null;
 			};
-			context["form"] = this;
-			context["parent"] = function() {
-				var parentForm = this.getParentForm();
-				if(!parentForm) return undefined;
-				return parentForm.getClientCodeContext();
-			}.bind(this);
+			context["form"] = // Deprecated, use capitalized version $.Form
+			context["Form"] = this;
 			qx.lang.Object.mergeWith(context, this.__variables, false);
 			return this.__clientCodeContext = context;
 		},

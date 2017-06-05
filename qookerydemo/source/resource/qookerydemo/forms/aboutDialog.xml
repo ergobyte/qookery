@@ -30,7 +30,7 @@
 
 	<button label="Close" col-span="2" max-width="150" align-x="right">
 		<script event="execute">
-			$.form.close();
+			$.Form.close();
 		</script>
 	</button>
 

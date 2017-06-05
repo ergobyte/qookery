@@ -9,7 +9,7 @@
 
 	<label label="Hacker-Proof® Password Manager" col-span="2" />
 
-	<table id="passwords" connect="passwords" label="%none">
+	<table id="passwords" connect="passwords" create-label="false">
 		<table-model class="qookery.impl.DefaultTableModel" />
 		<table-column connect="serial" label="Serial #" width="S" text-align="center" />
 		<table-column connect="username" label="Username" width="1*" editable="true" />
@@ -66,13 +66,13 @@
 		<composite column-count="auto" max-width="300" align-x="right" column-flexes="1 1">
 			<button label="OK">
 				<script event="execute">
-					if($.form.validate()) return;
-					$.form.close($.form.getModel());
+					if($.Form.validate()) return;
+					$.Form.close($.Form.getModel());
 				</script>
 			</button>
 			<button label="Cancel">
 				<script event="execute">
-					$.form.close(null);
+					$.Form.close(null);
 				</script>
 			</button>
 		</composite>

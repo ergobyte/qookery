@@ -239,7 +239,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				}
 				return null;
 			}.bind(this);
-			context["form"] = this; // Deprecated, use $() instead
+			context["form"] = // Deprecated, use capitalized version $.Form
+			context["Form"] = this;
 			if(variables != null) qx.lang.Object.mergeWith(context, variables, false);
 			return context;
 		},

@@ -35,7 +35,7 @@ qx.Class.define("qookery.mobile.components.EditableComponent", {
 
 		_createWidgets: function(attributes) {
 			var mainWidget = this._createMainWidget(attributes);
-			if(attributes["label"] !== "%none") {
+			if(this.getAttribute("create-label", true)) {
 				var label = new qx.ui.mobile.basic.Label();
 				this._setupLabelAppearance(label, attributes);
 				return [ mainWidget, label ];
