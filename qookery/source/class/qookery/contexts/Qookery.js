@@ -49,7 +49,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @return {String|null} loaded resource as text in case call is synchronous
 		 */
 		loadResource: function(resourceUri, thisArg, successCallback, failCallback) {
-			var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+			var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 			return resourceLoader.loadResource(resourceUri, thisArg, successCallback, failCallback);
 		},
 
@@ -202,7 +202,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 				}
 			};
 
-			var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+			var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 			if(options["async"] === false) {
 				var xmlCode = resourceLoader.loadResource(formUrl, thisArg, null, failCallback);
 				return createForm(xmlCode);

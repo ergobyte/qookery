@@ -63,7 +63,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 			var customConfigResource = this.getAttribute("custom-config", null);
 			if(customConfigResource != null) {
-				var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+				var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 				var resolvedConfigUri = resourceLoader.resolveResourceUri(customConfigResource);
 				configuration["customConfig"] = resolvedConfigUri;
 			}

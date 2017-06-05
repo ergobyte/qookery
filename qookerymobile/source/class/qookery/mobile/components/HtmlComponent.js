@@ -51,10 +51,6 @@ qx.Class.define("qookery.mobile.components.HtmlComponent", {
 
 		getDomElement: function() {
 			return this.getMainWidget().getContainerElement();
-		},
-
-		updateAppearance: function() {
-			// TODO force update apperance
 		}
 	}
 });

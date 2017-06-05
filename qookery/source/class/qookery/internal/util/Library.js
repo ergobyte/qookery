@@ -120,7 +120,7 @@ qx.Class.define("qookery.internal.util.Library", {
 				resourceType = "css";
 			}
 
-			var resourceLoader = qookery.Qookery.getService("ResourceLoader");
+			var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 			var resourceUri = resourceLoader.resolveResourceUri(resourceName);
 
 			switch(resourceType) {

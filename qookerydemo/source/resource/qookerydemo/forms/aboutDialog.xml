@@ -5,8 +5,8 @@
 		qookery.contexts.Qookery.openWindow("qookerydemo/forms/aboutDialog.xml");
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
+		id="qookerydemo.forms.aboutDialog"
 		title="About Qookery Demo" icon="qookerydemo/icons/24/about.png"
-		translation-prefix="qookerydemo.forms.aboutDialog"
 		column-count="2" column-flexes="0 1" width="300" spacing="20">
 
 	<translation xml:lang="en">

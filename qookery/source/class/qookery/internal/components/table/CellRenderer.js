@@ -33,11 +33,11 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 		this.__component = component;
 		this.__format = column["format"] != null ? qookery.Qookery.getRegistry().createFormat(column["format"]) : null;
 		this.__map = column["map"] != null ? qookery.Qookery.getRegistry().getMap(column["map"]) : null;
-		var callbackName = column["cell-renderer-callback"] || null;
-		if(callbackName != null && !component.isActionSupported(callbackName))
-			throw new Error(qx.lang.String.format("Cell render callback '%1' is not supported by component '%2'", [ callbackName, component.toString() ]));
+		var styleActionName = column["cell-renderer-callback"] || null;
+		if(styleActionName != null && !component.isActionSupported(styleActionName))
+			throw new Error(qx.lang.String.format("Cell render callback '%1' is not supported by component '%2'", [ styleActionName, component.toString() ]));
 		else
-			this.__callbackName = callbackName;
+			this.__styleActionName = styleActionName;
 	},
 
 	members: {
@@ -45,7 +45,7 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 		__column: null,
 		__format: null,
 		__map: null,
-		__callbackName: null,
+		__styleActionName: null,
 		__component: null,
 
 		_getContentHtml: function(cellInfo) {
@@ -67,9 +67,9 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 				if(mappedValue != null)
 					value = mappedValue;
 			}
-			var label = qookery.Qookery.getService("ModelProvider").getLabel(value, "short");
-			if(label == null) label = "";
-			return label;
+			var modelProvider = this.__component.getForm().getModelProvider();
+			var label = modelProvider.getLabel(value, "short");
+			return label != null ? label : "";
 		},
 
 		_getCellStyle: function(cellInfo) {
@@ -82,9 +82,10 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 				return cellStyle;
 			}, { });
 
-			if(this.__callbackName != null) {
-				var result = this.__component.executeAction(this.__callbackName, cellInfo);
-				if(result != null) qx.lang.Object.mergeWith(style, result, true);
+			if(this.__styleActionName != null) {
+				var result = this.__component.executeAction(this.__styleActionName, cellInfo);
+				if(result != null)
+					qx.lang.Object.mergeWith(style, result, true);
 			}
 
 			return qookery.internal.components.table.CellRenderer.CSS_KEYS.reduce(function(cellStyle, key) {

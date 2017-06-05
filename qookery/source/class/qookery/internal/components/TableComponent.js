@@ -277,12 +277,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		_applyRequired: function() {
 			// Overriden in order to prevent default handling
 			// TODO Qookery: Add a validator that checks that table is not empty
-		},
-
-		// Deprecated methods
-
-		getSelectedRowData: function() {
-			return this.getSingleSelection();
 		}
 	},
 

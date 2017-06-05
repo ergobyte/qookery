@@ -48,22 +48,22 @@ qx.Class.define("qookery.Qookery", {
 		/**
 		 * Service: currently running Qooxdoo application
 		 */
-		SERVICE_APPLICATION: "Application",
+		SERVICE_APPLICATION: "qx.application.Application",
 
 		/**
 		 * Service: default model provider
 		 */
-		SERVICE_MODEL_PROVIDER: "ModelProvider",
+		SERVICE_MODEL_PROVIDER: "qookery.IModelProvider",
 
 		/**
 		 * Service: Qookery registry
 		 */
-		SERVICE_REGISTRY: "Registry",
+		SERVICE_REGISTRY: "qookery.IRegistry",
 
 		/**
 		 * Service: currently set resource loader
 		 */
-		SERVICE_RESOURCE_LOADER: "ResourceLoader",
+		SERVICE_RESOURCE_LOADER: "qookery.IResourceLoader",
 
 		__OPTIONS: { },
 
@@ -109,10 +109,10 @@ qx.Class.define("qookery.Qookery", {
 		 * @return {Object} the instance of the required service or <code>null</code> if not available
 		 */
 		getService: function(serviceName, required) {
-			var service = qookery.internal.Registry.getInstance().getService(serviceName);
-			if(service == null && required)
-				throw new Error("Required service '" + serviceName + "' is not available");
-			return service;
+			var registry = qookery.internal.Registry.getInstance();
+			var service = registry.getService(serviceName);
+			if(service != null || !required) return service;
+			throw new Error("Required service '" + serviceName + "' is not available");
 		},
 
 		/**

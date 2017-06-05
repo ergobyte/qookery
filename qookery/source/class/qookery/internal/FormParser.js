@@ -259,7 +259,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		__parseXInclude: function(xIncludeElement, parentComponent) {
 			var formUrl = this.getAttribute(xIncludeElement, "href");
 			formUrl = this.parseValue(parentComponent, "ReplaceableString", formUrl);
-			var xmlString = qookery.Qookery.getService("ResourceLoader").loadResource(formUrl);
+			var xmlString = qookery.Qookery.getService("qookery.IResourceLoader", true).loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
 			var formParser = new qookery.internal.FormParser(this.__variables, this.__serviceResolver);
 			try {
@@ -292,7 +292,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			var sourceCode = this.getNodeText(scriptElement);
 			var scriptUrl = this.getAttribute(scriptElement, "source");
 			if(scriptUrl != null)
-				sourceCode = qookery.Qookery.getService("ResourceLoader").loadResource(scriptUrl);
+				sourceCode = qookery.Qookery.getService("qookery.IResourceLoader", true).loadResource(scriptUrl);
 			if(sourceCode == null)
 				throw new Error("Empty <script> element");
 

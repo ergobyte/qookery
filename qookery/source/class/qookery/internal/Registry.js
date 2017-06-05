@@ -28,12 +28,18 @@ qx.Class.define("qookery.internal.Registry", {
 		var partition = null;
 
 		partition = this.__createPartition(qookery.IRegistry.P_SERVICE);
-		partition["Application"] = { getInstance: function() {
+		partition["qookery.IModelProvider"] = qookery.impl.DefaultModelProvider;
+		partition["qookery.IRegistry"] = this;
+		partition["qookery.IResourceLoader"] = qookery.impl.DefaultResourceLoader;
+		partition["qx.application.IApplication"] = { getInstance: function() {
 			return qx.core.Init.getApplication();
 		} };
-		partition["Registry"] = this;
-		partition["ModelProvider"] = qookery.impl.DefaultModelProvider;
-		partition["ResourceLoader"] = qookery.impl.DefaultResourceLoader;
+
+		// Obsolete shorthands, refrain from using; full interface name is preferred
+		partition["Application"] = partition["qx.application.IApplication"];
+		partition["ModelProvider"] = partition["qookery.IModelProvider"];
+		partition["Registry"] = partition["qookery.IRegistry"];
+		partition["ResourceLoader"] = partition["qookery.IResourceLoader"];
 
 		partition = this.__createPartition(qookery.IRegistry.P_MODEL_PROVIDER);
 		partition["default"] = qookery.impl.DefaultModelProvider.getInstance();
@@ -197,14 +203,14 @@ qx.Class.define("qookery.internal.Registry", {
 		// Model providers
 
 		getModelProvider: function(providerName) {
-			if(providerName == null) return this.getService("ModelProvider");
+			if(providerName == null) return this.getService("qookery.IModelProvider");
 			var providerClass = this.get(qookery.IRegistry.P_MODEL_PROVIDER, providerName, true);
 			return providerClass.getInstance();
 		},
 
 		registerModelProvider: function(providerName, providerClass, setDefault) {
 			this.put(qookery.IRegistry.P_MODEL_PROVIDER, providerName, providerClass);
-			if(setDefault) this.registerService("ModelProvider", providerClass);
+			if(setDefault) this.registerService("qookery.IModelProvider", providerClass);
 		},
 
 		// Components

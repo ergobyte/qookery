@@ -2,7 +2,9 @@
 <!--
 	Demonstration of translation support in Qookery
 -->
-<form xmlns="http://www.qookery.org/ns/Form" translation-prefix="qookerydemo.forms.translations" column-flexes="1" spacing-y="10">
+<form xmlns="http://www.qookery.org/ns/Form"
+		id="qookerydemo.forms.translations"
+		column-flexes="1" spacing-y="10">
 
 	<translation xml:lang="en">
 		<message id="header">Ancient Greek Gods</message>
