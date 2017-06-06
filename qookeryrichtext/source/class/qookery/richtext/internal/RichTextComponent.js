@@ -65,7 +65,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			if(customConfigResource != null) {
 				var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 				var resolvedConfigUri = resourceLoader.resolveResourceUri(customConfigResource);
-				configuration["customConfig"] = resolvedConfigUri;
+				configuration["customConfig"] = qx.util.Uri.getAbsolute(resolvedConfigUri);
 			}
 			else {
 				var toolbarSpecification = this.getAttribute("toolbar", qookery.richtext.internal.RichTextComponent.DEFAULT_TOOLBAR);

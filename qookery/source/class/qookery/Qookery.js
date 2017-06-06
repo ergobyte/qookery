@@ -48,7 +48,7 @@ qx.Class.define("qookery.Qookery", {
 		/**
 		 * Service: currently running Qooxdoo application
 		 */
-		SERVICE_APPLICATION: "qx.application.Application",
+		SERVICE_APPLICATION: "qx.application.IApplication",
 
 		/**
 		 * Service: default model provider

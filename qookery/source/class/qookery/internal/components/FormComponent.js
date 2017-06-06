@@ -131,7 +131,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		resolveService: function(serviceName) {
 			var resolver = this.__serviceResolver;
 			if(resolver == null)
-				throw new Error("Service resolver is not available");
+				return null;
 			var service = resolver(serviceName);
 			if(service != null)
 				return service;
