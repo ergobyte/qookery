@@ -48,6 +48,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"spacing-y": "Integer",
 			"tab-index": "Integer",
 
+			"allow-grow": "Boolean",
+			"allow-grow-x": "Boolean",
+			"allow-grow-y": "Boolean",
+			"allow-shrink": "Boolean",
+			"allow-shrink-x": "Boolean",
+			"allow-shrink-y": "Boolean",
 			"allow-stretch": "Boolean",
 			"allow-stretch-x": "Boolean",
 			"allow-stretch-y": "Boolean",
@@ -305,6 +311,14 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			if(attributes["align-x"] !== undefined) widget.setAlignX(attributes["align-x"]);
 			if(attributes["align-y"] !== undefined) widget.setAlignY(attributes["align-y"]);
+
+			if(attributes["allow-grow"] !== undefined) { var v = attributes["allow-grow"]; widget.setAllowGrowX(v); widget.setAllowGrowY(v); }
+			if(attributes["allow-grow-x"] !== undefined) widget.setAllowGrowX(attributes["allow-grow-x"]);
+			if(attributes["allow-grow-y"] !== undefined) widget.setAllowGrowY(attributes["allow-grow-y"]);
+
+			if(attributes["allow-shrink"] !== undefined) { var v = attributes["allow-shrink"]; widget.setAllowShrinkX(v); widget.setAllowShrinkY(v); }
+			if(attributes["allow-shrink-x"] !== undefined) widget.setAllowShrinkX(attributes["allow-shrink-x"]);
+			if(attributes["allow-shrink-y"] !== undefined) widget.setAllowShrinkY(attributes["allow-shrink-y"]);
 
 			if(attributes["allow-stretch"] !== undefined) { var v = attributes["allow-stretch"]; widget.setAllowStretchX(v); widget.setAllowStretchY(v); }
 			if(attributes["allow-stretch-x"] !== undefined) widget.setAllowStretchX(attributes["allow-stretch-x"]);
