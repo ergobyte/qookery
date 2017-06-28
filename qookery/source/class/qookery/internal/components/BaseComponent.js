@@ -136,6 +136,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return this.__id;
 		},
 
+		getAttributes: function() {
+			return this.__attributes;
+		},
+
 		getAttribute: function(attributeName, defaultValue) {
 			var value = this.__attributes[attributeName];
 			if(value !== undefined) return value;

@@ -32,6 +32,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 	members: {
 
+		_containerWidget: null,
 		__children: null,
 		__layout: null,
 
@@ -53,15 +54,20 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			if(layoutName === "none") return;
 			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
 			var layout = this.__layout = layoutFactory.createLayout(attributes);
-			this.getMainWidget().setLayout(layout);
+			this.getContainerWidget().setLayout(layout);
 		},
 
 		_createWidgets: function(attributes) {
-			return [ this._createContainerWidget(attributes) ];
+			this._containerWidget = this._createContainerWidget(attributes);
+			return [ this._containerWidget ];
 		},
 
 		_createContainerWidget: function(attributes) {
 			throw new Error("Override _createContainerWidget() to provide implementation specific code");
+		},
+
+		getContainerWidget: function() {
+			return this._containerWidget;
 		},
 
 		listChildren: function() {
@@ -70,7 +76,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		add: function(component) {
 			this._addChildComponent(component);
-			var container = this.getMainWidget();
+			var container = this.getContainerWidget();
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
@@ -81,14 +87,14 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		},
 
 		remove: function(component) {
-			var container = this.getMainWidget();
+			var container = this.getContainerWidget();
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++)
 				container.remove(widgets[i]);
 		},
 
 		contains: function(component) {
-			var container = this.getMainWidget();
+			var container = this.getContainerWidget();
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++)
 				if(container.indexOf(widgets[i]) != -1) return true;
