@@ -149,9 +149,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return defaultValue;
 		},
 
-		setVariable: function(variableName, value, replace) {
-			if(replace === false && this.__scriptingContext.hasOwnProperty(variableName))
-				throw new Error("Variable '" + variableName + "' has already been set");
+		setVariable: function(variableName, value) {
 			this.__scriptingContext[variableName] = value;
 		},
 
@@ -252,10 +250,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		__parseImport: function(formParser, importElement) {
-			var instance = null, name = null;
+			var value = null, name = null;
 			var className = formParser.getAttribute(importElement, "class");
 			if(className != null) {
-				instance = qx.Class.getByName(className);
+				value = qx.Class.getByName(className);
 				name = className;
 			}
 			var formName = formParser.getAttribute(importElement, "form");
@@ -263,7 +261,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				var form = this;
 				do {
 					if(form.getId() === formName) {
-						instance = form;
+						value = form;
 						break;
 					}
 					form = form.getParentForm();
@@ -273,20 +271,22 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 			var serviceName = formParser.getAttribute(importElement, "service");
 			if(serviceName != null) {
-				instance = this.resolveService(serviceName);
+				value = this.resolveService(serviceName);
 				name = serviceName;
 			}
 			if(name == null) {
 				throw new Error("Invalid <import> element");
 			}
-			if(instance == null && formParser.getAttribute(importElement, "optional") !== "true") {
+			if(value == null && formParser.getAttribute(importElement, "optional") !== "true") {
 				throw new Error("Unable to resolve required import '" + name + "'");
 			}
 			var variableName = formParser.getAttribute(importElement, "variable");
 			if(variableName == null) {
 				variableName = name.substring(name.lastIndexOf(".") + 1);
 			}
-			this.setVariable(variableName, instance, false);
+			if(this.__scriptingContext.hasOwnProperty(variableName))
+				throw new Error("Variable '" + variableName + "' has already been defined");
+			this.__scriptingContext[variableName] = value;
 		},
 
 		__parseTranslation: function(formParser, translationElement) {
@@ -313,17 +313,34 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var name = formParser.getAttribute(variableElement, "name");
 			if(name == null)
 				throw new Error("Variable name is required");
-			if(this.__scriptingContext[name] !== undefined) return;
-			var defaultValue;
-			var defaultClientCode = formParser.getAttribute(variableElement, "default");
-			if(defaultClientCode != null)
-				defaultValue = this.executeClientCode(qx.lang.String.format("return (%1);", [ defaultClientCode ]));
-			if(defaultValue === undefined) defaultValue = null;
-			this.__scriptingContext[name] = defaultValue;
-			if(defaultValue != null) return;
-			var isRequired = formParser.getAttribute(variableElement, "required") === "true";
-			if(!isRequired) return;
-			throw new Error("Required variable " + name + " has not been defined");
+			var provider = this;
+			var providerName = formParser.getAttribute(variableElement, "provider");
+			if(providerName != null && providerName !== "Form") {
+				provider = this.__scriptingContext[providerName];
+				if(provider == null || !qx.Class.hasInterface(provider.constructor, qookery.IVariableProvider))
+					throw new Error("Variable provider '" + providerName + "' missing from scripting context");
+			}
+			var value = provider.getVariable(name);
+			if(value == null) {
+				var defaultExpression = formParser.getAttribute(variableElement, "default");
+				if(defaultExpression != null)
+					value = this.executeClientCode(qx.lang.String.format("return (%1);", [ defaultExpression ]));
+				if(value === undefined) value = null;
+				if(value === null && formParser.getAttribute(variableElement, "required") === "true")
+					throw new Error("Value for required variable '" + name + "' is missing");
+				provider.setVariable(name, value);
+			}
+			if(provider === this) return;
+			var writable = formParser.getAttribute(variableElement, "writable") !== "false";
+			var setFunction = writable ?
+				function(v) { provider.setVariable(name, v); } :
+				function(v) { throw new Error("Illegal attempt to modify non-writable variable '" + name + "'"); };
+			Object.defineProperty(this.__scriptingContext, name, {
+				configurable: false,
+				enumerable: true,
+				get: function() { return provider.getVariable(name); },
+				set: setFunction
+			});
 		},
 
 		// Operations

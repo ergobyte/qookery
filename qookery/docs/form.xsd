@@ -898,11 +898,17 @@
 			<attribute name="name" type="q:javascript-identifier"><annotation><documentation>
 				The name of the variable to register into the form context ("$")
 			</documentation></annotation></attribute>
-			<attribute name="default" type="q:javascript-expression"><annotation><documentation>
-				An expression that provides a default value, in case variable was not set during parser initialization
+			<attribute name="provider" type="q:javascript-identifier" default="Form"><annotation><documentation>
+				The name of an existing variable whose value implements IVariableProvider and will provide new variable - defaults to 'Form'
 			</documentation></annotation></attribute>
-			<attribute name="required" type="boolean"><annotation><documentation>
+			<attribute name="default" type="q:javascript-expression"><annotation><documentation>
+				An expression that provides a default value, in case variable value was undefined or null during parser initialization
+			</documentation></annotation></attribute>
+			<attribute name="required" type="boolean" default="false"><annotation><documentation>
 				When true, a non-null value is required for form parsing to continue
+			</documentation></annotation></attribute>
+			<attribute name="writable" type="boolean" default="true"><annotation><documentation>
+				When false, modification of variable's initial value is not allowed
 			</documentation></annotation></attribute>
 		</complexType>
 	</element>

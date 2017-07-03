@@ -21,7 +21,7 @@
  */
 qx.Interface.define("qookery.IFormComponent", {
 
-	extend: qookery.IContainerComponent,
+	extend: [ qookery.IContainerComponent, qookery.IVariableProvider ],
 
 	events: {
 
@@ -80,26 +80,6 @@ qx.Interface.define("qookery.IFormComponent", {
 		 * @return {any} required service or <code>null</code> if not available
 		 */
 		resolveService: function(serviceName) { },
-
-		// Variables
-
-		/**
-		 * Get a form variable's value
-		 *
-		 * @param variableName {String} the name of the variable
-		 *
-		 * @return {any} variable value or <code>undefined</code>
-		 */
-		getVariable: function(variableName) { },
-
-		/**
-		 * Set a form variable's value
-		 *
-		 * @param variableName {String} the name of the variable
-		 * @param value {any} the new variable value
-		 * @param replace {Boolean ? true} if set to <code>false</code>, attempt to set an existing variable will throw an error
-		 */
-		setVariable: function(variableName, value, replace) { },
 
 		// Scripting
 
