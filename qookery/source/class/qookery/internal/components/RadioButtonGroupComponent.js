@@ -42,13 +42,9 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		// Creation
 
 		_createMainWidget: function(attributes) {
-			var orientation = this.getAttribute("orientation", "horizontal");
-			var layoutClass =
-				orientation === "horizontal" ? qx.ui.layout.HBox :
-				orientation === "vertical" ? qx.ui.layout.VBox : null;
-			if(!layoutClass) throw new Error("Orientation must be 'horizontal' or 'vertical'");
-			var layout = new layoutClass(this.getAttribute("spacing", 5));
-
+			var layoutName = this.getAttribute("layout", "h-box");
+			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
+			var layout = this.__layout = layoutFactory.createLayout(attributes);
 			var radioButtonGroup = new qx.ui.form.RadioButtonGroup(layout);
 			radioButtonGroup.getRadioGroup().setAllowEmptySelection(this.getAttribute("allow-empty-selection", false));
 			radioButtonGroup.addListener("changeSelection", function(event) {
@@ -93,7 +89,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		// IContainerComponent implementation
 
-		add: function(childComponent, display) {
+		add: function(childComponent) {
 			var radioButton = childComponent.getMainWidget();
 			if(!qx.Class.hasInterface(radioButton.constructor, qx.ui.form.IRadioItem))
 				throw new Error("<radio-button-group> supports only components with main widgets implementing IRadioItem");

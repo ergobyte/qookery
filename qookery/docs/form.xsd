@@ -192,6 +192,25 @@
 
 	<!-- Attribute groups -->
 
+	<attributeGroup name="container">
+		<attribute name="layout" type="q:layout" default="grid" />
+		<!-- Attributes used by multiple layouts -->
+		<attribute name="spacing" type="integer" default="0" />
+		<attribute name="spacing-x" type="integer" default="0" />
+		<attribute name="spacing-y" type="integer" default="0" />
+		<!-- Grid layout specific attributes -->
+		<attribute name="row-count" type="q:row-and-column-count" default="auto" />
+		<attribute name="column-count" type="q:row-and-column-count" default="1" />
+		<attribute name="row-flexes"><simpleType><list itemType="q:flex" /></simpleType></attribute>
+		<attribute name="column-flexes"><simpleType><list itemType="q:flex" /></simpleType></attribute>
+		<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
+		<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
+		<!-- Flow layout specific attributes -->
+		<attribute name="reversed" type="boolean" default="false" />
+		<!-- HBox/VBox layout specific attributes -->
+		<attribute name="separator" type="token" />
+	</attributeGroup>
+
 	<attributeGroup name="content-padding">
 		<attribute name="content-padding"><simpleType><list itemType="integer" /></simpleType></attribute>
 		<attribute name="content-padding-bottom" type="integer" default="0" />
@@ -333,22 +352,7 @@
 	</extension></complexContent></complexType>
 
 	<complexType name="container-component.attributes"><complexContent><extension base="q:component.attributes">
-		<attribute name="layout" type="q:layout" default="grid" />
-		<!-- Attributes used by multiple layouts -->
-		<attribute name="spacing" type="integer" default="0" />
-		<attribute name="spacing-x" type="integer" default="0" />
-		<attribute name="spacing-y" type="integer" default="0" />
-		<!-- Grid layout specific attributes -->
-		<attribute name="row-count" type="q:row-and-column-count" default="auto" />
-		<attribute name="column-count" type="q:row-and-column-count" default="1" />
-		<attribute name="row-flexes"><simpleType><list itemType="q:flex" /></simpleType></attribute>
-		<attribute name="column-flexes"><simpleType><list itemType="q:flex" /></simpleType></attribute>
-		<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
-		<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
-		<!-- Flow layout specific attributes -->
-		<attribute name="reversed" type="boolean" default="false" />
-		<!-- HBox/VBox layout specific attributes -->
-		<attribute name="separator" type="token" />
+		<attributeGroup ref="q:container" />
 	</extension></complexContent></complexType>
 
 	<complexType name="editable-component.attributes"><complexContent><extension base="q:component.attributes">
@@ -626,9 +630,8 @@
 			<element ref="q:radio-button" />
 			<element ref="q:toggle-button" />
 		</choice>
+		<attributeGroup ref="q:container" />
 		<attribute name="allow-empty-selection" type="boolean" default="false" />
-		<attribute name="orientation" type="q:orientation" default="horizontal" />
-		<attribute name="spacing" type="nonNegativeInteger" default="5" />
 	</extension></complexContent></complexType></element>
 
 	<element name="scroll"><complexType><complexContent><extension base="q:container-component">

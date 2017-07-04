@@ -286,7 +286,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 			if(this.__scriptingContext.hasOwnProperty(variableName))
 				throw new Error("Variable '" + variableName + "' has already been defined");
-			this.__scriptingContext[variableName] = value;
+			Object.defineProperty(this.__scriptingContext, variableName, {
+				configurable: false,
+				enumerable: false,
+				get: function() { return value; },
+				set: function(v) { throw new Error("Illegal write access to form import"); }
+			});
 		},
 
 		__parseTranslation: function(formParser, translationElement) {
@@ -310,8 +315,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		__parseVariable: function(formParser, variableElement) {
-			var name = formParser.getAttribute(variableElement, "name");
-			if(name == null)
+			var variableName = formParser.getAttribute(variableElement, "name");
+			if(variableName == null)
 				throw new Error("Variable name is required");
 			var provider = this;
 			var providerName = formParser.getAttribute(variableElement, "provider");
@@ -320,25 +325,25 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				if(provider == null || !qx.Class.hasInterface(provider.constructor, qookery.IVariableProvider))
 					throw new Error("Variable provider '" + providerName + "' missing from scripting context");
 			}
-			var value = provider.getVariable(name);
+			var value = provider.getVariable(variableName);
 			if(value == null) {
 				var defaultExpression = formParser.getAttribute(variableElement, "default");
 				if(defaultExpression != null)
 					value = this.executeClientCode(qx.lang.String.format("return (%1);", [ defaultExpression ]));
 				if(value === undefined) value = null;
 				if(value === null && formParser.getAttribute(variableElement, "required") === "true")
-					throw new Error("Value for required variable '" + name + "' is missing");
-				provider.setVariable(name, value);
+					throw new Error("Value for required variable '" + variableName + "' is missing");
+				provider.setVariable(variableName, value);
 			}
 			if(provider === this) return;
 			var writable = formParser.getAttribute(variableElement, "writable") !== "false";
 			var setFunction = writable ?
-				function(v) { provider.setVariable(name, v); } :
-				function(v) { throw new Error("Illegal attempt to modify non-writable variable '" + name + "'"); };
-			Object.defineProperty(this.__scriptingContext, name, {
+				function(v) { provider.setVariable(variableName, v); } :
+				function(v) { throw new Error("Illegal attempt to modify non-writable variable '" + variableName + "'"); };
+			Object.defineProperty(this.__scriptingContext, variableName, {
 				configurable: false,
 				enumerable: true,
-				get: function() { return provider.getVariable(name); },
+				get: function() { return provider.getVariable(variableName); },
 				set: setFunction
 			});
 		},
