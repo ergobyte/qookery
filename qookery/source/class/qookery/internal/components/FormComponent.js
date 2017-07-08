@@ -47,7 +47,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__scriptingContext: null,
 		__serviceResolver: null,
 		__operationQueue: null,
-		__disposeList: null,
 
 		// Metadata
 
@@ -161,11 +160,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(context == null)
 				throw new Error("Scripting context is not available");
 			return context;
-		},
-
-		addToDisposeList: function(disposable) {
-			if(!this.__disposeList) this.__disposeList = [ ];
-			this.__disposeList.push(disposable);
 		},
 
 		// Validation
@@ -402,7 +396,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	destruct: function() {
 		for(var i = 0; i < this.__connections.length; i++) this.__connections[i].disconnect();
-		this._disposeArray("__disposeList");
 		this.__components = null;
 		this.__validations = null;
 		this.__userContextMap = null;

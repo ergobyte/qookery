@@ -35,6 +35,7 @@ qx.Interface.define("qookery.IRegistry", {
 		P_LAYOUT_FACTORY: "layout-factory",
 		P_LIBRARY: "library",
 		P_MAP: "map",
+		P_MEDIA_QUERY: "media-query",
 		P_MODEL_PROVIDER: "model-provider",
 		P_SERVICE: "service",
 		P_VALIDATOR: "validator"
@@ -158,6 +159,10 @@ qx.Interface.define("qookery.IRegistry", {
 		 * @return {qookery.IValidator} the validator or <code>undefined</code> if not found
 		 */
 		getValidator: function(name) { },
+
+		// Media queries
+
+		getMediaQuery: function(name) { },
 
 		// Model providers
 

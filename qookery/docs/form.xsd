@@ -345,9 +345,15 @@
 
 	<complexType name="atom-component.attributes"><complexContent><extension base="q:component.attributes">
 		<attribute name="center" type="boolean" default="false" />
+		<attribute name="gap" type="nonNegativeInteger" default="4" />
 		<attribute name="icon" type="anyURI" />
 		<attribute name="icon-position" type="q:icon-position" default="left" />
 		<attribute name="rich" type="boolean" default="false" />
+		<attribute name="show" default="both"><simpleType><restriction base="token">
+			<enumeration value="both" />
+			<enumeration value="label" />
+			<enumeration value="icon" />
+		</restriction></simpleType></attribute>
 		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType>
 
@@ -816,7 +822,7 @@
 
 	<element name="script">
 		<annotation><documentation>
-			Add a JavaScript script to component
+			Add a JavaScript script to one or more components
 		</documentation></annotation>
 		<complexType>
 			<simpleContent>
@@ -834,10 +840,23 @@
 					<attribute name="event"><annotation><documentation>
 						The name(s) of the component's event(s) the script should be attached to.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
-					<attribute name="execute" type="boolean"><annotation><documentation>
+					<attribute name="execute" type="boolean" default="false"><annotation><documentation>
 						If true, execute script immediately in addition to any other performed attachments/registrations.
-						This attribute is false by default, unless no action, function and event registration is requested.
+						This attribute is false by default, unless no action, function, event or media query is specified.
 					</documentation></annotation></attribute>
+					<attribute name="media-query"><annotation><documentation>
+						A CSS3 media query that will invoke script each time its state changes
+					</documentation></annotation><simpleType><union memberTypes="string"><simpleType><restriction base="token">
+						<enumeration value="small-up" />
+						<enumeration value="small-only" />
+						<enumeration value="medium-up" />
+						<enumeration value="medium-only" />
+						<enumeration value="large-up" />
+						<enumeration value="large-only" />
+						<enumeration value="xlarge-up" />
+						<enumeration value="xlarge-only" />
+						<enumeration value="xxlarge-up" />
+					</restriction></simpleType></union></simpleType></attribute>
 					<attribute name="name"><annotation><documentation>
 						The name(s) of the function(s) to register into the form context ("$") for later execution of script.
 					</documentation></annotation><simpleType><list itemType="q:javascript-identifier" /></simpleType></attribute>

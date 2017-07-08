@@ -127,6 +127,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		__parentComponent: null,
 		__attributes: null,
 		__actions: null,
+		__disposeList: null,
 
 		_widgets: null,
 
@@ -267,6 +268,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return qx.locale.Manager.getInstance().translate(messageId, formatArguments);
 		},
 
+		addToDisposeList: function(disposable) {
+			if(!this.__disposeList) this.__disposeList = [ ];
+			this.__disposeList.push(disposable);
+		},
+
 		toString: function() {
 			var hash = this.__id || this.$$hash;
 			var form = this.getForm();
@@ -387,6 +393,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	},
 
 	destruct: function() {
+		this._disposeArray("__disposeList");
 		var widgets = this.listWidgets();
 		for(var i = 0; i < widgets.length; i++) {
 			widgets[i].destroy();

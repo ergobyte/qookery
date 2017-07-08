@@ -41,6 +41,17 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["Registry"] = partition["qookery.IRegistry"];
 		partition["ResourceLoader"] = partition["qookery.IResourceLoader"];
 
+		partition = this.__createPartition(qookery.IRegistry.P_MEDIA_QUERY);
+		partition["small-up"] = "only screen";
+		partition["small-only"] = "only screen and (max-width: 40em)"; // Mobile screens, width up to 640px
+		partition["medium-up"] = "only screen and (min-width: 40.063em)";
+		partition["medium-only"] = "only screen and (min-width: 40.063em) and (max-width: 64em)"; // Tablet screens, width up to 1024px
+		partition["large-up"] = "only screen and (min-width: 64.063em)";
+		partition["large-only"] = "only screen and (min-width: 64.063em) and (max-width: 90em)"; // Large screens, width up to1440px
+		partition["xlarge-up"] = "only screen and (min-width: 90.063em)";
+		partition["xlarge-only"] = "only screen and (min-width: 90.063em) and (max-width: 120em)"; // Extra large screens, width up to 1920px
+		partition["xxlarge-up"] = "only screen and (min-width: 120.063em)";
+
 		partition = this.__createPartition(qookery.IRegistry.P_MODEL_PROVIDER);
 		partition["default"] = qookery.impl.DefaultModelProvider.getInstance();
 
@@ -236,6 +247,18 @@ qx.Class.define("qookery.internal.Registry", {
 
 		getValidator: function(name) {
 			return this.get(qookery.IRegistry.P_VALIDATOR, name);
+		},
+
+		// Media queries
+
+		getMediaQuery: function(name) {
+			var query = this.get(qookery.IRegistry.P_MEDIA_QUERY, name);
+			if(query == null) return null;
+			if(qx.lang.Type.isString(query)) {
+				query = new qx.bom.MediaQuery(query);
+				this.put(qookery.IRegistry.P_MEDIA_QUERY, name, query);
+			}
+			return query;
 		},
 
 		// Formats

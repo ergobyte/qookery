@@ -318,9 +318,10 @@ qx.Class.define("qookery.internal.FormParser", {
 			var actionNames = this.getAttribute(scriptElement, "action");
 			var functionNames = this.getAttribute(scriptElement, "name");
 			var eventNames = this.getAttribute(scriptElement, "event");
+			var mediaQuery = this.getAttribute(scriptElement, "media-query");
 			var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
 			var execute = this.getAttribute(scriptElement, "execute") === "true";
-			if(actionNames == null && functionNames == null && eventNames == null) execute = true;
+			if(!execute && (actionNames == null && functionNames == null && eventNames == null && mediaQuery == null)) execute = true;
 
 			// Create list of target components
 			var componentIds = this.getAttribute(scriptElement, "component");
@@ -342,16 +343,33 @@ qx.Class.define("qookery.internal.FormParser", {
 						throw error;
 					}
 				}
-				if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
-					component.getForm().getScriptingContext()[functionName] = componentFunction;
-				});
-				if(actionNames != null) actionNames.split(/\s+/).forEach(function(actionName) {
-					component.setAction(actionName, componentFunction);
-				});
-				if(eventNames != null) eventNames.split(/\s+/).forEach(function(eventName) {
-					component.addEventHandler(eventName, componentFunction, onlyOnce);
-				});
-				if(execute) componentFunction();
+				if(mediaQuery != null) {
+					var query = this.constructor.REGISTRY.getMediaQuery(mediaQuery);
+					if(query == null)
+						query = new qx.bom.MediaQuery(mediaQuery);
+					if(!(execute && onlyOnce)) {
+						var methodName = onlyOnce ? "addListenerOnce" : "addListener";
+						var listenerId = query[methodName]("change", function(data) {
+							componentFunction(data["matches"], data["query"]);
+						});
+						component.addToDisposeList({ dispose: function() {
+							query.removeListenerById(listenerId);
+						} });
+					}
+					if(execute) componentFunction(query.isMatching(), mediaQuery);
+				}
+				else {
+					if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
+						component.getForm().getScriptingContext()[functionName] = componentFunction;
+					});
+					if(actionNames != null) actionNames.split(/\s+/).forEach(function(actionName) {
+						component.setAction(actionName, componentFunction);
+					});
+					if(eventNames != null) eventNames.split(/\s+/).forEach(function(eventName) {
+						component.addEventHandler(eventName, componentFunction, onlyOnce);
+					});
+					if(execute) componentFunction();
+				}
 			}, this);
 		},
 

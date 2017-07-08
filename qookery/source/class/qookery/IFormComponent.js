@@ -103,13 +103,6 @@ qx.Interface.define("qookery.IFormComponent", {
 		 */
 		getScriptingContext: function() { },
 
-		/**
-		 * Add a disposable to the list of objects that will be disposed automatically with form
-		 *
-		 * @param disposable {any} any object that has a <code>dispose</code> member function
-		 */
-		addToDisposeList: function(disposable) { },
-
 		// Operations
 
 		/**

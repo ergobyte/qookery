@@ -32,7 +32,9 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "center": return "Boolean";
+			case "gap": return "Number";
 			case "rich": return "Boolean";
+			case "show": return "String";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -50,10 +52,12 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 
 		_applyAtomAttributes: function(atom, attributes) {
 			if(attributes["center"] !== undefined) atom.setCenter(attributes["center"]);
+			if(attributes["gap"] !== undefined) atom.setGap(attributes["gap"]);
 			if(attributes["icon"] !== undefined) atom.setIcon(attributes["icon"]);
 			if(attributes["icon-position"] !== undefined) atom.setIconPosition(attributes["icon-position"]);
 			if(attributes["label"] !== undefined) atom.setLabel(attributes["label"]);
 			if(attributes["rich"] !== undefined) atom.setRich(attributes["rich"]);
+			if(attributes["show"] !== undefined) atom.setShow(attributes["show"]);
 			if(attributes["text-align"] !== undefined) {
 				atom.getChildControl("label").setAllowGrowX(true);
 				atom.getChildControl("label").setTextAlign(attributes["text-align"]);

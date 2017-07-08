@@ -206,6 +206,13 @@ qx.Interface.define("qookery.IComponent", {
 		 *
 		 * @param messageId {String} the identifier of the wanted message
 		 */
-		tr: function(messageId) { }
+		tr: function(messageId) { },
+
+		/**
+		 * Add a disposable to the list of objects that will be disposed automatically together with component
+		 *
+		 * @param disposable {Object} any object that has a <code>dispose</code> property that is a function
+		 */
+		addToDisposeList: function(disposable) { }
 	}
 });
