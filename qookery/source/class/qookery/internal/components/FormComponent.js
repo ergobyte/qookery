@@ -16,18 +16,6 @@
 	limitations under the License.
 */
 
-/**
- * Forms are containers that lay the necessary groundwork for Qookery components
- *
- * <p>Among others, they cater for:</p>
- * <ul>
- *	<li>context bindings</li>
- *	<li>client scripting</li>
- *	<li>model connections</li>
- *	<li>component validation</li>
- *	<li>translation support</li>
- * </ul>
- */
 qx.Class.define("qookery.internal.components.FormComponent", {
 
 	extend: qookery.internal.components.CompositeComponent,

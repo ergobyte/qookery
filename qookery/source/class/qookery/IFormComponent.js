@@ -17,11 +17,24 @@
 */
 
 /**
- * Form components implement this interface
+ * Forms are container components that provide a number of facilities to their descendants
+ *
+ * <p>Descendant components can rely on their form to:</p>
+ *
+ * <ul>
+ *	<li>Resolve services via dependency injection</li>
+ *	<li>Require, define or otherwise access form-level variables</li>
+ *	<li>Execute JavaScript source code into a common scripting context</li>
+ *	<li>Interact with a model, either directly of through connections</li>
+ *	<li>Use unique, in the scope of the form, component identifiers</li>
+ *	<li>Run form-level validation of current model</li>
+ *	<li>Translate messages using form-local translation identifiers</li>
+ *	<li>Register objects for disposal on form destruction</li>
+ *</ul>
  */
 qx.Interface.define("qookery.IFormComponent", {
 
-	extend: [ qookery.IContainerComponent, qookery.IVariableProvider ],
+	extend: [ qookery.IContainerComponent, qookery.IVariableProvider, qx.ui.form.IModel ],
 
 	events: {
 
