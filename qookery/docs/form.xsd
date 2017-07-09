@@ -27,6 +27,19 @@
 
 	<!-- Simple types -->
 
+	<simpleType name="cell-renderer"><union memberTypes="QName"><simpleType><restriction base="token">
+		<enumeration value="boolean" />
+		<enumeration value="date" />
+		<enumeration value="debug" />
+		<enumeration value="default" />
+		<enumeration value="html" />
+		<enumeration value="image" />
+		<enumeration value="model" />
+		<enumeration value="number" />
+		<enumeration value="password" />
+		<enumeration value="string" />
+	</restriction></simpleType></union></simpleType>
+
 	<simpleType name="display">
 		<restriction base="token">
 			<enumeration value="inline" />
@@ -73,7 +86,7 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name="layout">
+	<simpleType name="layout"><union memberTypes="QName"><simpleType>
 		<restriction base="token">
 			<enumeration value="none" />
 			<enumeration value="basic" />
@@ -83,7 +96,7 @@
 			<enumeration value="h-box" />
 			<enumeration value="v-box" />
 		</restriction>
-	</simpleType>
+	</simpleType></union></simpleType>
 
 	<simpleType name="orientation">
 		<restriction base="token">
@@ -206,6 +219,8 @@
 		<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
 		<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
 		<!-- Flow layout specific attributes -->
+		<attribute name="layout-align-x" type="q:horizontal-alignment" default="left" />
+		<attribute name="layout-align-y" type="q:vertical-alignment" default="top" />
 		<attribute name="reversed" type="boolean" default="false" />
 		<!-- HBox/VBox layout specific attributes -->
 		<attribute name="separator" type="token" />
@@ -757,18 +772,7 @@
 	</complexType></element>
 
 	<element name="table-column"><complexType>
-		<attribute name="cell-renderer" default="model"><simpleType><restriction base="token">
-			<enumeration value="boolean" />
-			<enumeration value="date" />
-			<enumeration value="debug" />
-			<enumeration value="default" />
-			<enumeration value="html" />
-			<enumeration value="image" />
-			<enumeration value="model" />
-			<enumeration value="number" />
-			<enumeration value="password" />
-			<enumeration value="string" />
-		</restriction></simpleType></attribute>
+		<attribute name="cell-renderer" default="model" type="q:cell-renderer" />
 		<attribute name="color" type="string" />
 		<attribute name="connect" type="string" />
 		<attribute name="editable" type="boolean" default="false" />

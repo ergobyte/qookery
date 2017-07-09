@@ -122,7 +122,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				var messageId = text.substring(1);
 				return component["tr"](messageId);
 			case "QName":
-				return this.__resolveQName(text);
+				return this.resolveQName(text);
 			case "Size":
 				return this.constructor.NAMED_SIZES[text] || (isNaN(text) ? text : parseInt(text, 10));
 			case "StringList":
@@ -157,6 +157,19 @@ qx.Class.define("qookery.internal.FormParser", {
 			return this.__namespaces[prefix];
 		},
 
+		resolveQName: function(qName) {
+			if(qName.charAt(0) === "{") return qName;
+			var colonPos = qName.indexOf(":");
+			if(colonPos === -1)
+				return "{" + this.__defaultNamespace + "}" + qName;
+			var prefix = qName.substr(0, colonPos);
+			var namespaceUri = this.resolveNamespacePrefix(prefix);
+			if(!namespaceUri)
+				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
+			var localPart = qName.substring(colonPos + 1);
+			return "{" + namespaceUri + "}" + localPart;
+		},
+
 		// Internal methods
 
 		__parseComponent: function(componentElement, parentComponent) {
@@ -172,7 +185,7 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Instantiate and initialize new component
 
 			var elementName = qx.dom.Node.getName(componentElement);
-			var componentQName = this.__resolveQName(elementName);
+			var componentQName = this.resolveQName(elementName);
 			var component = this.constructor.REGISTRY.createComponent(componentQName, parentComponent);
 			component.prepare(this, componentElement);
 
@@ -219,7 +232,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				var elementName = qx.dom.Node.getName(statementElement);
 				if(elementName === "parsererror")
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
-				var elementQName = this.__resolveQName(elementName);
+				var elementQName = this.resolveQName(elementName);
 
 				// First consult the component registry
 				if(this.constructor.REGISTRY.isComponentTypeAvailable(elementQName)) {
@@ -392,18 +405,6 @@ qx.Class.define("qookery.internal.FormParser", {
 				return true;
 			}
 			return false;
-		},
-
-		__resolveQName: function(qname) {
-			var colonPos = qname.indexOf(":");
-			if(colonPos === -1)
-				return "{" + this.__defaultNamespace + "}" + qname;
-			var prefix = qname.substr(0, colonPos);
-			var namespaceUri = this.resolveNamespacePrefix(prefix);
-			if(!namespaceUri)
-				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
-			var localPart = qname.substring(colonPos + 1);
-			return "{" + namespaceUri + "}" + localPart;
 		},
 
 		__evaluateExpression: function(component, expression) {

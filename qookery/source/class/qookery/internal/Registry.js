@@ -62,12 +62,12 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["string"] = qookery.internal.validators.StringValidator.getInstance();
 
 		partition = this.__createPartition(qookery.IRegistry.P_LAYOUT_FACTORY);
-		partition["basic"] = qookery.internal.layouts.BasicLayoutFactory.getInstance();
-		partition["flow"] = qookery.internal.layouts.FlowLayoutFactory.getInstance();
-		partition["grid"] = qookery.internal.layouts.GridLayoutFactory.getInstance();
-		partition["grow"] = qookery.internal.layouts.GrowLayoutFactory.getInstance();
-		partition["h-box"] = qookery.internal.layouts.HBoxLayoutFactory.getInstance();
-		partition["v-box"] = qookery.internal.layouts.VBoxLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}basic"] = qookery.internal.layouts.BasicLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}flow"] = qookery.internal.layouts.FlowLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}grid"] = qookery.internal.layouts.GridLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}grow"] = qookery.internal.layouts.GrowLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}h-box"] = qookery.internal.layouts.HBoxLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}v-box"] = qookery.internal.layouts.VBoxLayoutFactory.getInstance();
 
 		partition = this.__createPartition(qookery.IRegistry.P_COMPONENT);
 		partition["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
@@ -110,34 +110,34 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["number"] = qookery.internal.formats.NumberFormat;
 
 		partition = this.__createPartition(qookery.IRegistry.P_CELL_RENDERER_FACTORY);
-		partition["boolean"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}boolean"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Boolean();
 		};
-		partition["date"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}date"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Date(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["debug"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}debug"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Debug();
 		};
-		partition["default"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}default"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Default();
 		};
-		partition["html"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}html"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Html(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["image"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}image"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Image(column["width"], column["height"]);
 		};
-		partition["model"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}model"] = function(component, column) {
 			return new qookery.internal.components.table.CellRenderer(component, column);
 		};
-		partition["number"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}number"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Number(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["password"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}password"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Password();
 		};
-		partition["string"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}string"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.String(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
 
@@ -163,7 +163,7 @@ qx.Class.define("qookery.internal.Registry", {
 			var partition = this.__getPartition(partitionName);
 			var element = partition[elementName];
 			if(element === undefined && required === true)
-				throw new Error("Require element '" + elementName + "' not found in partition '" + partitionName + "'");
+				throw new Error("Required element '" + elementName + "' missing from partition '" + partitionName + "'");
 			return element;
 		},
 

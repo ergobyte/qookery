@@ -35,6 +35,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "allow-empty-selection": return "Boolean";
+			case "layout": return "QName";
 			default: return this.base(arguments, attributeName);
 			}
 		},
@@ -42,7 +43,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		// Creation
 
 		_createMainWidget: function(attributes) {
-			var layoutName = this.getAttribute("layout", "h-box");
+			var layoutName = this.getAttribute("layout", "{http://www.qookery.org/ns/Form}h-box");
 			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
 			var layout = layoutFactory.createLayout(attributes);
 			var radioButtonGroup = new qx.ui.form.RadioButtonGroup(layout);
