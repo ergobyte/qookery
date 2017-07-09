@@ -102,6 +102,8 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "false": return false;
 				}
 				return text;
+			case "Expression":
+				return this.__evaluateExpression(component, text);
 			case "Integer":
 				return parseInt(text, 10);
 			case "IntegerList":
@@ -198,8 +200,16 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Attribute parsing
 
 			var attributes = this.parseAttributes(component, componentElement);
+			var useAttributes = this.getAttribute(componentElement, "use-attributes");
+			if(useAttributes != null) useAttributes.split(/\s+/).forEach(function(variableName) {
+				var useAttributes = component.getForm().getVariable(variableName);
+				if(!qx.lang.Type.isObject(useAttributes))
+					throw new Error("Variable specified in use-attributes not found or of incorrect type");
+				qx.lang.Object.mergeWith(attributes, useAttributes);
+			});
 
 			// Component creation
+
 			component.create(attributes);
 
 			// Children parsing
@@ -296,6 +306,11 @@ qx.Class.define("qookery.internal.FormParser", {
 				var result = this.__evaluateExpression(component, expression);
 				if(!result) return false;
 			}
+			var mediaQuery = this.getAttribute(selectionElement, "media-query");
+			if(mediaQuery != null) {
+				var query = this.__getMediaQuery(mediaQuery);
+				if(!query.isMatching()) return false;
+			}
 			this.__parseStatementBlock(selectionElement, component);
 			return true;
 		},
@@ -357,9 +372,7 @@ qx.Class.define("qookery.internal.FormParser", {
 					}
 				}
 				if(mediaQuery != null) {
-					var query = this.constructor.REGISTRY.getMediaQuery(mediaQuery);
-					if(query == null)
-						query = new qx.bom.MediaQuery(mediaQuery);
+					var query = this.__getMediaQuery(mediaQuery);
 					if(!(execute && onlyOnce)) {
 						var methodName = onlyOnce ? "addListenerOnce" : "addListener";
 						var listenerId = query[methodName]("change", function(data) {
@@ -405,6 +418,13 @@ qx.Class.define("qookery.internal.FormParser", {
 				return true;
 			}
 			return false;
+		},
+
+		__getMediaQuery: function(mediaQuery) {
+			var query = this.constructor.REGISTRY.getMediaQuery(mediaQuery);
+			if(query != null)
+				return query;
+			return new qx.bom.MediaQuery(mediaQuery);
 		},
 
 		__evaluateExpression: function(component, expression) {

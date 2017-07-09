@@ -309,9 +309,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 			var value = provider.getVariable(variableName);
 			if(value == null) {
-				var defaultExpression = formParser.getAttribute(variableElement, "default");
-				if(defaultExpression != null)
-					value = this.executeClientCode(qx.lang.String.format("return (%1);", [ defaultExpression ]));
+				var defaultValue = formParser.getAttribute(variableElement, "default");
+				if(defaultValue != null) {
+					var typeName = formParser.getAttribute(variableElement, "type", "Expression");
+					value = formParser.parseValue(this, typeName, defaultValue);
+				}
 				if(value === undefined) value = null;
 				if(value === null && formParser.getAttribute(variableElement, "required") === "true")
 					throw new Error("Value for required variable '" + variableName + "' is missing");

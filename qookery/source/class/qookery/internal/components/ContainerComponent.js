@@ -91,14 +91,11 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++)
 				container.remove(widgets[i]);
+			this._removeChildComponent(component);
 		},
 
 		contains: function(component) {
-			var container = this.getContainerWidget();
-			var widgets = component.listWidgets();
-			for(var i = 0; i < widgets.length; i++)
-				if(container.indexOf(widgets[i]) != -1) return true;
-			return false;
+			return qx.lang.Array.contains(this.__children, component);
 		},
 
 		validate: function() {
@@ -120,6 +117,10 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		_addChildComponent: function(component) {
 			this.__children.push(component);
+		},
+
+		_removeChildComponent: function(component) {
+			qx.lang.Array.remove(this.__children, component);
 		}
 	},
 
