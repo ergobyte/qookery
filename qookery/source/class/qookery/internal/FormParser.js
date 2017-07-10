@@ -176,14 +176,6 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseComponent: function(componentElement, parentComponent) {
 
-			// Check conditionals
-
-			var skipIfExpression = this.getAttribute(componentElement, "skip-if");
-			if(skipIfExpression != null) {
-				var skip = this.__evaluateExpression(parentComponent, skipIfExpression);
-				if(skip) return null;
-			}
-
 			// Instantiate and initialize new component
 
 			var elementName = qx.dom.Node.getName(componentElement);
