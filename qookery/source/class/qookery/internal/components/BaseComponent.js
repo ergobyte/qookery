@@ -57,16 +57,14 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"allow-stretch": "Boolean",
 			"allow-stretch-x": "Boolean",
 			"allow-stretch-y": "Boolean",
-			"auto-size": "Boolean",
-			"focusable": "Boolean",
-			"column-visibility-button-visible": "Boolean",
 			"enabled": "Boolean",
+			"focusable": "Boolean",
 			"live-update": "Boolean",
 			"native-context-menu": "Boolean",
 			"read-only": "Boolean",
 			"required": "Boolean",
+			"reversed": "Boolean",
 			"scale": "Boolean",
-			"status-bar-visible": "Boolean",
 
 			"width": "Size",
 			"height": "Size",
@@ -131,7 +129,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		_widgets: null,
 
-		// IComponent Implementation
+		// IComponent implementation
 
 		getId: function() {
 			return this.__id;

@@ -41,7 +41,6 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "layout": return "QName";
-			case "reverse": return "Boolean";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -77,11 +76,12 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		add: function(component) {
 			this._addChildComponent(component);
 			var container = this.getContainerWidget();
+			var layout = container.getLayout();
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
-				if(this.__layout != null && qx.lang.Type.isFunction(this.__layout.configureWidget))
-					this.__layout.configureWidget(widget);
+				if(layout != null && qx.lang.Type.isFunction(layout.configureWidget))
+					layout.configureWidget(widget);
 				container.add(widget);
 			}
 		},

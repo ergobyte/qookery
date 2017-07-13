@@ -34,7 +34,7 @@ qx.Class.define("qookery.internal.layouts.HBoxLayoutFactory", {
 			if(alignY != null)
 				layout.setAlignY(alignY);
 			if(attributes["reversed"] != null)
-				layout.setReversed(qx.data.Conversion.toBoolean(attributes["reversed"]));
+				layout.setReversed(attributes["reversed"]);
 			if(attributes["separator"] != null)
 				layout.setSeparator(attributes["separator"]);
 			var spacing = attributes["spacing"];

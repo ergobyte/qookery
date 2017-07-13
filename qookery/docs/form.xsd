@@ -27,19 +27,10 @@
 
 	<!-- Simple types -->
 
-	<simpleType name="value-type"><restriction base="token">
-		<enumeration value="Boolean" />
-		<enumeration value="Expression" />
-		<enumeration value="Integer" />
-		<enumeration value="IntegerList" />
-		<enumeration value="Number" />
-		<enumeration value="NumberList" />
-		<enumeration value="RegularExpression" />
-		<enumeration value="ReplaceableString" />
-		<enumeration value="QName" />
-		<enumeration value="Size" />
-		<enumeration value="String" />
-		<enumeration value="StringList" />
+	<simpleType name="atom-element-visibility"><restriction base="token">
+		<enumeration value="both" />
+		<enumeration value="label" />
+		<enumeration value="icon" />
 	</restriction></simpleType>
 
 	<simpleType name="cell-renderer"><union memberTypes="QName"><simpleType><restriction base="token">
@@ -213,6 +204,21 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="value-type"><restriction base="token">
+		<enumeration value="Boolean" />
+		<enumeration value="Expression" />
+		<enumeration value="Integer" />
+		<enumeration value="IntegerList" />
+		<enumeration value="Number" />
+		<enumeration value="NumberList" />
+		<enumeration value="RegularExpression" />
+		<enumeration value="ReplaceableString" />
+		<enumeration value="QName" />
+		<enumeration value="Size" />
+		<enumeration value="String" />
+		<enumeration value="StringList" />
+	</restriction></simpleType>
+
 	<simpleType name="vertical-alignment">
 		<restriction base="token">
 			<enumeration value="top" />
@@ -379,11 +385,7 @@
 		<attribute name="icon" type="anyURI" />
 		<attribute name="icon-position" type="q:icon-position" default="left" />
 		<attribute name="rich" type="boolean" default="false" />
-		<attribute name="show" default="both"><simpleType><restriction base="token">
-			<enumeration value="both" />
-			<enumeration value="label" />
-			<enumeration value="icon" />
-		</restriction></simpleType></attribute>
+		<attribute name="show" type="q:atom-element-visibility" default="both" />
 		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType>
 

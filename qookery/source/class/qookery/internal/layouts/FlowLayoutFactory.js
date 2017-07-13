@@ -35,7 +35,7 @@ qx.Class.define("qookery.internal.layouts.FlowLayoutFactory", {
 			if(alignY != null)
 				layout.setAlignY(alignY);
 			if(attributes["reversed"] != null)
-				layout.setReversed(qx.data.Conversion.toBoolean(attributes["reversed"]));
+				layout.setReversed(attributes["reversed"]);
 			var spacing = attributes["spacing"];
 			if(spacing != null) {
 				layout.setSpacingX(spacing);
