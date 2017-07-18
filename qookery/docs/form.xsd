@@ -802,6 +802,7 @@
 		<attribute name="map" type="token" />
 		<attribute name="max-width" type="q:size" />
 		<attribute name="min-width" type="q:size" />
+		<attribute name="name" type="token" />
 		<attribute name="sortable" type="boolean" default="true" />
 		<attribute name="text-align" type="q:horizontal-alignment" default="left" />
 		<attribute name="tool-tip-text" type="string" />

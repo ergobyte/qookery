@@ -124,6 +124,10 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 		// .	Component
 
+		getData: function() {
+			return this.__data;
+		},
+
 		setData: function(data) {
 			if(data instanceof qx.data.Array)
 				this.__accessor = this.self(arguments).qxDataArrayAccessor;
