@@ -181,48 +181,56 @@ qx.Class.define("qookery.internal.FormParser", {
 			var elementName = qx.dom.Node.getName(componentElement);
 			var componentQName = this.resolveQName(elementName);
 			var component = this.constructor.REGISTRY.createComponent(componentQName, parentComponent);
-			component.prepare(this, componentElement);
+			try {
+				component.prepare(this, componentElement);
 
-			// Id registration
+				// Id registration
 
-			var componentId = this.getAttribute(componentElement, "id");
-			if(componentId != null && parentComponent != null)
-				parentComponent.getForm().putComponent(componentId, component);
+				var componentId = this.getAttribute(componentElement, "id");
+				if(componentId != null && parentComponent != null)
+					parentComponent.getForm().putComponent(componentId, component);
 
-			// Attribute parsing
+				// Attribute parsing
 
-			var attributes = this.parseAttributes(component, componentElement);
-			var useAttributes = this.getAttribute(componentElement, "use-attributes");
-			if(useAttributes != null) useAttributes.split(/\s+/).forEach(function(variableName) {
-				var useAttributes = component.getForm().getVariable(variableName);
-				if(!qx.lang.Type.isObject(useAttributes))
-					throw new Error("Variable specified in use-attributes not found or of incorrect type");
-				qx.lang.Object.mergeWith(attributes, useAttributes);
-			});
+				var attributes = this.parseAttributes(component, componentElement);
+				var useAttributes = this.getAttribute(componentElement, "use-attributes");
+				if(useAttributes != null) useAttributes.split(/\s+/).forEach(function(variableName) {
+					var useAttributes = component.getForm().getVariable(variableName);
+					if(!qx.lang.Type.isObject(useAttributes))
+						throw new Error("Variable specified in use-attributes not found or of incorrect type");
+					qx.lang.Object.mergeWith(attributes, useAttributes);
+				});
 
-			// Component creation
+				// Component creation
 
-			component.create(attributes);
+				component.create(attributes);
 
-			// Children parsing
+				// Children parsing
 
-			this.__parseStatementBlock(componentElement, component);
+				this.__parseStatementBlock(componentElement, component);
 
-			// Component setup
+				// Component setup
 
-			component.setup(this, attributes);
+				component.setup(this, attributes);
 
-			// Attach to container
+				// Attach to container
 
-			if(parentComponent != null) {
-				var display = this.getAttribute(componentElement, "display", "inline");
-				if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
-					throw new Error("Attempted to add a component to a non-container component");
-				parentComponent.add(component, display);
+				if(parentComponent != null) {
+					var display = this.getAttribute(componentElement, "display", "inline");
+					if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
+						throw new Error("Attempted to add a component to a non-container component");
+					parentComponent.add(component, display);
+				}
+
+				// Return new component
+				var c = component;
+				component = null;
+				return c;
 			}
-
-			// Return new component
-			return component;
+			finally {
+				if(component != null)
+					component.dispose();
+			}
 		},
 
 		__parseStatementBlock: function(blockElement, component) {
