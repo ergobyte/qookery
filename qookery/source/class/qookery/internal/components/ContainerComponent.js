@@ -76,7 +76,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		add: function(component) {
 			this._addChildComponent(component);
 			var container = this.getContainerWidget();
-			var layout = container.getLayout();
+			var layout = qx.lang.Type.isFunction(container["getLayout"]) ? container.getLayout() : null;
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
