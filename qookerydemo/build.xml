@@ -22,12 +22,13 @@
 	<property name="build.projectName" value="qookerydemo" />
 
 	<import file="../build.xml" as="base" />
+	<import file="../qookeryace/build.xml" as="ace" />
 	<import file="../qookeryrichtext/build.xml" as="richtext" />
 	<import file="../qookerycalendar/build.xml" as="calendar" />
 
-	<target name="Build" depends="richtext.Download, calendar.Download, base.Build-Run" description="Generate and run the build version of the demo application" />
-	<target name="Source" depends="richtext.Download, calendar.Download, base.Source-Run" description="Generate and run the source version of the demo application" />
-	<target name="Clean" depends="richtext.Clean, calendar.Clean, base.Clean" description="Clean up any intermediate files produced by build" />
+	<target name="Build" depends="ace.Download, richtext.Download, calendar.Download, base.Build-Run" description="Generate and run the build version of the demo application" />
+	<target name="Source" depends="ace.Download, richtext.Download, calendar.Download, base.Source-Run" description="Generate and run the source version of the demo application" />
+	<target name="Clean" depends="ace.Clean, richtext.Clean, calendar.Clean, base.Clean" description="Clean up any intermediate files produced by build" />
 	<target name="Lint" depends="base.Lint" description="Perform syntactic checks on application" />
 	<target name="ValidateManifest" depends="base.ValidateManifest" description="Validate Manifest.json" />
 

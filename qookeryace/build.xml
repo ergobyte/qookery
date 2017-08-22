@@ -18,7 +18,7 @@
 -->
 <project name="qookery.ace" basedir="." default="Download">
 
-	<property name="ace.version" value="1.1.8" />
+	<property name="ace.version" value="1.2.8" />
 	<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${ace.version}/src-min" />
 	<property name="ace.target" location="../qookeryace/source/resource/qookery/lib/ace" />
 
@@ -35,7 +35,10 @@
 			<url url="${ace.downloadBase}/mode-json.js" />
 			<url url="${ace.downloadBase}/mode-textile.js" />
 			<url url="${ace.downloadBase}/mode-xml.js" />
+			<url url="${ace.downloadBase}/theme-eclipse.js" />
+			<url url="${ace.downloadBase}/theme-textmate.js" />
 			<url url="${ace.downloadBase}/worker-json.js" />
+			<url url="${ace.downloadBase}/worker-xml.js" />
 		</get>
 	</target>
 

@@ -20,18 +20,28 @@ qx.Class.define("qookery.ace.internal.AceWidget", {
 
 	extend: qx.ui.core.Widget,
 
-	construct: function() {
+	construct: function(component) {
 		this.base(arguments);
-		this.setDecorator("inset");
+		this.__component = component;
+		this.addListener("resize", function() {
+			qx.event.Timer.once(function() {
+				if(this.isDisposed()) return;
+				var editor = this.__component.getEditor();
+				if(editor == null) return;
+				editor.resize();
+			}, this, 0);
+		}, this);
 	},
 
 	members: {
 
+		__component: null,
+
 		_createContentElement: function() {
-			// Create a selectable and overflow enabled <div>
+			// Create a selectable and overflow disabled <div>
 			var element = new qx.html.Element("div", {
-				overflowX: "auto",
-				overflowY: "auto"
+				overflowX: "hidden",
+				overflowY: "hidden"
 			});
 			element.setSelectable(true);
 			return element;

@@ -394,7 +394,9 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		this._disposeArray("__disposeList");
 		var widgets = this.listWidgets();
 		for(var i = 0; i < widgets.length; i++) {
-			widgets[i].destroy();
+			var widget = widgets[i];
+			if(widget == null) continue;
+			widget.destroy();
 		}
 		delete this.__actions;
 		this.__parentComponent = null;

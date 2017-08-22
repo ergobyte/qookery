@@ -19,7 +19,7 @@
 qx.Theme.define("qookerydemo.theme.Theme", {
 
 	meta: {
-		appearance: qx.theme.modern.Appearance,
+		appearance: qookerydemo.theme.Appearance,
 		color: qx.theme.modern.Color,
 		decoration: qx.theme.modern.Decoration,
 		font: qx.theme.modern.Font,

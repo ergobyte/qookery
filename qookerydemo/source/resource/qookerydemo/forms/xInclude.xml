@@ -4,7 +4,7 @@
 -->
 <form xmlns="http://www.qookery.org/ns/Form" xmlns:xi="http://www.w3.org/2001/XInclude" column-flexes="1">
 
-	<import class="qookerydemo.contexts.QookeryDemo" />
+	<import class="qx.data.marshal.Json" />
 
 	<group-box label="'Layouts' demo" legend-position="top">
 		<xi:include href="qookerydemo/forms/layouts.xml" />
@@ -13,7 +13,7 @@
 	<group-box label="'Login Dialog' demo, with setup script" legend-position="top">
 		<xi:include xml:id="dialog" href="qookerydemo/forms/loginDialog.xml" />
 		<script>
-			$("#dialog").setModel($.QookeryDemo.createModel({
+			$("#dialog").setModel($.Json.createModel({
 				username: 'admin',
 				password: '1234'
 			}));

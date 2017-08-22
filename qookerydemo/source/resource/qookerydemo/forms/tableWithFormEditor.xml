@@ -5,7 +5,7 @@
 <form xmlns="http://www.qookery.org/ns/Form" column-count="2" column-flexes="1 0" row-flexes="0 1" spacing="10">
 
 	<import class="qookery.contexts.Qookery" />
-	<import class="qookerydemo.contexts.QookeryDemo" />
+	<import class="qx.data.marshal.Json" />
 
 	<label label="Hacker-Proof® Password Manager" col-span="2" />
 
@@ -25,7 +25,7 @@
 		<button label="Add Password">
 			<script event="execute">
 				$.Qookery.openWindow($("#editor"), {
-					model: $.QookeryDemo.createModel({ username: "New user", password: "", serial: "de ad be ef" }),
+					model: $.Json.createModel({ username: "New user", password: "", serial: "de ad be ef" }),
 					onClose: function(result) {
 						if(!result) return;
 						$("#passwords").getTableModel().appendRow(result);
@@ -35,8 +35,9 @@
 		</button>
 		<button label="Edit Password" id="editButton" enabled="false">
 			<script event="execute">
+				var json = qx.util.Serializer.toNativeObject($("#passwords").getSingleSelection());
 				$.Qookery.openWindow($("#editor"), {
-					model: $.QookeryDemo.cloneModel($("#passwords").getSingleSelection()),
+					model: $.Json.createModel(json, true),
 					onClose: function(result) {
 						if(!result) return;
 						$("#passwords").getTableModel().replaceRow(

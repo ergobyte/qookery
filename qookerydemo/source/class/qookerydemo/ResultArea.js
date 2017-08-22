@@ -16,13 +16,12 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookerydemo.ui.ResultArea",
+qx.Class.define("qookerydemo.ResultArea",
 {
 	extend: qx.ui.container.Scroll,
 
 	construct: function() {
 		this.base(arguments);
-		this.setPadding(10);
 	},
 
 	members: {

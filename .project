@@ -34,14 +34,5 @@
 				<arguments>1.0-projectRelativePath-matches-true-true-qookery[a-z]*/(api|build|source/script|source/resource/qookery[a-z]*/lib)</arguments>
 			</matcher>
 		</filter>
-		<filter>
-			<id>1438247180299</id>
-			<name></name>
-			<type>30</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-true-false-qookerydemo/source/resource/qookerydemo/editor</arguments>
-			</matcher>
-		</filter>
 	</filteredResources>
 </projectDescription>
