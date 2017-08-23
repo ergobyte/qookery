@@ -18,129 +18,83 @@
 
 /**
  * @asset(qookerydemo/*)
+ *
+ * @require(qx.bom.History)
+ * @require(qx.data.marshal.Json)
+ * @require(qx.util.Serializer)
  */
 qx.Class.define("qookerydemo.Application", {
 
 	extend: qx.application.Standalone,
 
 	statics: {
-		DEMOS: [
-			{ id: "helloWorld", label: "Hello, World!", formFile: "helloWorld.xml" },
-			{ id: "aboutDialog", label: "About Dialog", formFile: "aboutDialog.xml" },
-			{ id: "loginDialog", label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
-			{ id: "layouts", label: "Layouts", formFile: "layouts.xml" },
-			{ id: "stack", label: "Stack", formFile: "stack.xml" },
-			{ id: "translations", label: "Translations", formFile: "translations.xml" },
-			{ id: "tableWithFormEditor", label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
-			{ id: "masterDetails", label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
-			{ id: "multipleConnections", label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
-			{ id: "flowControl", label: "Flow Control", formFile: "flowControl.xml" },
-			{ id: "xInclude", label: "XInclude", formFile: "xInclude.xml" },
-			{ id: "richText", label: "Extension: CKeditor", formFile: "richText.xml", modelFile: "carConfiguration.json" },
-			{ id: "calendar", label: "Extension: FullCalendar.io", formFile: "calendar.xml" },
-			{ id: "maps", label: "Extension: Google Maps", formFile: "maps.xml", modelFile: "carConfiguration.json" }
+		CONFIGURATIONS: [
+			{ name: "demo.helloWorld", label: "Demo: Hello, World!", formFile: "demos/helloWorld.xml" },
+			{ name: "demo.layouts", label: "Demo: Layouts", formFile: "demos/layouts.xml" },
+			{ name: "demo.stack", label: "Demo: Stack", formFile: "demos/stack.xml" },
+			{ name: "demo.flowControl", label: "Demo: Flow Control", formFile: "demos/flowControl.xml" },
+			{ name: "demo.translations", label: "Demo: Translations", formFile: "demos/translations.xml" },
+			{ name: "demo.connections", label: "Demo: Connections", formFile: "demos/connections.xml", modelFile: "carConfiguration.json" },
+			{ name: "demo.xInclude", label: "Demo: XInclude", formFile: "demos/xInclude.xml" },
+			{ name: "example.loginDialog", label: "Example: Login Dialog", formFile: "examples/loginDialog.xml", modelFile: "loginCredentials.json" },
+			{ name: "example.tableWithFormEditor", label: "Example: Table with Form Editor", formFile: "examples/tableWithFormEditor.xml", modelFile: "passwordList.json" },
+			{ name: "example.masterDetails", label: "Example: Master Details", formFile: "examples/masterDetails.xml", modelFile: "passwordList.json" },
+			{ name: "extension.richtext", label: "Extension: CKeditor", formFile: "extensions/richText.xml", modelFile: "carConfiguration.json" },
+			{ name: "extension.calendar", label: "Extension: FullCalendar.io", formFile: "extensions/calendar.xml" },
+			{ name: "extension.maps", label: "Extension: Google Maps", formFile: "extensions/maps.xml", modelFile: "carConfiguration.json" },
+			{ name: "this.rootForm", label: "This Application: Root Form", formFile: "application.xml" },
+			{ name: "this.aboutDialog", label: "This Application: About Dialog", formFile: "aboutDialog.xml" }
 		]
 	},
 
 	members: {
 
-		__pendingComponents: null,
-		__toolbar: null,
-		__xmlEditor: null,
-		__resultArea: null,
-		__jsonEditor: null,
+		__applicationForm: null,
 
 		main: function() {
 			this.base(arguments);
+
+			// Setup Qooxdoo
 			if(qx.core.Environment.get("qx.debug")) {
 				qx.log.appender.Native;
 				qx.log.appender.Console;
 			}
 
+			// Setup Qookery
 			qookery.Qookery.setOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY, "AIzaSyB6WP2UY69lxzzLtpdTw4GVBlXRyLF4_Pw");
+			qookery.Qookery.getRegistry().registerComponentType(
+					"{http://www.qookery.org/ns/Form/Demo}demo-selector",
+					qookery.impl.WrapperComponent.bind(null, qookerydemo.DemoSelector));
+			qookery.Qookery.getRegistry().registerComponentType(
+					"{http://www.qookery.org/ns/Form/Demo}result-area",
+					qookery.impl.WrapperComponent.bind(null, qookerydemo.ResultArea));
 
-			this.__pendingComponents = [ qookerydemo.ui.XmlEditor, qookerydemo.ui.JsonEditor ];
-			this.__toolbar = new qookerydemo.ui.Toolbar();
-			this.__xmlEditor = new qookerydemo.ui.XmlEditor();
-			this.__jsonEditor = new qookerydemo.ui.JsonEditor();
-			this.__resultArea = new qookerydemo.ui.ResultArea();
+			// Load application form and install it in root composite
+			var applicationXml = qookery.Qookery.getService("ResourceLoader", true).loadResource("qookerydemo/forms/application.xml");
+			var applicationDocument = qx.xml.Document.fromString(applicationXml);
+			var parser = qookery.Qookery.createFormParser({ isRoot: true });
+			try {
+				var component = this.__applicationForm = parser.parseXmlDocument(applicationDocument);
+				this.getRoot().add(component.getMainWidget(), { edge: 0 });
+			}
+			catch(e) {
+				this.error("Error creating application root form", e);
+				return;
+			}
+			finally {
+				parser.dispose();
+			}
 
-			var verticalSplitter = new qx.ui.splitpane.Pane("vertical");
-			verticalSplitter.setDecorator(new qx.ui.decoration.Decorator().set({ width: 0 }));
-			verticalSplitter.setOffset(0);
-			verticalSplitter.add(this.__xmlEditor);
-			verticalSplitter.add(this.__jsonEditor);
-
-			var horizontalSplitter = new qx.ui.splitpane.Pane("horizontal");
-			horizontalSplitter.add(verticalSplitter);
-			horizontalSplitter.add(this.__resultArea);
-
-			var mainContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
-			mainContainer.add(this.__toolbar, { flex: 0 });
-			mainContainer.add(horizontalSplitter, { flex: 1 });
-			this.getRoot().add(mainContainer, { edge: 0 });
-
-			qx.bom.History.getInstance().addListener("request", function(event) {
-				var demoId = event.getData();
-				if(demoId == null) { return; }
-				this.loadDemo(demoId);
-			}, this);
-		},
-
-		onComponentReady: function(component) {
-			qx.lang.Array.remove(this.__pendingComponents, component);
-			if(this.__pendingComponents.length > 0) { return; }
-
-			var initialDemoId = qx.bom.History.getInstance().getState();
-			if(initialDemoId == null) { initialDemoId = "helloWorld"; }
-			this.loadDemo(initialDemoId);
+			// Remove splash screen
 			qx.dom.Element.remove(document.getElementById("splash"));
 		},
 
-		loadDemo: function(demoId) {
-			var demoConfiguration = qookerydemo.Application.DEMOS.filter(function(configuration) {
-				return configuration["id"] === demoId;
-			})[0];
-			if(demoConfiguration == null) {
-				throw new Error("Demo " + demoId + " not found");
-			}
-			var formFile = demoConfiguration["formFile"];
-			var formUrl = "resource/qookerydemo/forms/" + formFile;
-			qookery.contexts.Qookery.loadResource(formUrl, this, function(data) {
-				this.setXmlEditorCode(data);
-				this.runCode();
-			});
-			var modelFile = demoConfiguration["modelFile"];
-			if(!modelFile) {
-				this.setModelAreaCode("null");
-				return;
-			}
-			var modelUrl = "resource/qookerydemo/models/" + modelFile;
-			qookery.contexts.Qookery.loadResource(modelUrl, this, function(data) {
-				this.setModelAreaCode(data);
-			});
-		},
-
-		setModelAreaCode: function(code) {
-			this.__jsonEditor.setCode(code);
-		},
-
-		setXmlEditorCode: function(code) {
-			this.__xmlEditor.setCode(code);
-		},
-
-		runCode: function() {
-			var xmlCode = this.__xmlEditor.getCode();
-			if(!xmlCode) { return; }
-			this.__resultArea.loadForm(xmlCode);
-		},
-
-		setFormModel: function(model) {
-			this.__resultArea.getFormComponent().setModel(model);
+		getDemoConfiguration: function(name) {
+			return this.constructor.CONFIGURATIONS.filter(function(c) { return c["name"] === name; })[0];
 		}
 	},
 
 	destruct: function() {
-		this._disposeObjects("__toolbar", "__xmlEditor", "__jsonEditor", "__resultArea" );
+		this._disposeObjects("__applicationForm");
 	}
 });

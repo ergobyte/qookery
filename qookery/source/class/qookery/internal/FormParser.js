@@ -102,6 +102,8 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "false": return false;
 				}
 				return text;
+			case "Expression":
+				return this.__evaluateExpression(component, text);
 			case "Integer":
 				return parseInt(text, 10);
 			case "IntegerList":
@@ -122,7 +124,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				var messageId = text.substring(1);
 				return component["tr"](messageId);
 			case "QName":
-				return this.__resolveQName(text);
+				return this.resolveQName(text);
 			case "Size":
 				return this.constructor.NAMED_SIZES[text] || (isNaN(text) ? text : parseInt(text, 10));
 			case "StringList":
@@ -157,57 +159,87 @@ qx.Class.define("qookery.internal.FormParser", {
 			return this.__namespaces[prefix];
 		},
 
+		resolveQName: function(qName) {
+			if(qName.charAt(0) === "{") return qName;
+			var colonPos = qName.indexOf(":");
+			if(colonPos === -1)
+				return "{" + this.__defaultNamespace + "}" + qName;
+			var prefix = qName.substr(0, colonPos);
+			var namespaceUri = this.resolveNamespacePrefix(prefix);
+			if(!namespaceUri)
+				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
+			var localPart = qName.substring(colonPos + 1);
+			return "{" + namespaceUri + "}" + localPart;
+		},
+
 		// Internal methods
 
 		__parseComponent: function(componentElement, parentComponent) {
 
-			// Check conditionals
-
-			var skipIfExpression = this.getAttribute(componentElement, "skip-if");
-			if(skipIfExpression != null) {
-				var skip = this.__evaluateExpression(parentComponent, skipIfExpression);
-				if(skip) return null;
-			}
-
 			// Instantiate and initialize new component
 
 			var elementName = qx.dom.Node.getName(componentElement);
-			var componentQName = this.__resolveQName(elementName);
+			var componentQName = this.resolveQName(elementName);
 			var component = this.constructor.REGISTRY.createComponent(componentQName, parentComponent);
-			component.prepare(this, componentElement);
+			try {
+				component.prepare(this, componentElement);
 
-			// Id registration
+				// Id registration
 
-			var componentId = this.getAttribute(componentElement, "id");
-			if(componentId != null && parentComponent != null)
-				parentComponent.getForm().putComponent(componentId, component);
+				var componentId = this.getAttribute(componentElement, "id");
+				if(componentId != null && parentComponent != null)
+					parentComponent.getForm().putComponent(componentId, component);
 
-			// Attribute parsing
+				// Attribute parsing
 
-			var attributes = this.parseAttributes(component, componentElement);
+				var attributes = this.parseAttributes(component, componentElement);
+				var useAttributes = this.getAttribute(componentElement, "use-attributes");
+				if(useAttributes != null) useAttributes.split(/\s+/).forEach(function(variableName) {
+					var useAttributes = component.getForm().getVariable(variableName);
+					if(!qx.lang.Type.isObject(useAttributes))
+						throw new Error("Variable specified in use-attributes not found or of incorrect type");
+					qx.lang.Object.mergeWith(attributes, useAttributes);
+				});
 
-			// Component creation
-			component.create(attributes);
+				// Component creation
 
-			// Children parsing
+				component.create(attributes);
 
-			this.__parseStatementBlock(componentElement, component);
+				// Children parsing
 
-			// Component setup
+				this.__parseStatementBlock(componentElement, component);
 
-			component.setup(this, attributes);
+				// Component setup
 
-			// Attach to container
+				component.setup(this, attributes);
 
-			if(parentComponent != null) {
-				var display = this.getAttribute(componentElement, "display", "inline");
-				if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
-					throw new Error("Attempted to add a component to a non-container component");
-				parentComponent.add(component, display);
+				// Attach to container
+
+				if(parentComponent != null) {
+					var display = this.getAttribute(componentElement, "display", "inline");
+					switch(display) {
+					case "inline":
+						if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
+							throw new Error("Attempted to add a component to a non-container component");
+						parentComponent.add(component);
+						break;
+					case "none":
+						// Do nothing
+						break;
+					default:
+						throw new Error("Unsupported display attribute value");
+					}
+				}
+
+				// Return new component
+				var c = component;
+				component = null;
+				return c;
 			}
-
-			// Return new component
-			return component;
+			finally {
+				if(component != null)
+					component.dispose();
+			}
 		},
 
 		__parseStatementBlock: function(blockElement, component) {
@@ -219,7 +251,7 @@ qx.Class.define("qookery.internal.FormParser", {
 				var elementName = qx.dom.Node.getName(statementElement);
 				if(elementName === "parsererror")
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
-				var elementQName = this.__resolveQName(elementName);
+				var elementQName = this.resolveQName(elementName);
 
 				// First consult the component registry
 				if(this.constructor.REGISTRY.isComponentTypeAvailable(elementQName)) {
@@ -283,6 +315,11 @@ qx.Class.define("qookery.internal.FormParser", {
 				var result = this.__evaluateExpression(component, expression);
 				if(!result) return false;
 			}
+			var mediaQuery = this.getAttribute(selectionElement, "media-query");
+			if(mediaQuery != null) {
+				var query = this.__getMediaQuery(mediaQuery);
+				if(!query.isMatching()) return false;
+			}
 			this.__parseStatementBlock(selectionElement, component);
 			return true;
 		},
@@ -318,9 +355,10 @@ qx.Class.define("qookery.internal.FormParser", {
 			var actionNames = this.getAttribute(scriptElement, "action");
 			var functionNames = this.getAttribute(scriptElement, "name");
 			var eventNames = this.getAttribute(scriptElement, "event");
+			var mediaQuery = this.getAttribute(scriptElement, "media-query");
 			var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
 			var execute = this.getAttribute(scriptElement, "execute") === "true";
-			if(actionNames == null && functionNames == null && eventNames == null) execute = true;
+			if(!execute && (actionNames == null && functionNames == null && eventNames == null && mediaQuery == null)) execute = true;
 
 			// Create list of target components
 			var componentIds = this.getAttribute(scriptElement, "component");
@@ -342,16 +380,31 @@ qx.Class.define("qookery.internal.FormParser", {
 						throw error;
 					}
 				}
-				if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
-					component.getForm().getScriptingContext()[functionName] = componentFunction;
-				});
-				if(actionNames != null) actionNames.split(/\s+/).forEach(function(actionName) {
-					component.setAction(actionName, componentFunction);
-				});
-				if(eventNames != null) eventNames.split(/\s+/).forEach(function(eventName) {
-					component.addEventHandler(eventName, componentFunction, onlyOnce);
-				});
-				if(execute) componentFunction();
+				if(mediaQuery != null) {
+					var query = this.__getMediaQuery(mediaQuery);
+					if(!(execute && onlyOnce)) {
+						var methodName = onlyOnce ? "addListenerOnce" : "addListener";
+						var listenerId = query[methodName]("change", function(data) {
+							componentFunction(data["matches"], data["query"]);
+						});
+						component.addToDisposeList({ dispose: function() {
+							query.removeListenerById(listenerId);
+						} });
+					}
+					if(execute) componentFunction(query.isMatching(), mediaQuery);
+				}
+				else {
+					if(functionNames != null) functionNames.split(/\s+/).forEach(function(functionName) {
+						component.getForm().getScriptingContext()[functionName] = componentFunction;
+					});
+					if(actionNames != null) actionNames.split(/\s+/).forEach(function(actionName) {
+						component.setAction(actionName, componentFunction);
+					});
+					if(eventNames != null) eventNames.split(/\s+/).forEach(function(eventName) {
+						component.addEventHandler(eventName, componentFunction, onlyOnce);
+					});
+					if(execute) componentFunction();
+				}
 			}, this);
 		},
 
@@ -376,16 +429,11 @@ qx.Class.define("qookery.internal.FormParser", {
 			return false;
 		},
 
-		__resolveQName: function(qname) {
-			var colonPos = qname.indexOf(":");
-			if(colonPos === -1)
-				return "{" + this.__defaultNamespace + "}" + qname;
-			var prefix = qname.substr(0, colonPos);
-			var namespaceUri = this.resolveNamespacePrefix(prefix);
-			if(!namespaceUri)
-				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
-			var localPart = qname.substring(colonPos + 1);
-			return "{" + namespaceUri + "}" + localPart;
+		__getMediaQuery: function(mediaQuery) {
+			var query = this.constructor.REGISTRY.getMediaQuery(mediaQuery);
+			if(query != null)
+				return query;
+			return new qx.bom.MediaQuery(mediaQuery);
 		},
 
 		__evaluateExpression: function(component, expression) {

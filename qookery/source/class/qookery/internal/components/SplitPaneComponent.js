@@ -37,16 +37,16 @@ qx.Class.define("qookery.internal.components.SplitPaneComponent", {
 
 		// Creation
 
-		create: function(attributes) {
-			attributes["layout"] = "none";
-			this.base(arguments, attributes);
-		},
-
 		_createContainerWidget: function(attributes) {
 			var orientation = this.getAttribute("orientation", "horizontal");
 			var pane = new qx.ui.splitpane.Pane(orientation);
 			this._applyLayoutAttributes(pane, attributes);
 			return pane;
+		},
+
+		getAttribute: function(attributeName, defaultValue) {
+			if(attributeName === "layout") return "none";
+			return this.base(arguments, attributeName, defaultValue);
 		},
 
 		add: function(childComponent) {

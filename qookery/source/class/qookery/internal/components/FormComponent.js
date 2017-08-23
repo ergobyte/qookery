@@ -16,18 +16,6 @@
 	limitations under the License.
 */
 
-/**
- * Forms are containers that lay the necessary groundwork for Qookery components
- *
- * <p>Among others, they cater for:</p>
- * <ul>
- *	<li>context bindings</li>
- *	<li>client scripting</li>
- *	<li>model connections</li>
- *	<li>component validation</li>
- *	<li>translation support</li>
- * </ul>
- */
 qx.Class.define("qookery.internal.components.FormComponent", {
 
 	extend: qookery.internal.components.CompositeComponent,
@@ -59,7 +47,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		__scriptingContext: null,
 		__serviceResolver: null,
 		__operationQueue: null,
-		__disposeList: null,
 
 		// Metadata
 
@@ -173,11 +160,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			if(context == null)
 				throw new Error("Scripting context is not available");
 			return context;
-		},
-
-		addToDisposeList: function(disposable) {
-			if(!this.__disposeList) this.__disposeList = [ ];
-			this.__disposeList.push(disposable);
 		},
 
 		// Validation
@@ -327,9 +309,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			}
 			var value = provider.getVariable(variableName);
 			if(value == null) {
-				var defaultExpression = formParser.getAttribute(variableElement, "default");
-				if(defaultExpression != null)
-					value = this.executeClientCode(qx.lang.String.format("return (%1);", [ defaultExpression ]));
+				var defaultValue = formParser.getAttribute(variableElement, "default");
+				if(defaultValue != null) {
+					var typeName = formParser.getAttribute(variableElement, "type", "Expression");
+					value = formParser.parseValue(this, typeName, defaultValue);
+				}
 				if(value === undefined) value = null;
 				if(value === null && formParser.getAttribute(variableElement, "required") === "true")
 					throw new Error("Value for required variable '" + variableName + "' is missing");
@@ -414,7 +398,6 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	destruct: function() {
 		for(var i = 0; i < this.__connections.length; i++) this.__connections[i].disconnect();
-		this._disposeArray("__disposeList");
 		this.__components = null;
 		this.__validations = null;
 		this.__userContextMap = null;

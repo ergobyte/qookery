@@ -27,6 +27,25 @@
 
 	<!-- Simple types -->
 
+	<simpleType name="atom-element-visibility"><restriction base="token">
+		<enumeration value="both" />
+		<enumeration value="label" />
+		<enumeration value="icon" />
+	</restriction></simpleType>
+
+	<simpleType name="cell-renderer"><union memberTypes="QName"><simpleType><restriction base="token">
+		<enumeration value="boolean" />
+		<enumeration value="date" />
+		<enumeration value="debug" />
+		<enumeration value="default" />
+		<enumeration value="html" />
+		<enumeration value="image" />
+		<enumeration value="model" />
+		<enumeration value="number" />
+		<enumeration value="password" />
+		<enumeration value="string" />
+	</restriction></simpleType></union></simpleType>
+
 	<simpleType name="display">
 		<restriction base="token">
 			<enumeration value="inline" />
@@ -73,7 +92,7 @@
 		</restriction>
 	</simpleType>
 
-	<simpleType name="layout">
+	<simpleType name="layout"><union memberTypes="QName"><simpleType>
 		<restriction base="token">
 			<enumeration value="none" />
 			<enumeration value="basic" />
@@ -83,7 +102,19 @@
 			<enumeration value="h-box" />
 			<enumeration value="v-box" />
 		</restriction>
-	</simpleType>
+	</simpleType></union></simpleType>
+
+	<simpleType name="media-query"><union memberTypes="string"><simpleType><restriction base="token">
+		<enumeration value="small-up" />
+		<enumeration value="small-only" />
+		<enumeration value="medium-up" />
+		<enumeration value="medium-only" />
+		<enumeration value="large-up" />
+		<enumeration value="large-only" />
+		<enumeration value="xlarge-up" />
+		<enumeration value="xlarge-only" />
+		<enumeration value="xxlarge-up" />
+	</restriction></simpleType></union></simpleType>
 
 	<simpleType name="orientation">
 		<restriction base="token">
@@ -173,6 +204,21 @@
 		</restriction>
 	</simpleType>
 
+	<simpleType name="value-type"><restriction base="token">
+		<enumeration value="Boolean" />
+		<enumeration value="Expression" />
+		<enumeration value="Integer" />
+		<enumeration value="IntegerList" />
+		<enumeration value="Number" />
+		<enumeration value="NumberList" />
+		<enumeration value="RegularExpression" />
+		<enumeration value="ReplaceableString" />
+		<enumeration value="QName" />
+		<enumeration value="Size" />
+		<enumeration value="String" />
+		<enumeration value="StringList" />
+	</restriction></simpleType>
+
 	<simpleType name="vertical-alignment">
 		<restriction base="token">
 			<enumeration value="top" />
@@ -206,6 +252,8 @@
 		<attribute name="row-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
 		<attribute name="column-alignments"><simpleType><list><simpleType><union memberTypes="q:horizontal-alignment q:vertical-alignment" /></simpleType></list></simpleType></attribute>
 		<!-- Flow layout specific attributes -->
+		<attribute name="layout-align-x" type="q:horizontal-alignment" default="left" />
+		<attribute name="layout-align-y" type="q:vertical-alignment" default="top" />
 		<attribute name="reversed" type="boolean" default="false" />
 		<!-- HBox/VBox layout specific attributes -->
 		<attribute name="separator" type="token" />
@@ -263,36 +311,24 @@
 		<attribute name="display" type="q:display" default="inline" />
 		<attribute name="tab-index" type="q:tab-index" />
 		<!-- Layout item -->
-		<attribute name="width" type="q:size">
-			<annotation><documentation>
-				Component preferred width in pixels or as one of the named sizes.
-			</documentation></annotation>
-		</attribute>
-		<attribute name="height" type="q:size">
-			<annotation><documentation>
+		<attribute name="width" type="q:size"><annotation><documentation>
+			Component preferred width in pixels or as one of the named sizes.
+		</documentation></annotation></attribute>
+		<attribute name="height" type="q:size"><annotation><documentation>
 				Component preferred height in pixels or as one of the named sizes.
-			</documentation></annotation>
-		</attribute>
-		<attribute name="min-width" type="q:size">
-			<annotation><documentation>
-				Component minimum width in pixels or one of the named sizes.
-			</documentation></annotation>
-		</attribute>
-		<attribute name="min-height" type="q:size">
-			<annotation><documentation>
-				Component minimum height in pixels or one of the named sizes.
-			</documentation></annotation>
-		</attribute>
-		<attribute name="max-width" type="q:size">
-			<annotation><documentation>
-				Component maximum width in pixels or one of the named sizes.
-			</documentation></annotation>
-		</attribute>
-		<attribute name="max-height" type="q:size">
-			<annotation><documentation>
-				Component maximum height in pixels or one of the named sizes.
-			</documentation></annotation>
-		</attribute>
+		</documentation></annotation></attribute>
+		<attribute name="min-width" type="q:size"><annotation><documentation>
+			Component minimum width in pixels or one of the named sizes.
+		</documentation></annotation></attribute>
+		<attribute name="min-height" type="q:size"><annotation><documentation>
+			Component minimum height in pixels or one of the named sizes.
+		</documentation></annotation></attribute>
+		<attribute name="max-width" type="q:size"><annotation><documentation>
+			Component maximum width in pixels or one of the named sizes.
+		</documentation></annotation></attribute>
+		<attribute name="max-height" type="q:size"><annotation><documentation>
+			Component maximum height in pixels or one of the named sizes.
+		</documentation></annotation></attribute>
 		<attribute name="margin-top" type="integer" default="0" />
 		<attribute name="margin-right" type="integer" default="0" />
 		<attribute name="margin-bottom" type="integer" default="0" />
@@ -308,16 +344,12 @@
 		<attribute name="allow-stretch" type="boolean" default="true" />
 		<attribute name="allow-stretch-x" type="boolean" default="true" />
 		<attribute name="allow-stretch-y" type="boolean" default="true" />
-		<attribute name="align-x" type="q:horizontal-alignment">
-			<annotation><documentation>
-				Horizontal alignment for component positioning purposes
-			</documentation></annotation>
-		</attribute>
-		<attribute name="align-y" type="q:vertical-alignment">
-			<annotation><documentation>
-				Vertical alignment for component positioning purposes
-			</documentation></annotation>
-		</attribute>
+		<attribute name="align-x" type="q:horizontal-alignment"><annotation><documentation>
+			Horizontal alignment for component positioning purposes
+		</documentation></annotation></attribute>
+		<attribute name="align-y" type="q:vertical-alignment"><annotation><documentation>
+			Vertical alignment for component positioning purposes
+		</documentation></annotation></attribute>
 		<!-- Widget -->
 		<attribute name="appearance" type="string" />
 		<attribute name="cursor" type="string" />
@@ -341,13 +373,19 @@
 		<attribute name="row-span" type="positiveInteger" default="1" />
 		<attribute name="stretch" type="boolean" default="false" />
 		<attribute name="top" type="nonNegativeInteger" default="0" />
+		<!-- Additional attributes -->
+		<attribute name="use-attributes"><annotation><documentation>
+			A list of variable names that provide additional attributes to use with this declaration
+		</documentation></annotation><simpleType><list itemType="q:javascript-identifier" /></simpleType></attribute>
 	</complexType>
 
 	<complexType name="atom-component.attributes"><complexContent><extension base="q:component.attributes">
 		<attribute name="center" type="boolean" default="false" />
+		<attribute name="gap" type="nonNegativeInteger" default="4" />
 		<attribute name="icon" type="anyURI" />
 		<attribute name="icon-position" type="q:icon-position" default="left" />
 		<attribute name="rich" type="boolean" default="false" />
+		<attribute name="show" type="q:atom-element-visibility" default="both" />
 		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType>
 
@@ -357,11 +395,9 @@
 
 	<complexType name="editable-component.attributes"><complexContent><extension base="q:component.attributes">
 		<attribute name="connect" type="string" />
-		<attribute name="create-label" type="boolean" default="true">
-			<annotation><documentation>
-				When set, an additional widget will be created in order to hold component's label
-			</documentation></annotation>
-		</attribute>
+		<attribute name="create-label" type="boolean" default="true"><annotation><documentation>
+			When set, an additional widget will be created in order to hold component's label
+		</documentation></annotation></attribute>
 		<attribute name="format" type="q:format-specification" />
 		<attribute name="initialize" type="q:javascript-expression" />
 		<attribute name="live-validate" default="false">
@@ -423,6 +459,14 @@
 			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 	</extension></complexContent></complexType>
+
+	<complexType name="if-else">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<group ref="q:statements" />
+		</choice>
+		<attribute name="expression" type="q:javascript-expression" />
+		<attribute name="media-query" type="q:media-query" />
+	</complexType>
 
 	<!-- Element groups -->
 
@@ -515,35 +559,25 @@
 				</documentation></annotation>
 				<complexType>
 					<!-- Source, exactly one must be specified -->
-					<attribute name="class" type="q:qooxdoo-class-name">
-						<annotation><documentation>
-							Name of a Qooxdoo static class to import via qx.Class.getByName().
-							Mutually exclusive with the 'service' attribute.
-						</documentation></annotation>
-					</attribute>
-					<attribute name="form" type="token">
-						<annotation><documentation>
-							ID of form to look for within form's ancestors
-						</documentation></annotation>
-					</attribute>
-					<attribute name="service" type="q:qooxdoo-class-name">
-						<annotation><documentation>
-							Name of a service to import by using the parser's service resolver or qooxdoo.Qooxdoo.getService() if unset.
-							Mutually exclusive with the 'class' attribute.
-						</documentation></annotation>
-					</attribute>
+					<attribute name="class" type="q:qooxdoo-class-name"><annotation><documentation>
+						Name of a Qooxdoo static class to import via qx.Class.getByName().
+						Mutually exclusive with the 'service' attribute.
+					</documentation></annotation></attribute>
+					<attribute name="form" type="token"><annotation><documentation>
+						ID of form to look for within form's ancestors
+					</documentation></annotation></attribute>
+					<attribute name="service" type="q:qooxdoo-class-name"><annotation><documentation>
+						Name of a service to import by using the parser's service resolver or qooxdoo.Qooxdoo.getService() if unset.
+						Mutually exclusive with the 'class' attribute.
+					</documentation></annotation></attribute>
 					<!-- Options -->
-					<attribute name="optional" type="boolean" default="false">
-						<annotation><documentation>
-							If true, no exception will be thrown in case importing was not possible.
-						</documentation></annotation>
-					</attribute>
-					<attribute name="variable" type="q:javascript-identifier" use="optional">
-						<annotation><documentation>
-							The name of the variable to create into the scripting context for imported object.
-							If not set, the last segment of the import's dot-separated name will be used.
-						</documentation></annotation>
-					</attribute>
+					<attribute name="optional" type="boolean" default="false"><annotation><documentation>
+						If true, no exception will be thrown in case importing was not possible.
+					</documentation></annotation></attribute>
+					<attribute name="variable" type="q:javascript-identifier" use="optional"><annotation><documentation>
+						The name of the variable to create into the scripting context for imported object.
+						If not set, the last segment of the import's dot-separated name will be used.
+					</documentation></annotation></attribute>
 				</complexType>
 			</element>
 			<element name="bind" minOccurs="0" maxOccurs="unbounded">
@@ -751,18 +785,7 @@
 	</complexType></element>
 
 	<element name="table-column"><complexType>
-		<attribute name="cell-renderer" default="model"><simpleType><restriction base="token">
-			<enumeration value="boolean" />
-			<enumeration value="date" />
-			<enumeration value="debug" />
-			<enumeration value="default" />
-			<enumeration value="html" />
-			<enumeration value="image" />
-			<enumeration value="model" />
-			<enumeration value="number" />
-			<enumeration value="password" />
-			<enumeration value="string" />
-		</restriction></simpleType></attribute>
+		<attribute name="cell-renderer" default="model" type="q:cell-renderer" />
 		<attribute name="color" type="string" />
 		<attribute name="connect" type="string" />
 		<attribute name="editable" type="boolean" default="false" />
@@ -791,33 +814,21 @@
 
 	<!-- Statement block non-component elements -->
 
-	<element name="else">
+	<element name="else" type="q:if-else">
 		<annotation><documentation>
 			Conditional parsing of children elements when previous conditions failed, optionally depending on evaluation of JS expression
 		</documentation></annotation>
-		<complexType>
-			<choice minOccurs="0" maxOccurs="unbounded">
-				<group ref="q:statements" />
-			</choice>
-			<attribute name="expression" type="q:javascript-expression" use="optional" />
-		</complexType>
 	</element>
 
-	<element name="if">
+	<element name="if" type="q:if-else">
 		<annotation><documentation>
 			Conditional parsing of children elements depending on evaluation of JS expression
 		</documentation></annotation>
-		<complexType>
-			<choice minOccurs="0" maxOccurs="unbounded">
-				<group ref="q:statements" />
-			</choice>
-			<attribute name="expression" type="q:javascript-expression" use="required" />
-		</complexType>
 	</element>
 
 	<element name="script">
 		<annotation><documentation>
-			Add a JavaScript script to component
+			Add a JavaScript script to one or more components
 		</documentation></annotation>
 		<complexType>
 			<simpleContent>
@@ -835,9 +846,12 @@
 					<attribute name="event"><annotation><documentation>
 						The name(s) of the component's event(s) the script should be attached to.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
-					<attribute name="execute" type="boolean"><annotation><documentation>
+					<attribute name="execute" type="boolean" default="false"><annotation><documentation>
 						If true, execute script immediately in addition to any other performed attachments/registrations.
-						This attribute is false by default, unless no action, function and event registration is requested.
+						This attribute is false by default, unless no action, function, event or media query is specified.
+					</documentation></annotation></attribute>
+					<attribute name="media-query" type="q:media-query"><annotation><documentation>
+						A CSS3 media query that will invoke script each time its state changes
 					</documentation></annotation></attribute>
 					<attribute name="name"><annotation><documentation>
 						The name(s) of the function(s) to register into the form context ("$") for later execution of script.
@@ -906,7 +920,10 @@
 				The name of an existing variable whose value implements IVariableProvider and will provide new variable - defaults to 'Form'
 			</documentation></annotation></attribute>
 			<attribute name="default" type="q:javascript-expression"><annotation><documentation>
-				An expression that provides a default value, in case variable value was undefined or null during parser initialization
+				A default value to set as variable's value if not available during parsing
+			</documentation></annotation></attribute>
+			<attribute name="type" type="q:value-type" default="Expression"><annotation><documentation>
+				The type of the default value, defaults to JavaScript expression if unspecified
 			</documentation></annotation></attribute>
 			<attribute name="required" type="boolean" default="false"><annotation><documentation>
 				When true, a non-null value is required for form parsing to continue

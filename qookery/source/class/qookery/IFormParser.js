@@ -98,6 +98,11 @@ qx.Interface.define("qookery.IFormParser", {
 		 * @param prefix {String} the prefix to resolve
 		 * @return {String} URI or <code>null</code>
 		 */
-		resolveNamespacePrefix: function(prefix) { }
+		resolveNamespacePrefix: function(prefix) { },
+
+		/**
+		 * Return the James Clark string representation of a resolved QName
+		 */
+		resolveQName: function(qName) { }
 	}
 });

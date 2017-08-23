@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	A "master-details" layout
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1" row-flexes="0 1 0" spacing="10">
+<form xmlns="http://www.qookery.org/ns/Form"
+		column-flexes="1" row-flexes="0 1 0" spacing="10">
 
 	<table connect="passwords" label="Secure® Password Manager">
 		<table-model class="qookery.impl.DefaultTableModel" />

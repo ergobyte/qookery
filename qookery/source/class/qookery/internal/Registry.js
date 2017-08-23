@@ -41,6 +41,17 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["Registry"] = partition["qookery.IRegistry"];
 		partition["ResourceLoader"] = partition["qookery.IResourceLoader"];
 
+		partition = this.__createPartition(qookery.IRegistry.P_MEDIA_QUERY);
+		partition["small-up"] = "only screen";
+		partition["small-only"] = "only screen and (max-width: 40em)"; // Mobile screens, width up to 640px
+		partition["medium-up"] = "only screen and (min-width: 40.063em)";
+		partition["medium-only"] = "only screen and (min-width: 40.063em) and (max-width: 64em)"; // Tablet screens, width up to 1024px
+		partition["large-up"] = "only screen and (min-width: 64.063em)";
+		partition["large-only"] = "only screen and (min-width: 64.063em) and (max-width: 90em)"; // Large screens, width up to1440px
+		partition["xlarge-up"] = "only screen and (min-width: 90.063em)";
+		partition["xlarge-only"] = "only screen and (min-width: 90.063em) and (max-width: 120em)"; // Extra large screens, width up to 1920px
+		partition["xxlarge-up"] = "only screen and (min-width: 120.063em)";
+
 		partition = this.__createPartition(qookery.IRegistry.P_MODEL_PROVIDER);
 		partition["default"] = qookery.impl.DefaultModelProvider.getInstance();
 
@@ -51,12 +62,12 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["string"] = qookery.internal.validators.StringValidator.getInstance();
 
 		partition = this.__createPartition(qookery.IRegistry.P_LAYOUT_FACTORY);
-		partition["basic"] = qookery.internal.layouts.BasicLayoutFactory.getInstance();
-		partition["flow"] = qookery.internal.layouts.FlowLayoutFactory.getInstance();
-		partition["grid"] = qookery.internal.layouts.GridLayoutFactory.getInstance();
-		partition["grow"] = qookery.internal.layouts.GrowLayoutFactory.getInstance();
-		partition["h-box"] = qookery.internal.layouts.HBoxLayoutFactory.getInstance();
-		partition["v-box"] = qookery.internal.layouts.VBoxLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}basic"] = qookery.internal.layouts.BasicLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}flow"] = qookery.internal.layouts.FlowLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}grid"] = qookery.internal.layouts.GridLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}grow"] = qookery.internal.layouts.GrowLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}h-box"] = qookery.internal.layouts.HBoxLayoutFactory.getInstance();
+		partition["{http://www.qookery.org/ns/Form}v-box"] = qookery.internal.layouts.VBoxLayoutFactory.getInstance();
 
 		partition = this.__createPartition(qookery.IRegistry.P_COMPONENT);
 		partition["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
@@ -99,34 +110,34 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["number"] = qookery.internal.formats.NumberFormat;
 
 		partition = this.__createPartition(qookery.IRegistry.P_CELL_RENDERER_FACTORY);
-		partition["boolean"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}boolean"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Boolean();
 		};
-		partition["date"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}date"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Date(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["debug"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}debug"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Debug();
 		};
-		partition["default"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}default"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Default();
 		};
-		partition["html"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}html"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Html(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["image"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}image"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Image(column["width"], column["height"]);
 		};
-		partition["model"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}model"] = function(component, column) {
 			return new qookery.internal.components.table.CellRenderer(component, column);
 		};
-		partition["number"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}number"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Number(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
-		partition["password"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}password"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Password();
 		};
-		partition["string"] = function(component, column) {
+		partition["{http://www.qookery.org/ns/Form}string"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.String(column["text-align"], column["color"], column["font-style"], column["font-weight"]);
 		};
 
@@ -152,7 +163,7 @@ qx.Class.define("qookery.internal.Registry", {
 			var partition = this.__getPartition(partitionName);
 			var element = partition[elementName];
 			if(element === undefined && required === true)
-				throw new Error("Require element '" + elementName + "' not found in partition '" + partitionName + "'");
+				throw new Error("Required element '" + elementName + "' missing from partition '" + partitionName + "'");
 			return element;
 		},
 
@@ -236,6 +247,18 @@ qx.Class.define("qookery.internal.Registry", {
 
 		getValidator: function(name) {
 			return this.get(qookery.IRegistry.P_VALIDATOR, name);
+		},
+
+		// Media queries
+
+		getMediaQuery: function(name) {
+			var query = this.get(qookery.IRegistry.P_MEDIA_QUERY, name);
+			if(query == null) return null;
+			if(qx.lang.Type.isString(query)) {
+				query = new qx.bom.MediaQuery(query);
+				this.put(qookery.IRegistry.P_MEDIA_QUERY, name, query);
+			}
+			return query;
 		},
 
 		// Formats

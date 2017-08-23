@@ -26,13 +26,25 @@
 	<import namespace="http://www.qookery.org/ns/Form" />
 
 	<element name="editor"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="cursor-style" default="ace"><simpleType><restriction base="token">
+			<enumeration value="ace" />
+			<enumeration value="slim" />
+			<enumeration value="smooth" />
+			<enumeration value="wide" />
+		</restriction></simpleType></attribute>
+		<attribute name="display-indent-guides" type="boolean" default="true" />
 		<attribute name="h-scroll-bar-always-visible" default="false" />
 		<attribute name="highlight-active-line" default="true" />
 		<attribute name="mode" type="token" use="required" />
+		<attribute name="print-margin-column" type="nonNegativeInteger" default="80" />
+		<attribute name="show-fold-widgets" type="boolean" default="true" />
+		<attribute name="show-invisibles" type="boolean" default="false" />
+		<attribute name="show-line-numbers" type="boolean" default="true" />
 		<attribute name="show-gutter" type="boolean" default="true" />
 		<attribute name="show-print-margin" type="boolean" default="true" />
 		<attribute name="tab-size" type="nonNegativeInteger" default="4" />
-		<attribute name="use-soft-tabs" type="boolean" default="false" />
+		<attribute name="theme" type="string" default="textmate" />
+		<attribute name="use-soft-tabs" type="boolean" default="true" />
 		<attribute name="use-wrap-mode" type="boolean" default="false" />
 		<attribute name="v-scroll-bar-always-visible" default="false" />
 	</extension></complexContent></complexType></element>

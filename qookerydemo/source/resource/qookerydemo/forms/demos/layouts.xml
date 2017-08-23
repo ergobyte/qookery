@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Demonstration of Qookery support for various layout managers
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-count="1" column-flexes="1" spacing="10">
+<form xmlns="http://www.qookery.org/ns/Form"
+		layout="v-box" spacing="10">
 
 	<group-box layout="grid" column-count="5" column-flexes="1 1 1 1 1" spacing="5" label="Grid" legend-position="top">
 		<!-- Row/column numbers are automatically assigned according to the column-count attribute -->

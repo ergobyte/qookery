@@ -57,16 +57,14 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			"allow-stretch": "Boolean",
 			"allow-stretch-x": "Boolean",
 			"allow-stretch-y": "Boolean",
-			"auto-size": "Boolean",
-			"focusable": "Boolean",
-			"column-visibility-button-visible": "Boolean",
 			"enabled": "Boolean",
+			"focusable": "Boolean",
 			"live-update": "Boolean",
 			"native-context-menu": "Boolean",
 			"read-only": "Boolean",
 			"required": "Boolean",
+			"reversed": "Boolean",
 			"scale": "Boolean",
-			"status-bar-visible": "Boolean",
 
 			"width": "Size",
 			"height": "Size",
@@ -127,10 +125,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		__parentComponent: null,
 		__attributes: null,
 		__actions: null,
+		__disposeList: null,
 
 		_widgets: null,
 
-		// IComponent Implementation
+		// IComponent implementation
 
 		getId: function() {
 			return this.__id;
@@ -267,6 +266,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return qx.locale.Manager.getInstance().translate(messageId, formatArguments);
 		},
 
+		addToDisposeList: function(disposable) {
+			if(!this.__disposeList) this.__disposeList = [ ];
+			this.__disposeList.push(disposable);
+		},
+
 		toString: function() {
 			var hash = this.__id || this.$$hash;
 			var form = this.getForm();
@@ -387,9 +391,12 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	},
 
 	destruct: function() {
+		this._disposeArray("__disposeList");
 		var widgets = this.listWidgets();
 		for(var i = 0; i < widgets.length; i++) {
-			widgets[i].destroy();
+			var widget = widgets[i];
+			if(widget == null) continue;
+			widget.destroy();
 		}
 		delete this.__actions;
 		this.__parentComponent = null;

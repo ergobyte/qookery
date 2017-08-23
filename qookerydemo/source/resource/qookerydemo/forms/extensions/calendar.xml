@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Calendar (fullcalendar.io) demo
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
 		xmlns:q-cal="http://www.qookery.org/ns/Form/Calendar"
-		column-count="1" column-flexes="1" row-flexes="1">
+		layout="grow">
 
 	<q-cal:calendar id="calendar" width="400" height="400" editable="true" selectable="true"
 			first-day="1" event-limit="true" default-date="2014-09-12"

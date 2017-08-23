@@ -38,16 +38,24 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
+			case "display-indent-guides":
 			case "h-scroll-bar-always-visible":
 			case "highlight-active-line":
+			case "show-fold-widgets":
+			case "show-invisibles":
+			case "show-line-numbers":
 			case "show-gutter":
 			case "show-print-margin":
 			case "use-soft-tabs":
 			case "use-wrap-mode":
 			case "v-scroll-bar-always-visible":
 				return "Boolean";
+			case "print-margin-column":
 			case "tab-size":
 				return "Integer";
+			case "cursor-style":
+			case "theme":
+				return "String";
 			default: return this.base(arguments, attributeName);
 			}
 		},
@@ -55,9 +63,22 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 		// Construction
 
 		_createMainWidget: function(attributes) {
-			var widget = this.__createAceWidget();
+			var widget = new qookery.ace.internal.AceWidget(this);
 			this._applyLayoutAttributes(widget, attributes);
 			return widget;
+		},
+
+		setup: function() {
+			qookery.Qookery.getRegistry().loadLibrary("ace", function() {
+				var aceWidget = this.getMainWidget();
+				if(aceWidget.getContentElement().getDomElement()) {
+					this.__attachAceEditor(aceWidget);
+					return;
+				}
+				aceWidget.addListenerOnce("appear", function() {
+					this.__attachAceEditor(aceWidget);
+				}, this);
+			}, this);
 		},
 
 		// Public methods
@@ -72,7 +93,12 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			if(!this.__editor) return;
 			this.__ignoreChangeEvents = true;
 			try {
-				this.__editor.getSession().setValue(this.getValue());
+				var value = this.getValue();
+				if(value == null) value = "";
+				this.__editor.getSession().setValue(value);
+			}
+			catch(e) {
+				this.error("Error seting value of ACE editor", e);
 			}
 			finally {
 				this.__ignoreChangeEvents = false;
@@ -93,38 +119,32 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 		// Internal
 
-		__createAceWidget: function() {
-			var aceWidget = new qookery.ace.internal.AceWidget();
-			qookery.Qookery.getRegistry().loadLibrary("ace", function() {
-				if(aceWidget.getContentElement().getDomElement()) {
-					this.__attachAceEditor(aceWidget);
-					return;
-				}
-				aceWidget.addListenerOnce("appear", function() {
-					this.__attachAceEditor(aceWidget);
-				}, this);
-			}, this);
-			return aceWidget;
-		},
-
 		__attachAceEditor: function(aceWidget) {
 			var aceContainer = aceWidget.getContentElement().getDomElement();
 
 			var editor = this.__editor = ace.edit(aceContainer);
 			editor.setReadOnly(this.isReadOnly());
 			editor.setHighlightActiveLine(this.getAttribute("highlight-active-line", true));
+			editor.setShowFoldWidgets(this.getAttribute("show-fold-widgets", true));
+			editor.setShowInvisibles(this.getAttribute("show-invisibles", false));
 			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
+			editor.setOption("cursorStyle", this.getAttribute("cursor-style", "ace"));
+			editor.$blockScrolling = Infinity;
 			editor.on("change", this.__onChange.bind(this));
 
 			var renderer = editor.renderer;
+			renderer.setPrintMarginColumn(this.getAttribute("print-margin-column", 80));
+			renderer.setDisplayIndentGuides(this.getAttribute("display-indent-guides", true));
 			renderer.setShowGutter(this.getAttribute("show-gutter", true));
 			renderer.setHScrollBarAlwaysVisible(this.getAttribute("h-scroll-bar-always-visible", false));
 			renderer.setVScrollBarAlwaysVisible(this.getAttribute("v-scroll-bar-always-visible", false));
+			renderer.setOption("showLineNumbers", this.getAttribute("show-line-numbers", true));
+			renderer.setTheme("ace/theme/" + this.getAttribute("theme", "textmate"));
 
 			var session = editor.getSession();
 			session.setMode("ace/mode/" + this.getAttribute("mode"));
 			session.setTabSize(this.getAttribute("tab-size", 4));
-			session.setUseSoftTabs(this.getAttribute("use-soft-tabs", false));
+			session.setUseSoftTabs(this.getAttribute("use-soft-tabs", true));
 			session.setUseWrapMode(this.getAttribute("use-wrap-mode", false));
 
 			this._updateUI(this.getValue());
@@ -137,8 +157,9 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 		__onChange: function(event) {
 			if(this.__ignoreChangeEvents) return;
-			var text = this.__editor.getSession().getValue();
-			this._setValueSilently(text);
+			var value = this.__editor.getSession().getValue();
+			if(value === "") value = null;
+			this._setValueSilently(value);
 		}
 	},
 

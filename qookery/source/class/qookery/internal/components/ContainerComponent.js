@@ -40,8 +40,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
-			case "layout": return "String";
-			case "reverse": return "Boolean";
+			case "layout": return "QName";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -50,7 +49,7 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			var layoutName = this.getAttribute("layout", "grid");
+			var layoutName = this.getAttribute("layout", "{http://www.qookery.org/ns/Form}grid");
 			if(layoutName === "none") return;
 			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
 			var layout = this.__layout = layoutFactory.createLayout(attributes);
@@ -77,11 +76,12 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		add: function(component) {
 			this._addChildComponent(component);
 			var container = this.getContainerWidget();
+			var layout = qx.lang.Type.isFunction(container["getLayout"]) ? container.getLayout() : null;
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++) {
 				var widget = widgets[i];
-				if(this.__layout != null && qx.lang.Type.isFunction(this.__layout.configureWidget))
-					this.__layout.configureWidget(widget);
+				if(layout != null && qx.lang.Type.isFunction(layout.configureWidget))
+					layout.configureWidget(widget);
 				container.add(widget);
 			}
 		},
@@ -91,14 +91,11 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			var widgets = component.listWidgets();
 			for(var i = 0; i < widgets.length; i++)
 				container.remove(widgets[i]);
+			this._removeChildComponent(component);
 		},
 
 		contains: function(component) {
-			var container = this.getContainerWidget();
-			var widgets = component.listWidgets();
-			for(var i = 0; i < widgets.length; i++)
-				if(container.indexOf(widgets[i]) != -1) return true;
-			return false;
+			return qx.lang.Array.contains(this.__children, component);
 		},
 
 		validate: function() {
@@ -120,6 +117,10 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 
 		_addChildComponent: function(component) {
 			this.__children.push(component);
+		},
+
+		_removeChildComponent: function(component) {
+			qx.lang.Array.remove(this.__children, component);
 		}
 	},
 

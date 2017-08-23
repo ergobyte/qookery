@@ -27,7 +27,15 @@ qx.Class.define("qookery.internal.layouts.FlowLayoutFactory", {
 		createLayout: function(attributes) {
 			var defaultSpacingX = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_X, 0);
 			var defaultSpacingY = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_Y, 0);
-			var layout = new qx.ui.layout.Flow(defaultSpacingX, defaultSpacingY);
+			var layout = new qx.ui.layout.Flow(defaultSpacingX, defaultSpacingY, "left");
+			var alignX = attributes["layout-align-x"];
+			if(alignX != null)
+				layout.setAlignX(alignX);
+			var alignY = attributes["layout-align-y"];
+			if(alignY != null)
+				layout.setAlignY(alignY);
+			if(attributes["reversed"] != null)
+				layout.setReversed(attributes["reversed"]);
 			var spacing = attributes["spacing"];
 			if(spacing != null) {
 				layout.setSpacingX(spacing);
@@ -39,8 +47,6 @@ qx.Class.define("qookery.internal.layouts.FlowLayoutFactory", {
 			var spacingY = attributes["spacing-y"];
 			if(spacingY != null)
 				layout.setSpacingY(spacingY);
-			if(attributes["reversed"] != null)
-				layout.setReversed(qx.data.Conversion.toBoolean(attributes["reversed"]));
 			return layout;
 		}
 	}

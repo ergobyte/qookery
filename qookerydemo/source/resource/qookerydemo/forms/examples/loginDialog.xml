@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	A simple login dialog in Qookery
+-->
+<form xmlns="http://www.qookery.org/ns/Form"
+		layout="v-box" spacing="10">
+
+	<!-- Input fields -->
+
+	<composite column-count="2" column-flexes="0 1" spacing="5">
+		<text-field id="username" label="User name" required="true" live-update="true" live-validate="form" connect="username">
+			<script>
+				this.addValidation("string", null, { regularExpression: /^[a-zA-Z][0-9a-zA-Z\-\_]{2,15}$/ });
+			</script>
+		</text-field>
+		<password-field id="password" label="Password" required="true" live-update="true" live-validate="form" connect="password">
+			<script>
+				this.addValidation("string", null, { minimumLength: 4, maximumLength: 16 });
+			</script>
+		</password-field>
+	</composite>
+
+	<!-- Login buttons -->
+
+	<button id="loginButton" label="Login" max-width="100" align-x="right">
+		<script event="execute">
+			if($.Form.validate() != null) { alert("Validation failed"); return; }
+			var username = $("#username").getValue();
+			var password = $("#password").getValue();
+			alert("Thank you " + username + ", your password has been safely stored in plaintext on a floppy disk.");
+		</script>
+	</button>
+
+	<script event="changeValid" arguments="event">
+		$("#loginButton").setEnabled(event.getData());
+	</script>
+
+	<script event="appear" arguments="event">
+		$("#username").focus();
+	</script>
+
+	<script event="keypress" arguments="event">
+		if(event.getKeyIdentifier() === "Enter") $("#loginButton").execute();
+	</script>
+
+	<script>
+		$.Form.validate();
+	</script>
+
+</form>

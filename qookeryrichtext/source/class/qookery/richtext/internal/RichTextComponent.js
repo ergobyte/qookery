@@ -61,11 +61,11 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			if(removePluginsSpecification)
 				configuration["removePlugins"] = removePluginsSpecification.split(/\s+/).join(",");
 
-			var customConfigResource = this.getAttribute("custom-config", null);
-			if(customConfigResource != null) {
+			var customConfigName = this.getAttribute("custom-config", qookery.Qookery.getOption("q-richtext:default-custom-config", null));
+			if(customConfigName != null) {
 				var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
-				var resolvedConfigUri = resourceLoader.resolveResourceUri(customConfigResource);
-				configuration["customConfig"] = qx.util.Uri.getAbsolute(resolvedConfigUri);
+				var customConfigUri = resourceLoader.resolveResourceUri(customConfigName);
+				configuration["customConfig"] = qx.util.Uri.getAbsolute(customConfigUri);
 			}
 			else {
 				var toolbarSpecification = this.getAttribute("toolbar", qookery.richtext.internal.RichTextComponent.DEFAULT_TOOLBAR);

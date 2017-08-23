@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Demonstration of translation support in Qookery
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
 		id="qookerydemo.forms.translations"
-		column-flexes="1" spacing-y="10">
+		layout="v-box" spacing="10">
 
 	<translation xml:lang="en">
 		<message id="header">Ancient Greek Gods</message>

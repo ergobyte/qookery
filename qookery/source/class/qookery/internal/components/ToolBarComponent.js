@@ -53,7 +53,7 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 			return this.__children;
 		},
 
-		add: function(childComponent, display) {
+		add: function(childComponent) {
 			var index = this.__children.length;
 			this.__children.push(childComponent);
 			var part = childComponent.getMainWidget();
