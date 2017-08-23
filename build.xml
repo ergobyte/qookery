@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -81,7 +81,7 @@
 
 	<!-- Package -->
 
-	<target name="Release" description="Package projects for release">
+	<target name="Release">
 		<delete dir="release" />
 		<package-contribution project="qookery" />
 		<package-contribution project="qookeryace" />
@@ -98,25 +98,20 @@
 		<echo message="Running Ant task '${ant.project.invoked-targets}' on project '${ant.project.name}'" />
 	</target>
 
-	<!-- Project cleanup -->
+	<!-- Build setup -->
 
-	<target name="Clean" depends="Init">
-		<delete failonerror="no" dir="api" />
-		<delete failonerror="no" dir="build" />
-		<delete failonerror="no" dir="source/script" />
-		<delete failonerror="no" dir="test" />
-	</target>
+	<extension-point name="Setup" depends="Init" />
 
-	<!-- Qooxdoo installation -->
+	<target name="Setup-Qooxdoo" extensionOf="Setup" depends="Setup-Qooxdoo-Init, Setup-Qooxdoo-DownloadSdk, Setup-Qooxdoo-SymLinks" />
 
-	<target name="Qooxdoo-Init" depends="Init">
+	<target name="Setup-Qooxdoo-Init">
 		<mkdir dir="${qooxdoo.downloadDirectory}" />
 		<condition property="build.qooxdooInstalled">
 			<available type="dir" file="${qooxdoo.downloadDirectory}/qooxdoo-${qooxdoo.version}-sdk" />
 		</condition>
 	</target>
 
-	<target name="Qooxdoo-DownloadSdk" unless="build.qooxdooInstalled">
+	<target name="Setup-Qooxdoo-DownloadSdk" unless="build.qooxdooInstalled">
 		<loadresource property="qooxdoo.version.underscores">
 			<propertyresource name="qooxdoo.version" />
 			<filterchain>
@@ -132,7 +127,7 @@
 		<chmod dir="${qooxdoo.downloadDirectory}/qooxdoo-${qooxdoo.version}-sdk/tool/bin" includes="*.py" perm="+x" />
 	</target>
 
-	<target name="Qooxdoo-SymLinks" unless="build.qooxdooInstalled">
+	<target name="Setup-Qooxdoo-SymLinks" unless="build.qooxdooInstalled">
 		<symlink link="${qooxdoo.relativePath}" resource="${qooxdoo.downloadDirectory}/qooxdoo-${qooxdoo.version}-sdk" overwrite="true" />
 		<symlink link="${qooxdoo.repository}/component/library/qookery" resource="${qookery.repository}/qookery" overwrite="true" />
 		<symlink link="${qooxdoo.repository}/component/library/qookeryace" resource="${qookery.repository}/qookeryace" overwrite="true" />
@@ -140,15 +135,24 @@
 		<symlink link="${qooxdoo.repository}/component/library/qookerycalendar" resource="${qookery.repository}/qookerycalendar" overwrite="true" />
 	</target>
 
-	<target name="Qooxdoo" depends="Qooxdoo-Init, Qooxdoo-DownloadSdk, Qooxdoo-SymLinks" />
-
-	<target name="Qooxdoo-DistClean" depends="Init, Qooxdoo">
+	<target name="Qooxdoo-DistClean" depends="Init, Setup-Qooxdoo">
 		<call-generator-py job="distclean" />
+	</target>
+
+	<!-- Project cleanup -->
+
+	<extension-point name="Clean" depends="Init" />
+
+	<target name="Clean-Base" extensionOf="Clean">
+		<delete failonerror="no" dir="api" />
+		<delete failonerror="no" dir="build" />
+		<delete failonerror="no" dir="source/script" />
+		<delete failonerror="no" dir="test" />
 	</target>
 
 	<!-- Source targets -->
 
-	<target name="Source-Init" depends="Init, Qooxdoo" />
+	<target name="Source-Init" depends="Setup" />
 
 	<target name="Source-Generate" depends="Source-Init">
 		<call-generator-py job="source" />
@@ -162,7 +166,7 @@
 
 	<!-- Build targets -->
 
-	<target name="Build-Init" depends="Init, Qooxdoo" />
+	<target name="Build-Init" depends="Setup" />
 
 	<target name="Build-Generate" depends="Build-Init">
 		<call-generator-py job="build" />
@@ -176,7 +180,7 @@
 
 	<!-- Test targets -->
 
-	<target name="Test-Init" depends="Init, Qooxdoo">
+	<target name="Test-Init" depends="Setup">
 		<uptodate property="build.sourceUpToDate" targetfile="test/script/tests.js">
 			<srcfiles dir="source" />
 			<srcfiles file="config.json" />
@@ -195,11 +199,11 @@
 
 	<!-- API -->
 
-	<target name="Api-Data" depends="Qooxdoo" unless="build.sourceUpToDate">
+	<target name="Api-Data" depends="Setup-Qooxdoo" unless="build.sourceUpToDate">
 		<call-generator-py job="api-data" />
 	</target>
 
-	<target name="Api-Application" depends="Api-Data, Qooxdoo" unless="build.apiUpToDate">
+	<target name="Api-Application" depends="Api-Data, Setup-Qooxdoo" unless="build.apiUpToDate">
 		<call-generator-py job="api-verify" />
 		<loadfile property="version" srcfile="${qookery.repository}/VERSION" />
 		<replace file="api/script/apiviewer.js">
@@ -215,11 +219,11 @@
 
 	<!-- Misc generator.py targets -->
 
-	<target name="Lint" depends="Init, Qooxdoo">
+	<target name="Lint" depends="Setup">
 		<call-generator-py job="lint" />
 	</target>
 
-	<target name="ValidateManifest" depends="Init, Qooxdoo">
+	<target name="ValidateManifest" depends="Setup">
 		<call-generator-py job="validate-manifest" />
 	</target>
 

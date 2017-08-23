@@ -19,6 +19,7 @@
 /**
  * @asset(qookerydemo/*)
  *
+ * @require(qx.bom.History)
  * @require(qx.data.marshal.Json)
  * @require(qx.util.Serializer)
  */
@@ -27,22 +28,22 @@ qx.Class.define("qookerydemo.Application", {
 	extend: qx.application.Standalone,
 
 	statics: {
-		DEMOS: [
-			{ name: "helloWorld", label: "Hello, World!", formFile: "helloWorld.xml" },
-			{ name: "aboutDialog", label: "About Dialog", formFile: "aboutDialog.xml" },
-			{ name: "loginDialog", label: "Login Dialog", formFile: "loginDialog.xml", modelFile: "loginCredentials.json" },
-			{ name: "layouts", label: "Layouts", formFile: "layouts.xml" },
-			{ name: "stack", label: "Stack", formFile: "stack.xml" },
-			{ name: "translations", label: "Translations", formFile: "translations.xml" },
-			{ name: "tableWithFormEditor", label: "Table with Form Editor", formFile: "tableWithFormEditor.xml", modelFile: "passwordList.json" },
-			{ name: "masterDetails", label: "Master Details", formFile: "masterDetails.xml", modelFile: "passwordList.json" },
-			{ name: "multipleConnections", label: "Multiple Connections", formFile: "multipleConnections.xml", modelFile: "carConfiguration.json" },
-			{ name: "flowControl", label: "Flow Control", formFile: "flowControl.xml" },
-			{ name: "xInclude", label: "XInclude", formFile: "xInclude.xml" },
-			{ name: "richText", label: "Extension: CKeditor", formFile: "richText.xml", modelFile: "carConfiguration.json" },
-			{ name: "calendar", label: "Extension: FullCalendar.io", formFile: "calendar.xml" },
-			{ name: "maps", label: "Extension: Google Maps", formFile: "maps.xml", modelFile: "carConfiguration.json" },
-			{ name: "recursion", label: "*this*", formFile: "application.xml" }
+		CONFIGURATIONS: [
+			{ name: "demo.helloWorld", label: "Demo: Hello, World!", formFile: "demos/helloWorld.xml" },
+			{ name: "demo.layouts", label: "Demo: Layouts", formFile: "demos/layouts.xml" },
+			{ name: "demo.stack", label: "Demo: Stack", formFile: "demos/stack.xml" },
+			{ name: "demo.flowControl", label: "Demo: Flow Control", formFile: "demos/flowControl.xml" },
+			{ name: "demo.translations", label: "Demo: Translations", formFile: "demos/translations.xml" },
+			{ name: "demo.connections", label: "Demo: Connections", formFile: "demos/connections.xml", modelFile: "carConfiguration.json" },
+			{ name: "demo.xInclude", label: "Demo: XInclude", formFile: "demos/xInclude.xml" },
+			{ name: "example.loginDialog", label: "Example: Login Dialog", formFile: "examples/loginDialog.xml", modelFile: "loginCredentials.json" },
+			{ name: "example.tableWithFormEditor", label: "Example: Table with Form Editor", formFile: "examples/tableWithFormEditor.xml", modelFile: "passwordList.json" },
+			{ name: "example.masterDetails", label: "Example: Master Details", formFile: "examples/masterDetails.xml", modelFile: "passwordList.json" },
+			{ name: "extension.richtext", label: "Extension: CKeditor", formFile: "extensions/richText.xml", modelFile: "carConfiguration.json" },
+			{ name: "extension.calendar", label: "Extension: FullCalendar.io", formFile: "extensions/calendar.xml" },
+			{ name: "extension.maps", label: "Extension: Google Maps", formFile: "extensions/maps.xml", modelFile: "carConfiguration.json" },
+			{ name: "this.rootForm", label: "This Application: Root Form", formFile: "application.xml" },
+			{ name: "this.aboutDialog", label: "This Application: About Dialog", formFile: "aboutDialog.xml" }
 		]
 	},
 
@@ -71,7 +72,7 @@ qx.Class.define("qookerydemo.Application", {
 			// Load application form and install it in root composite
 			var applicationXml = qookery.Qookery.getService("ResourceLoader", true).loadResource("qookerydemo/forms/application.xml");
 			var applicationDocument = qx.xml.Document.fromString(applicationXml);
-			var parser = qookery.Qookery.createFormParser();
+			var parser = qookery.Qookery.createFormParser({ isRoot: true });
 			try {
 				var component = this.__applicationForm = parser.parseXmlDocument(applicationDocument);
 				this.getRoot().add(component.getMainWidget(), { edge: 0 });
@@ -89,7 +90,7 @@ qx.Class.define("qookerydemo.Application", {
 		},
 
 		getDemoConfiguration: function(name) {
-			return this.constructor.DEMOS.filter(function(c) { return c["name"] === name; })[0];
+			return this.constructor.CONFIGURATIONS.filter(function(c) { return c["name"] === name; })[0];
 		}
 	},
 

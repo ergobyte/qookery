@@ -23,7 +23,7 @@ qx.Class.define("qookerydemo.DemoSelector", {
 	construct: function() {
 		this.base(arguments, "Demo Selection", "qookerydemo/icons/24/samples.png");
 		var demoListMenu = new qx.ui.menu.Menu();
-		qookerydemo.Application.DEMOS.forEach(function(configuration) {
+		qookerydemo.Application.CONFIGURATIONS.forEach(function(configuration) {
 			var label = configuration["label"];
 			var button = new qx.ui.menu.Button(label);
 			button.addListener("execute", function() {

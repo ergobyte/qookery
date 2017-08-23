@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -16,19 +16,28 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="qookery.ace" basedir="." default="Download">
+<project name="qookery.ace" basedir=".">
 
 	<property name="ace.version" value="1.2.8" />
 	<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${ace.version}/src-min" />
 	<property name="ace.target" location="../qookeryace/source/resource/qookery/lib/ace" />
 
-	<target name="Download-Init">
+	<import file="../build.xml" as="base" />
+
+	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
+	<extension-point name="Setup" depends="base.Setup" description="Setup build" />
+
+	<target name="Clean-Ace" extensionOf="base.Clean">
+		<delete dir="${ace.target}" />
+	</target>
+
+	<target name="Setup-Ace-Init">
 		<condition property="build.aceAvailable">
 			<available type="file" file="${ace.target}/ace.js" />
 		</condition>
 	</target>
 
-	<target name="Download" depends="Download-Init" unless="build.aceAvailable" description="Download ACE">
+	<target name="Setup-Ace" extensionOf="Setup" depends="Setup-Ace-Init" unless="build.aceAvailable">
 		<mkdir dir="${ace.target}" />
 		<get dest="${ace.target}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="${ace.downloadBase}/ace.js" />
@@ -40,10 +49,6 @@
 			<url url="${ace.downloadBase}/worker-json.js" />
 			<url url="${ace.downloadBase}/worker-xml.js" />
 		</get>
-	</target>
-
-	<target name="Clean" description="Clean up target directory">
-		<delete dir="${ace.target}" />
 	</target>
 
 </project>

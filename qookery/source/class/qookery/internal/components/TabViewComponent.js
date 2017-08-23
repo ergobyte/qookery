@@ -42,11 +42,6 @@ qx.Class.define("qookery.internal.components.TabViewComponent", {
 
 		// Construction
 
-		create: function(attributes) {
-			attributes["layout"] = "none";
-			this.base(arguments, attributes);
-		},
-
 		_createContainerWidget: function(attributes) {
 			var tabView = new qx.ui.tabview.TabView();
 			tabView.setBarPosition(this.getAttribute("bar-position", "top"));
@@ -57,6 +52,11 @@ qx.Class.define("qookery.internal.components.TabViewComponent", {
 			if(attributes["content-padding-left"] !== undefined) tabView.setContentPaddingLeft(attributes["content-padding-left"]);
 			this._applyLayoutAttributes(tabView, attributes);
 			return tabView;
+		},
+
+		getAttribute: function(attributeName, defaultValue) {
+			if(attributeName === "layout") return "none";
+			return this.base(arguments, attributeName, defaultValue);
 		},
 
 		getSelection: function() {

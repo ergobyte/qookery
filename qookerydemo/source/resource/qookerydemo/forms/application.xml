@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	The Qookery Demo application is written in Qookery
 	
-	The XML has been annotated to serve as an example of some advanced Qookery features
+	This is the root XML. It has been annotated to serve as an example for some advanced Qookery features.
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
 		xmlns:q-ace="http://www.qookery.org/ns/Form/Ace"
@@ -136,9 +136,9 @@
 
 	<!-- This script is called once the totality of the form has been parsed to load the first demo automatically -->
 	<script>
+		if(!$.isRoot) return; // Ths isRoot variable is set by Application.js to prevent an infinite loop with the recursion demo
 		var demoName = $.History.getInstance().getState();
-		if(demoName === "recursion") demoName = null; // Needed to prevent an unwanted infinite recursion
-		$.Form.executeAction("load", demoName || "helloWorld");
+		$.Form.executeAction("load", demoName || "demo.helloWorld");
 	</script>
 
 </form>

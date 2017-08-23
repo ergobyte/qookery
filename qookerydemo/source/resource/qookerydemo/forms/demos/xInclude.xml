@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	XInclude example
+-->
+<form xmlns="http://www.qookery.org/ns/Form"
+		xmlns:xi="http://www.w3.org/2001/XInclude"
+		layout="v-box" spacing="10">
+
+	<import class="qx.data.marshal.Json" />
+
+	<group-box label="'Layouts' demo" legend-position="top" layout="grow">
+		<scroll height="100">
+			<xi:include href="qookerydemo/forms/demos/layouts.xml" />
+		</scroll>
+	</group-box>
+
+	<group-box label="'Login Dialog' demo, with setup script" legend-position="top" layout="grow">
+		<xi:include xml:id="dialog" href="qookerydemo/forms/examples/loginDialog.xml" />
+		<script>
+			$("#dialog").setModel($.Json.createModel({
+				username: 'admin',
+				password: '1234'
+			}));
+		</script>
+	</group-box>
+
+</form>

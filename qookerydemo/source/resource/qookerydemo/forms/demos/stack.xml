@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Stack example
 -->
-<form xmlns="http://www.qookery.org/ns/Form" column-flexes="1">
+<form xmlns="http://www.qookery.org/ns/Form"
+		layout="v-box" spacing="10">
 
-	<composite column-count="auto">
+	<composite layout="h-box" spacing="10">
 		<button label="Page 1">
 			<script event="execute">
 				$("#stack").setSelection($("#page1"));
@@ -22,14 +23,14 @@
 		</button>
 	</composite>
 
-	<stack id="stack" decorator="group" height="100">
-		<composite id="page1">
+	<stack id="stack" decorator="group" height="100" flex="1">
+		<composite id="page1" layout="basic">
 			<label label="First Page" text-color="red" />
 		</composite>
-		<composite id="page2">
+		<composite id="page2" layout="basic">
 			<label label="Second Page" text-color="blue" />
 		</composite>
-		<composite id="page3">
+		<composite id="page3" layout="basic">
 			<label label="Third Page" text-color="green" />
 		</composite>
 	</stack>

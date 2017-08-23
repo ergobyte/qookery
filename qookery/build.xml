@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -21,12 +21,9 @@
 	<property name="build.projectHome" location="." />
 	<property name="build.projectName" value="qookery" />
 
-	<import file="../build.xml" as="base" />
+	<import file="../build.xml" />
 
-	<target name="Api" depends="base.Api-Run" description="Generate and view the Qookery API" />
-	<target name="Clean" depends="base.Clean" description="Clean up any intermediate files produced by build" />
-	<target name="Lint" depends="base.Lint" description="Perform syntactic checks on library" />
-	<target name="ValidateManifest" depends="base.ValidateManifest" description="Validate Manifest.json" />
+	<target name="Api" depends="Api-Run" description="Generate and view the Qookery API" />
 
 	<target name="Api-Publish" depends="Api-Data, Api-Application" description="Publish API documentation to a WAFFLE server - do not use if not working at Ergobyte">
 		<zip destfile="build/waffle-archive.zip" level="9" basedir="api" includes="resource/** script/** index.html sitemap.xml" />

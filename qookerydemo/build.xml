@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -26,9 +26,11 @@
 	<import file="../qookeryrichtext/build.xml" as="richtext" />
 	<import file="../qookerycalendar/build.xml" as="calendar" />
 
-	<target name="Build" depends="ace.Download, richtext.Download, calendar.Download, base.Build-Run" description="Generate and run the build version of the demo application" />
-	<target name="Source" depends="ace.Download, richtext.Download, calendar.Download, base.Source-Run" description="Generate and run the source version of the demo application" />
-	<target name="Clean" depends="ace.Clean, richtext.Clean, calendar.Clean, base.Clean" description="Clean up any intermediate files produced by build" />
+	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
+	<extension-point name="Setup" depends="base.Setup" description="Setup build" />
+
+	<target name="Build" depends="base.Setup, base.Build-Run" description="Generate and run the build version of the demo application" />
+	<target name="Source" depends="base.Setup, base.Source-Run" description="Generate and run the source version of the demo application" />
 	<target name="Lint" depends="base.Lint" description="Perform syntactic checks on application" />
 	<target name="ValidateManifest" depends="base.ValidateManifest" description="Validate Manifest.json" />
 
