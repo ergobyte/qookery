@@ -23,7 +23,7 @@
 	<property name="build.root" location="${user.home}/tmp/qookery" />
 	<property name="build.applicationName" value="${build.projectName}" />
 
-	<dirname property="qookery.repository" file="${ant.file.qookery.base}" />
+	<dirname property="qookery.repository" file="${ant.file.qookery.common}" />
 
 	<condition property="qooxdoo.version" value="5.0.2"><not><isset property="qooxdoo.version" /></not></condition>
 	<!-- Change below value to "qooxdoo-master" when building against the qooxdoo master branch checkout -->
