@@ -102,6 +102,8 @@ qx.Interface.define("qookery.IFormParser", {
 
 		/**
 		 * Return the James Clark string representation of a resolved QName
+		 *
+		 * @param qName {String} XML QName to resolve
 		 */
 		resolveQName: function(qName) { }
 	}

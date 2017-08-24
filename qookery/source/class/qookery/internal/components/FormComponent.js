@@ -300,13 +300,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var variableName = formParser.getAttribute(variableElement, "name");
 			if(variableName == null)
 				throw new Error("Variable name is required");
-			var provider = this;
 			var providerName = formParser.getAttribute(variableElement, "provider");
-			if(providerName != null && providerName !== "Form") {
-				provider = this.__scriptingContext[providerName];
-				if(provider == null || !qx.Class.hasInterface(provider.constructor, qookery.IVariableProvider))
-					throw new Error("Variable provider '" + providerName + "' missing from scripting context");
-			}
+			if(providerName == null)
+				providerName = "Form";
+			var provider = this.__scriptingContext[providerName];
+			if(provider == null || !qx.Class.hasInterface(provider.constructor, qookery.IVariableProvider))
+				throw new Error("Variable provider '" + providerName + "' missing from scripting context");
 			var value = provider.getVariable(variableName);
 			if(value == null) {
 				var defaultValue = formParser.getAttribute(variableElement, "default");

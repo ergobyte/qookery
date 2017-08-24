@@ -2,7 +2,7 @@ h1. Qookery: Declarative UI Building for Qooxdoo
 
 h2(#about). About
 
-The Qookery library helps "Qooxdoo":http://qooxdoo.org/ programmers declare and run user interfaces through an easy to master XML language.
+The Qookery library helps "Qooxdoo":http://qooxdoo.org/ programmers declare and run user interfaces through an expressive XML language.
 
 This project is a spinoff of "WAFFLE", the client-side web application framework used within Ergobyte for its cloud products.
 
@@ -16,7 +16,7 @@ You can discover Qookery and experiment with its features by visiting its intera
 
 h2(#examples). Real-life Examples
 
-Below rich Internet applications are using Qookery for their UI needs almost exclusively. All interface elements, from the browser's window up, are assembled and laid out declaratively via Qookery forms. 
+Below rich Internet applications are using Qookery for their UI needs almost exclusively. All interface elements, from the browser's window up, are assembled and laid out declaratively via Qookery forms.
 
 * "Ergobyte Electronic Services":https://www.ergobyte.net/ - Ergobyte customer account management interface
 * "Γαληνός Office":https://office.galinos.gr/ - Full featured medical practice management system by Ergobyte, providing patient management, appointment scheduling, customizable health records, document management, reporting etc.
@@ -31,7 +31,7 @@ A short introductory tutorial is available:
 
 h2(#documentation). Documentation
 
-The documentation is generated from class files and is under construction. 
+The documentation is generated from class files and is under construction.
 
 * "API Documentation":http://www.qookery.org/content/waffle/qookeryapi/index.html
 

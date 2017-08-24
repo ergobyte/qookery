@@ -22,7 +22,7 @@
 	<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${ace.version}/src-min" />
 	<property name="ace.target" location="../qookeryace/source/resource/qookery/lib/ace" />
 
-	<import file="../build.xml" as="base" />
+	<import file="../build-common.xml" as="base" />
 
 	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
 	<extension-point name="Setup" depends="base.Setup" description="Setup build" />

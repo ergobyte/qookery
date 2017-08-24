@@ -24,7 +24,7 @@
 	<property name="fullcalendar.temp" location="/tmp/" />
 	<property name="fullcalendar.target" location="../qookerycalendar/source/resource/qookery/lib" />
 
-	<import file="../build.xml" as="base" />
+	<import file="../build-common.xml" as="base" />
 
 	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
 	<extension-point name="Setup" depends="base.Setup" description="Setup build" />

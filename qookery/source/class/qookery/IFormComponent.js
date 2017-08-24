@@ -34,20 +34,18 @@
  */
 qx.Interface.define("qookery.IFormComponent", {
 
-	extend: [ qookery.IContainerComponent, qookery.IVariableProvider, qx.ui.form.IModel ],
+	extend: [ qookery.IContainerComponent, qookery.IVariableProvider ],
 
 	events: {
 
-		/**
-		 * This event is fired when the form has been closed. Its value is set to the form's <code>result</code> variable.
-		 */
+		/** This event is fired when the form has been closed. Its value is set to the form's <code>result</code> variable. */
 		"close": "qx.event.type.Data"
 	},
 
 	properties: {
 
 		/** An icon for UI elements that present this form */
-		icon: { nullable: true },
+		icon: { check: "String", nullable: true },
 
 		/** The form's model for data binding */
 		model: { nullable: true, dereference: true, event: "changeModel" },

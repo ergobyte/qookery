@@ -24,7 +24,7 @@
 	<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${ckeditor.version}/${ckeditor.zipFilename}" />
 	<property name="ckeditor.target" location="../qookeryrichtext/source/resource/qookery/lib" />
 
-	<import file="../build.xml" as="base" />
+	<import file="../build-common.xml" as="base" />
 
 	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
 	<extension-point name="Setup" depends="base.Setup" description="Setup build" />
