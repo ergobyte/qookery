@@ -162,6 +162,13 @@ qx.Interface.define("qookery.IRegistry", {
 
 		// Media queries
 
+		/**
+		 * Get a previously registered media query by name
+		 *
+		 * @param name {String} name of the media query
+		 *
+		 * @return {qx.bom.MediaQuery} the media query or <code>null</code> if not found
+		 */
 		getMediaQuery: function(name) { },
 
 		// Model providers

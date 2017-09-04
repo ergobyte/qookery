@@ -217,9 +217,18 @@ qx.Class.define("qookery.internal.FormParser", {
 
 				if(parentComponent != null) {
 					var display = this.getAttribute(componentElement, "display", "inline");
-					if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
-						throw new Error("Attempted to add a component to a non-container component");
-					parentComponent.add(component, display);
+					switch(display) {
+					case "inline":
+						if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
+							throw new Error("Attempted to add a component to a non-container component");
+						parentComponent.add(component);
+						break;
+					case "none":
+						// Do nothing
+						break;
+					default:
+						throw new Error("Unsupported display attribute value");
+					}
 				}
 
 				// Return new component

@@ -1,34 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-	An about window - this same form is opened from the toolbar by calling
-
-		qookery.contexts.Qookery.openWindow("qookerydemo/forms/aboutDialog.xml");
+	The Qookery Demo about window
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
 		id="qookerydemo.forms.aboutDialog"
-		title="About Qookery Demo" icon="qookerydemo/icons/24/about.png"
-		column-count="2" column-flexes="0 1" width="300" spacing="20">
+		title="About the Qookery Demo" icon="qookerydemo/icons/24/about.png"
+		layout="v-box" spacing="20" width="300">
 
 	<translation xml:lang="en">
 		<message id="about"><![CDATA[
 			<h3>Qookery Demo and Playground application</h3>
-			<p>
-				Discover Qookery and experiment with its features, thanks to this interactive demo.
-				Load a demo, modify XML and/or JSON code and press Run Again to see the results.
-			</p>
-			<p>
-				Qookery is a community project sponsored by Ergobyte Informatics S.A. and licensed under the
+			<p>	Discover Qookery and experiment with its features, thanks to this interactive demo.
+				Load a demo, modify XML and/or JSON code and press Run Again to see the results.</p>
+			<p>	Qookery is a community project sponsored by Ergobyte Informatics S.A. and licensed under the
 				Apache License, v2.0. Visit <a href="http://www.qookery.org/" target="_blank">www.qookery.org</a>
-				for more information.
-			</p>
+				for more information.</p>
 		]]></message>
 	</translation>
 
-	<image source="qookerydemo/icons/66/loading-66.gif" align-y="middle" />
+	<composite layout="h-box" spacing="20">
+		<image source="qookerydemo/icons/66/loading-66.gif" align-y="middle" />
+		<label rich="true" wrap="true" label="%.about" flex="1" />
+	</composite> 
 
-	<label rich="true" wrap="true" label="%.about" />
-
-	<button label="Close" col-span="2" max-width="150" align-x="right">
+	<button label="Close" max-width="150" align-x="right">
 		<script event="execute">
 			$.Form.close();
 		</script>

@@ -59,6 +59,11 @@ qx.Class.define("qookery.internal.components.ScrollComponent", {
 			return scroll;
 		},
 
+		getAttribute: function(attributeName, defaultValue) {
+			if(attributeName === "layout") return "none";
+			return this.base(arguments, attributeName, defaultValue);
+		},
+
 		getMainWidget: function() {
 			return this.__composite;
 		}

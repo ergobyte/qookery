@@ -45,8 +45,12 @@ qx.Class.define("qookery.internal.components.StackComponent", {
 		_createContainerWidget: function(attributes) {
 			var stack = new qx.ui.container.Stack();
 			this._applyLayoutAttributes(stack, attributes);
-			attributes["layout"] = "none";
 			return stack;
+		},
+
+		getAttribute: function(attributeName, defaultValue) {
+			if(attributeName === "layout") return "none";
+			return this.base(arguments, attributeName, defaultValue);
 		},
 
 		setSelection: function(component) {

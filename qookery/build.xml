@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -16,19 +16,17 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="qookery" basedir="." default="Api">
+<project name="qookery.core" basedir="." default="Api">
 
 	<property name="build.projectHome" location="." />
 	<property name="build.projectName" value="qookery" />
 
-	<import file="../build.xml" as="base" />
+	<import file="../build-common.xml" as="base" />
 
 	<target name="Api" depends="base.Api-Run" description="Generate and view the Qookery API" />
-	<target name="Clean" depends="base.Clean" description="Clean up any intermediate files produced by build" />
-	<target name="Lint" depends="base.Lint" description="Perform syntactic checks on library" />
-	<target name="ValidateManifest" depends="base.ValidateManifest" description="Validate Manifest.json" />
+	<target name="Lint" depends="base.Lint" description="Lint source code" />
 
-	<target name="Api-Publish" depends="Api-Data, Api-Application" description="Publish API documentation to a WAFFLE server - do not use if not working at Ergobyte">
+	<target name="Api-Publish" depends="base.Api-Data, base.Api-Application" description="Publish API documentation to a WAFFLE server - do not use if not working at Ergobyte">
 		<zip destfile="build/waffle-archive.zip" level="9" basedir="api" includes="resource/** script/** index.html sitemap.xml" />
 		<input addproperty="waffle.serverHost" message="WAFFLE server hostname : " defaultvalue="www.ergobyte.net" />
 		<input addproperty="waffle.safiraUsername" message="Safira username : " defaultvalue="${user.name}" />
@@ -40,6 +38,10 @@
 			<arg value="qookeryapi" />
 			<arg value="build/waffle-archive.zip" />
 		</exec>
+	</target>
+
+	<target name="Qooxdoo-DistClean" depends="base.Init, base.Setup-Qooxdoo" description="Perform a distclean on Qooxdoo">
+		<call-generator-py job="distclean" />
 	</target>
 
 </project>

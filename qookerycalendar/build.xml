@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -16,7 +16,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="qookery.calendar" basedir="." default="Download">
+<project name="qookery.calendar" basedir=".">
 
 	<property name="fullcalendar.version" value="2.1.1" />
 	<property name="fullcalendar.zipFilename" value="fullcalendar-${fullcalendar.version}.zip" />
@@ -24,13 +24,18 @@
 	<property name="fullcalendar.temp" location="/tmp/" />
 	<property name="fullcalendar.target" location="../qookerycalendar/source/resource/qookery/lib" />
 
-	<target name="Download-Init">
+	<import file="../build-common.xml" as="base" />
+
+	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
+	<extension-point name="Setup" depends="base.Setup" description="Setup build" />
+
+	<target name="Setup-Calendar-Init">
 		<condition property="build.fullcalendarAvailable">
-			<available type="file" file="${fullcalendar.target}/fullcalendar.min.js" />
+			<available type="file" file="${fullcalendar.target}/fullcalendar/fullcalendar.min.js" />
 		</condition>
 	</target>
 
-	<target name="Download" depends="Download-Init" unless="build.fullcalendarAvailable">
+	<target name="Setup-Calendar" extensionOf="Setup" depends="Setup-Calendar-Init" unless="build.fullcalendarAvailable">
 		<get dest="${fullcalendar.temp}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="${fullcalendar.downloadUrl}" />
 		</get>
@@ -42,7 +47,7 @@
 		<copy file="${fullcalendar.temp}/fullcalendar-${fullcalendar.version}/lib/moment.min.js" tofile="${fullcalendar.target}/moment/moment.min.js" overwrite="true" />
 	</target>
 
-	<target name="Clean">
+	<target name="Clean-Calendar" extensionOf="Clean">
 		<delete dir="${fullcalendar.target}" />
 	</target>
 

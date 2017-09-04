@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	Qookery - Declarative UI Building for Qooxdoo
 
@@ -16,7 +16,7 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<project name="qookery.richtext" basedir="." default="Download">
+<project name="qookery.richtext" basedir=".">
 
 	<property name="ckeditor.version" value="4.6.2" />
 	<property name="ckeditor.package" value="full" />
@@ -24,13 +24,18 @@
 	<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${ckeditor.version}/${ckeditor.zipFilename}" />
 	<property name="ckeditor.target" location="../qookeryrichtext/source/resource/qookery/lib" />
 
-	<target name="Download-Init">
+	<import file="../build-common.xml" as="base" />
+
+	<extension-point name="Clean" depends="base.Clean" description="Clean build" />
+	<extension-point name="Setup" depends="base.Setup" description="Setup build" />
+
+	<target name="Setup-CKEditor-Init">
 		<condition property="build.ckeditorAvailable">
 			<available type="file" file="${ckeditor.target}/ckeditor/ckeditor.js" />
 		</condition>
 	</target>
 
-	<target name="Download" depends="Download-Init" unless="build.ckeditorAvailable" description="Download CKEditor">
+	<target name="Setup-CKEditor" extensionOf="Setup" depends="Setup-CKEditor-Init" unless="build.ckeditorAvailable">
 		<mkdir dir="${ckeditor.target}" />
 		<get dest="${ckeditor.target}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="${ckeditor.downloadUrl}" />
@@ -39,7 +44,7 @@
 		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
 	</target>
 
-	<target name="Clean">
+	<target name="Clean-CKEditor" extensionOf="Clean">
 		<delete dir="${ckeditor.target}" />
 	</target>
 
