@@ -301,7 +301,7 @@
 
 	<complexType name="component.attributes">
 		<!-- Identity -->
-		<attribute name="id" type="ID" />
+		<attribute name="id" type="token" />
 		<!-- Properties -->
 		<attribute name="label" type="string" />
 		<attribute name="enabled" type="boolean" default="true" />

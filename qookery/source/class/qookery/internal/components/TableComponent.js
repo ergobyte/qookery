@@ -180,6 +180,9 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				var cellRendererFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_CELL_RENDERER_FACTORY, cellRendererName, true);
 				var cellRenderer = cellRendererFactory(this, column);
 				columnModel.setDataCellRenderer(i, cellRenderer);
+				if(column["visibility"] == "hidden") {
+					columnModel.setColumnVisible(i, false);
+				}
 			}
 			this.base(arguments, formParser, attributes);
 		},
