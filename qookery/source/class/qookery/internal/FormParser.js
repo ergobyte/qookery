@@ -357,6 +357,8 @@ qx.Class.define("qookery.internal.FormParser", {
 			var eventNames = this.getAttribute(scriptElement, "event");
 			var mediaQuery = this.getAttribute(scriptElement, "media-query");
 			var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
+			var preventRecursion = this.getAttribute(scriptElement, "recursion") === "prevent";
+			var debounceMillis = parseInt(this.getAttribute(scriptElement, "debounce"), 10) || 0;
 			var execute = this.getAttribute(scriptElement, "execute") === "true";
 			if(!execute && (actionNames == null && functionNames == null && eventNames == null && mediaQuery == null)) execute = true;
 
@@ -370,15 +372,35 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Apply requested operations to all target components
 			components.forEach(function(component) {
 				var componentFunction = function() {
+					if(component.isDisposed()) return;
+					if(preventRecursion && componentFunction.__isRunning === true) return;
 					var scriptArguments = Array.prototype.slice.call(arguments);
 					scriptArguments.unshift(component.getForm().getScriptingContext());
 					try {
+						componentFunction.__isRunning = true;
 						return scriptFunction.apply(component, scriptArguments);
 					}
 					catch(error) {
 						qookery.util.Debug.logScriptError(component, scriptFunction.toString(), error);
 						throw error;
 					}
+					finally {
+						componentFunction.__isRunning = false;
+					}
+				}
+				if(debounceMillis > 0) {
+					var debounceFunction = componentFunction;
+					componentFunction = function() {
+						var timerId = debounceFunction.__timerId;
+						if(timerId != null) {
+							debounceFunction.__timerId = null;
+							clearTimeout(timerId);
+						}
+						var bindArguments = [ this ];
+						Array.prototype.push.apply(bindArguments, arguments);
+						var setTimoutFunction = Function.prototype.bind.apply(debounceFunction, bindArguments);
+						debounceFunction.__timerId = setTimeout(setTimoutFunction, debounceMillis);
+					};
 				}
 				if(mediaQuery != null) {
 					var query = this.__getMediaQuery(mediaQuery);
