@@ -57,6 +57,20 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			return this.base(arguments, attributeName);
 		},
 
+		setAttribute: function(attributeName, value) {
+			switch(attributeName) {
+			case "center":
+				if(this.__map != null)
+					this.__map.setCenter(new google.maps.LatLng(value[0], value[1]));
+				return this.getAttributes()[attributeName] = value;
+			case "zoom":
+				if(this.__map != null)
+					this.__map.setZoom(value);
+				return this.getAttributes()[attributeName] = value;
+			}
+			return this.base(arguments, attributeName, value);
+		},
+
 		// Construction
 
 		_createMainWidget: function(attributes) {
@@ -108,11 +122,11 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 		},
 
 		setCenter: function(lat, lng) {
-			this.__map.setCenter(new google.maps.LatLng(lat, lng));
+			this.setAttribute("center", [ lat, lng ]);
 		},
 
 		setZoom: function(zoom) {
-			this.__map.setZoom(zoom);
+			this.setAttribute("zoom", zoom);
 		},
 
 		// Internals
@@ -123,17 +137,18 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 			var map = this.__map = new google.maps.Map(widget.getContentElement().getDomElement(), {
 				mapTypeId: this.getAttribute("map-type", "roadmap"),
-				zoom: this.getAttribute("zoom", 6)
+				zoom: this.getAttribute("zoom", qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTIONS_DEFAULT_ZOOM, 6))
 			});
-
-			var centerAttribute = this.getAttribute("center");
-			if(centerAttribute)
-				map.setCenter(new google.maps.LatLng(centerAttribute[0], centerAttribute[1]));
-
 			var value = this.getValue();
-			if(value)
+			if(value != null) {
 				map.setCenter(this.__valueToLatLng(value));
-
+			}
+			else {
+				var centerAttribute = this.getAttribute("center");
+				if(centerAttribute == null)
+					centerAttribute = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTIONS_DEFAULT_CENTER, [ 0, 0 ]);
+				map.setCenter(new google.maps.LatLng(centerAttribute[0], centerAttribute[1]));
+			}
 			this._updateUI(this.getValue());
 
 			widget.addListener("resize", function() {
@@ -170,7 +185,8 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 		__setMarkerPosition: function(location) {
 			var latLng = this.__valueToLatLng(location);
-			if(this.__marker) {
+			this.__map.setCenter(latLng);
+			if(this.__marker != null) {
 				this.__marker.setPosition(latLng);
 				return;
 			}
@@ -234,7 +250,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			}
 
 			this.__closeTimeoutId = qx.lang.Function.delay(function() {
-				if(this.__popup) this.__popup.hide();
+				if(this.__popup != null && !this.__popup.isDisposed()) this.__popup.hide();
 			}, 200, this);
 		},
 

@@ -24,9 +24,19 @@ qx.Bootstrap.define("qookery.maps.Bootstrap", {
 	statics: {
 
 		/**
-		 * Option: An API key as provided by Google for accessing the Google Maps Javascript API
+		 * Option {String}: An API key as provided by Google for accessing the Google Maps Javascript API
 		 */
-		OPTIONS_GOOGLE_API_KEY: "q-maps:google-api-key"
+		OPTIONS_GOOGLE_API_KEY: "q-maps:google-api-key",
+
+		/**
+		 * Option {Array}: The default map center, if none provided
+		 */
+		OPTIONS_DEFAULT_CENTER: "q-maps:default-center",
+
+		/**
+		 * Option {Number?6}: The default map zoom, if none provided
+		 */
+		OPTIONS_DEFAULT_ZOOM: "q-maps:default-zoom"
 	},
 
 	defer: function() {
