@@ -843,6 +843,10 @@
 						The identifier(s) of a previously registered component(s) that will receive the script.
 						If undefined, the enclosing component will be used.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
+					<attribute name="debounce" type="positiveInteger"><annotation><documentation>
+						Number of milliseconds to postpone execution until after the last time the script was invoked.
+						Implies "recursion = prevent".
+					</documentation></annotation></attribute>
 					<attribute name="event"><annotation><documentation>
 						The name(s) of the component's event(s) the script should be attached to.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
@@ -859,6 +863,13 @@
 					<attribute name="once" type="boolean" default="false"><annotation><documentation>
 						Unregister the script after it has been run once (currently implemented only for event registrations)
 					</documentation></annotation></attribute>
+					<attribute name="recursion" default="allow"><annotation><documentation>
+						If set to 'prevented', the script will return "undefined" if called a second time while already running
+						</documentation></annotation><simpleType><restriction base="token">
+							<enumeration value="allow" />
+							<enumeration value="prevent" />
+						</restriction></simpleType>
+					</attribute>
 					<attribute name="source" type="anyURI"><annotation><documentation>
 						The URL to the script that will be attached.
 					</documentation></annotation></attribute>
