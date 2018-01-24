@@ -49,6 +49,19 @@ qx.Interface.define("qookery.IEditableComponent", {
 
 	members: {
 
+		// User interface
+
+		/**
+		 * Update the component's user interface to reflect given value
+		 *
+		 * <p>This method will do nothing in case an update is already in progress or the component has been disposed</p>
+		 *
+		 * @param value {any?} if <code>undefined</code>, automatically use component's current value
+		 *
+		 * @retun {Boolean} <code>true</code> in case the update was performed
+		 */
+		updateUI: function(value) { },
+
 		// Model connection
 
 		/**

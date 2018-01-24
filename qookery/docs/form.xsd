@@ -571,6 +571,14 @@
 						Mutually exclusive with the 'class' attribute.
 					</documentation></annotation></attribute>
 					<!-- Options -->
+					<attribute name="resolution" default="immediate"><annotation><documentation>
+						When to resolve dependency, 'on-demand' means that the resolution will be attempted every time the variable is accessed
+						</documentation></annotation>
+						<simpleType><restriction base="token">
+							<enumeration value="immediate" />
+							<enumeration value="on-demand" />
+						</restriction></simpleType>
+					</attribute>
 					<attribute name="optional" type="boolean" default="false"><annotation><documentation>
 						If true, no exception will be thrown in case importing was not possible.
 					</documentation></annotation></attribute>

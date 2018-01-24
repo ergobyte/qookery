@@ -130,7 +130,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			return this._widgets[1];
 		},
 
-		// Model connection
+		// Model connection and UI
 
 		connect: function(propertyPath) {
 			this.disconnect();
@@ -141,6 +141,22 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			if(this.__connection == null) return;
 			this.getForm().removeConnection(this.__connection);
 			this.__connection = null;
+		},
+
+		updateUI: function(value) {
+			if(this._disableValueEvents || this.isDisposed()) return false;
+			if(value === undefined) value = this.getValue();
+			this._disableValueEvents = true;
+			try {
+				this._updateUI(value);
+				return true;
+			}
+			catch(e) {
+				throw e;
+			}
+			finally {
+				this._disableValueEvents = false;
+			}
 		},
 
 		_applyConnectionHandle: function(modelProvider, connectionHandle) {
@@ -261,17 +277,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				if(model != null)
 					this.__connection.setModelValue(model, value);
 			}
-			if(this._disableValueEvents || this.isDisposed()) return;
-			this._disableValueEvents = true;
-			try {
-				this._updateUI(value);
-			}
-			catch(e) {
-				throw e;
-			}
-			finally {
-				this._disableValueEvents = false;
-			}
+			this.updateUI(value);
 		},
 
 		_applyLabel: function(label) {

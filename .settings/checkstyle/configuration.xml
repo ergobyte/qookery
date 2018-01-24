@@ -54,11 +54,13 @@
 	<module name="Header">
 		<property name="fileExtensions" value="js" />
 		<property name="headerFile" value="${samedir}/header.js.txt" />
+		<property name="ignoreLines" value="3, 5, 9, 11" />
 	</module>
 
 	<module name="Header">
 		<property name="fileExtensions" value="xml, xsd" />
 		<property name="headerFile" value="${samedir}/header.xml.txt" />
+		<property name="ignoreLines" value="1, 4, 6, 10, 12" />
 	</module>
 
 </module>

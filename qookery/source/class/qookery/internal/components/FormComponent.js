@@ -232,46 +232,60 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		__parseImport: function(formParser, importElement) {
-			var value = null, name = null;
+			var name = null, getter = null;
 			var className = formParser.getAttribute(importElement, "class");
 			if(className != null) {
-				value = qx.Class.getByName(className);
 				name = className;
+				getter = function() { return qx.Class.getByName(className); };
 			}
 			var formName = formParser.getAttribute(importElement, "form");
 			if(formName != null) {
-				var form = this;
-				do {
-					if(form.getId() === formName) {
-						value = form;
-						break;
-					}
-					form = form.getParentForm();
-				}
-				while(form != null);
 				name = formName;
+				getter = function() {
+					var form = this;
+					do {
+						if(form.getId() === formName) return form;
+						form = form.getParentForm();
+					}
+					while(form != null);
+				}.bind(this);
 			}
 			var serviceName = formParser.getAttribute(importElement, "service");
 			if(serviceName != null) {
-				value = this.resolveService(serviceName);
 				name = serviceName;
+				getter = this.resolveService.bind(this, serviceName);
 			}
-			if(name == null) {
+			if(name == null || getter == null) {
 				throw new Error("Invalid <import> element");
-			}
-			if(value == null && formParser.getAttribute(importElement, "optional") !== "true") {
-				throw new Error("Unable to resolve required import '" + name + "'");
 			}
 			var variableName = formParser.getAttribute(importElement, "variable");
 			if(variableName == null) {
 				variableName = name.substring(name.lastIndexOf(".") + 1);
 			}
-			if(this.__scriptingContext.hasOwnProperty(variableName))
+			if(this.__scriptingContext.hasOwnProperty(variableName)) {
 				throw new Error("Variable '" + variableName + "' has already been defined");
+			}
+			var isRequired = formParser.getAttribute(importElement, "optional") !== "true";
+			var onDemand = formParser.getAttribute(importElement, "resolution") === "on-demand";
+			if(!onDemand) {
+				var value = getter();
+				if(value == null && isRequired)
+					throw new Error("Unable to resolve required import '" + name + "'");
+				getter = function() { return value; };
+			}
+			else if(isRequired) {
+				var g = getter;
+				getter = function() {
+					var value = g();
+					if(value == null)
+						throw new Error("Unable to resolve required import '" + name + "'");
+					return value;
+				}
+			}
 			Object.defineProperty(this.__scriptingContext, variableName, {
 				configurable: false,
 				enumerable: false,
-				get: function() { return value; },
+				get: getter,
 				set: function(v) { throw new Error("Illegal write access to form import"); }
 			});
 		},

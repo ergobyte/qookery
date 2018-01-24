@@ -40,10 +40,10 @@
 		<input addproperty="waffle.safiraUsername" message="Safira username : " defaultvalue="${user.name}" />
 		<input addproperty="waffle.safiraPassword" message="Safira password : " />
 		<exec executable="${user.home}/git/kitchen/com.ergobyte.ria.waffle/tool/uploader.py">
-			<arg value="${waffle.serverHost}" />
-			<arg value="${waffle.safiraUsername}" />
-			<arg value="${waffle.safiraPassword}" />
-			<arg value="qookerydemo" />
+			<arg line="--server ${waffle.serverHost}" />
+			<arg line="--username ${waffle.safiraUsername}" />
+			<arg line="--password ${waffle.safiraPassword}" />
+			<arg line="--application qookerydemo" />
 			<arg value="build/waffle-archive.zip" />
 		</exec>
 	</target>
