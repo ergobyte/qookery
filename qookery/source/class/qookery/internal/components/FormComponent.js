@@ -53,6 +53,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
 			case "title": return "ReplaceableString";
+			case "instructions": return "ReplaceableString";
 			}
 			return this.base(arguments, attributeName);
 		},
