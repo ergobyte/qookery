@@ -665,6 +665,7 @@
 
 	<element name="radio-button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="model" type="string" />
+		<attribute name="model-type" type="q:value-type" default="String" />
 	</extension></complexContent></complexType></element>
 
 	<element name="radio-button-group"><complexType><complexContent><extension base="q:editable-component.attributes">
@@ -767,6 +768,7 @@
 
 	<element name="toggle-button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="model" type="string" />
+		<attribute name="model-type" type="q:value-type" default="String" />
 		<attribute name="tri-state" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
 

@@ -44,9 +44,13 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 			return toggleButton;
 		},
 
-		setup: function() {
-			var model = this.getAttribute("model");
-			if(model !== undefined) this.setModel(model);
+		setup: function(formParser, attributes) {
+			var model = attributes["model"];
+			if(model != null) {
+				var type = this.getAttribute("model-type", "String");
+				this.setModel(formParser.parseValue(this, type, model));
+			}
+			return this.base(arguments, formParser, attributes);
 		},
 
 		getModel: function() {
@@ -67,6 +71,7 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 	},
 
 	defer: function() {
+		// TODO Patching a QX class goes against the "thin wrapper" spirit of Qookery- consider future removal
 		qx.Class.patch(qx.ui.form.ToggleButton, qx.ui.form.MModelProperty);
 		qx.Class.patch(qx.ui.form.ToggleButton, qx.ui.form.MForm);
 	}
