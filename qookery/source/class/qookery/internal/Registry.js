@@ -25,7 +25,64 @@ qx.Class.define("qookery.internal.Registry", {
 	construct: function() {
 		this.base(arguments);
 		this.__partitions = { };
-		var partition = null;
+		var partition = this.__attributes = this.__createPartition(qookery.IRegistry.P_ATTRIBUTE);
+		partition["allow-grow"] = "Boolean";
+		partition["allow-grow-x"] = "Boolean";
+		partition["allow-grow-y"] = "Boolean";
+		partition["allow-shrink"] = "Boolean";
+		partition["allow-shrink-x"] = "Boolean";
+		partition["allow-shrink-y"] = "Boolean";
+		partition["allow-stretch"] = "Boolean";
+		partition["allow-stretch-x"] = "Boolean";
+		partition["allow-stretch-y"] = "Boolean";
+		partition["col-span"] = "Number";
+		partition["column"] = "Number";
+		partition["enabled"] = "Boolean";
+		partition["filter"] = "RegularExpression";
+		partition["flex"] = "Number";
+		partition["focusable"] = "Boolean";
+		partition["height"] = "Size";
+		partition["label"] = "ReplaceableString";
+		partition["left"] = "Number";
+		partition["line-break"] = "Boolean";
+		partition["live-update"] = "Boolean";
+		partition["margin"] = "IntegerList";
+		partition["margin-bottom"] = "Integer";
+		partition["margin-left"] = "Integer";
+		partition["margin-right"] = "Integer";
+		partition["margin-top"] = "Integer";
+		partition["max-height"] = "Size";
+		partition["max-length"] = "Integer";
+		partition["max-width"] = "Size";
+		partition["maximum"] = "Integer";
+		partition["min-height"] = "Size";
+		partition["min-width"] = "Size";
+		partition["minimal-line-height"] = "Integer";
+		partition["minimum"] = "Integer";
+		partition["native-context-menu"] = "Boolean";
+		partition["padding"] = "IntegerList";
+		partition["padding-bottom"] = "Integer";
+		partition["padding-left"] = "Integer";
+		partition["padding-right"] = "Integer";
+		partition["padding-top"] = "Integer";
+		partition["page-step"] = "Integer";
+		partition["placeholder"] = "ReplaceableString";
+		partition["read-only"] = "Boolean";
+		partition["required"] = "Boolean";
+		partition["reversed"] = "Boolean";
+		partition["row"] = "Number";
+		partition["row-height"] = "Integer";
+		partition["row-span"] = "Number";
+		partition["scale"] = "Boolean";
+		partition["single-step"] = "Integer";
+		partition["spacing"] = "Integer";
+		partition["spacing-x"] = "Integer";
+		partition["spacing-y"] = "Integer";
+		partition["stretch"] = "Boolean";
+		partition["tab-index"] = "Integer";
+		partition["tool-tip-text"] = "ReplaceableString";
+		partition["top"] = "Number"
+		partition["width"] = "Size";
 
 		partition = this.__createPartition(qookery.IRegistry.P_SERVICE);
 		partition["qookery.IModelProvider"] = qookery.impl.DefaultModelProvider;
@@ -150,6 +207,7 @@ qx.Class.define("qookery.internal.Registry", {
 	members: {
 
 		__partitions: null,
+		__attributes: null,
 
 		// Partitions
 
@@ -185,6 +243,12 @@ qx.Class.define("qookery.internal.Registry", {
 		remove: function(partitionName, elementName) {
 			var partition = this.__getPartition(partitionName);
 			delete partition[elementName];
+		},
+
+		// Attributes
+
+		getAttributeType: function(attributeName) {
+			return this.__attributes[attributeName];
 		},
 
 		// Services

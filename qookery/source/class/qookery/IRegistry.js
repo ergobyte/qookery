@@ -27,6 +27,7 @@ qx.Interface.define("qookery.IRegistry", {
 
 		// .	Partitions
 
+		P_ATTRIBUTE: "attribute",
 		P_CELL_RENDERER_FACTORY: "cell-renderer-factory",
 		P_COMMAND: "command",
 		P_COMPONENT: "component",

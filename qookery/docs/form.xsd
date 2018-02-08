@@ -377,6 +377,7 @@
 		<attribute name="use-attributes"><annotation><documentation>
 			A list of variable names that provide additional attributes to use with this declaration
 		</documentation></annotation><simpleType><list itemType="q:javascript-identifier" /></simpleType></attribute>
+		<anyAttribute namespace="##other" />
 	</complexType>
 
 	<complexType name="atom-component.attributes"><complexContent><extension base="q:component.attributes">
@@ -606,7 +607,6 @@
 		<attribute ref="xml:base" />
 		<attribute name="translation-prefix" />
 		<attribute name="title" />
-		<attribute name="instructions" />
 		<attribute name="icon" type="anyURI" />
 		<attribute name="model-provider" type="token" />
 	</extension></complexContent></complexType></element>

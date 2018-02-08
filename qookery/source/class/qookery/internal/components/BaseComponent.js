@@ -27,73 +27,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 	statics: {
 
-		__ATTRIBUTE_TYPES: {
-			"margin-bottom": "Integer",
-			"margin-left": "Integer",
-			"margin-right": "Integer",
-			"margin-top": "Integer",
-			"maximum": "Integer",
-			"max-length": "Integer",
-			"minimum": "Integer",
-			"minimal-line-height": "Integer",
-			"padding-bottom": "Integer",
-			"padding-left": "Integer",
-			"padding-right": "Integer",
-			"padding-top": "Integer",
-			"page-step": "Integer",
-			"row-height": "Integer",
-			"single-step": "Integer",
-			"spacing": "Integer",
-			"spacing-x": "Integer",
-			"spacing-y": "Integer",
-			"tab-index": "Integer",
-
-			"allow-grow": "Boolean",
-			"allow-grow-x": "Boolean",
-			"allow-grow-y": "Boolean",
-			"allow-shrink": "Boolean",
-			"allow-shrink-x": "Boolean",
-			"allow-shrink-y": "Boolean",
-			"allow-stretch": "Boolean",
-			"allow-stretch-x": "Boolean",
-			"allow-stretch-y": "Boolean",
-			"enabled": "Boolean",
-			"focusable": "Boolean",
-			"live-update": "Boolean",
-			"native-context-menu": "Boolean",
-			"read-only": "Boolean",
-			"required": "Boolean",
-			"reversed": "Boolean",
-			"scale": "Boolean",
-
-			"width": "Size",
-			"height": "Size",
-			"min-width": "Size",
-			"min-height": "Size",
-			"max-width": "Size",
-			"max-height": "Size",
-
-			"margin": "IntegerList",
-			"padding": "IntegerList",
-
-			"filter": "RegularExpression",
-
-			"label": "ReplaceableString",
-			"placeholder": "ReplaceableString",
-			"tool-tip-text": "ReplaceableString",
-
-			// Layout item properties
-			"col-span": "Number",
-			"column": "Number",
-			"flex": "Number",
-			"left": "Number",
-			"line-break": "Boolean",
-			"row": "Number",
-			"row-span": "Number",
-			"stretch": "Boolean",
-			"top": "Number"
-		},
-
 		__LAYOUT_ITEM_PROPERTY_MAP: {
 			"col-span": "colSpan",
 			"column": "column",
@@ -246,7 +179,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		getAttributeType: function(attributeName) {
-			return qookery.internal.components.BaseComponent.__ATTRIBUTE_TYPES[attributeName];
+			return qookery.internal.Registry.getInstance().getAttributeType(attributeName);
 		},
 
 		validate: function() {
