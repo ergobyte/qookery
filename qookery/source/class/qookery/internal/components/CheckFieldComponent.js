@@ -75,9 +75,22 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 			this.getMainWidget().setValue(value);
 		},
 
+		_applyEnabled: function(enabled) {
+			var labelWidget = this.getLabelWidget();
+			if(labelWidget != null)
+				labelWidget.setEnabled(enabled);
+			this.__updateEnabled();
+		},
+
 		_applyReadOnly: function(readOnly) {
 			this.base(arguments, readOnly);
-			this.getMainWidget().setEnabled(!readOnly);
+			this.__updateEnabled();
+		},
+
+		__updateEnabled: function() {
+			var isEnabled = this.getEnabled();
+			var isReadOnly = this.getReadOnly();
+			this.getMainWidget().setEnabled(isEnabled && !isReadOnly);
 		},
 
 		// Internals
