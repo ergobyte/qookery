@@ -6,6 +6,8 @@
 		id="qookerydemo.forms.translations"
 		layout="v-box" spacing="10">
 
+	<import singleton="qx.locale.Manager" />
+
 	<translation xml:lang="en">
 		<message id="header">Ancient Greek Gods</message>
 		<message id="intro">
@@ -68,12 +70,12 @@
 	<composite column-count="auto" align-x="center" max-width="300" column-flexes="1 1">
 		<button label="Switch to EL" width="1">
 			<script event="execute">
-				qx.locale.Manager.getInstance().setLocale("el");
+				$.Manager.setLocale("el");
 			</script>
 		</button>
 		<button label="Switch to EN" width="1">
 			<script event="execute">
-				qx.locale.Manager.getInstance().setLocale("en");
+				$.Manager.setLocale("en");
 			</script>
 		</button>
 	</composite>

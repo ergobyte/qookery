@@ -40,13 +40,13 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__translationPrefix: null,
 		__components: null,
-		__modelProvider: null,
 		__connections: null,
 		__scriptingContext: null,
 		__serviceResolver: null,
+		__translationPrefix: null,
 		__operationQueue: null,
+		__modelProvider: null,
 
 		// Metadata
 
@@ -57,31 +57,39 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return this.base(arguments, attributeName);
 		},
 
-		// Creation
-
-		prepare: function(formParser, xmlElement) {
-			this.__serviceResolver = formParser.getServiceResolver();
-			this.__scriptingContext = this.$ = this.__createScriptingContext(formParser.getVariables());
-			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
-			if(!this.__translationPrefix)
-				this.__translationPrefix = formParser.getAttribute(xmlElement, "id");
-			this.__enableOperationQueuing();
+		setAttribute: function(attributeName, value) {
+			switch(attributeName) {
+			case qookery.IFormComponent.A_SERVICE_RESOLVER:
+				this.__serviceResolver = value;
+				return;
+			case qookery.IFormComponent.A_TRANSLATION_PREFIX:
+				this.__translationPrefix = value;
+				return;
+			case qookery.IFormComponent.A_VARIABLES:
+				this.__scriptingContext = this.$ = this.__createScriptingContext(value);
+				return;
+			}
+			return this.base(arguments, attributeName, value)
 		},
 
+		// Lifecycle
+
 		create: function(attributes) {
+			this.__enableOperationQueuing();
+			this.debug("Created");
 			this.base(arguments, attributes);
 			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes["model-provider"]);
 			var icon = this.getAttribute("icon");
-			if(icon) this.setIcon(icon);
-			this.debug("Created form");
+			if(icon != null)
+				this.setIcon(icon);
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			var title = this.getAttribute("title");
-			if(title)
+			if(title != null)
 				this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
 			this.__flushOperationQueue();
-			return this.base(arguments, formParser, attributes);
+			return this.base(arguments, attributes);
 		},
 
 		focus: function() {
@@ -185,20 +193,16 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return new qookery.util.ValidationError(this, message, errors);
 		},
 
-		parseCustomElement: function(formParser, xmlElement) {
-			var elementName = qx.dom.Node.getName(xmlElement);
+		parseXmlElement: function(elementName, xmlElement) {
 			switch(elementName) {
-			case "bind":
-				this.__parseBind(formParser, xmlElement);
+			case "{http://www.qookery.org/ns/Form}import":
+				this.__parseImport(xmlElement);
 				return true;
-			case "import":
-				this.__parseImport(formParser, xmlElement);
+			case "{http://www.qookery.org/ns/Form}translation":
+				this.__parseTranslation(xmlElement);
 				return true;
-			case "translation":
-				this.__parseTranslation(formParser, xmlElement);
-				return true;
-			case "variable":
-				this.__parseVariable(formParser, xmlElement);
+			case "{http://www.qookery.org/ns/Form}variable":
+				this.__parseVariable(xmlElement);
 				return true;
 			}
 			return false;
@@ -225,20 +229,14 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			return context;
 		},
 
-		__parseBind: function(formParser, bindElement) {
-			var prefix = formParser.getAttribute(bindElement, "prefix");
-			var namespaceUri = formParser.getAttribute(bindElement, "uri");
-			formParser.setNamespacePrefix(prefix, namespaceUri);
-		},
-
-		__parseImport: function(formParser, importElement) {
+		__parseImport: function(importElement) {
 			var name = null, getter = null;
-			var className = formParser.getAttribute(importElement, "class");
+			var className = qookery.util.Xml.getAttribute(importElement, "class");
 			if(className != null) {
 				name = className;
 				getter = function() { return qx.Class.getByName(className); };
 			}
-			var formName = formParser.getAttribute(importElement, "form");
+			var formName = qookery.util.Xml.getAttribute(importElement, "form");
 			if(formName != null) {
 				name = formName;
 				getter = function() {
@@ -250,23 +248,28 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					while(form != null);
 				}.bind(this);
 			}
-			var serviceName = formParser.getAttribute(importElement, "service");
+			var serviceName = qookery.util.Xml.getAttribute(importElement, "service");
 			if(serviceName != null) {
 				name = serviceName;
 				getter = this.resolveService.bind(this, serviceName);
 			}
+			var singletonName = qookery.util.Xml.getAttribute(importElement, "singleton");
+			if(singletonName != null) {
+				name = singletonName;
+				getter = function() { return qx.Class.getByName(singletonName).getInstance(); };
+			}
 			if(name == null || getter == null) {
 				throw new Error("Invalid <import> element");
 			}
-			var variableName = formParser.getAttribute(importElement, "variable");
+			var variableName = qookery.util.Xml.getAttribute(importElement, "variable");
 			if(variableName == null) {
 				variableName = name.substring(name.lastIndexOf(".") + 1);
 			}
 			if(this.__scriptingContext.hasOwnProperty(variableName)) {
 				throw new Error("Variable '" + variableName + "' has already been defined");
 			}
-			var isRequired = formParser.getAttribute(importElement, "optional") !== "true";
-			var onDemand = formParser.getAttribute(importElement, "resolution") === "on-demand";
+			var isRequired = qookery.util.Xml.getAttribute(importElement, "optional") !== "true";
+			var onDemand = qookery.util.Xml.getAttribute(importElement, "resolution") === "on-demand";
 			if(!onDemand) {
 				var value = getter();
 				if(value == null && isRequired)
@@ -290,31 +293,33 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			});
 		},
 
-		__parseTranslation: function(formParser, translationElement) {
+		__parseTranslation: function(translationElement) {
 			if(!qx.dom.Element.hasChildren(translationElement)) return;
 			var languageCode = qx.xml.Element.getAttributeNS(translationElement, "http://www.w3.org/XML/1998/namespace", "lang");
-			if(!languageCode) throw new Error("Language code missing");
+			if(languageCode == null)
+				throw new Error("Language code missing");
 			var messages = { };
-			var prefix = this.getTranslationPrefix();
 			var children = qx.dom.Hierarchy.getChildElements(translationElement);
 			for(var i = 0; i < children.length; i++) {
 				var messageElement = children[i];
 				var elementName = qx.dom.Node.getName(messageElement);
 				if(elementName != "message")
 					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in translation block", [ elementName ]));
-				var messageId = formParser.getAttribute(messageElement, "id");
-				if(!messageId) throw new Error("Message identifier missing");
-				if(prefix) messageId = prefix + "." + messageId;
-				messages[messageId] = formParser.getNodeText(messageElement);
+				var messageId = qookery.util.Xml.getAttribute(messageElement, "id");
+				if(messageId == null)
+					throw new Error("Message identifier missing");
+				if(this.__translationPrefix != null)
+					messageId = this.__translationPrefix + "." + messageId;
+				messages[messageId] = qookery.util.Xml.getNodeText(messageElement);
 			}
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		},
 
-		__parseVariable: function(formParser, variableElement) {
-			var variableName = formParser.getAttribute(variableElement, "name");
+		__parseVariable: function(variableElement) {
+			var variableName = qookery.util.Xml.getAttribute(variableElement, "name");
 			if(variableName == null)
 				throw new Error("Variable name is required");
-			var providerName = formParser.getAttribute(variableElement, "provider");
+			var providerName = qookery.util.Xml.getAttribute(variableElement, "provider");
 			if(providerName == null)
 				providerName = "Form";
 			var provider = this.__scriptingContext[providerName];
@@ -322,18 +327,18 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				throw new Error("Variable provider '" + providerName + "' missing from scripting context");
 			var value = provider.getVariable(variableName);
 			if(value == null) {
-				var defaultValue = formParser.getAttribute(variableElement, "default");
+				var defaultValue = qookery.util.Xml.getAttribute(variableElement, "default");
 				if(defaultValue != null) {
-					var typeName = formParser.getAttribute(variableElement, "type", "Expression");
-					value = formParser.parseValue(this, typeName, defaultValue);
+					var typeName = qookery.util.Xml.getAttribute(variableElement, "type", "Expression");
+					value = qookery.util.Xml.parseValue(this, typeName, defaultValue);
 				}
 				if(value === undefined) value = null;
-				if(value === null && formParser.getAttribute(variableElement, "required") === "true")
+				if(value === null && qookery.util.Xml.getAttribute(variableElement, "required") === "true")
 					throw new Error("Value for required variable '" + variableName + "' is missing");
 				provider.setVariable(variableName, value);
 			}
 			if(provider === this) return;
-			var writable = formParser.getAttribute(variableElement, "writable") !== "false";
+			var writable = qookery.util.Xml.getAttribute(variableElement, "writable") !== "false";
 			var setFunction = writable ?
 				function(v) { provider.setVariable(variableName, v); } :
 				function(v) { throw new Error("Illegal attempt to modify non-writable variable '" + variableName + "'"); };
@@ -410,14 +415,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		for(var i = 0; i < this.__connections.length; i++) this.__connections[i].disconnect();
-		this.__components = null;
-		this.__validations = null;
-		this.__userContextMap = null;
-		this.__registration = null;
-		this.__scriptingContext = null;
-		this.__serviceResolver = null;
-		this.__translationPrefix = null;
-		this.debug("Destructed form");
+		for(var i = 0; i < this.__connections.length; i++)
+			this.__connections[i].disconnect();
+		this.debug("Destructed");
 	}
 });

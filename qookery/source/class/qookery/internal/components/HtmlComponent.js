@@ -18,7 +18,7 @@
 
 qx.Class.define("qookery.internal.components.HtmlComponent", {
 
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.Component,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -35,6 +35,13 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 			if(overflowY !== undefined) html.setOverflowY(overflowY);
 			this._applyLayoutAttributes(html, attributes);
 			return [ html ];
+		},
+
+		parseXmlElement: function(elementName, xmlElement) {
+			if(elementName.indexOf("{http://www.w3.org/1999/xhtml}") !== 0) return false;
+			var html = qx.xml.Element.serialize(xmlElement);
+			this.setHtml(html);
+			return true;
 		},
 
 		getHtml: function() {

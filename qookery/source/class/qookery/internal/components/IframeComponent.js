@@ -18,7 +18,7 @@
 
 qx.Class.define("qookery.internal.components.IframeComponent", {
 
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.Component,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);

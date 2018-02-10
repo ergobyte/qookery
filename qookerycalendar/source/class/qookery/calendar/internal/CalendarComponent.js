@@ -25,7 +25,7 @@
  */
 qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.Component,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -83,8 +83,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				// Use a timeout to let the layout queue apply its changes to the DOM
 				var height = event.getData()["height"];
 				qx.event.Timer.once(function() {
-					if(!this.__calendar) return;
-					this.__calendar.fullCalendar("option", "height", height);
+					if(this.__calendar != null)
+						this.__calendar.fullCalendar("option", "height", height);
 				}, this, 0);
 			}, this);
 			return [ widget ];
@@ -185,14 +185,15 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				}
 				return;
 			case "refetchEvents":
-				this.__calendar.fullCalendar("refetchEvents");
+				if(this.__calendar != null)
+					this.__calendar.fullCalendar("refetchEvents");
 				return;
 			}
 		}
 	},
 
 	destruct: function() {
-		if(this.__calendar) {
+		if(this.__calendar != null) {
 			this.__calendar.fullCalendar("destroy");
 			this.__calendar = null;
 		}

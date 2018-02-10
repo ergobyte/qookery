@@ -27,9 +27,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 	statics: {
 
-		REGISTRY: qookery.internal.Registry.getInstance(),
-
-		NAMED_SIZES: { "XXS": 28, "XS": 46, "S": 74, "M": 120, "L": 194, "XL": 314, "XXL": 508 }
+		__REGISTRY: qookery.internal.Registry.getInstance()
 	},
 
 	construct: function(variables, serviceResolver) {
@@ -38,162 +36,123 @@ qx.Class.define("qookery.internal.FormParser", {
 			this.assertMap(variables);
 			this.assertFunction(serviceResolver);
 		}
-		this.__namespaces = { };
 		this.__variables = variables;
 		this.__serviceResolver = serviceResolver;
 	},
 
 	members: {
 
-		__defaultNamespace: null,
-		__namespaces: null,
 		__variables: null,
 		__serviceResolver: null,
 
 		// IFormParser implementation
 
-		getVariables: function() {
-			return this.__variables;
-		},
-
-		getServiceResolver: function() {
-			return this.__serviceResolver;
-		},
-
 		parseXmlDocument: function(xmlDocument, parentComponent) {
-			if(xmlDocument == null) throw new Error("An XML form must be supplied.");
-			var elements = qx.dom.Hierarchy.getChildElements(xmlDocument);
-			var rootElement = elements[0];
-			var attributes = rootElement.attributes;
-			for(var i = 0; i < attributes.length; i++) {
-				var attribute = attributes.item(i);
-				var attributeName = attribute.nodeName;
-				if(attributeName === "xmlns")
-					this.__defaultNamespace = attribute.value;
-				else if(attributeName.indexOf("xmlns:") === 0)
-					this.__namespaces[attributeName.substr(6)] = attribute.value;
-			}
-			var rootComponent = this.__parseComponent(rootElement, parentComponent);
-			return rootComponent;
-		},
-
-		parseAttributes: function(component, xmlElement, typeMap) {
-			var attributes = { };
-			var xmlAttributes = xmlElement.attributes;
-			for(var i = 0; i < xmlAttributes.length; i++) {
-				var xmlAttribute = xmlAttributes.item(i);
-				var attributeName = xmlAttribute.nodeName;
-				var text = xmlAttribute.value;
-				if(text == null || text.length == 0) continue;
-				text = text.trim();
-				if(text.length == 0) continue;
-				var type = (typeMap ? typeMap[attributeName] : undefined) || component.getAttributeType(attributeName);
-				var value = type ? this.parseValue(component, type, text) : text;
-				attributes[attributeName] = value;
-			}
-			return attributes;
-		},
-
-		parseValue: function(component, type, text) {
-			switch(type) {
-			case "Boolean":
-				switch(text.toLowerCase()) {
-				case "true": return true;
-				case "false": return false;
-				}
-				return text;
-			case "Expression":
-				return this.__evaluateExpression(component, text);
-			case "Integer":
-				return parseInt(text, 10);
-			case "IntegerList":
-				return text.split(/\W+/).map(function(element) { return parseInt(element, 10); });
-			case "Number":
-				return qx.data.Conversion.toNumber(text);
-			case "NumberList":
-				return text.split(/\s+/).map(function(element) { return qx.data.Conversion.toNumber(element); });
-			case "RegularExpression":
-				return new RegExp(text);
-			case "ReplaceableString":
-				if(text.length < 2) return text;
-				if(text.charAt(0) !== "%") return text;
-				if(text.charAt(1) === "{" && text.charAt(text.length - 1) === "}") {
-					var expression = text.substring(2, text.length - 1);
-					return this.__evaluateExpression(component, expression);
-				}
-				var messageId = text.substring(1);
-				return component["tr"](messageId);
-			case "QName":
-				return this.resolveQName(text);
-			case "Size":
-				return this.constructor.NAMED_SIZES[text] || (isNaN(text) ? text : parseInt(text, 10));
-			case "StringList":
-				return text.split(/\s+/);
-			default:
-				// Fallback for unknown types
-				return text;
-			}
-		},
-
-		getNodeText: function(node) {
-			var text = qx.dom.Node.getText(node);
-			if(text == null || text.length == 0) return null;
-			text = text.trim();
-			if(text.length == 0) return null;
-			return text;
-		},
-
-		getAttribute: function(element, attributeName, defaultValue) {
-			var text = qx.xml.Element.getAttributeNS(element, "", attributeName);
-			if(text == null || text.length == 0) return defaultValue;
-			text = text.trim();
-			if(text.length == 0) return defaultValue;
-			return text;
-		},
-
-		setNamespacePrefix: function(prefix, namespaceUri) {
-			this.__namespaces[prefix] = namespaceUri;
-		},
-
-		resolveNamespacePrefix: function(prefix) {
-			return this.__namespaces[prefix];
-		},
-
-		resolveQName: function(qName) {
-			if(qName.charAt(0) === "{") return qName;
-			var colonPos = qName.indexOf(":");
-			if(colonPos === -1)
-				return "{" + this.__defaultNamespace + "}" + qName;
-			var prefix = qName.substr(0, colonPos);
-			var namespaceUri = this.resolveNamespacePrefix(prefix);
-			if(!namespaceUri)
-				throw new Error(qx.lang.String.format("Unable to resolve namespace prefix '%1'", [ prefix ]));
-			var localPart = qName.substring(colonPos + 1);
-			return "{" + namespaceUri + "}" + localPart;
+			if(xmlDocument == null)
+				throw new Error("An XML form must be supplied");
+			var component = this.__parseStatementBlock(xmlDocument, parentComponent);
+			if(component == null)
+				throw new Error("No Qookery component found within XML document");
+			return component;
 		},
 
 		// Internal methods
 
-		__parseComponent: function(componentElement, parentComponent) {
+		__parseStatementBlock: function(blockElement, component) {
+			if(!qx.dom.Element.hasChildren(blockElement)) return null;
+			var selectionMade = false;
+			return qx.dom.Hierarchy.getChildElements(blockElement).reduce(function(previousResult, statementElement) {
+
+				var elementQName = qx.dom.Node.getName(statementElement);
+				if(elementQName === "parsererror")
+					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
+
+				var namespaces = qookery.util.Xml.getNamespaceDeclarations(statementElement);
+				var elementQName = qx.dom.Node.getName(statementElement);
+				var elementName = qookery.util.Xml.resolveQName(function(prefix) {
+					if(namespaces != null) {
+						var namespaceUri = namespaces[prefix];
+						if(namespaceUri != null)
+							return namespaceUri;
+					}
+					if(component != null) {
+						return component.resolveNamespacePrefix(prefix);
+					}
+					return null;
+				}, elementQName);
+
+				// First consult the component registry
+				if(this.constructor.__REGISTRY.isComponentTypeAvailable(elementName)) {
+					return this.__parseComponent(statementElement, component, elementName, namespaces);
+				}
+
+				// Assert that we are within the context of a component
+				if(component == null)
+					throw new Error("Flow control and other non-component statements must appear with the context of a component");
+
+				// Then check a number of special elements known by parser
+				switch(elementName) {
+				case "{http://www.qookery.org/ns/Form}else":
+					if(selectionMade) return previousResult;
+					// Fall through
+				case "{http://www.qookery.org/ns/Form}if":
+					selectionMade = this.__parseIfElse(statementElement, component);
+					return previousResult;
+				case "{http://www.qookery.org/ns/Form}script":
+					this.__parseScript(statementElement, component);
+					return previousResult;
+				case "{http://www.qookery.org/ns/Form}switch":
+					this.__parseSwitch(statementElement, component);
+					return previousResult;
+				case "{http://www.w3.org/2001/XInclude}include":
+					this.__parseXInclude(statementElement, component);
+					return previousResult;
+				}
+
+				// Lastly, attempt to delegate element parsing to current component
+				if(component.parseXmlElement(elementName, statementElement))
+					return previousResult;
+
+				// Tough luck with this element, interrupt parser progress here
+				throw new Error(qx.lang.String.format("Unexpected element '%1' encountered in statement block", [ elementName ]));
+
+			}.bind(this), null);
+		},
+
+		__parseComponent: function(componentElement, parentComponent, componentName, namespaces) {
 
 			// Instantiate and initialize new component
 
-			var elementName = qx.dom.Node.getName(componentElement);
-			var componentQName = this.resolveQName(elementName);
-			var component = this.constructor.REGISTRY.createComponent(componentQName, parentComponent);
+			var component = this.constructor.__REGISTRY.createComponent(componentName, parentComponent);
 			try {
-				component.prepare(this, componentElement);
 
-				// Id registration
+				// Set component attributes
 
-				var componentId = this.getAttribute(componentElement, "id");
+				var componentId = qookery.util.Xml.getAttribute(componentElement, "id");
+				if(componentId != null)
+					component.setAttribute(qookery.IComponent.A_ID, componentId);
+				if(namespaces != null)
+					component.setAttribute(qookery.IComponent.A_NAMESPACES, namespaces);
+
+				// Additional attributes applicable exclusively to forms
+
+				if(qx.Class.implementsInterface(component.constructor, qookery.IFormComponent)) {
+					component.setAttribute(qookery.IFormComponent.A_SERVICE_RESOLVER, this.__serviceResolver);
+					component.setAttribute(qookery.IFormComponent.A_VARIABLES, this.__variables);
+					var translationPrefix = qookery.util.Xml.getAttribute(componentElement, "translation-prefix") || componentId;
+					if(translationPrefix != null)
+						component.setAttribute(qookery.IFormComponent.A_TRANSLATION_PREFIX, translationPrefix);
+				}
+
+				// Register component into its form
+
 				if(componentId != null && parentComponent != null)
 					parentComponent.getForm().putComponent(componentId, component);
 
 				// Attribute parsing
 
-				var attributes = this.parseAttributes(component, componentElement);
-				var useAttributes = this.getAttribute(componentElement, "use-attributes");
+				var attributes = qookery.util.Xml.parseAllAttributes(component, componentElement);
+				var useAttributes = qookery.util.Xml.getAttribute(componentElement, "use-attributes");
 				if(useAttributes != null) useAttributes.split(/\s+/).forEach(function(variableName) {
 					var useAttributes = component.getForm().getVariable(variableName);
 					if(!qx.lang.Type.isObject(useAttributes))
@@ -211,12 +170,12 @@ qx.Class.define("qookery.internal.FormParser", {
 
 				// Component setup
 
-				component.setup(this, attributes);
+				component.setup(attributes);
 
 				// Attach to container
 
 				if(parentComponent != null) {
-					var display = this.getAttribute(componentElement, "display", "inline");
+					var display = qookery.util.Xml.getAttribute(componentElement, "display", "inline");
 					switch(display) {
 					case "inline":
 						if(!qx.Class.hasInterface(parentComponent.constructor, qookery.IContainerComponent))
@@ -237,67 +196,22 @@ qx.Class.define("qookery.internal.FormParser", {
 				return c;
 			}
 			finally {
+				// Prevent memory leaks in case component creation failed midway
 				if(component != null)
 					component.dispose();
 			}
 		},
 
-		__parseStatementBlock: function(blockElement, component) {
-			if(!qx.dom.Element.hasChildren(blockElement)) return;
-			var selectionMade = false;
-			var children = qx.dom.Hierarchy.getChildElements(blockElement);
-			for(var i = 0; i < children.length; i++) {
-				var statementElement = children[i];
-				var elementName = qx.dom.Node.getName(statementElement);
-				if(elementName === "parsererror")
-					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
-				var elementQName = this.resolveQName(elementName);
-
-				// First consult the component registry
-				if(this.constructor.REGISTRY.isComponentTypeAvailable(elementQName)) {
-					this.__parseComponent(statementElement, component);
-					continue;
-				}
-
-				// Then check a number of special elements known by parser
-				switch(elementQName) {
-				case "{http://www.qookery.org/ns/Form}else":
-					if(selectionMade) continue;
-					// Fall through
-				case "{http://www.qookery.org/ns/Form}if":
-					selectionMade = this.__parseIfElse(statementElement, component);
-					continue;
-				case "{http://www.qookery.org/ns/Form}script":
-					this.__parseScript(statementElement, component);
-					continue;
-				case "{http://www.qookery.org/ns/Form}switch":
-					this.__parseSwitch(statementElement, component);
-					continue;
-				case "{http://www.w3.org/2001/XInclude}include":
-					this.__parseXInclude(statementElement, component);
-					continue;
-				}
-
-				// Lastly, attempt to delegate element parsing to current component
-				if(component.parseCustomElement(this, statementElement)) {
-					continue;
-				}
-
-				// Since everything failed, break parser execution here
-				throw new Error(qx.lang.String.format("Unexpected XML element '%1' in statement block", [ elementQName ]));
-			}
-		},
-
 		__parseXInclude: function(xIncludeElement, parentComponent) {
-			var formUrl = this.getAttribute(xIncludeElement, "href");
-			formUrl = this.parseValue(parentComponent, "ReplaceableString", formUrl);
+			var formUrl = qookery.util.Xml.getAttribute(xIncludeElement, "href");
+			formUrl = qookery.util.Xml.parseValue(parentComponent, "ReplaceableString", formUrl);
 			var xmlString = qookery.Qookery.getService("qookery.IResourceLoader", true).loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
 			var formParser = new qookery.internal.FormParser(this.__variables, this.__serviceResolver);
 			try {
 				var component = formParser.parseXmlDocument(xmlDocument, parentComponent);
 				var xmlIdAttribute = xIncludeElement.attributes["xml:id"];
-				if(xmlIdAttribute)
+				if(xmlIdAttribute != null)
 					parentComponent.getForm().putComponent(xmlIdAttribute.value, component);
 				return component;
 			}
@@ -310,12 +224,12 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseIfElse: function(selectionElement, component) {
-			var expression = this.getAttribute(selectionElement, "expression");
+			var expression = qookery.util.Xml.getAttribute(selectionElement, "expression");
 			if(expression != null) {
-				var result = this.__evaluateExpression(component, expression);
+				var result = component.evaluateExpression(expression);
 				if(!result) return false;
 			}
-			var mediaQuery = this.getAttribute(selectionElement, "media-query");
+			var mediaQuery = qookery.util.Xml.getAttribute(selectionElement, "media-query");
 			if(mediaQuery != null) {
 				var query = this.__getMediaQuery(mediaQuery);
 				if(!query.isMatching()) return false;
@@ -326,8 +240,8 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseScript: function(scriptElement, component) {
 			// Load source code
-			var sourceCode = this.getNodeText(scriptElement);
-			var scriptUrl = this.getAttribute(scriptElement, "source");
+			var sourceCode = qookery.util.Xml.getNodeText(scriptElement);
+			var scriptUrl = qookery.util.Xml.getAttribute(scriptElement, "source");
 			if(scriptUrl != null)
 				sourceCode = qookery.Qookery.getService("qookery.IResourceLoader", true).loadResource(scriptUrl);
 			if(sourceCode == null)
@@ -335,11 +249,11 @@ qx.Class.define("qookery.internal.FormParser", {
 
 			// Compile script function
 			var functionConstructorArgs = [ "$" ];
-			var argumentNames = this.getAttribute(scriptElement, "arguments");
+			var argumentNames = qookery.util.Xml.getAttribute(scriptElement, "arguments");
 			if(argumentNames != null) {
 				Array.prototype.push.apply(functionConstructorArgs, argumentNames.split(/\s+/));
 			}
-			else if(this.getAttribute(scriptElement, "event") != null) {
+			else if(qookery.util.Xml.getAttribute(scriptElement, "event") != null) {
 				// For backward compatibility, add the implied "event" argument
 				functionConstructorArgs.push("event");
 			}
@@ -352,18 +266,18 @@ qx.Class.define("qookery.internal.FormParser", {
 			}
 
 			// Preload some XML attributes
-			var actionNames = this.getAttribute(scriptElement, "action");
-			var functionNames = this.getAttribute(scriptElement, "name");
-			var eventNames = this.getAttribute(scriptElement, "event");
-			var mediaQuery = this.getAttribute(scriptElement, "media-query");
-			var onlyOnce = this.getAttribute(scriptElement, "once") === "true";
-			var preventRecursion = this.getAttribute(scriptElement, "recursion") === "prevent";
-			var debounceMillis = parseInt(this.getAttribute(scriptElement, "debounce"), 10) || 0;
-			var execute = this.getAttribute(scriptElement, "execute") === "true";
+			var actionNames = qookery.util.Xml.getAttribute(scriptElement, "action");
+			var functionNames = qookery.util.Xml.getAttribute(scriptElement, "name");
+			var eventNames = qookery.util.Xml.getAttribute(scriptElement, "event");
+			var mediaQuery = qookery.util.Xml.getAttribute(scriptElement, "media-query");
+			var onlyOnce = qookery.util.Xml.getAttribute(scriptElement, "once") === "true";
+			var preventRecursion = qookery.util.Xml.getAttribute(scriptElement, "recursion") === "prevent";
+			var debounceMillis = parseInt(qookery.util.Xml.getAttribute(scriptElement, "debounce"), 10) || 0;
+			var execute = qookery.util.Xml.getAttribute(scriptElement, "execute") === "true";
 			if(!execute && (actionNames == null && functionNames == null && eventNames == null && mediaQuery == null)) execute = true;
 
 			// Create list of target components
-			var componentIds = this.getAttribute(scriptElement, "component");
+			var componentIds = qookery.util.Xml.getAttribute(scriptElement, "component");
 			var components = componentIds == null ? [ component ] :
 				componentIds.split(/\s+/).map(function(componentId) {
 					return component.getForm().getComponent(componentId, true);
@@ -432,17 +346,17 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseSwitch: function(switchElement, component) {
 			if(!qx.dom.Element.hasChildren(switchElement)) return;
-			var switchExpression = this.getAttribute(switchElement, "expression");
-			var switchResult = this.__evaluateExpression(component, switchExpression);
+			var switchExpression = qookery.util.Xml.getAttribute(switchElement, "expression");
+			var switchResult = component.evaluateExpression(switchExpression);
 			var children = qx.dom.Hierarchy.getChildElements(switchElement);
 			for(var i = 0; i < children.length; i++) {
 				var caseElement = children[i];
 				var elementName = qx.dom.Node.getName(caseElement);
 				if(elementName !== "case")
 					throw new Error(qx.lang.String.format("Unexpected element in switch block: %1", [ qx.dom.Node.getText(switchElement) ]));
-				var caseExpression = this.getAttribute(caseElement, "expression");
+				var caseExpression = qookery.util.Xml.getAttribute(caseElement, "expression");
 				if(caseExpression != null) {
-					var caseResult = this.__evaluateExpression(component, caseExpression);
+					var caseResult = component.evaluateExpression(caseExpression);
 					if(caseResult != switchResult) continue;
 				}
 				this.__parseStatementBlock(caseElement, component);
@@ -452,20 +366,10 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__getMediaQuery: function(mediaQuery) {
-			var query = this.constructor.REGISTRY.getMediaQuery(mediaQuery);
+			var query = this.constructor.__REGISTRY.getMediaQuery(mediaQuery);
 			if(query != null)
 				return query;
 			return new qx.bom.MediaQuery(mediaQuery);
-		},
-
-		__evaluateExpression: function(component, expression) {
-			if(!component) throw new Error("Illegal attempt to evaluate an expression without a parent component");
-			var clientCode = "return (" + expression + ");";
-			return component.executeClientCode(clientCode);
 		}
-	},
-
-	destruct: function() {
-		this.__namespaces = null;
 	}
 });

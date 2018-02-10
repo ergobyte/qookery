@@ -19,7 +19,7 @@
 /**
  * Base class for all Qookery components.
  */
-qx.Class.define("qookery.internal.components.BaseComponent", {
+qx.Class.define("qookery.internal.components.Component", {
 
 	type: "abstract",
 	extend: qx.core.Object,
@@ -48,6 +48,11 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 	construct: function(parentComponent) {
 		this.base(arguments);
 		this.__parentComponent = parentComponent;
+		this.__namespaceResolver = parentComponent != null ? function(prefix) {
+			return parentComponent.resolveNamespacePrefix(prefix);
+		} : function(prefix) {
+			return null;
+		};
 		this._widgets = [ ];
 		this.__actions = { };
 	},
@@ -56,41 +61,66 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		__id: null,
 		__parentComponent: null,
+		__namespaceResolver: null,
 		__attributes: null,
 		__actions: null,
 		__disposeList: null,
 
 		_widgets: null,
 
-		// IComponent implementation
+		// Metadata
 
 		getId: function() {
 			return this.__id;
 		},
 
-		getAttributes: function() {
-			return this.__attributes;
+		getAttributeType: function(attributeName) {
+			return qookery.internal.Registry.getInstance().getAttributeType(attributeName);
 		},
 
 		getAttribute: function(attributeName, defaultValue) {
 			var value = this.__attributes[attributeName];
-			if(value !== undefined) return value;
-			if(defaultValue === Error) throw new Error(qx.lang.String.format(
-					"Required attribute '%1' missing for component '%2'", [ attributeName, this ]));
+			if(value !== undefined)
+				return value;
+			if(defaultValue === Error)
+				throw new Error(qx.lang.String.format("Required attribute '%1' missing from component '%2'", [ attributeName, this ]));
 			return defaultValue;
 		},
 
 		setAttribute: function(attributeName, value) {
-			throw new Error(qx.lang.String.format("Changing attribute '%1' is not supported", [ attributeName ]));
+			switch(attributeName) {
+			case qookery.IComponent.A_ID:
+				this.__id = value;
+				return;
+			case qookery.IComponent.A_NAMESPACES:
+				var parent = this.getParent();
+				this.__namespaceResolver = function(prefix) {
+					var namespaceUri = value[prefix];
+					if(namespaceUri != null)
+						return namespaceUri;
+					if(parent != null)
+						return parent.resolveNamespacePrefix(prefix);
+					return null;
+				};
+				return;
+			}
+			throw new Error(qx.lang.String.format("Setting attribute '%1' is not implemented", [ attributeName ]));
 		},
 
-		prepare: function(formParser, xmlElement) {
-			// Nothing is done here by default, components may override
+		// Namespaces
+
+		resolveNamespacePrefix: function(prefix) {
+			return this.__namespaceResolver(prefix);
 		},
+
+		resolveQName: function(qName) {
+			return qookery.util.Xml.resolveQName(this.__namespaceResolver, qName);
+		},
+
+		// Lifecycle
 
 		create: function(attributes) {
 			// Attention: Base method must be called early when overriden
-			this.__id = attributes["id"] || null;
 			this.__attributes = attributes;
 
 			this._widgets = this._createWidgets(attributes);
@@ -100,12 +130,24 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			if(attributes["visibility"] !== undefined) this.setVisibility(attributes["visibility"]);
 		},
 
-		parseCustomElement: function(formParser, xmlElement) {
+		parseXmlElement: function(elementName, xmlElement) {
+			// Override to implement custom elements
 			return false;
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			// Nothing to do here, override if needed
+		},
+
+		// Access to other components
+
+		getForm: function() {
+			if(!this.__parentComponent) return null;
+			return this.__parentComponent.getForm();
+		},
+
+		getParent: function() {
+			return this.__parentComponent;
 		},
 
 		setAction: function(actionName, scriptFunction) {
@@ -118,15 +160,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		getMainWidget: function() {
 			return this.listWidgets("main")[0];
-		},
-
-		getParent: function() {
-			return this.__parentComponent;
-		},
-
-		getForm: function() {
-			if(!this.__parentComponent) return null;
-			return this.__parentComponent.getForm();
 		},
 
 		focus: function() {
@@ -157,6 +190,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 			return actionFunction.apply(this, actionArguments);
 		},
 
+		evaluateExpression: function(expression) {
+			return this.executeClientCode("return (" + expression + ");");
+		},
+
 		executeClientCode: function(clientCode, argumentMap) {
 			var clientCodeContext = this.getForm().getScriptingContext();
 			try {
@@ -176,10 +213,6 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 		isActionSupported: function(actionName) {
 			return this.__actions[actionName] !== undefined;
-		},
-
-		getAttributeType: function(attributeName) {
-			return qookery.internal.Registry.getInstance().getAttributeType(attributeName);
 		},
 
 		validate: function() {
@@ -213,6 +246,10 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 		},
 
 		// Protected methods for internal use
+
+		_getAttributes: function() {
+			return this.__attributes;
+		},
 
 		_createWidgets: function(attributes) {
 			// Subclasses are advised to implement this method instead of overriding create()
@@ -297,7 +334,7 @@ qx.Class.define("qookery.internal.components.BaseComponent", {
 
 			var layoutProperties = null;
 			for(var attributeName in attributes) {
-				var propertyName = qookery.internal.components.BaseComponent.__LAYOUT_ITEM_PROPERTY_MAP[attributeName];
+				var propertyName = qookery.internal.components.Component.__LAYOUT_ITEM_PROPERTY_MAP[attributeName];
 				if(propertyName == null) continue;
 				if(layoutProperties == null) layoutProperties = { };
 				layoutProperties[propertyName] = attributes[attributeName];

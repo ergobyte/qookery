@@ -79,11 +79,11 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			this.base(arguments, modelProvider, connectionHandle);
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			var mapName = this.getAttribute("map");
 			if(mapName !== undefined)
 				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
-			this.base(arguments, formParser, attributes);
+			this.base(arguments, attributes);
 		},
 
 		__getListItemLabel: function(listItem) {

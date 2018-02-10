@@ -17,5 +17,5 @@
 */
 
 /**
- * EXPERIMENTAL implementation of some Qookery interfaces for the mobile subset of Qooxdoo - do not use
+ * BROKEN/UNMAINTAINED implementation of some Qookery interfaces for the mobile subset of Qooxdoo - do not use
  */

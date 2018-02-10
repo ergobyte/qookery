@@ -44,13 +44,13 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 			return toggleButton;
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			var model = attributes["model"];
 			if(model != null) {
 				var type = this.getAttribute("model-type", "String");
-				this.setModel(formParser.parseValue(this, type, model));
+				this.setModel(qookery.util.Xml.parseValue(this, type, model));
 			}
-			return this.base(arguments, formParser, attributes);
+			return this.base(arguments, attributes);
 		},
 
 		getModel: function() {

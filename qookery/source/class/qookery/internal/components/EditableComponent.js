@@ -23,7 +23,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 	type: "abstract",
 	implement: [ qookery.IEditableComponent ],
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.Component,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -93,13 +93,13 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			throw new Error("Override _createMainWidget() to provide implementation specific code");
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			var connectionSpecification = this.getAttribute("connect");
 			if(connectionSpecification) {
 				var modelProvider = this.getForm().getModelProvider();
 				if(!modelProvider)
 					throw new Error("Install a model provider to handle connections in XML forms");
-				var connectionHandle = modelProvider.handleConnection(formParser, this, connectionSpecification);
+				var connectionHandle = modelProvider.handleConnection(this, connectionSpecification);
 				if(connectionHandle)
 					this._applyConnectionHandle(modelProvider, connectionHandle);
 			}
@@ -108,6 +108,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				var initialValue = this.executeClientCode(qx.lang.String.format("return (%1);", [ initializeClientCode ]));
 				this.setValue(initialValue);
 			}
+			return this.base(arguments, attributes);
 		},
 
 		// Widget access

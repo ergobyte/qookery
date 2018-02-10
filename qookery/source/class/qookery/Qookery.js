@@ -25,43 +25,57 @@ qx.Class.define("qookery.Qookery", {
 
 	statics: {
 
+		// Prefixed attributes - see XSD for their definition
+
+		A_FORMAT: "{http://www.qookery.org/ns/Form}format",
+
+		A_ICON: "{http://www.qookery.org/ns/Form}icon",
+
+		A_MAP: "{http://www.qookery.org/ns/Form}map",
+
+		A_TOOL_TIP_TEXT: "{http://www.qookery.org/ns/Form}tool-tip-text",
+
+		// Options
+
 		/**
-		 * Option: Default value of <code>spacing-x</code> attribute for layout managers that support it
+		 * Default value of <code>spacing-x</code> attribute for layout managers that support it
 		 */
 		OPTION_DEFAULT_LAYOUT_SPACING_X: "q:default-layout-spacing-x",
 
 		/**
-		 * Option: Default value of <code>spacing-y</code> attribute for layout managers that support it
+		 * Default value of <code>spacing-y</code> attribute for layout managers that support it
 		 */
 		OPTION_DEFAULT_LAYOUT_SPACING_Y: "q:default-layout-spacing-y",
 
 		/**
-		 * Option: Default value of <code>live-update</code> attribute for components that support it
+		 * Default value of <code>live-update</code> attribute for components that support it
 		 */
 		OPTION_DEFAULT_LIVE_UPDATE: "q:default-live-update",
 
 		/**
-		 * Option: Default value of <code>native-context-menu</code> attribute for components that support it
+		 * Default value of <code>native-context-menu</code> attribute for components that support it
 		 */
 		OPTION_DEFAULT_NATIVE_CONTEXT_MENU: "q:default-native-context-menu",
 
+		// Services
+
 		/**
-		 * Service: currently running Qooxdoo application
+		 * Currently running Qooxdoo application
 		 */
 		SERVICE_APPLICATION: "qx.application.IApplication",
 
 		/**
-		 * Service: default model provider
+		 * Default model provider
 		 */
 		SERVICE_MODEL_PROVIDER: "qookery.IModelProvider",
 
 		/**
-		 * Service: Qookery registry
+		 * Qookery registry
 		 */
 		SERVICE_REGISTRY: "qookery.IRegistry",
 
 		/**
-		 * Service: currently set resource loader
+		 * Currently set resource loader
 		 */
 		SERVICE_RESOURCE_LOADER: "qookery.IResourceLoader",
 

@@ -19,9 +19,10 @@
 /**
  * Forms are container components that provide a number of facilities to their descendants
  *
- * <p>Descendant components can rely on their form to:</p>
+ * <p>Descendant components can rely on their containing form to:</p>
  *
  * <ul>
+ *	<li>Maintain and resolve URI prefixes</li>
  *	<li>Resolve services via dependency injection</li>
  *	<li>Require, define or otherwise access form-level variables</li>
  *	<li>Execute JavaScript source code into a common scripting context</li>
@@ -35,6 +36,20 @@
 qx.Interface.define("qookery.IFormComponent", {
 
 	extend: [ qookery.IContainerComponent, qookery.IVariableProvider ],
+
+	statics: {
+
+		// Attribute names
+
+		/** {Function} The service resolver associated with form */
+		A_SERVICE_RESOLVER: "{http://www.qookery.org/ns/Form}service-resolver",
+
+		/** {String} A string to prepend to all form-local translation message IDs */
+		A_TRANSLATION_PREFIX: "{http://www.qookery.org/ns/Form}translation-prefix",
+
+		/** {Map} Additional variables provided by the caller of the form parser */
+		A_VARIABLES: "{http://www.qookery.org/ns/Form}variables"
+	},
 
 	events: {
 
@@ -59,6 +74,8 @@ qx.Interface.define("qookery.IFormComponent", {
 
 	members: {
 
+		// Access to other components
+
 		/**
 		 * Return a component registered within this form
 		 *
@@ -70,16 +87,16 @@ qx.Interface.define("qookery.IFormComponent", {
 		getComponent: function(componentId, required) { },
 
 		/**
-		 * Return the form's model provider if set, or the default one otherwise
-		 */
-		getModelProvider: function() { },
-
-		/**
 		 * Return the form that is the parent of this form, or <code>null</code> if no such linkage exists
 		 */
 		getParentForm: function() { },
 
 		// Services
+
+		/**
+		 * Return the form's model provider if set, or the default one otherwise
+		 */
+		getModelProvider: function() { },
 
 		/**
 		 * Attempt to resolve a service by using installed service resolver

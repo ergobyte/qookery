@@ -94,24 +94,23 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return table;
 		},
 
-		parseCustomElement: function(formParser, xmlElement) {
-			var elementName = qx.dom.Node.getName(xmlElement);
+		parseXmlElement: function(elementName, xmlElement) {
 			switch(elementName) {
-			case "table-model":
+			case "{http://www.qookery.org/ns/Form}table-model":
 				if(this.__tableModel) throw new Error("Table model has already been created");
-				var tableModelClassName = formParser.getAttribute(xmlElement, "class");
+				var tableModelClassName = qookery.util.Xml.getAttribute(xmlElement, "class");
 				var tableModelClass = qx.Class.getByName(tableModelClassName);
-				this.__tableModel = new tableModelClass(this, formParser, xmlElement);
+				this.__tableModel = new tableModelClass(this, xmlElement);
 				return true;
-			case "table-column":
-				var column = formParser.parseAttributes(this, xmlElement);
+			case "{http://www.qookery.org/ns/Form}table-column":
+				var column = qookery.util.Xml.parseAllAttributes(this, xmlElement);
 				this.addColumn(column);
 				return true;
 			}
 			return false;
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			if(this.__columns.length == 0)
 				throw new Error("Table must have at least one column");
 			var table = this.getMainWidget();
@@ -174,9 +173,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
 				}
 
-				var cellRendererName = column["cell-renderer"] || "{http://www.qookery.org/ns/Form}model";
-				if(formParser != null)
-					cellRendererName = formParser.resolveQName(cellRendererName);
+				var cellRendererName = this.resolveQName(column["cell-renderer"] || "{http://www.qookery.org/ns/Form}model");
 				var cellRendererFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_CELL_RENDERER_FACTORY, cellRendererName, true);
 				var cellRenderer = cellRendererFactory(this, column);
 				columnModel.setDataCellRenderer(i, cellRenderer);
@@ -184,7 +181,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					columnModel.setColumnVisible(i, false);
 				}
 			}
-			this.base(arguments, formParser, attributes);
+			this.base(arguments, attributes);
 		},
 
 		// Public methods

@@ -22,6 +22,7 @@
 		targetNamespace="http://www.qookery.org/ns/Form"
 		elementFormDefault="qualified">
 
+	<import namespace="http://www.w3.org/1999/xhtml" />
 	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd" />
 	<import namespace="http://www.w3.org/2001/XMLSchema" />
 
@@ -269,14 +270,6 @@
 
 	<!-- Global attributes -->
 
-	<attribute name="class" type="q:qooxdoo-class-name"><annotation><documentation>
-		The name of a Qooxdoo class to associate with element
-	</documentation></annotation></attribute>
-
-	<attribute name="flex" type="q:flex"><annotation><documentation>
-		The relative weight for computing the size of the user interface holding element's contents
-	</documentation></annotation></attribute>
-
 	<attribute name="format" type="q:format-specification"><annotation><documentation>
 		A specification for creating the formatter to attach to element
 	</documentation></annotation></attribute>
@@ -287,10 +280,6 @@
 
 	<attribute name="map" type="token"><annotation><documentation>
 		The symbolic name of a registered map to associate with element
-	</documentation></annotation></attribute>
-
-	<attribute name="read-only" type="boolean"><annotation><documentation>
-		If set, associated element's value may not be modified through its user interface
 	</documentation></annotation></attribute>
 
 	<attribute name="tool-tip-text" type="string"><annotation><documentation>
@@ -561,15 +550,18 @@
 				<complexType>
 					<!-- Source, exactly one must be specified -->
 					<attribute name="class" type="q:qooxdoo-class-name"><annotation><documentation>
-						Name of a Qooxdoo static class to import via qx.Class.getByName().
-						Mutually exclusive with the 'service' attribute.
+						Name of a Qooxdoo class to import via qx.Class.getByName(). Mutually exclusive with other source attributes.
 					</documentation></annotation></attribute>
 					<attribute name="form" type="token"><annotation><documentation>
-						ID of form to look for within form's ancestors
+						Identifier of a form to look for within current form's ancestors. Mutually exclusive with other source attributes.
 					</documentation></annotation></attribute>
 					<attribute name="service" type="q:qooxdoo-class-name"><annotation><documentation>
-						Name of a service to import by using the parser's service resolver or qooxdoo.Qooxdoo.getService() if unset.
-						Mutually exclusive with the 'class' attribute.
+						Name of an interface for which an implementing service is needed. The service will be resolved using the parser's
+						service resolver or the default resolve (qooxdoo.Qooxdoo#getService()) if none defined. Mutually exclusive with
+						other source attributes.
+					</documentation></annotation></attribute>
+					<attribute name="singleton" type="q:qooxdoo-class-name"><annotation><documentation>
+						Name of a singleton class whose unique instance is needed. Mutually exclusive with other source attributes.
 					</documentation></annotation></attribute>
 					<!-- Options -->
 					<attribute name="resolution" default="immediate"><annotation><documentation>
@@ -587,15 +579,6 @@
 						The name of the variable to create into the scripting context for imported object.
 						If not set, the last segment of the import's dot-separated name will be used.
 					</documentation></annotation></attribute>
-				</complexType>
-			</element>
-			<element name="bind" minOccurs="0" maxOccurs="unbounded">
-				<annotation><documentation>
-					Bind a URI to a prefix for scripting and data binding purposes
-				</documentation></annotation>
-				<complexType>
-					<attribute name="prefix" type="token" use="required" />
-					<attribute name="uri" type="anyURI" use="required" />
 				</complexType>
 			</element>
 			<element ref="q:translation" minOccurs="0" maxOccurs="unbounded" />
@@ -625,7 +608,11 @@
 		<attribute name="interval" type="positiveInteger" />
 	</extension></complexContent></complexType></element>
 
-	<element name="html"><complexType><complexContent><extension base="q:component">
+	<element name="html"><complexType><complexContent><extension base="q:component.attributes">
+		<sequence>
+			<any namespace="http://www.w3.org/1999/xhtml" minOccurs="0" maxOccurs="1" />
+			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
 		<attribute name="html" type="string" />
 		<attribute name="overflow-x" type="q:overflow" />
 		<attribute name="overflow-y" type="q:overflow" />

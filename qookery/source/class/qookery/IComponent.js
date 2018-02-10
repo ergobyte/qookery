@@ -17,9 +17,20 @@
 */
 
 /**
- * Base interface implemented by all Qookery components
+ * Interface implemented by all Qookery components
  */
 qx.Interface.define("qookery.IComponent", {
+
+	statics: {
+
+		// Attribute names
+
+		/** {String} Symbolic name of component, unique within its containing form */
+		A_ID: "{http://www.qookery.org/ns/Form}id",
+
+		/** {Map} Mapping of prefixes to namespace URIs to associate with component, set by parser after instantiation */
+		A_NAMESPACES: "{http://www.qookery.org/ns/Form}namespaces"
+	},
 
 	properties: {
 
@@ -32,6 +43,8 @@ qx.Interface.define("qookery.IComponent", {
 
 	members: {
 
+		// Metadata
+
 		/**
 		 * Return the component identifier, if any
 		 *
@@ -40,6 +53,15 @@ qx.Interface.define("qookery.IComponent", {
 		 * @return {String} unique identifier or <code>null</code>
 		 */
 		getId: function() { },
+
+		/**
+		 * Return the type of an attribute
+		 *
+		 * @param attributeName {String} name of the attribute
+		 *
+		 * @return {String} attribute's type or <code>null</code> if unknown
+		 */
+		getAttributeType: function(attributeName) { },
 
 		/**
 		 * Return an attribute value from the defining XML document
@@ -65,15 +87,30 @@ qx.Interface.define("qookery.IComponent", {
 		 */
 		setAttribute: function(attributeName, value) { },
 
+		// Namespaces
+
 		/**
-		 * Called by the parser immediately after new instance construction
+		 * Resolve a URI namespace prefix
 		 *
-		 * <p>Notice: You must never call this method directly.</p>
+		 * @param prefix {String} the prefix to resolve
 		 *
-		 * @param formParser {qookery.IFormParser} requesting form parser
-		 * @param xmlElement {qx.dom.Element} XML element that initiated component creation
+		 * @return {String?} namespace URI or <code>null</code> if prefix is unknown
 		 */
-		prepare: function(formParser, xmlElement) { },
+		resolveNamespacePrefix: function(prefix) { },
+
+		/**
+		 * Resolve a QName
+		 *
+		 * <p>The result format is "{" + Namespace URI + "}" + local part. If the namespace URI is empty,
+		 * only the local part is returned.</p>
+		 *
+		 * @param qName {String} the QName to resolve
+		 *
+		 * @return {String} the string representation of the resolved QName
+		 */
+		resolveQName: function(qName) { },
+
+		// Lifecycle
 
 		/**
 		 * Called by the form parser soon after initialization and attribute parsing
@@ -85,26 +122,27 @@ qx.Interface.define("qookery.IComponent", {
 		create: function(attributes) { },
 
 		/**
-		 * Called by the parser any time an unknown element is encounted within component's XML declaration
+		 * Called by the parser when an unknown XML element is encountered within a component's declaration
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
 		 *
-		 * @param formParser {qookery.IFormParser} requesting form parser
-		 * @param xmlElement {qx.dom.Element} XML element
+		 * @param elementName {String} the resolved fully-qualified name of encountered DOM element
+		 * @param element {Element} the DOM element that is not understood by parser
 		 *
-		 * @return {Boolean} <code>true</code> in case component understood and parsed element
+		 * @return {Boolean} <code>true</code> in case the component was able to do something with input
 		 */
-		parseCustomElement: function(formParser, xmlElement) { },
+		parseXmlElement: function(elementName, element) { },
 
 		/**
-		 * Called by the parser after creation of the component and its children
+		 * Called by the parser after creation of the component and all its children
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
 		 *
-		 * @param formParser {qookery.IFormParser} the parser that is invoking this method
 		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
-		setup: function(formParser, attributes) { },
+		setup: function(attributes) { },
+
+		// Access to other components
 
 		/**
 		 * Return the form containing this component
@@ -119,6 +157,29 @@ qx.Interface.define("qookery.IComponent", {
 		 * @return {qookery.IComponent} parent component or <code>null</code>
 		 */
 		getParent: function() { },
+
+		// Scripting
+
+		/**
+		 * Evaluate a Qookery expression within component's scripting context
+		 *
+		 * @param expression {String} a valid JavaScript expression
+		 *
+		 * @return {any} the evaluation result
+		 */
+		evaluateExpression: function(expression) { },
+
+		/**
+		 * Execute Qookery scripting code on component
+		 *
+		 * @param clientCode {String} a valid Qookery script
+		 * @param argumentMap {Map} a map to be passed as arguments to the script
+		 *
+		 * @return {any} the script result
+		 */
+		executeClientCode: function(clientCode, argumentMap) { },
+
+		// User interface
 
 		/**
 		 * Set the focus to this component
@@ -152,15 +213,15 @@ qx.Interface.define("qookery.IComponent", {
 		 */
 		addEventHandler: function(eventName, handler, onlyOnce) { },
 
+		// Actions
+
 		/**
-		 * Execute Qookery scripting code on component
+		 * Check whether the action exist or not.
 		 *
-		 * @param clientCode {String} a valid Qookery script
-		 * @param argumentMap {Map} a map to be passed as arguments to the script
-		 *
-		 * @return {any} the script result
+		 * @param actionName {String} the name of the action
+		 * @return {Boolean} whether the action exists
 		 */
-		executeClientCode: function(clientCode, argumentMap) { },
+		isActionSupported: function(actionName) { },
 
 		/**
 		 * Execute an action provided by this component
@@ -175,22 +236,7 @@ qx.Interface.define("qookery.IComponent", {
 		 */
 		executeAction: function(actionName, varargs) { },
 
-		/**
-		 * Check whether the action exist or not.
-		 *
-		 * @param actionName {String} the name of the action
-		 * @return {Boolean} whether the action exists
-		 */
-		isActionSupported: function(actionName) { },
-
-		/**
-		 * Return the type of an attribute
-		 *
-		 * @param attributeName {String} name of the attribute
-		 *
-		 * @return {String} attribute's type or <code>null</code> if unknown
-		 */
-		getAttributeType: function(attributeName) { },
+		// Miscellaneous
 
 		/**
 		 * Request validation of component state and contents

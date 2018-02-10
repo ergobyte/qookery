@@ -74,7 +74,7 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			return qx.data.Conversion.toString(object);
 		},
 
-		handleConnection: function(formParser, component, connectionSpecification) {
+		handleConnection: function(component, connectionSpecification) {
 			component.connect(connectionSpecification);
 			return null;
 		},

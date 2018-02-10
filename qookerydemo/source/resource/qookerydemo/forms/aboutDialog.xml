@@ -3,27 +3,28 @@
 	The Qookery Demo about window
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
-		id="qookerydemo.forms.aboutDialog"
 		title="About the Qookery Demo" icon="qookerydemo/icons/24/about.png"
-		layout="v-box" spacing="20" width="300">
+		layout="v-box" spacing="20" width="300" height="250">
 
-	<translation xml:lang="en">
-		<message id="about"><![CDATA[
-			<h3>Qookery Demo and Playground application</h3>
-			<p>	Discover Qookery and experiment with its features, thanks to this interactive demo.
-				Load a demo, modify XML and/or JSON code and press Run Again to see the results.</p>
-			<p>	Qookery is a community project sponsored by Ergobyte Informatics S.A. and licensed under the
-				Apache License, v2.0. Visit <a href="http://www.qookery.org/" target="_blank">www.qookery.org</a>
-				for more information.</p>
-		]]></message>
-	</translation>
+	<!-- Thanks to XML namespaces, we can start writing XHTML as the content of this Qookery
+		 <html> component, and have our XSD validating editor find and correct errors -->
 
-	<composite layout="h-box" spacing="20">
-		<image source="qookerydemo/icons/66/loading-66.gif" align-y="middle" />
-		<label rich="true" wrap="true" label="%.about" flex="1" />
-	</composite> 
+	<html flex="1" allow-grow-y="true"><body xmlns="http://www.w3.org/1999/xhtml">
 
-	<button label="Close" max-width="150" align-x="right">
+		<h3>Qookery Demo and Playground application</h3>
+
+		<p>	Discover Qookery and experiment with its features, thanks to this interactive demo.
+			Load a demo, modify XML and/or JSON code and press Run Again to see the results.</p>
+
+		<p>	Qookery is a community project sponsored by Ergobyte Informatics S.A. and licensed under
+			the Apache License, v2.0.</p>
+			
+		<p>	Visit <a href="http://www.qookery.org/" alt="qookery.org" target="_blank">www.qookery.org</a>
+			for more information.</p>
+
+	</body></html>
+	
+	<button label="OK" max-width="140" align-x="right">
 		<script event="execute">
 			$.Form.close();
 		</script>

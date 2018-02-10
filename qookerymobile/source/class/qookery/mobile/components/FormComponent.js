@@ -48,6 +48,7 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 	members: {
 
 		__variables: null,
+		__namespaces: null,
 		__translationPrefix: null,
 		__components: null,
 		__modelProvider: null,
@@ -55,11 +56,6 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 		__clientCodeContext: null,
 
 		// Creation
-
-		prepare: function(formParser, xmlElement) {
-			this.__variables = formParser.getVariables();
-			this.__translationPrefix = formParser.getAttribute(xmlElement, "translation-prefix");
-		},
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
@@ -69,10 +65,10 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 			this.debug("Created form", this.getId() || "");
 		},
 
-		setup: function(formParser, attributes) {
+		setup: function(attributes) {
 			var title = this.getAttribute("title");
 			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
-			return this.base(arguments, formParser, attributes);
+			return this.base(arguments, attributes);
 		},
 
 		focus: function() {
@@ -176,38 +172,30 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 			return new qookery.util.ValidationError(this, message, errors);
 		},
 
-		parseCustomElement: function(formParser, xmlElement) {
-			var elementName = qx.dom.Node.getName(xmlElement);
+		parseXmlElement: function(elementName, element) {
 			switch(elementName) {
-				case "bind":
-					this.__parseBind(formParser, xmlElement);
-					return true;
-				case "import":
-					this.__parseImport(formParser, xmlElement);
-					return true;
-				case "translation":
-					this.__parseTranslation(formParser, xmlElement);
-					return true;
+			case "{http://www.qookery.org/ns/Form}import":
+				this.__parseImport(element);
+				return true;
+			case "{http://www.qookery.org/ns/Form}translation":
+				this.__parseTranslation(element);
+				return true;
 			}
 			return false;
 		},
 
-		__parseBind: function(formParser, bindElement) {
-			var prefix = formParser.getAttribute(bindElement, "prefix");
-			var namespaceUri = formParser.getAttribute(bindElement, "uri");
-			formParser.setNamespacePrefix(prefix, namespaceUri);
-		},
-
-		__parseImport: function(formParser, importElement) {
-			var className = formParser.getAttribute(importElement, "class");
+		__parseImport: function(importElement) {
+			var className = qookery.util.Xml.getAttribute(importElement, "class");
 			var clazz = qx.Class.getByName(className);
-			if(!clazz) throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
-			var key = formParser.getAttribute(importElement, "key");
-			if(!key) key = className.substring(className.lastIndexOf(".") + 1);
+			if(clazz == null)
+				throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
+			var key = qookery.util.Xml.getAttribute(importElement, "key");
+			if(key == null)
+				key = className.substring(className.lastIndexOf(".") + 1);
 			this.registerUserContext(key, clazz);
 		},
 
-		__parseTranslation: function(formParser, translationElement) {
+		__parseTranslation: function(translationElement) {
 			if(!qx.dom.Element.hasChildren(translationElement)) return;
 			var languageCode = qx.xml.Element.getAttributeNS(translationElement, "http://www.w3.org/XML/1998/namespace", "lang");
 			if(!languageCode) throw new Error("Language code missing");
@@ -219,10 +207,10 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 				var elementName = qx.dom.Node.getName(messageElement);
 				if(elementName != "message")
 					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in translation block", [ elementName ]));
-				var messageId = formParser.getAttribute(messageElement, "id");
+				var messageId = qookery.util.Xml.getAttribute(messageElement, "id");
 				if(!messageId) throw new Error("Message identifier missing");
 				if(prefix) messageId = prefix + "." + messageId;
-				messages[messageId] = formParser.getNodeText(messageElement);
+				messages[messageId] = qookery.util.Xml.getNodeText(messageElement);
 			}
 			qx.locale.Manager.getInstance().addTranslation(languageCode, messages);
 		},

@@ -18,7 +18,7 @@
 
 qx.Class.define("qookery.internal.components.ToolBarComponent", {
 
-	extend: qookery.internal.components.BaseComponent,
+	extend: qookery.internal.components.Component,
 	implement: [ qookery.IContainerComponent ],
 
 	construct: function(parentComponent) {

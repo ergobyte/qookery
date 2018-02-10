@@ -49,6 +49,14 @@ qx.Class.define("qookerydemo.ResultArea",
 
 		getFormComponent: function() {
 			return this.__formComponent;
+		},
+
+		getModel: function() {
+			return this.__formComponent.getModel();
+		},
+
+		setModel: function(model) {
+			this.__formComponent.setModel(model);
 		}
 	},
 

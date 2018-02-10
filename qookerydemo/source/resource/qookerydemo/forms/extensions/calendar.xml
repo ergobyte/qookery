@@ -3,10 +3,10 @@
 	Calendar (fullcalendar.io) demo
 -->
 <form xmlns="http://www.qookery.org/ns/Form"
-		xmlns:q-cal="http://www.qookery.org/ns/Form/Calendar"
 		layout="grow">
 
-	<q-cal:calendar id="calendar" width="400" height="400" editable="true" selectable="true"
+	<q-cal:calendar xmlns:q-cal="http://www.qookery.org/ns/Form/Calendar"
+			id="calendar" width="400" height="400" editable="true" selectable="true"
 			first-day="1" event-limit="true" default-date="2014-09-12"
 			header-left="prev,next today" header-center="title" header-right="month,basicWeek,basicDay">
 

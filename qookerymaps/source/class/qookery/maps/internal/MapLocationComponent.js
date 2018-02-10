@@ -62,11 +62,11 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			case "center":
 				if(this.__map != null)
 					this.__map.setCenter(new google.maps.LatLng(value[0], value[1]));
-				return this.getAttributes()[attributeName] = value;
+				return this._getAttributes()[attributeName] = value;
 			case "zoom":
 				if(this.__map != null)
 					this.__map.setZoom(value);
-				return this.getAttributes()[attributeName] = value;
+				return this._getAttributes()[attributeName] = value;
 			}
 			return this.base(arguments, attributeName, value);
 		},

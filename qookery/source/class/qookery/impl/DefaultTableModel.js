@@ -97,7 +97,7 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		}
 	},
 
-	construct: function(component) {
+	construct: function(component, xmlElement) {
 		this.base(arguments);
 		this.__component = component;
 		this.__accessor = this.self(arguments).nullAccessor;
