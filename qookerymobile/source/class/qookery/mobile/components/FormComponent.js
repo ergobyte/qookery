@@ -185,7 +185,7 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 		},
 
 		__parseImport: function(importElement) {
-			var className = qookery.util.Xml.getAttribute(importElement, "class");
+			var className = qookery.util.Xml.getAttribute(importElement, "class", Error);
 			var clazz = qx.Class.getByName(className);
 			if(clazz == null)
 				throw new Error(qx.lang.String.format("Imported class '%1' not found", [ className ]));
@@ -207,8 +207,7 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 				var elementName = qx.dom.Node.getName(messageElement);
 				if(elementName != "message")
 					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in translation block", [ elementName ]));
-				var messageId = qookery.util.Xml.getAttribute(messageElement, "id");
-				if(!messageId) throw new Error("Message identifier missing");
+				var messageId = qookery.util.Xml.getAttribute(messageElement, "id", Error);
 				if(prefix) messageId = prefix + "." + messageId;
 				messages[messageId] = qookery.util.Xml.getNodeText(messageElement);
 			}

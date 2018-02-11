@@ -54,7 +54,7 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 		parseXmlElement: function(elementName, xmlElement) {
 			switch(elementName) {
 			case "{http://www.qookery.org/ns/Form}virtual-tree-delegate":
-				var delegateClassName = qookery.util.Xml.getAttribute(xmlElement, "class");
+				var delegateClassName = qookery.util.Xml.getAttribute(xmlElement, "class", Error);
 				var delegateClass = qx.Class.getByName(delegateClassName);
 				this.__delegate = new delegateClass();
 				return true;

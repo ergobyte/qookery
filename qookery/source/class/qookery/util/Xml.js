@@ -104,6 +104,9 @@ qx.Class.define("qookery.util.Xml", {
 		/**
 		 * Return the text value of an element's attribute, after trimming leading and trailing whitespace
 		 *
+		 * <p>You may supply the <code>Error</code> build-in object as the defaultValue parameter
+		 * in order to request that an exception is thrown when value is missing.</p>
+		 *
 		 * @param element {Element} XML element holding required attribute
 		 * @param attributeName {String} name of required attribute, may be fully qualified
 		 * @param defaultValue {String?} the text to return in case the attribute is empty/missing
@@ -120,12 +123,14 @@ qx.Class.define("qookery.util.Xml", {
 				localPart = attributeName.substring(rightBracePos + 1);
 			}
 			var text = qx.xml.Element.getAttributeNS(element, namespaceUri, localPart);
-			if(text == null || text.length == 0)
-				return defaultValue;
-			text = text.trim();
-			if(text.length == 0)
-				return defaultValue;
-			return text;
+			if(text != null) {
+				text = text.trim();
+				if(text.length !== 0)
+					return text;
+			}
+			if(defaultValue === Error)
+				throw new Error(qx.lang.String.format("Required attribute '%1' missing from XML element '%2'", [ attributeName, element ]));
+			return defaultValue;
 		},
 
 		/**

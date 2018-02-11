@@ -203,7 +203,7 @@ qx.Class.define("qookery.internal.FormParser", {
 		},
 
 		__parseXInclude: function(xIncludeElement, parentComponent) {
-			var formUrl = qookery.util.Xml.getAttribute(xIncludeElement, "href");
+			var formUrl = qookery.util.Xml.getAttribute(xIncludeElement, "href", Error);
 			formUrl = qookery.util.Xml.parseValue(parentComponent, "ReplaceableString", formUrl);
 			var xmlString = qookery.Qookery.getService("qookery.IResourceLoader", true).loadResource(formUrl);
 			var xmlDocument = qx.xml.Document.fromString(xmlString);
@@ -346,7 +346,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 		__parseSwitch: function(switchElement, component) {
 			if(!qx.dom.Element.hasChildren(switchElement)) return;
-			var switchExpression = qookery.util.Xml.getAttribute(switchElement, "expression");
+			var switchExpression = qookery.util.Xml.getAttribute(switchElement, "expression", Error);
 			var switchResult = component.evaluateExpression(switchExpression);
 			var children = qx.dom.Hierarchy.getChildElements(switchElement);
 			for(var i = 0; i < children.length; i++) {

@@ -305,9 +305,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				var elementName = qx.dom.Node.getName(messageElement);
 				if(elementName != "message")
 					throw new Error(qx.lang.String.format("Unexpected XML element '%1' in translation block", [ elementName ]));
-				var messageId = qookery.util.Xml.getAttribute(messageElement, "id");
-				if(messageId == null)
-					throw new Error("Message identifier missing");
+				var messageId = qookery.util.Xml.getAttribute(messageElement, "id", Error);
 				if(this.__translationPrefix != null)
 					messageId = this.__translationPrefix + "." + messageId;
 				messages[messageId] = qookery.util.Xml.getNodeText(messageElement);
@@ -316,12 +314,8 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		__parseVariable: function(variableElement) {
-			var variableName = qookery.util.Xml.getAttribute(variableElement, "name");
-			if(variableName == null)
-				throw new Error("Variable name is required");
-			var providerName = qookery.util.Xml.getAttribute(variableElement, "provider");
-			if(providerName == null)
-				providerName = "Form";
+			var variableName = qookery.util.Xml.getAttribute(variableElement, "name", Error);
+			var providerName = qookery.util.Xml.getAttribute(variableElement, "provider", "Form");
 			var provider = this.__scriptingContext[providerName];
 			if(provider == null || !qx.Class.hasInterface(provider.constructor, qookery.IVariableProvider))
 				throw new Error("Variable provider '" + providerName + "' missing from scripting context");

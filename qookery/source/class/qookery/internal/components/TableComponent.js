@@ -98,7 +98,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			switch(elementName) {
 			case "{http://www.qookery.org/ns/Form}table-model":
 				if(this.__tableModel) throw new Error("Table model has already been created");
-				var tableModelClassName = qookery.util.Xml.getAttribute(xmlElement, "class");
+				var tableModelClassName = qookery.util.Xml.getAttribute(xmlElement, "class", Error);
 				var tableModelClass = qx.Class.getByName(tableModelClassName);
 				this.__tableModel = new tableModelClass(this, xmlElement);
 				return true;
