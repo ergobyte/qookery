@@ -191,7 +191,7 @@ qx.Class.define("qookery.internal.components.Component", {
 		},
 
 		evaluateExpression: function(expression) {
-			return this.executeClientCode("return (" + expression + ");");
+			return this.executeClientCode("return (" + expression + ");", null);
 		},
 
 		executeClientCode: function(clientCode, argumentMap) {

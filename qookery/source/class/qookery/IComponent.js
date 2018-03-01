@@ -173,7 +173,7 @@ qx.Interface.define("qookery.IComponent", {
 		 * Execute Qookery scripting code on component
 		 *
 		 * @param clientCode {String} a valid Qookery script
-		 * @param argumentMap {Map} a map to be passed as arguments to the script
+		 * @param argumentMap {Map?} a map to be passed as arguments to the script
 		 *
 		 * @return {any} the script result
 		 */
