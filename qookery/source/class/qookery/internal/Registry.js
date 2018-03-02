@@ -166,6 +166,20 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["map"] = qookery.internal.formats.MapFormat;
 		partition["number"] = qookery.internal.formats.NumberFormat;
 
+		partition = this.__createPartition(qookery.IRegistry.P_CELL_EDITOR_FACTORY);
+		partition["{http://www.qookery.org/ns/Form}check-box"] = function(component, column) {
+			return new qx.ui.table.celleditor.CheckBox();
+		};
+		partition["{http://www.qookery.org/ns/Form}password-field"] = function(component, column) {
+			return new qx.ui.table.celleditor.PasswordField();
+		};
+		partition["{http://www.qookery.org/ns/Form}select-box"] = function(component, column) {
+			return new qx.ui.table.celleditor.SelectBox();
+		};
+		partition["{http://www.qookery.org/ns/Form}text-field"] = function(component, column) {
+			return new qx.ui.table.celleditor.TextField();
+		};
+
 		partition = this.__createPartition(qookery.IRegistry.P_CELL_RENDERER_FACTORY);
 		partition["{http://www.qookery.org/ns/Form}boolean"] = function(component, column) {
 			return new qx.ui.table.cellrenderer.Boolean();

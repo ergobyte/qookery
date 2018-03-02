@@ -172,6 +172,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				if(column["text-align"]) {
 					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
 				}
+				if(column["cell-editor"]) {
+					var cellEditorName = this.resolveQName(column["cell-editor"]);
+					var cellEditorFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_CELL_EDITOR_FACTORY, cellEditorName, true);
+					var cellEditor = cellEditorFactory(this, column);
+					columnModel.setCellEditorFactory(i, cellEditor);
+				}
 
 				var cellRendererName = this.resolveQName(column["cell-renderer"] || "{http://www.qookery.org/ns/Form}model");
 				var cellRendererFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_CELL_RENDERER_FACTORY, cellRendererName, true);

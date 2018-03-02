@@ -33,6 +33,13 @@
 		<enumeration value="icon" />
 	</restriction></simpleType>
 
+	<simpleType name="cell-editor"><union memberTypes="QName"><simpleType><restriction base="token">
+		<enumeration value="check-box" />
+		<enumeration value="password-field" />
+		<enumeration value="select-box" />
+		<enumeration value="text-field" />
+	</restriction></simpleType></union></simpleType>
+
 	<simpleType name="cell-renderer"><union memberTypes="QName"><simpleType><restriction base="token">
 		<enumeration value="boolean" />
 		<enumeration value="date" />
@@ -782,6 +789,7 @@
 	</complexType></element>
 
 	<element name="table-column"><complexType>
+		<attribute name="cell-editor" type="q:cell-editor" />
 		<attribute name="cell-renderer" default="model" type="q:cell-renderer" />
 		<attribute name="color" type="string" />
 		<attribute name="connect" type="string" />
