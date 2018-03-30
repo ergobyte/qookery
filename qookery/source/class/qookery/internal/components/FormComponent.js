@@ -133,7 +133,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			var parentForm = this.getParentForm();
 			if(parentForm != null)
 				return parentForm.resolveService(serviceName);
-			return null;
+			return qookery.Qookery.getService(serviceName, false);
 		},
 
 		// Variables
