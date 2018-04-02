@@ -403,21 +403,22 @@ qx.Class.define("qookery.internal.Registry", {
 			this.put(qookery.IRegistry.P_LIBRARY, name, library);
 		},
 
-		loadLibrary: function(libraryNames, callback, thisArg) {
+		loadLibrary: function(libraryNames, continuation, thisArg) {
 			var libraryName = libraryNames;
 			if(qx.lang.Type.isArray(libraryNames)) {
 				libraryName = libraryNames[0];
 				if(libraryNames.length >= 2) {
 					libraryNames = libraryNames.slice(1);
-					var originalCallback = callback;
-					callback = function() {
-						qookery.internal.Registry.getInstance().loadLibrary(libraryNames, originalCallback, thisArg);
+					var originalContinuation = continuation;
+					continuation = function(error) {
+						if(error != null) return originalContinuation(error);
+						qookery.internal.Registry.getInstance().loadLibrary(libraryNames, originalContinuation, thisArg);
 					};
 				}
 			}
-			if(!libraryName) return callback.call(thisArg);
+			if(!libraryName) return continuation.call(thisArg);
 			var library = this.get(qookery.IRegistry.P_LIBRARY, libraryName, true);
-			library.load(callback, thisArg);
+			library.load(continuation, thisArg);
 		},
 
 		// Commands

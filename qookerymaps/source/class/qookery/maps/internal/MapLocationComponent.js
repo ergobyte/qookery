@@ -96,7 +96,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 				}
 			}, this);
 			widget.addListenerOnce("appear", function() {
-				qookery.Qookery.getRegistry().loadLibrary("googleMaps", this.__createMap, this);
+				qookery.Qookery.getRegistry().loadLibrary("googleMaps", this.__onLibraryLoaded, this);
 			}, this);
 			this._applyLayoutAttributes(widget, attributes);
 			return widget;
@@ -131,7 +131,11 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 
 		// Internals
 
-		__createMap: function() {
+		__onLibraryLoaded: function(error) {
+			if(error != null) {
+				this.error("Error loading library", error);
+				return;
+			}
 			var widget = this.getMainWidget();
 			if(widget.isDisposed()) return;
 

@@ -39,7 +39,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		this.__configuration = configuration;
 		// Defer creation of CKEditor until after positioning is done
 		this.addListenerOnce("appear", function(event) {
-			qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__createCkEditor, this);
+			qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__onLibraryLoaded, this);
 		}, this);
 		this.addListener("focusin", function() {
 			if(!this.__ckEditor) return;
@@ -69,7 +69,11 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			return element;
 		},
 
-		__createCkEditor: function() {
+		__onLibraryLoaded: function(error) {
+			if(error != null) {
+				this.error("Error loading library", error);
+				return;
+			}
 			// Method might be called after widget destruction
 			if(this.isDisposed()) return;
 

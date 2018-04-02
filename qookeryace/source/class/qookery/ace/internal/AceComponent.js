@@ -69,7 +69,11 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 		},
 
 		setup: function() {
-			qookery.Qookery.getRegistry().loadLibrary("ace", function() {
+			qookery.Qookery.getRegistry().loadLibrary("ace", function(error) {
+				if(error != null) {
+					this.error("Error loading library", error);
+					return;
+				}
 				var aceWidget = this.getMainWidget();
 				if(aceWidget.getContentElement().getDomElement()) {
 					this.__attachAceEditor(aceWidget);

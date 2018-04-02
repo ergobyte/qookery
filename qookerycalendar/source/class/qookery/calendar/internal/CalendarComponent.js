@@ -77,7 +77,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			this._applyLayoutAttributes(widget, attributes);
 			// Defer creation of fullcalendar until after positioning is done
 			widget.addListenerOnce("appear", function(event) {
-				qookery.Qookery.getRegistry().loadLibrary("fullcalendar", this.__createCalendar, this);
+				qookery.Qookery.getRegistry().loadLibrary("fullcalendar", this.__onLibraryLoaded, this);
 			}, this);
 			widget.addListener("resize", function(event) {
 				// Use a timeout to let the layout queue apply its changes to the DOM
@@ -90,7 +90,11 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			return [ widget ];
 		},
 
-		__createCalendar: function() {
+		__onLibraryLoaded: function(error) {
+			if(error != null) {
+				this.error("Error loading library", error);
+				return;
+			}
 			// Create calendar
 			qx.lang.Object.mergeWith(this.__options, {
 				allDaySlot: this.getAttribute("all-day-slot", true),

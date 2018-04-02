@@ -26,7 +26,7 @@ qx.Class.define("qookery.internal.util.Library", {
 		this.__resourceNames = resourceNames;
 		this.__dependencies = dependencies;
 		this.__isLoaded = false;
-		this.__callbacks = [ ];
+		this.__continuations = [ ];
 		this.__postLoadCallback = postLoadCallback;
 	},
 
@@ -36,7 +36,7 @@ qx.Class.define("qookery.internal.util.Library", {
 		__resourceNames: null,
 		__dependencies: null,
 		__isLoaded: null,
-		__callbacks: null,
+		__continuations: null,
 		__postLoadCallback: null,
 
 		getName: function() {
@@ -53,18 +53,18 @@ qx.Class.define("qookery.internal.util.Library", {
 			return this.__isLoaded;
 		},
 
-		load: function(callback, thisArg) {
-			// If loaded, just call the callback
+		load: function(continuation, thisArg) {
+			// If loaded, just call the continuation
 			if(this.__isLoaded) {
-				callback.call(thisArg);
+				continuation.call(thisArg, null);
 				return;
 			}
 
-			// Push callback to the queue
-			this.__callbacks.push(callback.bind(thisArg));
+			// Push continuation to the queue
+			this.__continuations.push(continuation.bind(thisArg));
 
-			// If not the first callback, return since loading has been already started
-			var isLoading = this.__callbacks.length !== 1;
+			// If not the first continuation, return since loading has been already started
+			var isLoading = this.__continuations.length !== 1;
 			if(isLoading) return;
 
 			// Start the library loading
@@ -73,17 +73,23 @@ qx.Class.define("qookery.internal.util.Library", {
 
 		__loadLibrary: function() {
 			// In case there are dependencies, load them
-			if(this.__dependencies && this.__dependencies.length > 0)
+			if(this.__dependencies != null && this.__dependencies.length > 0)
 				return this.__loadNextDependency();
 
 			// In case there are needed resources, load them
-			if(this.__resourceNames && this.__resourceNames.length > 0)
+			if(this.__resourceNames != null && this.__resourceNames.length > 0)
 				return this.__loadNextResource();
 
-			// Invoke the post-load callback, if set
-			if(this.__postLoadCallback) {
+			// Invoke the post-load continuation, if set
+			if(this.__postLoadCallback != null) try {
 				var finished = this.__postLoadCallback(this.__onLibraryLoaded.bind(this));
-				if(finished === false) return; // Callback is responsible to complete library loading when ready
+				if(finished === false)
+					// Callback requested to take over library loading sequence
+					return;
+			}
+			catch(error) {
+				this.__invokeContinuations(error);
+				return;
 			}
 
 			this.__onLibraryLoaded();
@@ -95,23 +101,28 @@ qx.Class.define("qookery.internal.util.Library", {
 			this.debug("Loaded", this.__name);
 
 			// Invoke any waiting callbacks
-			this.__callbacks.forEach(function(callback) { callback(); });
-			this.__callbacks = [ ];
+			this.__invokeContinuations(null);
 		},
 
 		__loadNextDependency: function() {
 			var libraryName = this.__dependencies.shift();
-			qookery.Qookery.getRegistry().loadLibrary(libraryName, this.__loadLibrary, this);
+			qookery.Qookery.getRegistry().loadLibrary(libraryName, function(error) {
+				if(error != null) {
+					this.__invokeContinuations(error);
+					return;
+				}
+				this.__loadLibrary();
+			}, this);
 		},
 
 		__loadNextResource: function() {
-			var resourceName = this.__resourceNames.shift();
+			var resourceSpecification = this.__resourceNames.shift();
 			// Create the request
-			var resourceType = null;
-			var atSignPosition = resourceName.indexOf("@");
+			var resourceName = resourceSpecification, resourceType = null;
+			var atSignPosition = resourceSpecification.indexOf("@");
 			if(atSignPosition !== -1 && atSignPosition <= 3) {
-				resourceType = resourceName.substring(0, atSignPosition);
-				resourceName = resourceName.substring(atSignPosition + 1);
+				resourceType = resourceSpecification.substring(0, atSignPosition);
+				resourceName = resourceSpecification.substring(atSignPosition + 1);
 			}
 			else if(qx.lang.String.endsWith(resourceName, ".js")) {
 				resourceType = "js";
@@ -128,7 +139,8 @@ qx.Class.define("qookery.internal.util.Library", {
 				var scriptRequest = new qx.bom.request.Script();
 				scriptRequest.onload = this.__loadLibrary.bind(this);
 				scriptRequest.onerror = function() {
-					this.error("Error loading script from", resourceUri);
+					this.__resourceNames.unshift(resourceSpecification);
+					this.__invokeContinuations(new Error("Error loading '" + resourceName + "'"));
 				}.bind(this);
 				scriptRequest.open("GET", resourceUri);
 				scriptRequest.send();
@@ -150,6 +162,11 @@ qx.Class.define("qookery.internal.util.Library", {
 			default:
 				throw new Error("Library uses unsupported resource type");
 			}
+		},
+
+		__invokeContinuations: function(error) {
+			this.__continuations.forEach(function(continuation) { continuation(error); });
+			this.__continuations = [ ];
 		}
 	}
 });
