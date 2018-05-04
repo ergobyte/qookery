@@ -27,6 +27,11 @@
 
 	<!-- Simple types -->
 
+	<simpleType name="access-level"><restriction base="token">
+		<enumeration value="public" />
+		<enumeration value="private" />
+	</restriction></simpleType>
+
 	<simpleType name="atom-element-visibility"><restriction base="token">
 		<enumeration value="both" />
 		<enumeration value="label" />
@@ -838,6 +843,9 @@
 		<complexType>
 			<simpleContent>
 				<extension base="string">
+					<attribute name="access" type="q:access-level" default="public"><annotation><documentation>
+						The access level of the script (currently used only for documentation purposes)
+					</documentation></annotation></attribute>
 					<attribute name="action"><annotation><documentation>
 						The name(s) of the action(s) the script is a handler for.
 					</documentation></annotation><simpleType><list itemType="token" /></simpleType></attribute>
@@ -929,6 +937,9 @@
 			<sequence>
 				<element ref="documentation" minOccurs="0" maxOccurs="1"></element>
 			</sequence>
+			<attribute name="access" type="q:access-level" default="public"><annotation><documentation>
+				The access level of the variable (currently used only for documentation purposes)
+			</documentation></annotation></attribute>
 			<attribute name="name" type="q:javascript-identifier"><annotation><documentation>
 				The name of the variable to register into the form context ("$")
 			</documentation></annotation></attribute>
