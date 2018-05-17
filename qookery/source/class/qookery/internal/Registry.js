@@ -81,7 +81,7 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["stretch"] = "Boolean";
 		partition["tab-index"] = "Integer";
 		partition["tool-tip-text"] = "ReplaceableString";
-		partition["top"] = "Number"
+		partition["top"] = "Number";
 		partition["width"] = "Size";
 
 		partition = this.__createPartition(qookery.IRegistry.P_SERVICE);

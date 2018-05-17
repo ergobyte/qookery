@@ -33,7 +33,7 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 			var asynchronous = true;
 			if(!successCallback) { successCallback = this._defaultSuccessCallback; asynchronous = false; }
 			if(!failCallback) { failCallback = this._defaultFailCallback; }
-			var result = undefined;
+			var result;
 			var resourceUri = this.resolveResourceUri(name);
 			var xhrRequest = new qx.bom.request.Xhr();
 			xhrRequest.onerror = xhrRequest.ontimeout = function() {

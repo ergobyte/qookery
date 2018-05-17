@@ -69,7 +69,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				this.__scriptingContext = this.$ = this.__createScriptingContext(value);
 				return;
 			}
-			return this.base(arguments, attributeName, value)
+			return this.base(arguments, attributeName, value);
 		},
 
 		// Lifecycle
@@ -283,7 +283,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					if(value == null)
 						throw new Error("Unable to resolve required import '" + name + "'");
 					return value;
-				}
+				};
 			}
 			Object.defineProperty(this.__scriptingContext, variableName, {
 				configurable: false,

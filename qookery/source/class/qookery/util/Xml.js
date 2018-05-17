@@ -93,10 +93,10 @@ qx.Class.define("qookery.util.Xml", {
 		 */
 		getNodeText: function(node) {
 			var text = qx.dom.Node.getText(node);
-			if(text == null || text.length == 0)
+			if(text == null || text.length === 0)
 				return null;
 			text = text.trim();
-			if(text.length == 0)
+			if(text.length === 0)
 				return null;
 			return text;
 		},
@@ -203,10 +203,10 @@ qx.Class.define("qookery.util.Xml", {
 				if(attributeQName === "xmlns" || attributeQName.indexOf("xmlns:") === 0)
 					continue; // Namespace declarations are handled separately
 				var text = xmlAttribute.value;
-				if(text == null || text.length == 0)
+				if(text == null || text.length === 0)
 					continue; // Empty attributes are ignored
 				text = text.trim();
-				if(text.length == 0)
+				if(text.length === 0)
 					continue; // Empty attribute after trimming whitespace, also ignored
 				var attributeName = attributeQName;
 				if(attributeQName.indexOf(":") !== -1)

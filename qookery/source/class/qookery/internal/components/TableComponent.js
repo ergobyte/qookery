@@ -111,7 +111,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		},
 
 		setup: function(attributes) {
-			if(this.__columns.length == 0)
+			if(this.__columns.length === 0)
 				throw new Error("Table must have at least one column");
 			var table = this.getMainWidget();
 			var tableModel = this.getTableModel();

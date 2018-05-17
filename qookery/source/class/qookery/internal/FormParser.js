@@ -93,8 +93,9 @@ qx.Class.define("qookery.internal.FormParser", {
 				// Then check a number of special elements known by parser
 				switch(elementName) {
 				case "{http://www.qookery.org/ns/Form}else":
-					if(selectionMade) return previousResult;
-					// Fall through
+					if(selectionMade)
+						return previousResult;
+					/* fall through */
 				case "{http://www.qookery.org/ns/Form}if":
 					selectionMade = this.__parseIfElse(statementElement, component);
 					return previousResult;
@@ -301,7 +302,7 @@ qx.Class.define("qookery.internal.FormParser", {
 					finally {
 						componentFunction.__isRunning = false;
 					}
-				}
+				};
 				if(debounceMillis > 0) {
 					var debounceFunction = componentFunction;
 					componentFunction = function() {

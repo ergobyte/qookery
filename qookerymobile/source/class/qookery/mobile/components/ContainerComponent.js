@@ -95,8 +95,8 @@ qx.Class.define("qookery.mobile.components.ContainerComponent", {
 				if(childError == null) continue;
 				errors.push(childError);
 			}
-			if(errors.length == 0) return null;
-			if(errors.length == 1) return errors[0];
+			if(errors.length === 0) return null;
+			if(errors.length === 1) return errors[0];
 			return new qookery.util.ValidationError(this, null, errors);
 		}
 	},

@@ -38,11 +38,11 @@ qx.Class.define("qookery.util.Debug", {
 		logScriptError: function(object, sourceCode, error) {
 			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
 			if(stackTraceLines == null) return;
-			var lineNumber = null;
+			var lineNumber = null, match;
 			for(var i = 0; i < stackTraceLines.length; i++) {
 				var stackTraceLine = stackTraceLines[i];
-				var match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
-				if(!match) continue;
+				match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
+				if(match == null) continue;
 				lineNumber = parseInt(match[1]);
 				break;
 			}

@@ -28,7 +28,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 	},
 
 	statics: {
-		__NULL_ITEM_MODEL: new String()
+		__NULL_ITEM_MODEL: ""
 	},
 
 	members: {

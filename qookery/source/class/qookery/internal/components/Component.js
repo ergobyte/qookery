@@ -260,7 +260,7 @@ qx.Class.define("qookery.internal.components.Component", {
 		 * Add component information to its widgets
 		 */
 		_registerWithWidgets: function() {
-			if(this._widgets.length == 0)
+			if(this._widgets.length === 0)
 				throw new Error("Component failed to create at least one widget");
 
 			for(var i = 0; i < this._widgets.length; i++)

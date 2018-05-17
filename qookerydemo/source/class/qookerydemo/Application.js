@@ -56,8 +56,8 @@ qx.Class.define("qookerydemo.Application", {
 
 			// Setup Qooxdoo
 			if(qx.core.Environment.get("qx.debug")) {
-				qx.log.appender.Native;
-				qx.log.appender.Console;
+				qx.log.appender.Native; // jshint ignore:line
+				qx.log.appender.Console; // jshint ignore:line
 			}
 
 			// Setup Qookery

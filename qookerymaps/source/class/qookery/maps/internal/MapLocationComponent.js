@@ -161,10 +161,6 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			});
 
 			map.addListener("click", function(event) {
-				var data = {
-					x: event.latLng.lng(),
-					y: event.latLng.lat()
-				};
 				this.focus();
 				if(this.isReadOnly()) return;
 				if(this.getAttribute("draggable-marker", false) && this.getValue() != null) return;
@@ -271,7 +267,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			popup.setPadding(2);
 			popup.addListener("mouseover", function() {
 				if(this.__closeTimeoutId) clearTimeout(this.__closeTimeoutId);
-			}, this)
+			}, this);
 
 			if(this.getAttribute("allow-maximize", false) && this.isActionSupported("maximize")) {
 				var fullScreenButton = new qx.ui.toolbar.Button("Μεγιστοποίηση", "waffle/icons/material-18/ic_fullscreen_grey600_18dp.png");

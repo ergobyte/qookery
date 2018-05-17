@@ -124,7 +124,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			var element = this.getContentElement();
 			element.setAttribute("readOnly", value);
 			if(this.__ckEditor != null) this.__ckEditor.setReadOnly(value);
-			if(value == true) {
+			if(value) {
 				this.addState("readonly");
 				this.setFocusable(false);
 			}

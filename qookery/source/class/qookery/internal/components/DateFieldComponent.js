@@ -48,7 +48,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			var nativeContextMenu = this.getAttribute("native-context-menu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
 			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
 			widget.getChildControl("textfield").addListener("focusout", function(event) {
-				if(this.__userTyped == true) {
+				if(this.__userTyped) {
 					this.__userTyped = false;
 					this.__parseInput();
 				}
@@ -98,7 +98,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			var textField = this.getMainWidget().getChildControl("textfield");
 			var text = textField.getValue();
 			text = this.__parseDateTime(text);
-			if(!text || text == "") return;
+			if(!text || text === "") return;
 			var res = this.__regularExpression.exec(text);
 			if(!res) return;
 			var year = parseInt(res[this.__inputIndexMap.year], 10);
@@ -106,11 +106,11 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			if(month < 0 || month > 11) return;
 			var date = parseInt(res[this.__inputIndexMap.date], 10);
 			if(date < 1 || date > 31) return;
-			var hours = (parseInt(this.__inputIndexMap.hours, 10) != 0) ? parseInt(res[this.__inputIndexMap.hours], 10) : 0;
+			var hours = (parseInt(this.__inputIndexMap.hours, 10) !== 0) ? parseInt(res[this.__inputIndexMap.hours], 10) : 0;
 			if(hours < 0 || hours > 23) return;
-			var minutes = (parseInt(this.__inputIndexMap.minutes, 10) != 0) ? parseInt(res[this.__inputIndexMap.minutes], 10) : 0;
+			var minutes = (parseInt(this.__inputIndexMap.minutes, 10) !== 0) ? parseInt(res[this.__inputIndexMap.minutes], 10) : 0;
 			if(minutes < 0 || minutes > 59) return;
-			var seconds = (parseInt(this.__inputIndexMap.seconds, 10) != 0) ? parseInt(res[this.__inputIndexMap.seconds], 10) : 0;
+			var seconds = (parseInt(this.__inputIndexMap.seconds, 10) !== 0) ? parseInt(res[this.__inputIndexMap.seconds], 10) : 0;
 			if(seconds < 0 || seconds > 59) return;
 			var inputDate = new Date(year, month, date, hours, minutes, seconds);
 			this.setValue(inputDate);
@@ -130,7 +130,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 			}
 			else {
 				datePart = dateParts.length >= 1 ? this.__parseDate(dateParts[0]) : "";
-				if(dateParts.length == 2 && parseInt(this.__inputIndexMap.minutes, 10) !=0 && parseInt(this.__inputIndexMap.hours, 10) !=0 ) {
+				if(dateParts.length === 2 && parseInt(this.__inputIndexMap.minutes, 10) !== 0 && parseInt(this.__inputIndexMap.hours, 10) !== 0 ) {
 					if(dateParts[1].indexOf(":") != -1) {
 						timePart = dateParts[1];
 					}

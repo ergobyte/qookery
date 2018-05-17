@@ -84,7 +84,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		setSelection: function(itemNumber) {
 			var selectablesItems = this.getMainWidget().getSelectables(true);
-			if(selectablesItems.length == 0) return;
+			if(selectablesItems.length === 0) return;
 			this.getMainWidget().setSelection([selectablesItems[itemNumber]]);
 		},
 
