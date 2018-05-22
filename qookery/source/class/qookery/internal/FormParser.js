@@ -338,7 +338,15 @@ qx.Class.define("qookery.internal.FormParser", {
 						component.setAction(actionName, componentFunction);
 					});
 					if(eventNames != null) eventNames.split(/\s+/).forEach(function(eventName) {
-						component.addEventHandler(eventName, componentFunction, onlyOnce);
+						// Event handlers are wrapped into try-catch blocks in order to ensure subsequent handlers will be called
+						component.addEventHandler(eventName, function(varargs) {
+							try {
+								componentFunction.apply(component, arguments);
+							}
+							catch(error) {
+								qx.log.Logger.error(component, "Event handler ", eventName, " error:", error);
+							}
+						}, onlyOnce);
 					});
 					if(execute) componentFunction();
 				}
