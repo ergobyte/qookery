@@ -321,7 +321,9 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				throw new Error("Variable provider '" + providerName + "' missing from scripting context");
 			var value = provider.getVariable(variableName);
 			if(value == null) {
-				var defaultValue = qookery.util.Xml.getAttribute(variableElement, "default");
+				var defaultValue = qookery.util.Xml.getNodeText(variableElement);
+				if(defaultValue == null)
+					defaultValue = qookery.util.Xml.getAttribute(variableElement, "default");
 				if(defaultValue != null) {
 					var typeName = qookery.util.Xml.getAttribute(variableElement, "type", "Expression");
 					value = qookery.util.Xml.parseValue(this, typeName, defaultValue);

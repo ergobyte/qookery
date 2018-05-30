@@ -933,7 +933,7 @@
 		<annotation><documentation>
 			Define a form variable, with optional default value
 		</documentation></annotation>
-		<complexType>
+		<complexType mixed="true">
 			<sequence>
 				<element ref="documentation" minOccurs="0" maxOccurs="1"></element>
 			</sequence>
