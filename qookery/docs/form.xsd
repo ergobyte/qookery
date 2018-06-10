@@ -467,6 +467,7 @@
 		</choice>
 		<attribute name="expression" type="q:javascript-expression" />
 		<attribute name="media-query" type="q:media-query" />
+		<attribute ref="xml:lang" />
 	</complexType>
 
 	<!-- Element groups -->
@@ -927,6 +928,10 @@
 			</sequence>
 			<attribute ref="xml:lang" use="required" />
 		</complexType>
+		<unique name="message">
+			<selector xpath="q:message" />
+			<field xpath="@id" />
+		</unique>
 	</element>
 
 	<element name="variable">
@@ -934,9 +939,6 @@
 			Define a form variable, with optional default value
 		</documentation></annotation>
 		<complexType mixed="true">
-			<sequence>
-				<element ref="documentation" minOccurs="0" maxOccurs="1"></element>
-			</sequence>
 			<attribute name="access" type="q:access-level" default="public"><annotation><documentation>
 				The access level of the variable (currently used only for documentation purposes)
 			</documentation></annotation></attribute>

@@ -228,12 +228,19 @@ qx.Class.define("qookery.internal.FormParser", {
 			var expression = qookery.util.Xml.getAttribute(selectionElement, "expression");
 			if(expression != null) {
 				var result = component.evaluateExpression(expression);
-				if(!result) return false;
+				if(!result)
+					return false;
 			}
 			var mediaQuery = qookery.util.Xml.getAttribute(selectionElement, "media-query");
 			if(mediaQuery != null) {
 				var query = this.__getMediaQuery(mediaQuery);
-				if(!query.isMatching()) return false;
+				if(!query.isMatching())
+					return false;
+			}
+			var language = qookery.util.Xml.getAttribute(selectionElement, "{http://www.w3.org/XML/1998/namespace}lang");
+			if(language != null) {
+				if(qx.locale.Manager.getInstance().getLanguage() != language)
+					return false;
 			}
 			this.__parseStatementBlock(selectionElement, component);
 			return true;
