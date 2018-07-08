@@ -99,24 +99,14 @@ qx.Interface.define("qookery.IModelProvider", {
 		getLabel: function(object, labelType) { },
 
 		/**
-		 * Handle connection specification of a connectable component
+		 * Connect a component to the form's underlying model, in a way specified by second argument
 		 *
-		 * @param connectableComponent {qookery.IComponent} a component that supports data binding
-		 * @param connectionSpecification {String} a specification that may be parsed by the model provider
+		 * @param component {qookery.IEditableComponent} editable component that will receive connection
+		 * @param specification {String} an implementation specific text that will be parsed by the model provider
 		 *
-		 * @return {any} implementation specific value that may be used with getConnectionAttribute()
+		 * @return {qookery.internal.util.Connection} new connection instance
 		 */
-		handleConnection: function(connectableComponent, connectionSpecification) { },
-
-		/**
-		 * Return the value of a connection's attribute, if available
-		 *
-		 * @param connectionHandle {any} the opaque value returned by handleConnection()
-		 * @param attributeName {String} name of wanted attribute
-		 *
-		 * @return {any} attribute's value or <code>undefined
-		 */
-		getConnectionAttribute: function(connectionHandle, attributeName) { },
+		connectComponent: function(component, specification) { },
 
 		/**
 		 * Clone an object

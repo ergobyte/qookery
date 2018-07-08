@@ -95,13 +95,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		setup: function(attributes) {
 			var connectionSpecification = this.getAttribute("connect");
-			if(connectionSpecification) {
-				var modelProvider = this.getForm().getModelProvider();
-				if(!modelProvider)
-					throw new Error("Install a model provider to handle connections in XML forms");
-				var connectionHandle = modelProvider.handleConnection(this, connectionSpecification);
-				if(connectionHandle)
-					this._applyConnectionHandle(modelProvider, connectionHandle);
+			if(connectionSpecification != null) {
+				this.connect(connectionSpecification);
 			}
 			var initializeClientCode = this.getAttribute("initialize");
 			if(initializeClientCode) {
@@ -133,9 +128,16 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		// Model connection and UI
 
-		connect: function(propertyPath) {
+		connect: function(connectionSpecification) {
 			this.disconnect();
-			this.__connection = this.getForm().addConnection(this, propertyPath);
+			var modelProvider = this.getForm().getModelProvider();
+			if(modelProvider == null)
+				throw new Error("Install a model provider to handle connections in XML forms");
+			var connection = modelProvider.connectComponent(this, connectionSpecification);
+			if(connection == null)
+				throw new Error("Model provider failed to provide a connection");
+			this._applyConnection(modelProvider, connection);
+			this.__connection = connection;
 		},
 
 		disconnect: function() {
@@ -160,19 +162,22 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			}
 		},
 
-		_applyConnectionHandle: function(modelProvider, connectionHandle) {
+		_applyConnection: function(modelProvider, connection) {
 			// Subclasses may extend or override below functionality to support more attributes
-			if(!this.getLabel()) {
-				var connectionLabel = modelProvider.getConnectionAttribute(connectionHandle, "label");
-				if(connectionLabel != null) this.setLabel(connectionLabel);
+			if(this.getLabel() == null) {
+				var connectionLabel = connection.getAttribute("label");
+				if(connectionLabel != null)
+					this.setLabel(connectionLabel);
 			}
-			if(!this.getFormat()) {
-				var formatSpecification = modelProvider.getConnectionAttribute(connectionHandle, "format");
-				if(formatSpecification != null) this.setFormat(qookery.Qookery.getRegistry().createFormat(formatSpecification));
+			if(this.getFormat() == null) {
+				var formatSpecification = connection.getAttribute("format");
+				if(formatSpecification != null)
+					this.setFormat(qookery.Qookery.getRegistry().createFormat(formatSpecification));
 			}
-			if(!this.getToolTipText()) {
-				var toolTipText = modelProvider.getConnectionAttribute(connectionHandle, "tool-tip-text");
-				if(toolTipText != null) this.setToolTipText(toolTipText);
+			if(this.getToolTipText() == null) {
+				var toolTipText = connection.getAttribute("tool-tip-text");
+				if(toolTipText != null)
+					this.setToolTipText(toolTipText);
 			}
 		},
 

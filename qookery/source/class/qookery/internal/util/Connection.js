@@ -52,6 +52,17 @@ qx.Class.define("qookery.internal.util.Connection", {
 			model["set" + qx.lang.String.firstUp(segments[segments.length - 1])](value);
 		},
 
+		/**
+		 * Return the value of a connection's attribute, if available
+		 *
+		 * @param attributeName {String} name of wanted attribute
+		 *
+		 * @return {any} attribute value or second argument if <code>undefined</code>
+		 */
+		getAttribute: function(attributeName, defaultValue) {
+			return defaultValue;
+		},
+
 		disconnect: function() {
 			if(this.__disconnectCallback == null) return;
 			this.__disconnectCallback();

@@ -74,14 +74,9 @@ qx.Class.define("qookery.impl.DefaultModelProvider", {
 			return qx.data.Conversion.toString(object);
 		},
 
-		handleConnection: function(component, connectionSpecification) {
-			component.connect(connectionSpecification);
-			return null;
-		},
-
-		getConnectionAttribute: function(connectionHandle, attributeName) {
-			// The default model provider does not provide any attributes
-			return;
+		connectComponent: function(component, connectionSpecification) {
+			// The default model provider expects a Qooxdoo property path in the specification argument
+			return component.getForm().addConnection(component, connectionSpecification);
 		},
 
 		clone: function(object) {

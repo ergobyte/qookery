@@ -67,11 +67,11 @@ qx.Interface.define("qookery.IEditableComponent", {
 		/**
 		 * Create a two way binding between form's model and component's value
 		 *
-		 * <p>This method will first disconnect an existing connection made a previous call.</p>
+		 * <p>This method will automatically disconnect existing connection, if any.</p>
 		 *
-		 * @param propertyPath {String} valid model property path
+		 * @param connectionSpecification {String} a model-provider specific specification, instrumenting connection
 		 */
-		connect: function(propertyPath) { },
+		connect: function(connectionSpecification) { },
 
 		/**
 		 * Remove connection created by #connect(), if any

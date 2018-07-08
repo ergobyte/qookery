@@ -83,6 +83,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 					this.__attachAceEditor(aceWidget);
 				}, this);
 			}, this);
+			this.base(arguments);
 		},
 
 		// Public methods

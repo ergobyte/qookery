@@ -71,12 +71,13 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			return selectBox;
 		},
 
-		_applyConnectionHandle: function(modelProvider, connectionHandle) {
+		_applyConnection: function(modelProvider, connection) {
 			if(this.getAttribute("map") === undefined) {
-				var mapName = modelProvider.getConnectionAttribute(connectionHandle, "map");
-				if(mapName) this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
+				var mapName = connection.getAttribute("map");
+				if(mapName != null)
+					this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
 			}
-			this.base(arguments, modelProvider, connectionHandle);
+			this.base(arguments, modelProvider, connection);
 		},
 
 		setup: function(attributes) {
