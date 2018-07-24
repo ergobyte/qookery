@@ -19,6 +19,7 @@
 	"provides": {
 		"namespace": "qookery.mobile",
 		"encoding": "utf-8",
+		"resource": "source/resource",
 		"class": "source/class",
 		"type": "component"
 	}
