@@ -11,7 +11,7 @@
 		],
 		"version": "0.4.1",
 		"qooxdoo-versions": [ "5.0.2", "5.1", "6.0" ],
-		"qooxdoo-range" : "6.0.0-* || 6.x",
+		"qooxdoo-range" : "6.0.0-* | 6.x",
 		"download": "https://github.com/ergobyte/qookery/releases/download/%{version}/qookery.tar.gz",
 		"checksum": "%{sha1-checksum}",
 		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/%{version}/qookery"
