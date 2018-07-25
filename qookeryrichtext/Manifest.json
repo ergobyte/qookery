@@ -1,26 +1,23 @@
 {
 	"info": {
-		"name": "qookery.richtext",
-		"summary": "Rich text editor component for Qookery",
-		"description": "Allows easy integration of CKEditor into Qookery forms",
+		"name": "Qookery Rich Text",
+		"summary": "Qookery extension: CKEditor integration",
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" }
 		],
-		"version": "0.4.1",
-		"qooxdoo-versions": [ "5.0.2", "5.1", "6.0" ],
-		"qooxdoo-range" : "^6.0.0-alpha",
-		"download": "https://github.com/ergobyte/qookery/releases/download/%{version}/qookery.tar.gz",
-		"checksum": "%{sha1-checksum}",
-		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/%{version}/qookery"
+		"version": "0.5.0",
+		"qooxdoo-versions": [ "5.0.2", "6.0.0" ],
+		"qooxdoo-range" : "^6.0.0-alpha"
 	},
 	"provides": {
 		"namespace": "qookery.richtext",
 		"encoding": "utf-8",
 		"class": "source/class",
 		"resource": "source/resource",
+		"translation": "source/translation",
 		"type": "component"
 	}
 }

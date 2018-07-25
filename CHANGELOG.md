@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0] - 2018-07-25
+
+* <script> configurable debouncing and recursion prevention
+* Support for on-demand dependencies, their resolution happening lazily as needed
+* XML namespaces may be freely set at any element with expected results
+* Cell editor support by <table> component
+* Better handling of script errors
+* xml:lang support for locale-specific markup, making i18n easier
+* Compatibility with upcoming Qooxdoo 6 contrib system
+
 ## [0.4] - 2017-08-24
 
 * Support for most layout managers provided by Qooxdoo
@@ -8,7 +18,7 @@
 * Attributes were added or updated to better match the Qooxdoo API
 * CKEditor can be provided with custom configuration
 * Pluggable variable providers, read-only and typed variables
-* The Qookery Demo was rewritten in Qookery
+* The Qookery Demo application was rewritten in Qookery
 
 ## [0.3] - 2017-02-05
 

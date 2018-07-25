@@ -1,9 +1,8 @@
 {
 	"info": {
-		"name": "qookerydemo",
-		"summary": "Demo runner for Qookery",
-		"description": "Provides a demonstration and testing environment for Qookery developers and users.",
-		"category": [ "utility" ],
+		"name": "Qookery Demo",
+		"summary": "Qookery demo runner application",
+		"description": "Demonstration and testing environment for Qookery developers and users.",
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
@@ -11,9 +10,9 @@
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "stylkarr@gmail.com" },
 			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" }
 		],
-		"version": "0.4.1",
-		"qooxdoo-versions": [ "5.0.2", "5.1", "6.0" ],
-		"qooxdoo-range" : "^6.0.0-alpha",
+		"version": "0.5.0",
+		"qooxdoo-versions": [ "5.0.2", "6.0.0" ],
+		"qooxdoo-range" : "^6.0.0-alpha"
 	},
 	"provides": {
 		"namespace": "qookerydemo",

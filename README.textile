@@ -2,7 +2,7 @@ h1. Qookery: Declarative UI Building for Qooxdoo
 
 h2(#about). About
 
-The Qookery library helps "Qooxdoo":http://qooxdoo.org/ programmers declare and run user interfaces through an expressive XML language.
+The Qookery library helps "Qooxdoo":https://qooxdoo.org/ programmers declare and run user interfaces through an expressive XML language.
 
 This project is a spinoff of "WAFFLE", the client-side web application framework used within Ergobyte for its cloud products.
 
@@ -16,10 +16,10 @@ You can discover Qookery and experiment with its features by visiting its intera
 
 h2(#examples). Real-life Examples
 
-Below rich Internet applications are using Qookery for their UI needs almost exclusively. All interface elements, from the browser's window up, are assembled and laid out declaratively via Qookery forms.
+Below applications are using Qookery for their user interface requirements exclusively. All components, from the browser window up, are assembled and laid out declaratively via Qookery forms.
 
-* "Ergobyte Electronic Services":https://www.ergobyte.net/ - Ergobyte customer account management interface
-* "Γαληνός Office":https://office.galinos.gr/ - Full featured medical practice management system by Ergobyte, providing patient management, appointment scheduling, customizable health records, document management, reporting etc.
+* "Galen Office":https://www.galenoffice.com/ - Cloud-based medical practice management system; provides patient management, appointment scheduling, customizable health records, document management, reporting and more.
+* "Ergobyte Electronic Services":https://www.ergobyte.net/ - Ergobyte's customer account management interface
 
 You may study their forms' XML source code by firing up your browser's developer tools and track network requests as you use the applications.
 
@@ -62,10 +62,9 @@ Qookery is licensed under the Apache License, Version 2.0.
 
 h2(#contact). Contact
 
-For requests and comments, please contact the project's contributors:
+For requests and comments, please contact the project's maintainer:
 
 * "George Nikolaidis":https://github.com/gnikolaidis - gnikolaidis@ergobyte.gr
-* "Joseph Karras":https://github.com/joskar - jkarr@ergobyte.gr
 
 h2(#links). See also
 

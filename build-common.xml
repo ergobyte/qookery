@@ -165,10 +165,6 @@
 
 	<target name="Api-Application" depends="Api-Data, Setup-Qooxdoo" unless="build.apiUpToDate">
 		<call-generator-py job="api-verify" />
-		<loadfile property="version" srcfile="${qookery.repository}/VERSION" />
-		<replace file="api/script/apiviewer.js">
-			<replacefilter token="/ergobyte/qookery/tree/%{version}" value="/ergobyte/qookery/tree/${version}" />
-		</replace>
 	</target>
 
 	<target name="Api-Run" depends="Api-Application, Util.HttpServer.Start">

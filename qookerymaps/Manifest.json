@@ -1,25 +1,23 @@
 {
 	"info": {
 		"name": "Qookery Maps",
-		"description": "Components wrapping Google Maps functionality",
+		"summary": "Qookery extension: Google Maps integration",
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" }
 		],
-		"version": "0.4.1",
-		"qooxdoo-versions": [ "5.0.2", "5.1", "6.0" ],
-		"qooxdoo-range" : "^6.0.0-alpha",
-		"download": "https://github.com/ergobyte/qookery/releases/download/%{version}/qookery.tar.gz",
-		"checksum": "%{sha1-checksum}",
-		"sourceViewUri": "https://github.com/ergobyte/qookery/tree/%{version}/qookery"
+		"version": "0.5.0",
+		"qooxdoo-versions": [ "5.0.2", "6.0.0" ],
+		"qooxdoo-range" : "^6.0.0-alpha"
 	},
 	"provides": {
 		"namespace": "qookery.maps",
 		"encoding": "utf-8",
 		"class": "source/class",
 		"resource": "source/resource",
+		"translation": "source/translation",
 		"type": "component"
 	}
 }
