@@ -187,6 +187,7 @@
 		<union memberTypes="integer">
 			<simpleType>
 				<restriction base="token">
+					<enumeration value="null" />
 					<enumeration value="XXS" />
 					<enumeration value="XS" />
 					<enumeration value="S" />

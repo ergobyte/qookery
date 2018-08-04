@@ -174,7 +174,13 @@ qx.Class.define("qookery.util.Xml", {
 			case "QName":
 				return component.resolveQName(text);
 			case "Size":
-				return qookery.util.Xml.__NAMED_SIZES[text] || (isNaN(text) ? text : parseInt(text, 10));
+				var v = qookery.util.Xml.__NAMED_SIZES[text];
+				if(v !== undefined)
+					return v;
+				v = parseInt(text, 10);
+				if(!isNaN(v))
+					return v;
+				return text;
 			case "StringList":
 				return text.split(/\s+/);
 			default:
@@ -220,6 +226,15 @@ qx.Class.define("qookery.util.Xml", {
 			return attributes;
 		},
 
-		__NAMED_SIZES: { "XXS": 28, "XS": 46, "S": 74, "M": 120, "L": 194, "XL": 314, "XXL": 508 }
+		__NAMED_SIZES: {
+			"null": null,
+			"XXS": 28,
+			"XS": 46,
+			"S": 74,
+			"M": 120,
+			"L": 194,
+			"XL": 314,
+			"XXL": 508
+		}
 	}
 });
