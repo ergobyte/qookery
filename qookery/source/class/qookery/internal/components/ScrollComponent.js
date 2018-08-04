@@ -40,6 +40,8 @@ qx.Class.define("qookery.internal.components.ScrollComponent", {
 			case "content-padding-left": return "Integer";
 			case "content-padding-right": return "Integer";
 			case "content-padding-top": return "Integer";
+			case "scrollbar-x": return "String";
+			case "scrollbar-y": return "String";
 			}
 			return this.base(arguments, attributeName);
 		},
@@ -49,12 +51,19 @@ qx.Class.define("qookery.internal.components.ScrollComponent", {
 		_createContainerWidget: function(attributes) {
 			var scroll = new qx.ui.container.Scroll();
 			this.__composite = new qx.ui.container.Composite();
-			scroll.add(this.__composite, { flex: 1, width: "100%", height: "100%" });
-			if(attributes["content-padding"] !== undefined) scroll.setContentPadding(attributes["content-padding"]);
-			if(attributes["content-padding-top"] !== undefined) scroll.setContentPaddingTop(attributes["content-padding-top"]);
-			if(attributes["content-padding-right"] !== undefined) scroll.setContentPaddingRight(attributes["content-padding-right"]);
-			if(attributes["content-padding-bottom"] !== undefined) scroll.setContentPaddingBottom(attributes["content-padding-bottom"]);
-			if(attributes["content-padding-left"] !== undefined) scroll.setContentPaddingLeft(attributes["content-padding-left"]);
+			scroll.add(this.__composite);
+			if(attributes["content-padding"] !== undefined)
+				scroll.setContentPadding(attributes["content-padding"]);
+			if(attributes["content-padding-top"] !== undefined)
+				scroll.setContentPaddingTop(attributes["content-padding-top"]);
+			if(attributes["content-padding-right"] !== undefined)
+				scroll.setContentPaddingRight(attributes["content-padding-right"]);
+			if(attributes["content-padding-bottom"] !== undefined)
+				scroll.setContentPaddingBottom(attributes["content-padding-bottom"]);
+			if(attributes["content-padding-left"] !== undefined)
+				scroll.setContentPaddingLeft(attributes["content-padding-left"]);
+			scroll.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));
+			scroll.setScrollbarY(this.getAttribute("scrollbar-y", "auto"));
 			this._applyLayoutAttributes(scroll, attributes);
 			return scroll;
 		},

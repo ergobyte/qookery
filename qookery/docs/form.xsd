@@ -686,6 +686,8 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="scroll"><complexType><complexContent><extension base="q:container-component">
+		<attribute name="scrollbar-x" type="q:scrollbar-policy" default="auto" />
+		<attribute name="scrollbar-y" type="q:scrollbar-policy" default="auto" />
 		<attributeGroup ref="q:content-padding" />
 	</extension></complexContent></complexType></element>
 
