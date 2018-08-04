@@ -30,6 +30,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
+			case "map": return "String";
 			case "spacing": return "Integer";
 			case "orientation": return "String";
 			}
@@ -63,6 +64,22 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 			}, this);
 			this._applyLayoutAttributes(list, attributes);
 			return list;
+		},
+
+		_applyConnection: function(modelProvider, connection) {
+			if(this.getAttribute("map") === undefined) {
+				var mapName = connection.getAttribute("map");
+				if(mapName != null)
+					this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
+			}
+			this.base(arguments, modelProvider, connection);
+		},
+
+		setup: function(attributes) {
+			var mapName = this.getAttribute("map");
+			if(mapName !== undefined)
+				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
+			this.base(arguments, attributes);
 		},
 
 		_updateUI: function(value) {

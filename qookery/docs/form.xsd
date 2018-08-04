@@ -116,6 +116,10 @@
 		</restriction>
 	</simpleType></union></simpleType>
 
+	<simpleType name="map-name">
+		<restriction base="token" />
+	</simpleType>
+
 	<simpleType name="media-query"><union memberTypes="string"><simpleType><restriction base="token">
 		<enumeration value="small-up" />
 		<enumeration value="small-only" />
@@ -290,7 +294,7 @@
 		The URI of the icon to use when presenting element
 	</documentation></annotation></attribute>
 
-	<attribute name="map" type="token"><annotation><documentation>
+	<attribute name="map" type="q:map-name"><annotation><documentation>
 		The symbolic name of a registered map to associate with element
 	</documentation></annotation></attribute>
 
@@ -648,6 +652,9 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="list"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="map" type="q:map-name"><annotation><documentation>
+			The symbolic name of a map registered with the Qookery registry
+		</documentation></annotation></attribute>
 		<attribute name="scrollbar-x" type="q:scrollbar-policy" default="auto" />
 		<attribute name="scrollbar-y" type="q:scrollbar-policy" default="auto" />
 		<attribute name="selection-mode" type="q:selection-mode" default="single" />
@@ -686,7 +693,7 @@
 		<attribute name="keep-sorted" type="boolean" default="true"><annotation><documentation>
 			If true, the select box items will be kept sorted in ascending order at all times
 		</documentation></annotation></attribute>
-		<attribute name="map" type="token"><annotation><documentation>
+		<attribute name="map" type="q:map-name"><annotation><documentation>
 			The symbolic name of a map registered with the Qookery registry
 		</documentation></annotation></attribute>
 		<attribute name="max-list-height" type="nonNegativeInteger" />
@@ -811,7 +818,7 @@
 		<attribute name="height" type="string" />
 		<attribute name="label" type="string" />
 		<attribute name="line-height" type="string" />
-		<attribute name="map" type="token" />
+		<attribute name="map" type="q:map-name" />
 		<attribute name="max-width" type="q:size" />
 		<attribute name="min-width" type="q:size" />
 		<attribute name="name" type="token" />
