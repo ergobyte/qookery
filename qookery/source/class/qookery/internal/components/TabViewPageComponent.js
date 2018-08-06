@@ -26,9 +26,21 @@ qx.Class.define("qookery.internal.components.TabViewPageComponent", {
 
 	members: {
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "show-close-button": return "Boolean";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		_createContainerWidget: function(attributes) {
-			var page = new qx.ui.tabview.Page(attributes["label"]);
-			page.setLayout(new qx.ui.layout.Grid());
+			var page = new qx.ui.tabview.Page(attributes["label"], attributes["icon"]);
+			if(attributes["show-close-button"] !== undefined)
+				page.setShowCloseButton(attributes["show-close-button"]);
 			this._applyLayoutAttributes(page, attributes);
 			return page;
 		}
