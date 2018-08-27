@@ -28,8 +28,7 @@ qx.Bootstrap.define("qookery.richtext.Bootstrap", {
 			CKEDITOR.config.entities = true;
 			CKEDITOR.config.entities_latin = false;
 			CKEDITOR.config.entities_greek = false;
-			CKEDITOR.config.entities_additional = "lt,gt,amp";
-			CKEDITOR.addCss(".cke_float { opacity: 0.8; }");
+			CKEDITOR.config.entities_additional = "nbsp,lt,gt,amp";
 		});
 		qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/RichText}rich-text", qookery.richtext.internal.RichTextComponent);
 	}

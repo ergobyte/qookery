@@ -42,14 +42,8 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__onLibraryLoaded, this);
 		}, this);
 		this.addListener("focusin", function() {
-			if(!this.__ckEditor) return;
+			if(this.__ckEditor == null) return;
 			this.__ckEditor.focus();
-		}, this);
-		this.addListener("keypress", function(event) {
-			if(this.getReadOnly()) return;
-			// Absolutely horrible workaround to a yet unknown bug with space keypress
-			if(event.getKeyIdentifier() === "Space")
-				this.__ckEditor.insertText(" ");
 		}, this);
 	},
 
@@ -60,11 +54,12 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		__disableValueUpdate: false,
 
 		_createContentElement: function() {
-			// Create a selectable and overflow enabled <div>
+			// Create a selectable and overflow enabled <div> for CKEDITOR.inline()
 			var element = new qx.html.Element("div", {
 				overflowX: "auto",
 				overflowY: "auto"
 			});
+			element.addClass("qk-rich-text");
 			element.setSelectable(true);
 			return element;
 		},
@@ -77,10 +72,14 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			// Method might be called after widget destruction
 			if(this.isDisposed()) return;
 
-			// Get underlying DOM element
-			var domElement = this.getContentElement().getDomElement();
+			// Horrific kludge to prevent qx.ui.root.Abstract#__preventScrollWhenFocused() from eating up Space keypresses
+			var element = this.getContentElement();
+			element.getNodeName = function() {
+				return "textarea";
+			};
 
 			// Check that CKEditor is in a supported environment
+			var domElement = element.getDomElement();
 			if(!CKEDITOR.env.isCompatible) {
 				domElement.innerHTML = "<span style='color: red;'>Rich text editing is not supported in this environment. Please upgrade your browser.</span>";
 				return;
@@ -123,7 +122,8 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		__applyReadOnly: function(value) {
 			var element = this.getContentElement();
 			element.setAttribute("readOnly", value);
-			if(this.__ckEditor != null) this.__ckEditor.setReadOnly(value);
+			if(this.__ckEditor != null)
+				this.__ckEditor.setReadOnly(value);
 			if(value) {
 				this.addState("readonly");
 				this.setFocusable(false);

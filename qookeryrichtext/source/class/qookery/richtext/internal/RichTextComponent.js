@@ -97,7 +97,10 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 		},
 
 		_applyValid: function(valid) {
-			if(!valid) this.getMainWidget().addState("invalid"); else this.getMainWidget().removeState("invalid");
+			if(!valid)
+				this.getMainWidget().addState("invalid");
+			else
+				this.getMainWidget().removeState("invalid");
 		},
 
 		setInvalidMessage: function(invalidMessage) {
