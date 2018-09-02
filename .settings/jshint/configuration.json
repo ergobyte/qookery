@@ -1,0 +1,12 @@
+{
+	"boss": true,
+	"eqnull": true,
+	"evil": true,
+	"latedef": true,
+	"loopfunc": true,
+	"quotmark": "double",
+	"scripturl": true,
+	"sub": true,
+	"shadow": true,
+	"unused": "vars"
+}

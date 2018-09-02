@@ -1,0 +1,8 @@
+{
+  "ecmaVersion": 5,
+  "plugins": {
+    "jshint": {
+      "configFile": ".settings/jshint/configuration.json"
+    }
+  }
+}
