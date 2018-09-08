@@ -103,6 +103,10 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 				this.getMainWidget().removeState("invalid");
 		},
 
+		getCkEditor: function() {
+			return this.getMainWidget().getCkEditor();
+		},
+
 		setInvalidMessage: function(invalidMessage) {
 			// Overriden to block default implementation
 		}

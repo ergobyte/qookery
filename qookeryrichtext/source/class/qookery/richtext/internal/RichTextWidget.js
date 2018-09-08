@@ -53,6 +53,10 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		__ckEditor: null,
 		__disableValueUpdate: false,
 
+		getCkEditor: function() {
+			return this.__ckEditor;
+		},
+
 		_createContentElement: function() {
 			// Create a selectable and overflow enabled <div> for CKEDITOR.inline()
 			var element = new qx.html.Element("div", {
@@ -87,6 +91,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 			// Invoke CKEditor inline()
 			domElement.setAttribute("contenteditable", "true");
+			domElement.setAttribute("data-qk-widget", this.toHashCode());
 			this.__ckEditor = CKEDITOR.inline(domElement, this.__configuration);
 			// Defer further setup after instance is ready
 			this.__ckEditor.on("instanceReady", function() {
@@ -103,6 +108,8 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			var text = this.__ckEditor.getData();
 			// Couldn't figure out a way to prevent CKEditor from inserting spurious non-breaking spaces - removing manually
 			text = text.replace(/(&nbsp;|\u00A0|\u202F)+/g, " ");
+			if(text.trim().length === 0)
+				text = null;
 			this.__disableValueUpdate = true;
 			try {
 				this.setValue(text);
