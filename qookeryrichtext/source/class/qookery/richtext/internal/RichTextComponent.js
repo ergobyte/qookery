@@ -20,15 +20,6 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
-	statics: {
-		DEFAULT_TOOLBAR: "Bold Italic Underline Strike - Subscript Superscript | " +
-				"NumberedList BulletedList - Outdent Indent Blockquote | " +
-				"JustifyLeft JustifyCenter JustifyRight JustifyBlock | " +
-				"Cut Copy Paste PasteText | " +
-				"Undo Redo - SelectAll RemoveFormat | " +
-				"Link Unlink"
-	},
-
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
@@ -43,19 +34,19 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			default: return this.base(arguments, attributeName); }
 		},
 
-		create: function(attributes) {
-			this.base(arguments, attributes);
-		},
-
 		_createMainWidget: function(attributes) {
 			// Prepare CKEditor configuration
 			var configuration = { };
 			configuration["language"] = qx.locale.Manager.getInstance().getLanguage();
 			configuration["readOnly"] = this.getReadOnly();
-			configuration["tabIndex"] = attributes["tab-index"];
+			configuration["tabIndex"] = this.getAttribute("tab-index");
 			configuration["title"] = this.getAttribute("title", false);
 			configuration["toolbarCanCollapse"] = this.getAttribute("toolbar-can-collapse", false);
 			configuration["uiColor"] = qx.theme.manager.Color.getInstance().resolve(this.getAttribute("ui-color", "background"));
+
+			var toolbarName = this.getAttribute("toolbar");
+			if(toolbarName != null)
+				configuration["toolbar"] = toolbarName;
 
 			var removePluginsSpecification = this.getAttribute("remove-plugins");
 			if(removePluginsSpecification)
@@ -66,12 +57,6 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 				var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 				var customConfigUri = resourceLoader.resolveResourceUri(customConfigName);
 				configuration["customConfig"] = qx.util.Uri.getAbsolute(customConfigUri);
-			}
-			else {
-				var toolbarSpecification = this.getAttribute("toolbar", qookery.richtext.internal.RichTextComponent.DEFAULT_TOOLBAR);
-				if(toolbarSpecification) configuration["toolbar"] = toolbarSpecification.split(/\s*\|\s*/).reduce(function(a, s) {
-					a.push(s.split(/\s+/)); return a;
-				}, [ ]);
 			}
 
 			// Create the wrapping widget

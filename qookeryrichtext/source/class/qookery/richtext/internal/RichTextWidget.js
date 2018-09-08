@@ -123,7 +123,9 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			// It is possible that we are not ready to accept values yet
 			if(this.__ckEditor == null || this.__disableValueUpdate) return;
 			// Store and set new value into CKEditor
-			this.__ckEditor.setData(text);
+			this.__ckEditor.setData(text, {
+				noSnapshot: true
+			});
 		},
 
 		__applyReadOnly: function(value) {
@@ -145,6 +147,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 	destruct: function() {
 		// We have to behave ourselves and properly clean up our mess
 		if(this.__ckEditor != null) {
+			this.__ckEditor.focusManager.blur(true);
 			this.__ckEditor.destroy();
 			this.__ckEditor = null;
 		}
