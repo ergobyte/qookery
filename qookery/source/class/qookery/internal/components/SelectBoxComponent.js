@@ -114,7 +114,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			else {
 				selectBox.resetSelection();
 			}
-			if(showingPlaceholder)
+			if(showingPlaceholder && this.getRequired())
 				selectBox.addState("showingPlaceholder");
 			else
 				selectBox.removeState("showingPlaceholder");
