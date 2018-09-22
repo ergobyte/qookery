@@ -38,12 +38,12 @@ qx.Class.define("qookery.internal.components.LabelComponent", {
 
 		// Construction
 
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			var label = new qx.ui.basic.Label(this.getAttribute("label", ""));
-			label.setRich(this.getAttribute("rich", false));
-			if(label.isRich()) label.setWrap(this.getAttribute("wrap", true));
-			label.setTextAlign(this.getAttribute("text-align", null));
-			this._applyLayoutAttributes(label, attributes);
+			this._applyAttribute("rich", label, "rich");
+			this._applyAttribute("wrap", label, "wrap");
+			this._applyAttribute("text-align", label, "textAlign");
+			this._applyWidgetAttributes(label);
 			return [ label ];
 		},
 

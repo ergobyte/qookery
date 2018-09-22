@@ -28,7 +28,7 @@ qx.Class.define("qookery.mobile.components.TextFieldComponent", {
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.mobile.form.TextField();
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;

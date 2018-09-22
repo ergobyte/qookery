@@ -69,12 +69,12 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			this.base(arguments, attributes);
 		},
 
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			// Create lightest possible widget since we only need a <div>
 			var widget = new qx.ui.core.Widget();
 			widget.getContentElement().setAttribute("id", this.__domIdentifier);
 			// Configure widget positioning by applying layout
-			this._applyLayoutAttributes(widget, attributes);
+			this._applyWidgetAttributes(widget);
 			// Defer creation of fullcalendar until after positioning is done
 			widget.addListenerOnce("appear", function(event) {
 				qookery.Qookery.getRegistry().loadLibrary("fullcalendar", this.__onLibraryLoaded, this);

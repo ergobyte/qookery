@@ -78,18 +78,16 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 			this.__enableOperationQueuing();
 			this.debug("Created");
 			this.base(arguments, attributes);
-			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes["model-provider"]);
-			var icon = this.getAttribute("icon");
-			if(icon != null)
-				this.setIcon(icon);
+			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(this.getAttribute("model-provider"));
+			this._applyAttribute("icon", this, "icon");
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			var title = this.getAttribute("title");
-			if(title != null)
+			if(title !== undefined)
 				this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
 			this.__flushOperationQueue();
-			return this.base(arguments, attributes);
+			return this.base(arguments);
 		},
 
 		focus: function() {

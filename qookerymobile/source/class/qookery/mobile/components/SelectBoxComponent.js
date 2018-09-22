@@ -33,7 +33,7 @@ qx.Class.define("qookery.mobile.components.SelectBoxComponent", {
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var mainWidget = new qx.ui.mobile.form.SelectBox();
 			mainWidget.addListener("changeSelection", function(event) {
 				if(this._disableValueEvents) return;
@@ -43,7 +43,7 @@ qx.Class.define("qookery.mobile.components.SelectBoxComponent", {
 				else
 					this.setValue(null);
 			}, this);
-			this._applyLayoutAttributes(mainWidget, attributes);
+			this._applyWidgetAttributes(mainWidget);
 			return mainWidget;
 		},
 

@@ -33,11 +33,11 @@ qx.Class.define("qookery.mobile.components.EditableComponent", {
 
 		// Initialization
 
-		_createWidgets: function(attributes) {
-			var mainWidget = this._createMainWidget(attributes);
+		_createWidgets: function() {
+			var mainWidget = this._createMainWidget();
 			if(this.getAttribute("create-label", true)) {
 				var label = new qx.ui.mobile.basic.Label();
-				this._setupLabelAppearance(label, attributes);
+				this._setupLabelAppearance(label);
 				return [ mainWidget, label ];
 			}
 			return [ mainWidget ];
@@ -57,7 +57,7 @@ qx.Class.define("qookery.mobile.components.EditableComponent", {
 			// Mobile does not support tooltips
 		},
 
-		_setupLabelAppearance: function(labelWidget, attributes) {
+		_setupLabelAppearance: function(labelWidget) {
 			// Mobile does not support align and stretch
 		}
 	}

@@ -24,15 +24,15 @@ qx.Interface.define("qookery.ILayoutFactory", {
 	members: {
 
 		/**
-		 * Create a new layout manager
+		 * Create a new layout
 		 *
-		 * @param attributes {Map} any number of attributes that may be of use for configuring output
+		 * @param attributes {qookery.IAttributeSet} set of attributes that may be of use for configuring new layout
 		 *
-		 * @return {qx.ui.layout.Abstract} created layout manager
+		 * @return {qx.ui.layout.Abstract} created layout
 		 */
 		createLayout: function(attributes) {
 			qx.core.Assert.assertArgumentsCount(arguments, 1, 1);
-			qx.core.Assert.assertMap(attributes);
+			qx.core.Assert.assertInterface(attributes, qookery.IAttributeSet);
 		}
 	}
 });

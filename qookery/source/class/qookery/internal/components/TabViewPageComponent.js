@@ -37,11 +37,10 @@ qx.Class.define("qookery.internal.components.TabViewPageComponent", {
 
 		// Construction
 
-		_createContainerWidget: function(attributes) {
-			var page = new qx.ui.tabview.Page(attributes["label"], attributes["icon"]);
-			if(attributes["show-close-button"] !== undefined)
-				page.setShowCloseButton(attributes["show-close-button"]);
-			this._applyLayoutAttributes(page, attributes);
+		_createContainerWidget: function() {
+			var page = new qx.ui.tabview.Page(this.getAttribute("label", null), this.getAttribute("icon", null));
+			this._applyAttribute("show-close-button", page, "showCloseButton");
+			this._applyWidgetAttributes(page);
 			return page;
 		}
 	}

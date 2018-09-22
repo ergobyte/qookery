@@ -36,17 +36,18 @@ qx.Class.define("qookery.internal.components.ToolBarComponent", {
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			this.__toolbar = this.getMainWidget();
-			if(attributes["column-flexes"] === undefined) return;
-			qx.util.StringSplit.split(attributes["column-flexes"], /\s+/).forEach(function(columnFlex) {
-				this.__flexes.push(parseInt(columnFlex, 10));
-			}, this);
+			this._applyAttribute("column-flexes", this, function(flexes) {
+				qx.util.StringSplit.split(flexes, /\s+/).forEach(function(columnFlex) {
+					this.__flexes.push(parseInt(columnFlex, 10));
+				}, this);
+			});
 		},
 
-		_createWidgets: function(attributes) {
-			var toolbar = new qx.ui.toolbar.ToolBar();
-			if(undefined !== attributes["spacing"]) toolbar.setSpacing(attributes["spacing"]);
-			this._applyLayoutAttributes(toolbar, attributes);
-			return [ toolbar ];
+		_createWidgets: function() {
+			var toolBar = new qx.ui.toolbar.ToolBar();
+			this._applyAttribute("spacing", toolBar, "spacing");
+			this._applyWidgetAttributes(toolBar);
+			return [ toolBar ];
 		},
 
 		listChildren: function() {

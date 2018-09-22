@@ -60,20 +60,18 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 		setAttribute: function(attributeName, value) {
 			switch(attributeName) {
 			case "center":
-				if(this.__map != null)
-					this.__map.setCenter(new google.maps.LatLng(value[0], value[1]));
-				return this._getAttributes()[attributeName] = value;
+				if(this.__map != null) this.__map.setCenter(new google.maps.LatLng(value[0], value[1]));
+				break;
 			case "zoom":
-				if(this.__map != null)
-					this.__map.setZoom(value);
-				return this._getAttributes()[attributeName] = value;
+				if(this.__map != null) this.__map.setZoom(value);
+				break;
 			}
 			return this.base(arguments, attributeName, value);
 		},
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.core.Widget();
 			widget.setAppearance("maplocation");
 			widget.setFocusable(true);
@@ -98,7 +96,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			widget.addListenerOnce("appear", function() {
 				qookery.Qookery.getRegistry().loadLibrary("googleMaps", this.__onLibraryLoaded, this);
 			}, this);
-			this._applyLayoutAttributes(widget, attributes);
+			this._applyWidgetAttributes(widget);
 			return widget;
 		},
 

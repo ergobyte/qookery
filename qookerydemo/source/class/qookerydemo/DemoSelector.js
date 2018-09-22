@@ -20,7 +20,7 @@ qx.Class.define("qookerydemo.DemoSelector", {
 
 	extend: qx.ui.toolbar.MenuButton,
 
-	construct: function() {
+	construct: function(component) {
 		this.base(arguments, "Demo Selection", "qookerydemo/icons/24/samples.png");
 		var demoListMenu = new qx.ui.menu.Menu();
 		qookerydemo.Application.CONFIGURATIONS.forEach(function(configuration) {

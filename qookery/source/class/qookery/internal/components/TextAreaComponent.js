@@ -43,13 +43,12 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes["placeholder"]) this.setPlaceholder(attributes["placeholder"]);
+			this._applyAttribute("placeholder", this, "placeholder");
 		},
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.form.TextArea();
-			var nativeContextMenu = this.getAttribute("native-context-menu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
-			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
+			this._applyAttribute("native-context-menu", widget, "nativeContextMenu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				var value = event.getData();
@@ -67,19 +66,15 @@ qx.Class.define("qookery.internal.components.TextAreaComponent", {
 					return;
 				}
 			}, this);
-			this._applyLayoutAttributes(widget, attributes);
-			if(attributes["auto-size"] !== undefined) widget.setAutoSize(attributes["auto-size"]);
-			if(attributes["filter"] !== undefined) widget.setFilter(attributes["filter"]);
-			if(attributes["max-length"] !== undefined) widget.setMaxLength(attributes["max-length"]);
-			if(attributes["minimal-line-height"] !== undefined) widget.setMinimalLineHeight(attributes["minimal-line-height"]);
-			if(attributes["single-step"] !== undefined) widget.setSingleStep(attributes["single-step"]);
-			if(attributes["text-align"] !== undefined) widget.setTextAlign(attributes["text-align"]);
-			if(attributes["wrap"] !== undefined) widget.setWrap(attributes["wrap"]);
-
-			var liveUpdate = this.getAttribute("live-update", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LIVE_UPDATE, false));
-			if(liveUpdate)
-				widget.setLiveUpdate(true);
-
+			this._applyWidgetAttributes(widget);
+			this._applyAttribute("auto-size", widget, "autoSize");
+			this._applyAttribute("filter", widget, "filter");
+			this._applyAttribute("max-length", widget, "maxLength");
+			this._applyAttribute("minimal-line-height", widget, "minimalLineHeight");
+			this._applyAttribute("single-step", widget, "singleStep");
+			this._applyAttribute("text-align", widget, "textAlign");
+			this._applyAttribute("wrap", widget, "wrap");
+			this._applyAttribute("live-update", widget, "liveUpdate", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LIVE_UPDATE));
 			return widget;
 		},
 

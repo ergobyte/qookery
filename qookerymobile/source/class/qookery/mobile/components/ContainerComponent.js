@@ -47,11 +47,11 @@ qx.Class.define("qookery.mobile.components.ContainerComponent", {
 			this.getMainWidget().setLayout(new qx.ui.mobile.layout.VBox());
 		},
 
-		_createWidgets: function(attributes) {
-			return [ this._createContainerWidget(attributes) ];
+		_createWidgets: function() {
+			return [ this._createContainerWidget() ];
 		},
 
-		_createContainerWidget: function(attributes) {
+		_createContainerWidget: function() {
 			throw new Error("Override _createContainerWidget() to provide implementation specific code");
 		},
 

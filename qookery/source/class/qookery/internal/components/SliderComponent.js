@@ -26,13 +26,13 @@ qx.Class.define("qookery.internal.components.SliderComponent", {
 
 	members: {
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.form.Slider();
-			this._applyLayoutAttributes(widget, attributes);
-			if(attributes["minimum"]) widget.setMinimum(attributes["minimum"]);
-			if(attributes["maximum"]) widget.setMaximum(attributes["maximum"]);
-			if(attributes["page-step"]) widget.setPageStep(attributes["page-step"]);
-			if(attributes["single-step"]) widget.setSingleStep(attributes["single-step"]);
+			this._applyWidgetAttributes(widget);
+			this._applyAttribute("minimum", widget, "minimum");
+			this._applyAttribute("maximum", widget, "maximum");
+			this._applyAttribute("page-step", widget, "pageStep");
+			this._applyAttribute("single-step", widget, "singleStep");
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());

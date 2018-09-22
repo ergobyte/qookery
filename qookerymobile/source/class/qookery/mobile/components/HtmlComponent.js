@@ -26,10 +26,10 @@ qx.Class.define("qookery.mobile.components.HtmlComponent", {
 
 	members: {
 
-		_createWidgets: function(attributes) {
-			var htmlText = attributes["html"] || null;
+		_createWidgets: function() {
+			var htmlText = this.getAttribute("html", null);
 			var html = new qx.ui.mobile.embed.Html(htmlText);
-			this._applyLayoutAttributes(html, attributes);
+			this._applyWidgetAttributes(html);
 			return [ html ];
 		},
 

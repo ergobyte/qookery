@@ -20,7 +20,7 @@ qx.Class.define("qookerydemo.ResultArea",
 {
 	extend: qx.ui.container.Scroll,
 
-	construct: function() {
+	construct: function(component) {
 		this.base(arguments);
 	},
 

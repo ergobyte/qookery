@@ -32,9 +32,9 @@ qx.Class.define("qookery.impl.WrapperComponent", {
 
 		__widgetClass: null,
 
-		_createWidgets: function(attributes) {
-			var mainWidget = new this.__widgetClass(attributes);
-			this._applyLayoutAttributes(mainWidget, attributes);
+		_createWidgets: function() {
+			var mainWidget = new this.__widgetClass(this);
+			this._applyWidgetAttributes(mainWidget);
 			return [ mainWidget ];
 		}
 	}

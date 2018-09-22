@@ -62,9 +62,9 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qookery.ace.internal.AceWidget(this);
-			this._applyLayoutAttributes(widget, attributes);
+			this._applyWidgetAttributes(widget);
 			return widget;
 		},
 

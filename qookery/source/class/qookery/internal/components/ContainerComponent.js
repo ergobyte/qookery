@@ -52,16 +52,16 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 			var layoutName = this.getAttribute("layout", "{http://www.qookery.org/ns/Form}grid");
 			if(layoutName === "none") return;
 			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
-			var layout = this.__layout = layoutFactory.createLayout(attributes);
+			var layout = this.__layout = layoutFactory.createLayout(this);
 			this.getContainerWidget().setLayout(layout);
 		},
 
-		_createWidgets: function(attributes) {
-			this._containerWidget = this._createContainerWidget(attributes);
+		_createWidgets: function() {
+			this._containerWidget = this._createContainerWidget();
 			return [ this._containerWidget ];
 		},
 
-		_createContainerWidget: function(attributes) {
+		_createContainerWidget: function() {
 			throw new Error("Override _createContainerWidget() to provide implementation specific code");
 		},
 

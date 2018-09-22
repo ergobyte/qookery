@@ -28,11 +28,7 @@ qx.Class.define("qookery.mobile.components.TextAreaComponent", {
 
 		// Construction
 
-		create: function(attributes) {
-			this.base(arguments, attributes);
-		},
-
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.mobile.form.TextArea();
 			widget.addListener("changeValue", function(event) {
 				if(this._disableValueEvents) return;
@@ -41,7 +37,7 @@ qx.Class.define("qookery.mobile.components.TextAreaComponent", {
 				this.getMainWidget().setValue(this._getLabelOf(value));
 				this._setValueSilently(value);
 			}, this);
-			this._applyLayoutAttributes(widget, attributes);
+			this._applyWidgetAttributes(widget);
 			return widget;
 		},
 

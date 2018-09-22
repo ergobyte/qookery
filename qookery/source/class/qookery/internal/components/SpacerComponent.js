@@ -26,9 +26,9 @@ qx.Class.define("qookery.internal.components.SpacerComponent", {
 
 	members: {
 
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			var spacer = new qx.ui.core.Spacer();
-			this._applyLayoutAttributes(spacer, attributes);
+			this._applyWidgetAttributes(spacer);
 			return [ spacer ];
 		},
 

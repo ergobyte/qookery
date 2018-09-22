@@ -41,28 +41,28 @@ qx.Class.define("qookery.internal.components.AtomComponent", {
 
 		// Construction
 
-		_createWidgets: function(attributes) {
-			var atom = this._createAtomWidget(attributes);
+		_createWidgets: function() {
+			var atom = this._createAtomWidget();
 			return [ atom ];
 		},
 
-		_createAtomWidget: function(attributes) {
+		_createAtomWidget: function() {
 			throw new Error("Override _createAtomWidget() to provide implementation specific code");
 		},
 
-		_applyAtomAttributes: function(atom, attributes) {
-			if(attributes["center"] !== undefined) atom.setCenter(attributes["center"]);
-			if(attributes["gap"] !== undefined) atom.setGap(attributes["gap"]);
-			if(attributes["icon"] !== undefined) atom.setIcon(attributes["icon"]);
-			if(attributes["icon-position"] !== undefined) atom.setIconPosition(attributes["icon-position"]);
-			if(attributes["label"] !== undefined) atom.setLabel(attributes["label"]);
-			if(attributes["rich"] !== undefined) atom.setRich(attributes["rich"]);
-			if(attributes["show"] !== undefined) atom.setShow(attributes["show"]);
-			if(attributes["text-align"] !== undefined) {
+		_applyAtomAttributes: function(atom) {
+			this._applyAttribute("center", atom, "center");
+			this._applyAttribute("gap", atom, "gap");
+			this._applyAttribute("icon", atom, "icon");
+			this._applyAttribute("icon-position", atom, "iconPosition");
+			this._applyAttribute("label", atom, "label");
+			this._applyAttribute("rich", atom, "rich");
+			this._applyAttribute("show", atom, "show");
+			this._applyAttribute("text-align", this, function(textAlign) {
 				atom.getChildControl("label").setAllowGrowX(true);
-				atom.getChildControl("label").setTextAlign(attributes["text-align"]);
-			}
-			this._applyLayoutAttributes(atom, attributes);
+				atom.getChildControl("label").setTextAlign(textAlign);
+			});
+			this._applyWidgetAttributes(atom);
 		},
 
 		getLabel: function() {

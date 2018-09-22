@@ -58,7 +58,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 
 		// Creation
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var table = new qx.ui.table.Table(null, {
 				tableColumnModel: function(_table) {
 					return new qx.ui.table.columnmodel.Resize(_table);
@@ -80,17 +80,12 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 				this.fireDataEvent("changeSelection", eventData);
 			}, this);
 
-			this._applyLayoutAttributes(table, attributes);
-			if(attributes["column-visibility-button-visible"] !== undefined)
-				table.setColumnVisibilityButtonVisible(attributes["column-visibility-button-visible"]);
-			if(attributes["row-height"] !== undefined)
-				table.setRowHeight(attributes["row-height"]);
-			if(attributes["status-bar-visible"] !== undefined)
-				table.setStatusBarVisible(attributes["status-bar-visible"]);
-			if(attributes["show-cell-focus-indicator"] !== undefined)
-				table.setShowCellFocusIndicator(attributes["show-cell-focus-indicator"]);
-			if(attributes["header-cells-visible"] !== undefined)
-				table.setHeaderCellsVisible(attributes["header-cells-visible"]);
+			this._applyWidgetAttributes(table);
+			this._applyAttribute("column-visibility-button-visible", table, "columnVisibilityButtonVisible");
+			this._applyAttribute("row-height", table, "rowHeight");
+			this._applyAttribute("status-bar-visible", table, "statusBarVisible");
+			this._applyAttribute("show-cell-focus-indicator", table, "showCellFocusIndicator");
+			this._applyAttribute("header-cells-visible", table, "headerCellsVisible");
 			return table;
 		},
 
@@ -110,7 +105,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			return false;
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			if(this.__columns.length === 0)
 				throw new Error("Table must have at least one column");
 			var table = this.getMainWidget();
@@ -187,7 +182,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					columnModel.setColumnVisible(i, false);
 				}
 			}
-			this.base(arguments, attributes);
+			this.base(arguments);
 		},
 
 		// Public methods

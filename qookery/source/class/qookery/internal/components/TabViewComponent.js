@@ -42,15 +42,15 @@ qx.Class.define("qookery.internal.components.TabViewComponent", {
 
 		// Construction
 
-		_createContainerWidget: function(attributes) {
+		_createContainerWidget: function() {
 			var tabView = new qx.ui.tabview.TabView();
-			tabView.setBarPosition(this.getAttribute("bar-position", "top"));
-			if(attributes["content-padding"] !== undefined) tabView.setContentPadding(attributes["content-padding"]);
-			if(attributes["content-padding-top"] !== undefined) tabView.setContentPaddingTop(attributes["content-padding-top"]);
-			if(attributes["content-padding-right"] !== undefined) tabView.setContentPaddingRight(attributes["content-padding-right"]);
-			if(attributes["content-padding-bottom"] !== undefined) tabView.setContentPaddingBottom(attributes["content-padding-bottom"]);
-			if(attributes["content-padding-left"] !== undefined) tabView.setContentPaddingLeft(attributes["content-padding-left"]);
-			this._applyLayoutAttributes(tabView, attributes);
+			this._applyAttribute("bar-position", tabView, "barPosition");
+			this._applyAttribute("content-padding", tabView, "contentPadding");
+			this._applyAttribute("content-padding-top", tabView, "contentPaddingTop");
+			this._applyAttribute("content-padding-right", tabView, "contentPaddingRight");
+			this._applyAttribute("content-padding-bottom", tabView, "contentPaddingBottom");
+			this._applyAttribute("content-padding-left", tabView, "contentPaddingLeft");
+			this._applyWidgetAttributes(tabView);
 			return tabView;
 		},
 

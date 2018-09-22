@@ -26,14 +26,11 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 
 	members: {
 
-		_createWidgets: function(attributes) {
-			var htmlText = this.getAttribute("html", null);
-			var html = new qx.ui.embed.Html(htmlText);
-			var overflowX = this.getAttribute("overflow-x");
-			if(overflowX !== undefined) html.setOverflowX(overflowX);
-			var overflowY = this.getAttribute("overflow-y");
-			if(overflowY !== undefined) html.setOverflowY(overflowY);
-			this._applyLayoutAttributes(html, attributes);
+		_createWidgets: function() {
+			var html = new qx.ui.embed.Html(this.getAttribute("html", null));
+			this._applyAttribute("overflow-x", html, "overflowX");
+			this._applyAttribute("overflow-y", html, "overflowY");
+			this._applyWidgetAttributes(html);
 			return [ html ];
 		},
 

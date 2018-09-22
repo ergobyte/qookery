@@ -26,15 +26,15 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 
 	members: {
 
-		_createAtomWidget: function(attributes) {
+		_createAtomWidget: function() {
 			var button = new qx.ui.form.Button();
-			var commandName = this.getAttribute("command");
-			if(commandName !== undefined) {
+			this._applyAttribute("command", this, function(commandName) {
 				var command = qookery.Qookery.getRegistry().getCommand(commandName);
-				if(command === undefined) throw new Error("Undefined command " + commandName);
+				if(command == null)
+					throw new Error("Undefined command " + commandName);
 				button.setCommand(command);
-			}
-			this._applyAtomAttributes(button, attributes);
+			});
+			this._applyAtomAttributes(button);
 			return button;
 		},
 

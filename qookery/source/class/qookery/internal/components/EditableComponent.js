@@ -60,10 +60,10 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.setRequired(this.getAttribute("required", false));
-			this.setReadOnly(this.getAttribute("read-only", false));
-			var format = this.getAttribute("format"); if(format !== undefined) this.setFormat(format);
-			var label = this.getAttribute("label"); if(label !== undefined) this.setLabel(label);
+			this._applyAttribute("required", this, "required", false);
+			this._applyAttribute("read-only", this, "readOnly", false);
+			this._applyAttribute("format", this, "format");
+			this._applyAttribute("label", this, "label");
 			var liveValidate = this.getAttribute("live-validate", "false");
 			switch(liveValidate) {
 			case "component":
@@ -79,21 +79,21 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			}
 		},
 
-		_createWidgets: function(attributes) {
-			var mainWidget = this._createMainWidget(attributes);
+		_createWidgets: function() {
+			var mainWidget = this._createMainWidget();
 			if(this.getAttribute("create-label", true)) {
 				var label = new qx.ui.basic.Label();
-				this._setupLabelAppearance(label, attributes);
+				this._setupLabelAppearance(label);
 				return [ mainWidget, label ];
 			}
 			return [ mainWidget ];
 		},
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			throw new Error("Override _createMainWidget() to provide implementation specific code");
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			var connectionSpecification = this.getAttribute("connect");
 			if(connectionSpecification != null) {
 				this.connect(connectionSpecification);
@@ -103,7 +103,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				var initialValue = this.executeClientCode(qx.lang.String.format("return (%1);", [ initializeClientCode ]));
 				this.setValue(initialValue);
 			}
-			return this.base(arguments, attributes);
+			return this.base(arguments);
 		},
 
 		// Widget access
@@ -358,9 +358,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		 * Perform all operation about align, width and height for a label
 		 *
 		 * @param widget {qx.ui.basic.Label} label widget
-		 * @param attributes {keyValuePairList} instructions about the label apperance
 		 */
-		_setupLabelAppearance: function(labelWidget, attributes) {
+		_setupLabelAppearance: function(labelWidget) {
 			var currentWidth = labelWidget.getWidth();
 			labelWidget.setMinWidth(currentWidth);
 			labelWidget.setAllowStretchX(false);

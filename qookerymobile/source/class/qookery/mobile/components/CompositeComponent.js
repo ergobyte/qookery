@@ -29,9 +29,9 @@ qx.Class.define("qookery.mobile.components.CompositeComponent", {
 
 	members: {
 
-		_createContainerWidget: function(attributes) {
+		_createContainerWidget: function() {
 			var	container = new qx.ui.mobile.container.Composite();
-			this._applyLayoutAttributes(container, attributes);
+			this._applyWidgetAttributes(container);
 			return container;
 		}
 	}

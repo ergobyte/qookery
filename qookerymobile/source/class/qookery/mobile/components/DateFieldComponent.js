@@ -41,7 +41,7 @@ qx.Class.define("qookery.mobile.components.DateFieldComponent", {
 			}
 		},
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = this.__textField = new qx.ui.mobile.form.TextField();
 			widget.addListener("changeValue", function(e) {
 				if(this._disableValueEvents) return;

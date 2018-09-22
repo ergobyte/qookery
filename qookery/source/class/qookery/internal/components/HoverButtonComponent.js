@@ -37,10 +37,10 @@ qx.Class.define("qookery.internal.components.HoverButtonComponent", {
 
 		// Construction
 
-		_createAtomWidget: function(attributes) {
+		_createAtomWidget: function() {
 			var button = new qx.ui.form.HoverButton();
-			if(undefined !== attributes["interval"]) button.setInterval(attributes["interval"]);
-			this._applyAtomAttributes(button, attributes);
+			this._applyAttribute("interval", button, "interval");
+			this._applyAtomAttributes(button);
 			return button;
 		},
 

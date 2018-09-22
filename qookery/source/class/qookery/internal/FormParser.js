@@ -171,7 +171,7 @@ qx.Class.define("qookery.internal.FormParser", {
 
 				// Component setup
 
-				component.setup(attributes);
+				component.setup();
 
 				// Attach to container
 

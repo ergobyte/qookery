@@ -48,23 +48,18 @@ qx.Class.define("qookery.internal.components.ScrollComponent", {
 
 		// Construction
 
-		_createContainerWidget: function(attributes) {
+		_createContainerWidget: function() {
 			var scroll = new qx.ui.container.Scroll();
 			this.__composite = new qx.ui.container.Composite();
 			scroll.add(this.__composite);
-			if(attributes["content-padding"] !== undefined)
-				scroll.setContentPadding(attributes["content-padding"]);
-			if(attributes["content-padding-top"] !== undefined)
-				scroll.setContentPaddingTop(attributes["content-padding-top"]);
-			if(attributes["content-padding-right"] !== undefined)
-				scroll.setContentPaddingRight(attributes["content-padding-right"]);
-			if(attributes["content-padding-bottom"] !== undefined)
-				scroll.setContentPaddingBottom(attributes["content-padding-bottom"]);
-			if(attributes["content-padding-left"] !== undefined)
-				scroll.setContentPaddingLeft(attributes["content-padding-left"]);
-			scroll.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));
-			scroll.setScrollbarY(this.getAttribute("scrollbar-y", "auto"));
-			this._applyLayoutAttributes(scroll, attributes);
+			this._applyAttribute("content-padding", scroll, "contentPadding");
+			this._applyAttribute("content-padding-top", scroll, "contentPaddingTop");
+			this._applyAttribute("content-padding-right", scroll, "contentPaddingRight");
+			this._applyAttribute("content-padding-bottom", scroll, "contentPaddingBottom");
+			this._applyAttribute("content-padding-left", scroll, "contentPaddingLeft");
+			this._applyAttribute("scrollbar-x", scroll, "scrollbarX");
+			this._applyAttribute("scrollbar-y", scroll, "scrollbarY");
+			this._applyWidgetAttributes(scroll);
 			return scroll;
 		},
 

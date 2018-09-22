@@ -21,6 +21,8 @@
  */
 qx.Interface.define("qookery.IComponent", {
 
+	extend: qookery.IAttributeSet,
+
 	statics: {
 
 		// Attribute names
@@ -64,26 +66,13 @@ qx.Interface.define("qookery.IComponent", {
 		getAttributeType: function(attributeName) { },
 
 		/**
-		 * Return an attribute value from the defining XML document
-		 *
-		 * <p>You may supply the <code>Error</code> build-in object as the defaultValue parameter
-		 * in order to request that an exception is thrown when value is missing.</p>
-		 *
-		 * @param attributeName {String} the name of the wanted attribute
-		 * @param defaultValue {any} value to return instead of <code>undefined</code> when attribute is missing
-		 *
-		 * @return {any} attribute's value or <code>undefined</code> if attribute is missing
-		 */
-		getAttribute: function(attributeName, defaultValue) { },
-
-		/**
 		 * Set an attribute's value
 		 *
 		 * <p>NB: Few attributes are expected by implementations to be modified this way - be sure
 		 * to check component documentation for supported changes.</p>
 		 *
 		 * @param attributeName {String} the name of the attribute to change
-		 * @param value {any} the new attribute value
+		 * @param value {any} the new attribute value, <code>undefined</code> clears attribute
 		 */
 		setAttribute: function(attributeName, value) { },
 
@@ -137,10 +126,8 @@ qx.Interface.define("qookery.IComponent", {
 		 * Called by the parser after creation of the component and all its children
 		 *
 		 * <p>Notice: You must never call this method directly.</p>
-		 *
-		 * @param attributes {Map} preprocessed attributes found in the defining XML document
 		 */
-		setup: function(attributes) { },
+		setup: function() { },
 
 		// Access to other components
 

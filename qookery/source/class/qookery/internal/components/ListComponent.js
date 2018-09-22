@@ -39,13 +39,12 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var list = new qx.ui.form.List();
-			list.setScrollbarX(this.getAttribute("scrollbar-x", "auto"));
-			list.setScrollbarY(this.getAttribute("scrollbar-y", "auto"));
-			list.setSelectionMode(this.getAttribute("selection-mode", "single"));
-			list.setOrientation(this.getAttribute("orientation", "vertical"));
-			list.setSpacing(this.getAttribute("spacing", 0));
+			this._applyAttribute("scrollbar-x", list, "scrollbarX");
+			this._applyAttribute("scrollbar-y", list, "scrollbarY");
+			this._applyAttribute("selection-mode", list, "selectionMode");
+			this._applyAttribute("spacing", list, "spacing");
 			list.addListener("changeSelection", function(event) {
 				if(this._disableValueEvents) return;
 				var selection = event.getData();
@@ -62,7 +61,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 					return;
 				}
 			}, this);
-			this._applyLayoutAttributes(list, attributes);
+			this._applyWidgetAttributes(list);
 			return list;
 		},
 
@@ -75,11 +74,11 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 			this.base(arguments, modelProvider, connection);
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			var mapName = this.getAttribute("map");
 			if(mapName !== undefined)
 				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
-			this.base(arguments, attributes);
+			this.base(arguments);
 		},
 
 		_updateUI: function(value) {

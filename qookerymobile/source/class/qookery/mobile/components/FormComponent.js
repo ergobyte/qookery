@@ -59,16 +59,16 @@ qx.Class.define("qookery.mobile.components.FormComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(attributes["model-provider"]);
+			this.__modelProvider = qookery.Qookery.getRegistry().getModelProvider(this.getAttribute("model-provider"));
 			var icon = this.getAttribute("icon");
 			if(icon) this.setIcon(icon);
 			this.debug("Created form", this.getId() || "");
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			var title = this.getAttribute("title");
 			if(title) this.setTitle(title instanceof qx.locale.LocalizedString ? title.translate() : title);
-			return this.base(arguments, attributes);
+			return this.base(arguments);
 		},
 
 		focus: function() {

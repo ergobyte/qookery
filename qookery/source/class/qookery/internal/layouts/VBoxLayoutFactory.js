@@ -27,17 +27,19 @@ qx.Class.define("qookery.internal.layouts.VBoxLayoutFactory", {
 		createLayout: function(attributes) {
 			var defaultSpacingY = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_Y, 0);
 			var layout = new qx.ui.layout.VBox(defaultSpacingY);
-			var alignX = attributes["layout-align-x"];
+			var alignX = attributes.getAttribute("layout-align-x");
 			if(alignX != null)
 				layout.setAlignX(alignX);
-			var alignY = attributes["layout-align-y"];
+			var alignY = attributes.getAttribute("layout-align-y");
 			if(alignY != null)
 				layout.setAlignY(alignY);
-			if(attributes["reversed"] != null)
-				layout.setReversed(attributes["reversed"]);
-			if(attributes["separator"] != null)
-				layout.setSeparator(attributes["separator"]);
-			var spacing = attributes["spacing"];
+			var reversed = attributes.getAttribute("reversed");
+			if(reversed != null)
+				layout.setReversed(reversed);
+			var separator = attributes.getAttribute("separator");
+			if(separator != null)
+				layout.setSeparator(separator);
+			var spacing = attributes.getAttribute("spacing");
 			if(spacing != null)
 				layout.setSpacing(spacing);
 			return layout;

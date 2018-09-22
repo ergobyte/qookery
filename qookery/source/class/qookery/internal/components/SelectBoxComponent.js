@@ -46,7 +46,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var selectBox = new qx.ui.form.SelectBox();
 			selectBox.setFormat(this.__getListItemLabel.bind(this));
 			selectBox.addListener("changeSelection", function(event) {
@@ -67,7 +67,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				}
 			}, this);
 
-			this._applyLayoutAttributes(selectBox, attributes);
+			this._applyWidgetAttributes(selectBox);
 			return selectBox;
 		},
 
@@ -80,11 +80,11 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			this.base(arguments, modelProvider, connection);
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			var mapName = this.getAttribute("map");
 			if(mapName !== undefined)
 				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
-			this.base(arguments, attributes);
+			this.base(arguments);
 		},
 
 		__getListItemLabel: function(listItem) {

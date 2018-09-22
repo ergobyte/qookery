@@ -28,9 +28,9 @@ qx.Class.define("qookery.mobile.components.ButtonComponent", {
 
 		// Construction
 
-		_createAtomWidget: function(attributes) {
-			var button = new qx.ui.mobile.form.Button(attributes["label"]);
-			this._applyAtomAttributes(button, attributes);
+		_createAtomWidget: function() {
+			var button = new qx.ui.mobile.form.Button(this.getAttribute("label", null));
+			this._applyAtomAttributes(button);
 			return button;
 		},
 

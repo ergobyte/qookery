@@ -28,23 +28,24 @@ qx.Class.define("qookery.internal.layouts.FlowLayoutFactory", {
 			var defaultSpacingX = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_X, 0);
 			var defaultSpacingY = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_Y, 0);
 			var layout = new qx.ui.layout.Flow(defaultSpacingX, defaultSpacingY, "left");
-			var alignX = attributes["layout-align-x"];
+			var alignX = attributes.getAttribute("layout-align-x");
 			if(alignX != null)
 				layout.setAlignX(alignX);
-			var alignY = attributes["layout-align-y"];
+			var alignY = attributes.getAttribute("layout-align-y");
 			if(alignY != null)
 				layout.setAlignY(alignY);
-			if(attributes["reversed"] != null)
-				layout.setReversed(attributes["reversed"]);
-			var spacing = attributes["spacing"];
+			var reversed = attributes.getAttribute("reversed");
+			if(reversed != null)
+				layout.setReversed(reversed);
+			var spacing = attributes.getAttribute("spacing");
 			if(spacing != null) {
 				layout.setSpacingX(spacing);
 				layout.setSpacingY(spacing);
 			}
-			var spacingX = attributes["spacing-x"];
+			var spacingX = attributes.getAttribute("spacing-x");
 			if(spacingX != null)
 				layout.setSpacingX(spacingX);
-			var spacingY = attributes["spacing-y"];
+			var spacingY = attributes.getAttribute("spacing-y");
 			if(spacingY != null)
 				layout.setSpacingY(spacingY);
 			return layout;

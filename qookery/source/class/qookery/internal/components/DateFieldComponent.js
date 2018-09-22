@@ -39,14 +39,15 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes["placeholder"]) this.setPlaceholder(attributes["placeholder"]);
-			if(attributes["input-specification"]) this.__parseSpecification(attributes["input-specification"]);
+			this._applyAttribute("placeholder", this, "placeholder");
+			this._applyAttribute("input-specification", this, function(specification) {
+				this.__regularExpression = this.__parseSpecification(specification);
+			});
 		},
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.form.DateField();
-			var nativeContextMenu = this.getAttribute("native-context-menu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
-			if(nativeContextMenu !== undefined) widget.setNativeContextMenu(nativeContextMenu);
+			this._applyAttribute("native-context-menu", widget, "nativeContextMenu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
 			widget.getChildControl("textfield").addListener("focusout", function(event) {
 				if(this.__userTyped) {
 					this.__userTyped = false;
@@ -64,7 +65,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				if(this._disableValueEvents) return;
 				this.setValue(event.getData());
 			}, this);
-			this._applyLayoutAttributes(widget, attributes);
+			this._applyWidgetAttributes(widget);
 			return widget;
 		},
 
@@ -182,7 +183,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				minutes: result[4],
 				seconds: result[5]
 			};
-			this.__regularExpression = new RegExp(result[6], "i");
+			return new RegExp(result[6], "i");
 		}
 	}
 });

@@ -109,7 +109,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 			var componentQName = componentName.indexOf("{") === 0 ? componentName : "{http://www.qookery.org/ns/Form}" + componentName;
 			var component = qookery.Qookery.getRegistry().createComponent(componentQName, parentComponent);
 			component.create(attributes);
-			component.setup(attributes);
+			component.setup();
 			return component;
 		},
 

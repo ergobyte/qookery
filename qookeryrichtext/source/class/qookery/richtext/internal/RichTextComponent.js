@@ -34,7 +34,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			default: return this.base(arguments, attributeName); }
 		},
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			// Prepare CKEditor configuration
 			var configuration = { };
 			configuration["language"] = qx.locale.Manager.getInstance().getLanguage();
@@ -65,10 +65,10 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 				if(this._disableValueEvents) return;
 				this._setValueSilently(event.getData());
 			}, this);
-			if(attributes["tab-index"] !== undefined) widget.setTabIndex(attributes["tab-index"]);
+			this._applyAttribute("tab-index", widget, "tabIndex");
 
 			// Configure widget positioning by applying layout
-			this._applyLayoutAttributes(widget, attributes);
+			this._applyWidgetAttributes(widget);
 			return widget;
 		},
 

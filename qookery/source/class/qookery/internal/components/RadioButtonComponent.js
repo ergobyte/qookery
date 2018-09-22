@@ -26,19 +26,19 @@ qx.Class.define("qookery.internal.components.RadioButtonComponent", {
 
 	members: {
 
-		_createAtomWidget: function(attributes) {
+		_createAtomWidget: function() {
 			var radioButton = new qx.ui.form.RadioButton();
-			this._applyAtomAttributes(radioButton, attributes);
+			this._applyAtomAttributes(radioButton);
 			return radioButton;
 		},
 
-		setup: function(attributes) {
-			var model = attributes["model"];
+		setup: function() {
+			var model = this.getAttribute("model");
 			if(model != null) {
 				var type = this.getAttribute("model-type", "String");
 				this.setModel(qookery.util.Xml.parseValue(this, type, model));
 			}
-			return this.base(arguments, attributes);
+			return this.base(arguments);
 		},
 
 		getModel: function() {

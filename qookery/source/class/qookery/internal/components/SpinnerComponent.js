@@ -41,9 +41,9 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 
 		// Construction
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var spinner = new qx.ui.form.Spinner();
-			this._applyLayoutAttributes(spinner, attributes);
+			this._applyWidgetAttributes(spinner);
 			spinner.setMinimum(this.getAttribute("minimum", 0));
 			spinner.setMaximum(this.getAttribute("maximum", 100));
 			spinner.setPageStep(this.getAttribute("page-step", 10));
@@ -55,11 +55,11 @@ qx.Class.define("qookery.internal.components.SpinnerComponent", {
 				this._setValueSilently(value);
 			}, this);
 			spinner.getChildControl("textfield").setTextAlign(this.getAttribute("text-align", null));
-			if(attributes["content-padding"] !== undefined) spinner.setContentPadding(attributes["content-padding"]);
-			if(attributes["content-padding-top"] !== undefined) spinner.setContentPaddingTop(attributes["content-padding-top"]);
-			if(attributes["content-padding-right"] !== undefined) spinner.setContentPaddingRight(attributes["content-padding-right"]);
-			if(attributes["content-padding-bottom"] !== undefined) spinner.setContentPaddingBottom(attributes["content-padding-bottom"]);
-			if(attributes["content-padding-left"] !== undefined) spinner.setContentPaddingLeft(attributes["content-padding-left"]);
+			this._applyAttribute("content-padding", spinner, "contentPadding");
+			this._applyAttribute("content-padding-top", spinner, "contentPaddingTop");
+			this._applyAttribute("content-padding-right", spinner, "contentPaddingRight");
+			this._applyAttribute("content-padding-bottom", spinner, "contentPaddingBottom");
+			this._applyAttribute("content-padding-left", spinner, "contentPaddingLeft");
 			return spinner;
 		},
 

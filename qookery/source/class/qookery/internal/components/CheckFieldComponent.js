@@ -44,10 +44,10 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			if(attributes["tri-state"] !== undefined) this.setTriState(attributes["tri-state"]);
+			this._applyAttribute("tri-state", this, "triState");
 		},
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var checkBox = new qx.ui.form.CheckBox();
 			var label = this.getAttribute("check-box-label");
 			if(label !== undefined)
@@ -57,7 +57,7 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 				this.setValue(event.getData());
 			}, this);
 			// Below hack works around chechbox shortcomings with triple state values
-			if(attributes["tri-state"]) {
+			if(this.getAttribute("tri-state", false)) {
 				checkBox.__availableStates = [ true, false, null ];
 				checkBox.toggleValue = function () {
 					this.__currentState = this.__availableStates.indexOf(this.getValue());
@@ -65,7 +65,7 @@ qx.Class.define("qookery.internal.components.CheckFieldComponent", {
 					this.setValue(this.__availableStates[this.__currentState]);
 				}.bind(checkBox);
 			}
-			this._applyLayoutAttributes(checkBox, attributes);
+			this._applyWidgetAttributes(checkBox);
 			return checkBox;
 		},
 

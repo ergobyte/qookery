@@ -32,23 +32,21 @@ qx.Class.define("qookery.internal.components.VirtualTreeComponent", {
 
 		__delegate: null,
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var virtualTree = new qx.ui.tree.VirtualTree();
-			if(attributes["child-property"]) virtualTree.setChildProperty(attributes["child-property"]);
-			if(attributes["hide-root"]) virtualTree.setHideRoot(true);
-			if(attributes["icon-property"]) virtualTree.setIconPath(attributes["icon-property"]);
-			if(attributes["label-path"]) virtualTree.setLabelPath(attributes["label-path"]);
-
+			this._applyAttribute("child-property", virtualTree, "childProperty");
+			this._applyAttribute("hide-root", virtualTree, "hideRoot");
+			this._applyAttribute("icon-property", virtualTree, "iconPath");
+			this._applyAttribute("label-path", virtualTree, "labelPath");
 			virtualTree.getSelection().addListener("change", function(e) {
 				this.fireDataEvent("changeSelection", virtualTree.getSelection().getItem(0));
 			}, this);
-
 			return virtualTree;
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			if(this.__delegate !== null) this.getMainWidget().setDelegate(this.__delegate);
-			this.base(arguments, attributes);
+			this.base(arguments);
 		},
 
 		parseXmlElement: function(elementName, xmlElement) {

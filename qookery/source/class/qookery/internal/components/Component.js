@@ -48,22 +48,17 @@ qx.Class.define("qookery.internal.components.Component", {
 	construct: function(parentComponent) {
 		this.base(arguments);
 		this.__parentComponent = parentComponent;
-		this.__namespaceResolver = parentComponent != null ? function(prefix) {
-			return parentComponent.resolveNamespacePrefix(prefix);
-		} : function(prefix) {
-			return null;
-		};
-		this._widgets = [ ];
+		this.__attributes = { };
 		this.__actions = { };
+		this._widgets = [ ];
 	},
 
 	members: {
 
-		__id: null,
 		__parentComponent: null,
-		__namespaceResolver: null,
 		__attributes: null,
 		__actions: null,
+		__namespaceResolver: null,
 		__disposeList: null,
 
 		_widgets: null,
@@ -71,7 +66,7 @@ qx.Class.define("qookery.internal.components.Component", {
 		// Metadata
 
 		getId: function() {
-			return this.__id;
+			return this.getAttribute(qookery.IComponent.A_ID);
 		},
 
 		getAttributeType: function(attributeName) {
@@ -83,51 +78,52 @@ qx.Class.define("qookery.internal.components.Component", {
 			if(value !== undefined)
 				return value;
 			if(defaultValue === Error)
-				throw new Error(qx.lang.String.format("Required attribute '%1' missing from component '%2'", [ attributeName, this ]));
+				throw new RangeError(qx.lang.String.format("Required attribute '%1' missing from '%2'", [ attributeName, this ]));
 			return defaultValue;
 		},
 
 		setAttribute: function(attributeName, value) {
-			switch(attributeName) {
-			case qookery.IComponent.A_ID:
-				this.__id = value;
-				return;
-			case qookery.IComponent.A_NAMESPACES:
-				var parent = this.getParent();
-				this.__namespaceResolver = function(prefix) {
-					var namespaceUri = value[prefix];
-					if(namespaceUri != null)
-						return namespaceUri;
-					if(parent != null)
-						return parent.resolveNamespacePrefix(prefix);
-					return null;
-				};
-				return;
-			}
-			throw new Error(qx.lang.String.format("Setting attribute '%1' is not implemented", [ attributeName ]));
+			if(value === undefined)
+				delete this.__attributes[attributeName];
+			else
+				this.__attributes[attributeName] = value;
 		},
 
 		// Namespaces
 
 		resolveNamespacePrefix: function(prefix) {
-			return this.__namespaceResolver(prefix);
+			var namespaces = this.getAttribute(qookery.IComponent.A_NAMESPACES);
+			if(namespaces != null) {
+				var namespaceUri = namespaces[prefix];
+				if(namespaceUri != null)
+					return namespaceUri;
+			}
+			var parent = this.getParent();
+			if(parent != null)
+				return parent.resolveNamespacePrefix(prefix);
+			return null;
 		},
 
 		resolveQName: function(qName) {
-			return qookery.util.Xml.resolveQName(this.__namespaceResolver, qName);
+			var resolver = this.__namespaceResolver;
+			if(resolver == null)
+				resolver = this.__namespaceResolver = this.resolveNamespacePrefix.bind(this);
+			return qookery.util.Xml.resolveQName(resolver, qName);
 		},
 
 		// Lifecycle
 
 		create: function(attributes) {
-			// Attention: Base method must be called early when overriden
-			this.__attributes = attributes;
+			// Attention: If overriden, base must be called early in order to setup initial attributes
+			for(var attributeName in attributes) {
+				this.setAttribute(attributeName, attributes[attributeName]);
+			}
 
-			this._widgets = this._createWidgets(attributes);
+			this._widgets = this._createWidgets();
 			this._registerWithWidgets();
 
-			if(attributes["enabled"] !== undefined) this.setEnabled(attributes["enabled"]);
-			if(attributes["visibility"] !== undefined) this.setVisibility(attributes["visibility"]);
+			this._applyAttribute("enabled", this, "enabled");
+			this._applyAttribute("visibility", this, "visibility");
 		},
 
 		parseXmlElement: function(elementName, xmlElement) {
@@ -135,7 +131,7 @@ qx.Class.define("qookery.internal.components.Component", {
 			return false;
 		},
 
-		setup: function(attributes) {
+		setup: function() {
 			// Nothing to do here, override if needed
 		},
 
@@ -238,7 +234,7 @@ qx.Class.define("qookery.internal.components.Component", {
 		},
 
 		toString: function() {
-			var hash = this.__id || this.$$hash;
+			var hash = this.getId() || this.$$hash;
 			var form = this.getForm();
 			if(form != null && form.getId() != null)
 				hash = form.getId() + "#" + hash;
@@ -247,11 +243,7 @@ qx.Class.define("qookery.internal.components.Component", {
 
 		// Protected methods for internal use
 
-		_getAttributes: function() {
-			return this.__attributes;
-		},
-
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			// Subclasses are advised to implement this method instead of overriding create()
 			return this._widgets;
 		},
@@ -270,74 +262,93 @@ qx.Class.define("qookery.internal.components.Component", {
 				this.getMainWidget().getContentElement().setAttribute("qkid", this.getId());
 		},
 
+		_applyAttribute: function(attributeName, target, propertyName, defaultValue) {
+			var value = this.getAttribute(attributeName, defaultValue);
+			if(value === undefined)
+				return false;
+			if(qx.lang.Type.isFunction(propertyName)) {
+				propertyName.call(target, value);
+				return true;
+			}
+			if(propertyName == null) {
+				propertyName = attributeName.replace(/-([a-z])/g, function(g) { return g[1].toUpperCase(); });
+			}
+			target.set(propertyName, value);
+			return true;
+		},
+
 		/**
 		 * Apply common attributes to a widget
 		 *
 		 * @param widget {qx.ui.core.Widget} widget to receive layout properties
-		 * @param attributes {Object} layouting instructions as provided by the XML parser
 		 */
-		_applyLayoutAttributes: function(widget, attributes) {
+		_applyWidgetAttributes: function(widget) {
 
 			// Size and position
 
-			if(attributes["width"] !== undefined) widget.setWidth(attributes["width"]);
-			if(attributes["height"] !== undefined) widget.setHeight(attributes["height"]);
-			if(attributes["min-width"] !== undefined) widget.setMinWidth(attributes["min-width"]);
-			if(attributes["min-height"] !== undefined) widget.setMinHeight(attributes["min-height"]);
-			if(attributes["max-width"] !== undefined) widget.setMaxWidth(attributes["max-width"]);
-			if(attributes["max-height"] !== undefined) widget.setMaxHeight(attributes["max-height"]);
+			this._applyAttribute("width", widget, "width");
+			this._applyAttribute("height", widget, "height");
+			this._applyAttribute("min-width", widget, "minWidth");
+			this._applyAttribute("min-height", widget, "minHeight");
+			this._applyAttribute("max-width", widget, "maxWidth");
+			this._applyAttribute("max-height", widget, "maxHeight");
 
-			if(attributes["align-x"] !== undefined) widget.setAlignX(attributes["align-x"]);
-			if(attributes["align-y"] !== undefined) widget.setAlignY(attributes["align-y"]);
+			this._applyAttribute("align-x", widget, "alignX");
+			this._applyAttribute("align-y", widget, "alignY");
 
-			if(attributes["allow-grow"] !== undefined) { var v = attributes["allow-grow"]; widget.setAllowGrowX(v); widget.setAllowGrowY(v); }
-			if(attributes["allow-grow-x"] !== undefined) widget.setAllowGrowX(attributes["allow-grow-x"]);
-			if(attributes["allow-grow-y"] !== undefined) widget.setAllowGrowY(attributes["allow-grow-y"]);
+			this._applyAttribute("allow-grow", widget, "allowGrowX");
+			this._applyAttribute("allow-grow", widget, "allowGrowY");
+			this._applyAttribute("allow-grow-x", widget, "allowGrowX");
+			this._applyAttribute("allow-grow-y", widget, "allowGrowY");
 
-			if(attributes["allow-shrink"] !== undefined) { var v = attributes["allow-shrink"]; widget.setAllowShrinkX(v); widget.setAllowShrinkY(v); }
-			if(attributes["allow-shrink-x"] !== undefined) widget.setAllowShrinkX(attributes["allow-shrink-x"]);
-			if(attributes["allow-shrink-y"] !== undefined) widget.setAllowShrinkY(attributes["allow-shrink-y"]);
+			this._applyAttribute("allow-shrink", widget, "allowShrinkX");
+			this._applyAttribute("allow-shrink", widget, "allowShrinkY");
+			this._applyAttribute("allow-shrink-x", widget, "allowShrinkX");
+			this._applyAttribute("allow-shrink-y", widget, "allowShrinkY");
 
-			if(attributes["allow-stretch"] !== undefined) { var v = attributes["allow-stretch"]; widget.setAllowStretchX(v); widget.setAllowStretchY(v); }
-			if(attributes["allow-stretch-x"] !== undefined) widget.setAllowStretchX(attributes["allow-stretch-x"]);
-			if(attributes["allow-stretch-y"] !== undefined) widget.setAllowStretchY(attributes["allow-stretch-y"]);
+			this._applyAttribute("allow-stretch", widget, "allowStretchX");
+			this._applyAttribute("allow-stretch", widget, "allowStretchY");
+			this._applyAttribute("allow-stretch-x", widget, "allowStretchX");
+			this._applyAttribute("allow-stretch-y", widget, "allowStretchY");
 
-			if(attributes["margin"] !== undefined) widget.setMargin(attributes["margin"]);
-			if(attributes["margin-top"] !== undefined) widget.setMarginTop(attributes["margin-top"]);
-			if(attributes["margin-right"] !== undefined) widget.setMarginRight(attributes["margin-right"]);
-			if(attributes["margin-bottom"] !== undefined) widget.setMarginBottom(attributes["margin-bottom"]);
-			if(attributes["margin-left"] !== undefined) widget.setMarginLeft(attributes["margin-left"]);
+			this._applyAttribute("margin", widget, "margin");
+			this._applyAttribute("margin-top", widget, "marginTop");
+			this._applyAttribute("margin-right", widget, "marginRight");
+			this._applyAttribute("margin-bottom", widget, "marginBottom");
+			this._applyAttribute("margin-left", widget, "marginLeft");
 
-			if(attributes["padding"] !== undefined) widget.setPadding(attributes["padding"]);
-			if(attributes["padding-top"] !== undefined) widget.setPaddingTop(attributes["padding-top"]);
-			if(attributes["padding-right"] !== undefined) widget.setPaddingRight(attributes["padding-right"]);
-			if(attributes["padding-bottom"] !== undefined) widget.setPaddingBottom(attributes["padding-bottom"]);
-			if(attributes["padding-left"] !== undefined) widget.setPaddingLeft(attributes["padding-left"]);
+			this._applyAttribute("padding", widget, "padding");
+			this._applyAttribute("padding-top", widget, "paddingTop");
+			this._applyAttribute("padding-right", widget, "paddingRight");
+			this._applyAttribute("padding-bottom", widget, "paddingBottom");
+			this._applyAttribute("padding-left", widget, "paddingLeft");
 
 			// Appearance
 
-			if(attributes["appearance"] !== undefined) widget.setAppearance(attributes["appearance"]);
-			if(attributes["cursor"] !== undefined) widget.setCursor(attributes["cursor"]);
-			if(attributes["decorator"] !== undefined) widget.setDecorator(attributes["decorator"]);
-			if(attributes["font"] !== undefined) widget.setFont(attributes["font"]);
-			if(attributes["text-color"] !== undefined) widget.setTextColor(attributes["text-color"]);
-			if(attributes["background-color"] !== undefined) widget.setBackgroundColor(attributes["background-color"]);
-			if(attributes["tool-tip-text"] !== undefined) widget.setToolTipText(attributes["tool-tip-text"]);
-			if(attributes["tool-tip-icon"] !== undefined) widget.setToolTipIcon(attributes["tool-tip-icon"]);
+			this._applyAttribute("appearance", widget, "appearance");
+			this._applyAttribute("cursor", widget, "cursor");
+			this._applyAttribute("decorator", widget, "decorator");
+			this._applyAttribute("font", widget, "font");
+			this._applyAttribute("text-color", widget, "textColor");
+			this._applyAttribute("background-color", widget, "backgroundColor");
+			this._applyAttribute("tool-tip-text", widget, "toolTipText");
+			this._applyAttribute("tool-tip-icon", widget, "toolTipIcon");
 
 			// Miscellaneous
 
-			if(attributes["tab-index"] !== undefined) widget.setTabIndex(attributes["tab-index"]);
-			if(attributes["focusable"] !== undefined) widget.setFocusable(attributes["focusable"]);
+			this._applyAttribute("tab-index", widget, "tabIndex");
+			this._applyAttribute("focusable", widget, "focusable");
 
 			// Layout item properties
 
 			var layoutProperties = null;
-			for(var attributeName in attributes) {
-				var propertyName = qookery.internal.components.Component.__LAYOUT_ITEM_PROPERTY_MAP[attributeName];
-				if(propertyName == null) continue;
+			var layoutPropertyMap = qookery.internal.components.Component.__LAYOUT_ITEM_PROPERTY_MAP;
+			for(var attributeName in layoutPropertyMap) {
+				var value = this.getAttribute(attributeName, undefined);
+				if(value === undefined)
+					continue;
 				if(layoutProperties == null) layoutProperties = { };
-				layoutProperties[propertyName] = attributes[attributeName];
+				layoutProperties[layoutPropertyMap[attributeName]] = value;
 			}
 			if(layoutProperties != null)
 				widget.setLayoutProperties(layoutProperties);

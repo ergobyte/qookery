@@ -37,10 +37,10 @@ qx.Class.define("qookery.internal.components.ProgressBarComponent", {
 
 		// Creation
 
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			var progressBar = new qx.ui.indicator.ProgressBar();
-			progressBar.setMaximum(this.getAttribute("maximum", 100));
-			this._applyLayoutAttributes(progressBar, attributes);
+			this._applyAttribute("maximum", progressBar, "maximum");
+			this._applyWidgetAttributes(progressBar);
 			return [ progressBar ];
 		},
 

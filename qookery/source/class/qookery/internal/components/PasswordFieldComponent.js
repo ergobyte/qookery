@@ -26,9 +26,9 @@ qx.Class.define("qookery.internal.components.PasswordFieldComponent", {
 
 	members: {
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var widget = new qx.ui.form.PasswordField();
-			return this._setupTextField(widget, attributes);
+			return this._setupTextField(widget);
 		}
 	}
 });

@@ -32,7 +32,7 @@ qx.Class.define("qookery.internal.layouts.GridLayoutFactory", {
 			configureFunction.rowArray = null;
 			configureFunction.currentRow = 0;
 			configureFunction.currentColumn = 0;
-			var columnCount = attributes["column-count"] || 1;
+			var columnCount = attributes.getAttribute("column-count", 1);
 			if(columnCount !== "auto") {
 				configureFunction.rowArray = [ ];
 				for(var i = 0; i < columnCount; i++)
@@ -78,23 +78,23 @@ qx.Class.define("qookery.internal.layouts.GridLayoutFactory", {
 			var defaultSpacingX = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_X, 0);
 			var defaultSpacingY = qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LAYOUT_SPACING_Y, 0);
 			var layout = new qx.ui.layout.Grid(defaultSpacingX, defaultSpacingY);
-			var spacing = attributes["spacing"];
+			var spacing = attributes.getAttribute("spacing");
 			if(spacing != null) {
 				layout.setSpacingX(spacing);
 				layout.setSpacingY(spacing);
 			}
-			var spacingX = attributes["spacing-x"];
+			var spacingX = attributes.getAttribute("spacing-x");
 			if(spacingX != null)
 				layout.setSpacingX(spacingX);
-			var spacingY = attributes["spacing-y"];
+			var spacingY = attributes.getAttribute("spacing-y");
 			if(spacingY != null)
 				layout.setSpacingY(spacingY);
-			var columnFlexes = attributes["column-flexes"];
+			var columnFlexes = attributes.getAttribute("column-flexes");
 			if(columnFlexes != null)
 				qx.util.StringSplit.split(columnFlexes, /\s+/).forEach(function(columnFlex, index) {
 					layout.setColumnFlex(index, parseInt(columnFlex, 10));
 				}, this);
-			var rowFlexes = attributes["row-flexes"];
+			var rowFlexes = attributes.getAttribute("row-flexes");
 			if(rowFlexes != null)
 				qx.util.StringSplit.split(rowFlexes, /\s+/).forEach(function(rowFlex, index) {
 					layout.setRowFlex(index, parseInt(rowFlex, 10));

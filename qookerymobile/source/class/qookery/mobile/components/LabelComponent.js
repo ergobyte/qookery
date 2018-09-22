@@ -37,7 +37,7 @@ qx.Class.define("qookery.mobile.components.LabelComponent", {
 
 		// Construction
 
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			var label = new qx.ui.mobile.basic.Label(this.getAttribute("label", ""));
 			label.setWrap(this.getAttribute("wrap", false));
 			return [ label ];

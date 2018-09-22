@@ -26,7 +26,7 @@ qx.Class.define("qookery.internal.components.SeparatorComponent", {
 
 	members: {
 
-		_createWidgets: function(attributes) {
+		_createWidgets: function() {
 			var separator = new qx.ui.core.Widget();
 			separator.setBackgroundColor("border-separator");
 			switch(this.getAttribute("variant", "horizontal")) {
@@ -39,7 +39,7 @@ qx.Class.define("qookery.internal.components.SeparatorComponent", {
 			default:
 				throw new Error("Unknown separator variant");
 			}
-			this._applyLayoutAttributes(separator, attributes);
+			this._applyWidgetAttributes(separator);
 			return [ separator ];
 		}
 	}

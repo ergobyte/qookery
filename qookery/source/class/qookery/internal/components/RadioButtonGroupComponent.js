@@ -42,10 +42,10 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		// Creation
 
-		_createMainWidget: function(attributes) {
+		_createMainWidget: function() {
 			var layoutName = this.getAttribute("layout", "{http://www.qookery.org/ns/Form}h-box");
 			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
-			var layout = layoutFactory.createLayout(attributes);
+			var layout = layoutFactory.createLayout(this);
 			var radioButtonGroup = new qx.ui.form.RadioButtonGroup(layout);
 			radioButtonGroup.getRadioGroup().setAllowEmptySelection(this.getAttribute("allow-empty-selection", false));
 			radioButtonGroup.addListener("changeSelection", function(event) {
@@ -55,7 +55,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 				this.setValue(model);
 			}, this);
 
-			this._applyLayoutAttributes(radioButtonGroup, attributes);
+			this._applyWidgetAttributes(radioButtonGroup);
 			return radioButtonGroup;
 		},
 

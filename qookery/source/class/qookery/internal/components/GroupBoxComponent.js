@@ -41,18 +41,18 @@ qx.Class.define("qookery.internal.components.GroupBoxComponent", {
 
 		// Construction
 
-		_createContainerWidget: function(attributes) {
+		_createContainerWidget: function() {
 			var groupBox = new qx.ui.groupbox.GroupBox(this.getAttribute("label"), this.getAttribute("icon"));
-			groupBox.setLegendPosition(this.getAttribute("legend-position", "middle"));
-			if(attributes["content-padding"] !== undefined) groupBox.setContentPadding(attributes["content-padding"]);
-			if(attributes["content-padding-top"] !== undefined) groupBox.setContentPaddingTop(attributes["content-padding-top"]);
-			if(attributes["content-padding-right"] !== undefined) groupBox.setContentPaddingRight(attributes["content-padding-right"]);
-			if(attributes["content-padding-bottom"] !== undefined) groupBox.setContentPaddingBottom(attributes["content-padding-bottom"]);
-			if(attributes["content-padding-left"] !== undefined) groupBox.setContentPaddingLeft(attributes["content-padding-left"]);
+			this._applyAttribute("legend-position", groupBox, "legendPosition", "middle");
+			this._applyAttribute("content-padding", groupBox, "contentPadding");
+			this._applyAttribute("content-padding-top", groupBox, "contentPaddingTop");
+			this._applyAttribute("content-padding-right", groupBox, "contentPaddingRight");
+			this._applyAttribute("content-padding-bottom", groupBox, "contentPaddingBottom");
+			this._applyAttribute("content-padding-left", groupBox, "contentPaddingLeft");
 			var label = groupBox.getChildControl("legend").getChildControl("label");
 			label.setAllowGrowX(true);
 			label.setTextAlign(this.getAttribute("text-align", "left"));
-			this._applyLayoutAttributes(groupBox, attributes);
+			this._applyWidgetAttributes(groupBox);
 			return groupBox;
 		},
 
