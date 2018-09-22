@@ -38,7 +38,6 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["col-span"] = "Number";
 		partition["column"] = "Number";
 		partition["enabled"] = "Boolean";
-		partition["filter"] = "RegularExpression";
 		partition["flex"] = "Number";
 		partition["focusable"] = "Boolean";
 		partition["height"] = "Size";
@@ -66,7 +65,6 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["padding-right"] = "Integer";
 		partition["padding-top"] = "Integer";
 		partition["page-step"] = "Integer";
-		partition["placeholder"] = "ReplaceableString";
 		partition["read-only"] = "Boolean";
 		partition["required"] = "Boolean";
 		partition["reversed"] = "Boolean";

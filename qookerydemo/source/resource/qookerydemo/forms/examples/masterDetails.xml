@@ -8,8 +8,8 @@
 	<table connect="passwords" label="Secure® Password Manager">
 		<table-model class="qookery.impl.DefaultTableModel" />
 		<table-column connect="serial" label="Serial #" max-width="S" text-align="center" />
-		<table-column connect="username" label="Username" width="1*" />
-		<table-column connect="password" label="Password" width="1*" />
+		<table-column connect="username" label="Username" flex="1" />
+		<table-column connect="password" label="Password" flex="1" />
 		<script event="changeSelection">
 			$("#subForm").setModel(event.getData());
 		</script>

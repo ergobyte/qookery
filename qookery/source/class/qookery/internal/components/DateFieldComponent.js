@@ -27,19 +27,25 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 		this.__userTyped = false;
 	},
 
-	properties: {
-		placeholder: { check: "String", inheritable: true, nullable: false, apply: "_applyPlaceholder" }
-	},
-
 	members: {
 
 		__regularExpression: null,
 		__inputIndexMap: null,
 		__userTyped: null,
 
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "placeholder": return "ReplaceableString";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Construction
+
 		create: function(attributes) {
 			this.base(arguments, attributes);
-			this._applyAttribute("placeholder", this, "placeholder");
 			this._applyAttribute("input-specification", this, function(specification) {
 				this.__regularExpression = this.__parseSpecification(specification);
 			});
@@ -66,6 +72,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				this.setValue(event.getData());
 			}, this);
 			this._applyWidgetAttributes(widget);
+			this._applyAttribute("placeholder", widget, "placeholder");
 			return widget;
 		},
 
@@ -83,12 +90,6 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 					throw new Error("Unsupported value type");
 			}
 			dateField.setValue(value);
-		},
-
-		_applyPlaceholder: function(placeholder) {
-			var mainWidget = this.getMainWidget();
-			if(!mainWidget) return;
-			mainWidget.setPlaceholder(placeholder);
 		},
 
 		_applyFormat: function(format) {

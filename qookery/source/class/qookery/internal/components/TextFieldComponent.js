@@ -18,97 +18,19 @@
 
 qx.Class.define("qookery.internal.components.TextFieldComponent", {
 
-	extend: qookery.internal.components.EditableComponent,
+	extend: qookery.internal.components.FieldComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
 
-	properties: {
-		placeholder: { check: "String", inheritable: true, nullable: false, apply: "_applyPlaceholder" }
-	},
-
 	members: {
-
-		create: function(attributes) {
-			this.base(arguments, attributes);
-			this._applyAttribute("placeholder", this, "placeholder");
-		},
 
 		_createMainWidget: function() {
 			var widget = new qx.ui.form.TextField();
-			return this._setupTextField(widget);
-		},
-
-		_setupTextField: function(widget) {
-			this._applyAttribute("native-context-menu", widget, "nativeContextMenu", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_NATIVE_CONTEXT_MENU));
-			widget.addListener("changeValue", function(event) {
-				if(this._disableValueEvents)
-					return;
-				var text = event.getData();
-				if(text != null && text.trim().length === 0)
-					text = null;
-				var format = this.getFormat();
-				var value = format ? format.parse(text) : text;
-				this.getMainWidget().setValue(this._getLabelOf(value));
-				this._setValueSilently(value);
-			}, this);
-
-			var liveUpdate = this.getAttribute("live-update", qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_LIVE_UPDATE));
-			if(liveUpdate) {
-				widget.addListenerOnce("appear", function() {
-					var component = this;
-					qx.bom.Event.addNativeListener(widget.getContentElement().getDomElement(), "paste", function() {
-						component.setValue(this.value);
-					});
-				}, this);
-				widget.addListener("blur", function(event) {
-					if(this._disableValueEvents)
-						return;
-					var format = this.getFormat();
-					if(format == null)
-						return;
-					var text = this.getMainWidget().getValue();
-					var value = format.parse(text);
-					text = format.format(value);
-					this.getMainWidget().setValue(text);
-				}, this);
-				widget.setLiveUpdate(true);
-			}
-
-			widget.addListener("keypress", function(event) {
-				if(this.isReadOnly() || !event.isShiftPressed() || event.isAltPressed() || event.isCtrlPressed())
-					return;
-				switch(event.getKeyIdentifier()) {
-				case "Delete":
-				case "Backspace":
-					this.setValue(null);
-					return;
-				}
-			}, this);
-
+			this._setupTextField(widget);
 			this._applyWidgetAttributes(widget);
-			this._applyAttribute("text-align", widget, "textAlign");
-			this._applyAttribute("filter", widget, "filter");
-			this._applyAttribute("max-length", widget, "maxLength");
 			return widget;
-		},
-
-		_applyPlaceholder: function(placeholder) {
-			var mainWidget = this.getMainWidget();
-			if(!mainWidget) return;
-			mainWidget.setPlaceholder(placeholder);
-		},
-
-		_updateUI: function(value) {
-			this.getMainWidget().setValue(this._getLabelOf(value));
-		},
-
-		_applyReadOnly: function(readOnly) {
-			this.base(arguments, readOnly);
-			var mainWidget = this.getMainWidget();
-			if(!mainWidget) return;
-			mainWidget.setReadOnly(readOnly);
 		}
 	}
 });
