@@ -16,7 +16,7 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.ImageComponent", {
+qx.Class.define("qookery.internal.components.CanvasComponent", {
 
 	extend: qookery.internal.components.Component,
 
@@ -30,35 +30,30 @@ qx.Class.define("qookery.internal.components.ImageComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
-			case "scale": return "Boolean";
-			case "source": return "ReplaceableString";
+			case "canvas-height": return "Size";
+			case "canvas-width": return "Size";
+			case "sync-dimension": return "Boolean";
 			default: return this.base(arguments, attributeName);
 			}
 		},
 
-		// Creation
+		// Lifecycle
 
 		_createWidgets: function() {
-			var image = new qx.ui.basic.Image(this.getAttribute("source", null));
-			this._applyAttribute("scale", image, "scale");
-			this._applyWidgetAttributes(image);
-			return [ image ];
+			var canvas = new qx.ui.embed.Canvas(this.getAttribute("canvas-width", 300), this.getAttribute("canvas-height", 150));
+			this._applyAttribute("sync-dimension", canvas, "syncDimension");
+			this._applyWidgetAttributes(canvas);
+			return [ canvas ];
 		},
 
-		getSource: function() {
-			return this.getMainWidget().getSource();
+		// Methods
+
+		getContext2d: function() {
+			return this.getMainWidget().getContext2d();
 		},
 
-		setSource: function(source) {
-			this.getMainWidget().setSource(source);
-		},
-
-		getScale: function() {
-			return this.getMainWidget().getScale();
-		},
-
-		setScale: function(scale) {
-			this.getMainWidget().setScale(scale);
+		update: function() {
+			this.getMainWidget().update();
 		}
 	}
 });

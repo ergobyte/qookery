@@ -71,7 +71,6 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["row"] = "Number";
 		partition["row-height"] = "Integer";
 		partition["row-span"] = "Number";
-		partition["scale"] = "Boolean";
 		partition["single-step"] = "Integer";
 		partition["spacing"] = "Integer";
 		partition["spacing-x"] = "Integer";
@@ -126,6 +125,7 @@ qx.Class.define("qookery.internal.Registry", {
 
 		partition = this.__createPartition(qookery.IRegistry.P_COMPONENT);
 		partition["{http://www.qookery.org/ns/Form}button"] = qookery.internal.components.ButtonComponent;
+		partition["{http://www.qookery.org/ns/Form}canvas"] = qookery.internal.components.CanvasComponent;
 		partition["{http://www.qookery.org/ns/Form}check-field"] = qookery.internal.components.CheckFieldComponent;
 		partition["{http://www.qookery.org/ns/Form}composite"] = qookery.internal.components.CompositeComponent;
 		partition["{http://www.qookery.org/ns/Form}date-field"] = qookery.internal.components.DateFieldComponent;

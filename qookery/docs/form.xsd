@@ -500,6 +500,7 @@
 		<annotation><documentation>Component elements defined by Qookery</documentation></annotation>
 		<choice>
 			<element ref="q:button" />
+			<element ref="q:canvas" />
 			<element ref="q:check-field" />
 			<element ref="q:component" />
 			<element ref="q:composite" />
@@ -539,6 +540,12 @@
 
 	<element name="button"><complexType><complexContent><extension base="q:atom-component">
 		<attribute name="command" type="token" />
+	</extension></complexContent></complexType></element>
+
+	<element name="canvas"><complexType><complexContent><extension base="q:component">
+		<attribute name="canvas-height" type="q:size" default="150" />
+		<attribute name="canvas-width" type="q:size" default="300" />
+		<attribute name="sync-dimension" type="boolean" default="false" />
 	</extension></complexContent></complexType></element>
 
 	<element name="check-field"><complexType><complexContent><extension base="q:editable-component">
