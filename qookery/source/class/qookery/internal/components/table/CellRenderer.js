@@ -23,7 +23,7 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 	statics: {
 
 		CSS_KEYS: [
-			"text-align", "color", "font-family", "font-style", "font-weight", "line-height", "white-space"
+			"text-align", "color", "font-family", "font-size", "font-style", "font-weight", "line-height", "white-space"
 		]
 	},
 
