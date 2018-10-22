@@ -137,6 +137,7 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["{http://www.qookery.org/ns/Form}image"] = qookery.internal.components.ImageComponent;
 		partition["{http://www.qookery.org/ns/Form}label"] = qookery.internal.components.LabelComponent;
 		partition["{http://www.qookery.org/ns/Form}list"] = qookery.internal.components.ListComponent;
+		partition["{http://www.qookery.org/ns/Form}menu-button"] = qookery.internal.components.MenuButtonComponent;
 		partition["{http://www.qookery.org/ns/Form}password-field"] = qookery.internal.components.PasswordFieldComponent;
 		partition["{http://www.qookery.org/ns/Form}progress-bar"] = qookery.internal.components.ProgressBarComponent;
 		partition["{http://www.qookery.org/ns/Form}radio-button"] = qookery.internal.components.RadioButtonComponent;
@@ -147,6 +148,7 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["{http://www.qookery.org/ns/Form}slider"] = qookery.internal.components.SliderComponent;
 		partition["{http://www.qookery.org/ns/Form}spacer"] = qookery.internal.components.SpacerComponent;
 		partition["{http://www.qookery.org/ns/Form}spinner"] = qookery.internal.components.SpinnerComponent;
+		partition["{http://www.qookery.org/ns/Form}split-button"] = qookery.internal.components.SplitButtonComponent;
 		partition["{http://www.qookery.org/ns/Form}split-pane"] = qookery.internal.components.SplitPaneComponent;
 		partition["{http://www.qookery.org/ns/Form}stack"] = qookery.internal.components.StackComponent;
 		partition["{http://www.qookery.org/ns/Form}tab-view"] = qookery.internal.components.TabViewComponent;

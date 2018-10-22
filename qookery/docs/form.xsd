@@ -395,6 +395,10 @@
 		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType>
 
+	<complexType name="button-component.attributes"><complexContent><extension base="q:atom-component.attributes">
+		<attribute name="command" type="token" />
+	</extension></complexContent></complexType>
+
 	<complexType name="container-component.attributes"><complexContent><extension base="q:component.attributes">
 		<attributeGroup ref="q:container" />
 	</extension></complexContent></complexType>
@@ -460,6 +464,12 @@
 		</sequence>
 	</extension></complexContent></complexType>
 
+	<complexType name="button-component"><complexContent><extension base="q:button-component.attributes">
+		<sequence>
+			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</extension></complexContent></complexType>
+
 	<complexType name="field-component"><complexContent><extension base="q:field-component.attributes">
 		<sequence>
 			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
@@ -513,6 +523,7 @@
 			<element ref="q:image" />
 			<element ref="q:label" />
 			<element ref="q:list" />
+			<element ref="q:menu-button" />
 			<element ref="q:password-field" />
 			<element ref="q:progress-bar" />
 			<element ref="q:radio-button-group" />
@@ -523,6 +534,7 @@
 			<element ref="q:slider" />
 			<element ref="q:spacer" />
 			<element ref="q:spinner" />
+			<element ref="q:split-button" />
 			<element ref="q:split-pane" />
 			<element ref="q:stack" />
 			<element ref="q:tab-view-page" />
@@ -538,9 +550,7 @@
 
 	<!-- Component elements -->
 
-	<element name="button"><complexType><complexContent><extension base="q:atom-component">
-		<attribute name="command" type="token" />
-	</extension></complexContent></complexType></element>
+	<element name="button" type="q:button-component" />
 
 	<element name="canvas"><complexType><complexContent><extension base="q:component">
 		<attribute name="canvas-height" type="q:size" default="150" />
@@ -670,6 +680,8 @@
 		<attribute name="text-align" type="q:horizontal-alignment" />
 	</extension></complexContent></complexType></element>
 
+	<element name="menu-button" type="q:button-component" />
+
 	<element name="password-field" type="q:field-component" />
 
 	<element name="progress-bar"><complexType><complexContent><extension base="q:component">
@@ -736,6 +748,12 @@
 		<attribute name="single-step" type="decimal" default="1" />
 		<attribute name="text-align" type="q:horizontal-alignment" />
 		<attributeGroup ref="q:content-padding" />
+	</extension></complexContent></complexType></element>
+
+	<element name="split-button"><complexType><complexContent><extension base="q:component">
+		<attribute name="command" type="token" />
+		<attribute name="icon" type="anyURI" />
+		<attribute name="show" type="q:atom-element-visibility" default="both" />
 	</extension></complexContent></complexType></element>
 
 	<element name="split-pane"><complexType><complexContent><extension base="q:container-component">

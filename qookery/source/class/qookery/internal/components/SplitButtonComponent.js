@@ -16,9 +16,9 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookery.internal.components.ButtonComponent", {
+qx.Class.define("qookery.internal.components.SplitButtonComponent", {
 
-	extend: qookery.internal.components.AtomComponent,
+	extend: qookery.internal.components.Component,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
@@ -26,37 +26,30 @@ qx.Class.define("qookery.internal.components.ButtonComponent", {
 
 	members: {
 
-		_createAtomWidget: function() {
-			var button = this._createButton();
+		// Metadata
+
+		getAttributeType: function(attributeName) {
+			switch(attributeName) {
+			case "show": return "String";
+			}
+			return this.base(arguments, attributeName);
+		},
+
+		// Lifecycle
+
+		_createWidgets: function() {
+			var button = new qx.ui.form.SplitButton();
 			this._applyAttribute("command", this, function(commandName) {
 				var command = qookery.Qookery.getRegistry().getCommand(commandName);
 				if(command == null)
 					throw new Error("Undefined command " + commandName);
 				button.setCommand(command);
 			});
-			this._applyAtomAttributes(button);
-			return button;
-		},
-
-		_createButton: function() {
-			return new qx.ui.form.Button();
-		},
-
-		setValue: function(buttonLabelValue) {
-			// BCC Qookery: Method kept for compatibilty with former way of setting label
-			this.getMainWidget().setLabel(buttonLabelValue);
-		},
-
-		getCommand: function() {
-			return this.getMainWidget().getCommand();
-		},
-
-		setCommand: function(command) {
-			this.getMainWidget().setCommand(command);
-		},
-
-		execute: function() {
-			this.getMainWidget().execute();
+			this._applyAttribute("icon", button, "icon");
+			this._applyAttribute("label", button, "label");
+			this._applyAttribute("show", button, "show");
+			this._applyWidgetAttributes(button);
+			return [ button ];
 		}
 	}
 });
