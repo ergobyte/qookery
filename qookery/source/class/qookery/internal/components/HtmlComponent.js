@@ -30,6 +30,7 @@ qx.Class.define("qookery.internal.components.HtmlComponent", {
 			var html = new qx.ui.embed.Html(this.getAttribute("html", null));
 			this._applyAttribute("overflow-x", html, "overflowX");
 			this._applyAttribute("overflow-y", html, "overflowY");
+			this._applyAttribute("css-class", html, "cssClass");
 			this._applyWidgetAttributes(html);
 			return [ html ];
 		},

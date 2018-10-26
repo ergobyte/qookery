@@ -647,6 +647,7 @@
 			<any namespace="http://www.w3.org/1999/xhtml" minOccurs="0" maxOccurs="1" />
 			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
+		<attribute name="css-class" type="string" />
 		<attribute name="html" type="string" />
 		<attribute name="overflow-x" type="q:overflow" />
 		<attribute name="overflow-y" type="q:overflow" />
