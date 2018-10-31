@@ -60,6 +60,17 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			}
 		},
 
+		setAttribute: function(attributeName, value) {
+			if(this.__editor != null) {
+				switch(attributeName) {
+				case "mode":
+					this.__editor.getSession().setMode("ace/mode/" + value);
+					break;
+				}
+			}
+			return this.base(arguments, attributeName, value);
+		},
+
 		// Construction
 
 		_createMainWidget: function() {

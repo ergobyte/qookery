@@ -41,11 +41,16 @@
 		<mkdir dir="${ace.target}" />
 		<get dest="${ace.target}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="${ace.downloadBase}/ace.js" />
+			<url url="${ace.downloadBase}/mode-html.js" />
+			<url url="${ace.downloadBase}/mode-javascript.js" />
 			<url url="${ace.downloadBase}/mode-json.js" />
+			<url url="${ace.downloadBase}/mode-plain_text.js" />
 			<url url="${ace.downloadBase}/mode-textile.js" />
 			<url url="${ace.downloadBase}/mode-xml.js" />
 			<url url="${ace.downloadBase}/theme-eclipse.js" />
 			<url url="${ace.downloadBase}/theme-textmate.js" />
+			<url url="${ace.downloadBase}/worker-html.js" />
+			<url url="${ace.downloadBase}/worker-javascript.js" />
 			<url url="${ace.downloadBase}/worker-json.js" />
 			<url url="${ace.downloadBase}/worker-xml.js" />
 		</get>

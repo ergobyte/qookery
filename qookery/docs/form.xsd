@@ -493,7 +493,7 @@
 			<element ref="q:script" />
 			<group ref="q:components" />
 			<group ref="q:flow-control-statements" />
-			<any namespace="##other" processContents="lax" />
+			<any namespace="##other" processContents="strict" />
 		</choice>
 	</group>
 
