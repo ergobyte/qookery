@@ -336,8 +336,10 @@ qx.Class.define("qookery.internal.components.Component", {
 
 			// Miscellaneous
 
-			this._applyAttribute("tab-index", widget, "tabIndex");
+			this._applyAttribute("draggable", widget, "draggable");
+			this._applyAttribute("droppable", widget, "droppable");
 			this._applyAttribute("focusable", widget, "focusable");
+			this._applyAttribute("tab-index", widget, "tabIndex");
 
 			// Layout item properties
 

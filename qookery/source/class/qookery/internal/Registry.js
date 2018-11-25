@@ -37,6 +37,8 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["allow-stretch-y"] = "Boolean";
 		partition["col-span"] = "Number";
 		partition["column"] = "Number";
+		partition["draggable"] = "Boolean";
+		partition["droppable"] = "Boolean";
 		partition["enabled"] = "Boolean";
 		partition["flex"] = "Number";
 		partition["focusable"] = "Boolean";
