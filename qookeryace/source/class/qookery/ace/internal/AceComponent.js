@@ -158,7 +158,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			renderer.setTheme("ace/theme/" + this.getAttribute("theme", "textmate"));
 
 			var session = editor.getSession();
-			session.setMode("ace/mode/" + this.getAttribute("mode"));
+			session.setMode("ace/mode/" + this.getAttribute("mode", "plain_text"));
 			session.setTabSize(this.getAttribute("tab-size", 4));
 			session.setUseSoftTabs(this.getAttribute("use-soft-tabs", true));
 			session.setUseWrapMode(this.getAttribute("use-wrap-mode", false));
