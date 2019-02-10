@@ -38,6 +38,13 @@
 		<enumeration value="icon" />
 	</restriction></simpleType>
 
+	<simpleType name="bar-position"><restriction base="token">
+		<enumeration value="left" />
+		<enumeration value="right" />
+		<enumeration value="top" />
+		<enumeration value="bottom" />
+	</restriction></simpleType>
+
 	<simpleType name="cell-editor"><union memberTypes="QName"><simpleType><restriction base="token">
 		<enumeration value="check-box" />
 		<enumeration value="password-field" />
@@ -769,12 +776,7 @@
 	</extension></complexContent></complexType></element>
 
 	<element name="tab-view"><complexType><complexContent><extension base="q:container-component">
-		<attribute name="bar-position" default="top"><simpleType><restriction base="token">
-			<enumeration value="left" />
-			<enumeration value="right" />
-			<enumeration value="top" />
-			<enumeration value="bottom" />
-		</restriction></simpleType></attribute>
+		<attribute name="bar-position" type="q:bar-position" default="top" />
 		<attributeGroup ref="q:content-padding" />
 	</extension></complexContent></complexType></element>
 
