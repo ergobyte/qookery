@@ -21,30 +21,13 @@
  */
 qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
-	extend: qookery.internal.components.EditableComponent,
+	extend: qookery.internal.components.AbstractSelectBoxComponent,
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
 	},
 
-	statics: {
-		__NULL_ITEM_MODEL: ""
-	},
-
 	members: {
-
-		// Metadata
-
-		getAttributeType: function(attributeName) {
-			switch(attributeName) {
-			case "keep-sorted": return "Boolean";
-			case "map": return "String";
-			case "null-item-label": return "ReplaceableString";
-			}
-			return this.base(arguments, attributeName);
-		},
-
-		// Construction
 
 		_createMainWidget: function() {
 			var selectBox = new qx.ui.form.SelectBox();
@@ -53,7 +36,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;
-				if(model === this.constructor.__NULL_ITEM_MODEL) model = null;
+				if(model === this.constructor._NULL_ITEM_MODEL) model = null;
 				this.setValue(model);
 			}, this);
 			selectBox.addListener("keypress", function(event) {
@@ -66,25 +49,8 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 					return;
 				}
 			}, this);
-
-			this._applyWidgetAttributes(selectBox);
+			this._applySelectBoxAttributes(selectBox);
 			return selectBox;
-		},
-
-		_applyConnection: function(modelProvider, connection) {
-			if(this.getAttribute("map") === undefined) {
-				var mapName = connection.getAttribute("map");
-				if(mapName != null)
-					this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
-			}
-			this.base(arguments, modelProvider, connection);
-		},
-
-		setup: function() {
-			var mapName = this.getAttribute("map");
-			if(mapName !== undefined)
-				this.setItems(qookery.Qookery.getRegistry().getMap(mapName));
-			this.base(arguments);
 		},
 
 		__getListItemLabel: function(listItem) {
@@ -94,7 +60,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		_updateUI: function(value) {
 			if(value == null)
-				value = this.constructor.__NULL_ITEM_MODEL;
+				value = this.constructor._NULL_ITEM_MODEL;
 			var matchingItem = null;
 			var selectBox = this.getMainWidget();
 			var listItems = selectBox.getChildren();
@@ -109,7 +75,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			var showingPlaceholder = true;
 			if(matchingItem != null) {
 				selectBox.setSelection([ matchingItem ]);
-				showingPlaceholder = value === this.constructor.__NULL_ITEM_MODEL;
+				showingPlaceholder = value === this.constructor._NULL_ITEM_MODEL;
 			}
 			else {
 				selectBox.resetSelection();
@@ -118,89 +84,6 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				selectBox.addState("showingPlaceholder");
 			else
 				selectBox.removeState("showingPlaceholder");
-		},
-
-		_applyEnabled: function(enabled) {
-			var labelWidget = this.getLabelWidget();
-			if(labelWidget != null)
-				labelWidget.setEnabled(enabled);
-			this.__updateEnabled();
-		},
-
-		_applyReadOnly: function(readOnly) {
-			this.base(arguments, readOnly);
-			this.__updateEnabled();
-		},
-
-		__updateEnabled: function() {
-			var isEnabled = this.getEnabled();
-			var isReadOnly = this.getReadOnly();
-			this.getMainWidget().setEnabled(isEnabled && !isReadOnly);
-		},
-
-		addItem: function(model, label, icon) {
-			if(!label) label = this._getLabelOf(model);
-			var item = new qx.ui.form.ListItem(label, icon, model);
-			var selectBox = this.getMainWidget();
-			if(this.getAttribute("keep-sorted", true)) {
-				var existingItems = selectBox.getChildren();
-				for(var index = 0; index < existingItems.length; index++) {
-					var existingItem = existingItems[index];
-					if(existingItem.getModel() === this.constructor.__NULL_ITEM_MODEL) continue;
-					if(existingItem.getLabel() > label) break;
-				}
-				selectBox.addAt(item, index);
-			}
-			else selectBox.add(item);
-		},
-
-		addNullItem: function(label, icon) {
-			if(label === undefined)
-				label = this.getAttribute("null-item-label", "");
-			if(icon === undefined)
-				icon = null;
-			var item = new qx.ui.form.ListItem(label, icon, this.constructor.__NULL_ITEM_MODEL);
-			this.getMainWidget().add(item);
-		},
-
-		removeAllItems: function() {
-			this.getMainWidget().removeAll().forEach(function(item) { item.destroy(); });
-		},
-
-		getItems: function() {
-			return this.getMainWidget().getChildren();
-		},
-
-		setItems: function(items) {
-			this._disableValueEvents = true;
-			try {
-				this.removeAllItems();
-				if(this.getAttribute("null-item-label") !== undefined) {
-					this.addNullItem();
-				}
-				if(items instanceof qx.data.Array) {
-					items = items.toArray();
-				}
-				if(qx.lang.Type.isArray(items)) {
-					for(var i = 0; i < items.length; i++) {
-						var item = items[i];
-						if(item instanceof qx.ui.form.ListItem)
-							this.getMainWidget().add(item);
-						else
-							this.addItem(item);
-					}
-				}
-				else if(qx.lang.Type.isObject(items)) {
-					for(var model in items) {
-						var label = items[model];
-						this.addItem(model, qx.data.Conversion.toString(label));
-					}
-				}
-			}
-			finally {
-				this._disableValueEvents = false;
-			}
-			this._updateUI(this.getValue());
 		},
 
 		setSelection: function(itemNumber) {
