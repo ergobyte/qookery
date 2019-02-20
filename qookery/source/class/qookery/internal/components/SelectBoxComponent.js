@@ -36,7 +36,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 				if(this._disableValueEvents) return;
 				var newSelection = event.getData()[0];
 				var model = newSelection ? newSelection.getModel() : null;
-				if(model === this.constructor._NULL_ITEM_MODEL) model = null;
+				if(model === qookery.internal.components.AbstractSelectBoxComponent._NULL_ITEM_MODEL) model = null;
 				this.setValue(model);
 			}, this);
 			selectBox.addListener("keypress", function(event) {
@@ -60,7 +60,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 
 		_updateUI: function(value) {
 			if(value == null)
-				value = this.constructor._NULL_ITEM_MODEL;
+				value = qookery.internal.components.AbstractSelectBoxComponent._NULL_ITEM_MODEL;
 			var matchingItem = null;
 			var selectBox = this.getMainWidget();
 			var listItems = selectBox.getChildren();
@@ -75,7 +75,7 @@ qx.Class.define("qookery.internal.components.SelectBoxComponent", {
 			var showingPlaceholder = true;
 			if(matchingItem != null) {
 				selectBox.setSelection([ matchingItem ]);
-				showingPlaceholder = value === this.constructor._NULL_ITEM_MODEL;
+				showingPlaceholder = value === qookery.internal.components.AbstractSelectBoxComponent._NULL_ITEM_MODEL;
 			}
 			else {
 				selectBox.resetSelection();

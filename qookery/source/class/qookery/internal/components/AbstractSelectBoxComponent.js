@@ -77,7 +77,7 @@ qx.Class.define("qookery.internal.components.AbstractSelectBoxComponent", {
 				var existingItems = selectBox.getChildren();
 				for(var index = 0; index < existingItems.length; index++) {
 					var existingItem = existingItems[index];
-					if(existingItem.getModel() === this.constructor._NULL_ITEM_MODEL)
+					if(existingItem.getModel() === qookery.internal.components.AbstractSelectBoxComponent._NULL_ITEM_MODEL)
 						continue;
 					if(existingItem.getLabel() > label)
 						break;
@@ -92,7 +92,7 @@ qx.Class.define("qookery.internal.components.AbstractSelectBoxComponent", {
 				label = this.getAttribute("null-item-label", "");
 			if(icon === undefined)
 				icon = null;
-			var item = new qx.ui.form.ListItem(label, icon, this.constructor._NULL_ITEM_MODEL);
+			var item = new qx.ui.form.ListItem(label, icon, qookery.internal.components.AbstractSelectBoxComponent._NULL_ITEM_MODEL);
 			this.getMainWidget().add(item);
 		},
 
