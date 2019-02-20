@@ -74,6 +74,20 @@ qx.Interface.define("qookery.IFormComponent", {
 
 	members: {
 
+		// Lifecycle
+
+		/**
+		 * Test if form is ready for processing user input
+		 *
+		 * <p>A form's readiness is asserted by the application via the markAsReady() method.</p>
+		 */
+		isReady: function() { },
+
+		/**
+		 * Assert that the form is ready for processing user input
+		 */
+		markAsReady: function() { },
+
 		// Access to other components
 
 		/**
