@@ -43,7 +43,6 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			case "highlight-active-line":
 			case "show-fold-widgets":
 			case "show-invisibles":
-			case "show-line-numbers":
 			case "show-gutter":
 			case "show-print-margin":
 			case "use-soft-tabs":
@@ -154,7 +153,6 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			renderer.setShowGutter(this.getAttribute("show-gutter", true));
 			renderer.setHScrollBarAlwaysVisible(this.getAttribute("h-scroll-bar-always-visible", false));
 			renderer.setVScrollBarAlwaysVisible(this.getAttribute("v-scroll-bar-always-visible", false));
-			renderer.setOption("showLineNumbers", this.getAttribute("show-line-numbers", true));
 			renderer.setTheme("ace/theme/" + this.getAttribute("theme", "textmate"));
 
 			var session = editor.getSession();

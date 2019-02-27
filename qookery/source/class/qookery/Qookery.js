@@ -57,6 +57,11 @@ qx.Class.define("qookery.Qookery", {
 		 */
 		OPTION_DEFAULT_NATIVE_CONTEXT_MENU: "q:default-native-context-menu",
 
+		/**
+		 * {String} Path to directory containing external libraries used by Qookery, defaults to <code>qookery/lib</code>.
+		 */
+		OPTION_EXTERNAL_LIBRARIES: "q:external-libraries",
+
 		// Services
 
 		/**
@@ -79,7 +84,12 @@ qx.Class.define("qookery.Qookery", {
 		 */
 		SERVICE_RESOURCE_LOADER: "qookery.IResourceLoader",
 
-		__OPTIONS: { },
+		__OPTIONS: {
+
+			// Default values
+
+			"q:external-libraries": "qookery/lib"
+		},
 
 		/**
 		 * Return an option's value
@@ -90,8 +100,10 @@ qx.Class.define("qookery.Qookery", {
 		 * @return {any} option value
 		 */
 		getOption: function(optionName, defaultValue) {
+			qx.core.Assert.assertString(optionName);
 			var value = qookery.Qookery.__OPTIONS[optionName];
-			if(value === undefined) return defaultValue;
+			if(value === undefined)
+				return defaultValue;
 			return value;
 		},
 
@@ -102,6 +114,7 @@ qx.Class.define("qookery.Qookery", {
 		 * @param value {any} new option value
 		 */
 		setOption: function(optionName, value) {
+			qx.core.Assert.assertString(optionName);
 			qookery.Qookery.__OPTIONS[optionName] = value;
 		},
 

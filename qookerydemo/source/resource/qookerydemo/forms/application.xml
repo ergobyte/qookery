@@ -140,7 +140,7 @@
 				
 				<ace:editor xmlns:ace="http://www.qookery.org/ns/Form/Ace"
 						id="jsonEditor" mode="json" flex="1" create-label="false"
-						tab-size="3" show-line-numbers="false" show-invisibles="true" />
+						tab-size="3" show-invisibles="true" />
 
 			</composite>
 

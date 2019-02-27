@@ -18,7 +18,7 @@
 -->
 <project name="qookery.ace" basedir=".">
 
-	<property name="ace.version" value="1.2.8" />
+	<property name="ace.version" value="1.4.3" />
 	<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${ace.version}/src-min" />
 	<property name="ace.target" location="../qookeryace/source/resource/qookery/lib/ace" />
 

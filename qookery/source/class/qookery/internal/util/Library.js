@@ -130,6 +130,9 @@ qx.Class.define("qookery.internal.util.Library", {
 			else if(qx.lang.String.endsWith(resourceName, ".css")) {
 				resourceType = "css";
 			}
+			resourceName = resourceName.replace(/\$\{([\w:-]*)\}/g, function(match, optionName) {
+				return qookery.Qookery.getOption(optionName);
+			});
 
 			var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
 			var resourceUri = resourceLoader.resolveResourceUri(resourceName);

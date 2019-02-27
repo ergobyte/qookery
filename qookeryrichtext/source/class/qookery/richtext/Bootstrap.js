@@ -22,7 +22,7 @@
 qx.Bootstrap.define("qookery.richtext.Bootstrap", {
 
 	defer: function() {
-		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "qookery/lib/ckeditor/ckeditor.js" ], null, function() {
+		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "${q:external-libraries}/ckeditor/ckeditor.js" ], null, function() {
 			CKEDITOR.disableAutoInline = true;
 			CKEDITOR.config.basicEntities = false;
 			CKEDITOR.config.entities = true;

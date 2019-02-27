@@ -18,30 +18,23 @@
 
 /**
  * The Qookery ACE plugin allows to use the ACE editor in qookery forms
+ *
+ * The main minified ACE source file must be named ace.js and reside in
+ * <code>${q:external-libraries}/ace/</code>. Additional ACE files may exist
+ * alongside for additional themes, workers etc. To get the editor working,
+ * the minimal set is "ace.js" and "theme-eclipse.js".
+ *
  * You will need to download a version of the editor with the required plugins
- * yourself and include it manually into your application.
+ * yourself. This can be done manually, or via the included ANT task in build.xml.
  *
  * If you are using the javascript compiler, add the following code to your
  * compile.json file:
  *
  * <pre>
  * "include": [
- *   "qookery.*",
- *   "qookery.ace.*"
- *   ...
- * ],
- * "environment": {
- *   "qookery.ace.path": "subdir-of-resource-folder",
- *   ...
- * }
+ *	"qookery.*",
+ *	"qookery.ace.*"
+ *	...
+ * ]
  * </pre>
- *
- * The environment variable "qookery.ace.path" must contain the path to the
- * directory containing the necessary (minified) ACE source files. This directory
- * should be a subdirectory the main library's source/resource/app-namespace
- * folder, since only then will these files be automatically copied to the final
- * build. For example, if the library namespace is foo, and ace.js is placed
- * into source/resource/foo/js/ace, define "qookery.ace.path": "foo/js/ace".
- * The minimal files to get the editor running are "ace.js" and "theme-eclipse.js".
- *
  */

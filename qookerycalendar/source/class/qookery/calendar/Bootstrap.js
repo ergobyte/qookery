@@ -24,12 +24,12 @@ qx.Bootstrap.define("qookery.calendar.Bootstrap", {
 	defer: function() {
 		var registry = qookery.Qookery.getRegistry();
 
-		registry.registerLibrary("jquery", [ "qookery/lib/jquery/jquery.min.js" ], null, function() { jQuery.noConflict(); });
-		registry.registerLibrary("moment", [ "qookery/lib/moment/moment.min.js" ]);
+		registry.registerLibrary("jquery", [ "${q:external-libraries}/jquery/jquery.min.js" ], null, function() { jQuery.noConflict(); });
+		registry.registerLibrary("moment", [ "${q:external-libraries}/moment/moment.min.js" ]);
 		registry.registerLibrary("fullcalendar", [
-			"qookery/lib/fullcalendar/fullcalendar.min.css",
-			"qookery/lib/fullcalendar/fullcalendar.min.js",
-			"qookery/lib/fullcalendar/lang/el.js"
+			"${q:external-libraries}/fullcalendar/fullcalendar.min.css",
+			"${q:external-libraries}/fullcalendar/fullcalendar.min.js",
+			"${q:external-libraries}/fullcalendar/lang/el.js"
 		], [ "moment", "jquery" ]);
 
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Calendar}calendar", qookery.calendar.internal.CalendarComponent);

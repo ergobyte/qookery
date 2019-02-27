@@ -20,7 +20,7 @@ qx.Bootstrap.define("qookery.ace.Bootstrap", {
 
 	defer: function() {
 		qookery.Qookery.getRegistry().registerLibrary("ace", [
-			(qx.core.Environment.get("qookery.ace.path") || "qookery/lib/ace") + "/ace.js"
+			"${q:external-libraries}/ace/ace.js"
 		]);
 		qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/Ace}editor", qookery.ace.internal.AceComponent);
 	}
