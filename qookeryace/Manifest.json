@@ -5,9 +5,10 @@
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
-			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" }
+			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
+			{ "name": "Jenny Pliatsika (jenny)", "email": "jenny@ergobyte.gr" }
 		],
-		"version": "0.5.0",
+		"version": "0.6.0",
 		"qooxdoo-versions": [ "5.0.2", "6.0.0" ],
 		"qooxdoo-range" : "^6.0.0-alpha"
 	},

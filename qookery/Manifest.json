@@ -10,7 +10,7 @@
 			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" },
 			{ "name": "Nikos Lamprakis (nikoslam)", "email": "nikoslam@ergobyte.gr" }
 		],
-		"version": "0.5.0",
+		"version": "0.6.0",
 		"qooxdoo-versions": [ "5.0.2", "6.0.0" ],
 		"qooxdoo-range" : "^6.0.0-alpha"
 	},

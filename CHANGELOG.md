@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.0] - 2019-03-03
+
+* New qookery.IAttributeSet interface simplifies attribute handling
+* New form readiness facility gives XML authors a useful $.Form.isReady() to act upon
+* The location of external libraries is now configurable by the application author
+* New elements <canvas>, <combo-box>, <menu-button>, <split-button>
+* <rich-text>, <html>, <scroll> and others improved and/or corrected
+* Drag'n'drop attributes added
+* Code style checking switched to Tern
+
 ## [0.5.0] - 2018-07-25
 
 * <script> configurable debouncing and recursion prevention
