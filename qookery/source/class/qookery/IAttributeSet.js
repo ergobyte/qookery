@@ -16,6 +16,9 @@
 	limitations under the License.
 */
 
+/**
+ * Represents a supplier of attributes
+ */
 qx.Interface.define("qookery.IAttributeSet", {
 
 	members: {

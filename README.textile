@@ -18,7 +18,7 @@ h2(#examples). Real-life Examples
 
 Below applications are using Qookery for their user interface requirements exclusively. All components, from the browser window up, are assembled and laid out declaratively via Qookery forms.
 
-* "Galen Office":https://www.galenoffice.com/ - Cloud-based medical practice management system; provides patient management, appointment scheduling, customizable health records, document management, reporting and more.
+* "Galen Office":https://www.galenoffice.com/portal/medical/en/home - Cloud-based medical practice management system; provides patient management, appointment scheduling, customizable health records, document management, reporting and more.
 * "Ergobyte Electronic Services":https://www.ergobyte.net/ - Ergobyte's customer account management interface
 
 You may study their forms' XML source code by firing up your browser's developer tools and track network requests as you use the applications.
