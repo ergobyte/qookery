@@ -52,6 +52,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			case "print-margin-column":
 			case "tab-size":
 				return "Integer";
+			case "auto-complete":
 			case "cursor-style":
 			case "theme":
 				return "String";
@@ -79,7 +80,11 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 		},
 
 		setup: function() {
-			qookery.Qookery.getRegistry().loadLibrary("ace", function(error) {
+			var libraryNames = [ "ace" ];
+			var autoCompleteType = this.getAttribute("auto-complete", "false");
+			if(autoCompleteType !== "false")
+				libraryNames.push("aceLanguageTools");
+			qookery.Qookery.getRegistry().loadLibrary(libraryNames, function(error) {
 				if(error != null) {
 					this.error("Error loading library", error);
 					return;
@@ -144,6 +149,8 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.setShowInvisibles(this.getAttribute("show-invisibles", false));
 			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
 			editor.setOption("cursorStyle", this.getAttribute("cursor-style", "ace"));
+			if(this.getAttribute("auto-complete", "false") === "basic")
+				editor.setOption("enableBasicAutocompletion", true);
 			editor.$blockScrolling = Infinity;
 			editor.on("change", this.__onChange.bind(this));
 

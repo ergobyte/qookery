@@ -41,6 +41,7 @@
 		<mkdir dir="${ace.target}" />
 		<get dest="${ace.target}" skipExisting="true" verbose="on" httpusecaches="no">
 			<url url="${ace.downloadBase}/ace.js" />
+			<url url="${ace.downloadBase}/ext-language_tools.js" />
 			<url url="${ace.downloadBase}/ext-searchbox.js" />
 			<url url="${ace.downloadBase}/mode-html.js" />
 			<url url="${ace.downloadBase}/mode-javascript.js" />

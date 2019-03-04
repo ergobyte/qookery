@@ -26,6 +26,10 @@
 	<import namespace="http://www.qookery.org/ns/Form" />
 
 	<element name="editor"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="auto-complete" default="false"><simpleType><restriction base="token">
+			<enumeration value="false" />
+			<enumeration value="basic" />
+		</restriction></simpleType></attribute>
 		<attribute name="cursor-style" default="ace"><simpleType><restriction base="token">
 			<enumeration value="ace" />
 			<enumeration value="slim" />
