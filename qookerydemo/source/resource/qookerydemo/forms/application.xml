@@ -84,7 +84,7 @@
 
 				<ace:editor xmlns:ace="http://www.qookery.org/ns/Form/Ace"
 						id="xmlEditor" mode="xml" flex="1" create-label="false"
-						tab-size="4" theme="eclipse" print-margin-column="100" />
+						tab-size="4" theme="eclipse" print-margin-column="100" auto-complete="basic" />
 
 			</composite>
 
@@ -140,7 +140,7 @@
 				
 				<ace:editor xmlns:ace="http://www.qookery.org/ns/Form/Ace"
 						id="jsonEditor" mode="json" flex="1" create-label="false"
-						tab-size="3" show-invisibles="true" />
+						tab-size="3" show-invisibles="true" auto-complete="basic" />
 
 			</composite>
 

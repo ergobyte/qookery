@@ -52,10 +52,11 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			case "print-margin-column":
 			case "tab-size":
 				return "Integer";
-			case "auto-complete":
 			case "cursor-style":
 			case "theme":
 				return "String";
+			case "auto-complete":
+				return "StringList";
 			default: return this.base(arguments, attributeName);
 			}
 		},
@@ -81,8 +82,8 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 		setup: function() {
 			var libraryNames = [ "ace" ];
-			var autoCompleteType = this.getAttribute("auto-complete", "false");
-			if(autoCompleteType !== "false")
+			var autoComplete = this.getAttribute("auto-complete");
+			if(autoComplete != null)
 				libraryNames.push("aceLanguageTools");
 			qookery.Qookery.getRegistry().loadLibrary(libraryNames, function(error) {
 				if(error != null) {
@@ -149,8 +150,12 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.setShowInvisibles(this.getAttribute("show-invisibles", false));
 			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
 			editor.setOption("cursorStyle", this.getAttribute("cursor-style", "ace"));
-			if(this.getAttribute("auto-complete", "false") === "basic")
-				editor.setOption("enableBasicAutocompletion", true);
+			var autoComplete = this.getAttribute("auto-complete");
+			if(autoComplete != null) {
+				editor.setOption("enableBasicAutocompletion", qx.lang.Array.contains(autoComplete, "basic"));
+				editor.setOption("enableLiveAutocompletion", qx.lang.Array.contains(autoComplete, "live"));
+				editor.setOption("enableSnippets", qx.lang.Array.contains(autoComplete, "snippets"));
+			}
 			editor.$blockScrolling = Infinity;
 			editor.on("change", this.__onChange.bind(this));
 
