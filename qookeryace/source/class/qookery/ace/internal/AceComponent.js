@@ -149,8 +149,11 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.setShowInvisibles(this.getAttribute("show-invisibles", false));
 			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
 			editor.setOption("cursorStyle", this.getAttribute("cursor-style", "ace"));
-			if(this.getAttribute("auto-complete", "false") === "basic")
-				editor.setOption("enableBasicAutocompletion", true);
+			if(this.getAttribute("auto-complete", "false") === "basic") {
+        editor.setOption("enableBasicAutocompletion", true);
+        editor.setOption("enableLiveAutocompletion", true);
+      }
+
 			editor.$blockScrolling = Infinity;
 			editor.on("change", this.__onChange.bind(this));
 
