@@ -97,7 +97,7 @@ qx.Class.define("qookery.internal.components.AbstractSelectBoxComponent", {
 		},
 
 		removeAllItems: function() {
-			this.getMainWidget().removeAll().forEach(function(item) { item.destroy(); });
+			this.getMainWidget().removeAll().forEach(function(item) { item.destroy(); }, this);
 		},
 
 		getItems: function() {

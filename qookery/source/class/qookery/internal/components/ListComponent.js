@@ -136,7 +136,7 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 		},
 
 		removeAllItems: function() {
-			this.getMainWidget().removeAll().forEach(function(widget) { widget.dispose(); });
+			this.getMainWidget().removeAll().forEach(function(widget) { widget.dispose(); }, this);
 		},
 
 		setSelection: function(itemNumber) {

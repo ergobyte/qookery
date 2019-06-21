@@ -37,7 +37,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		required: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyRequired" },
 		readOnly: { check: "Boolean", inheritable: true, nullable: false, init: false, apply: "_applyReadOnly" },
 		format: { check: "qx.util.format.IFormat", inheritable: true, nullable: true, init: null, apply: "_applyFormat", transform: "_transformFormat" },
-		valid: { check: "Boolean", nullable: false, apply: "_applyValid" }
+		valid: { check: "Boolean", nullable: false, apply: "_applyValid", event: "changeValid" }
 	},
 
 	members: {

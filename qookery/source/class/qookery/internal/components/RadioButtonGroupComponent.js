@@ -149,7 +149,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		},
 
 		__removeAllGroupItems: function() {
-			this.getMainWidget().removeAll().forEach(function(widget) { widget.dispose(); });
+			this.getMainWidget().removeAll().forEach(function(widget) { widget.dispose(); }, this);
 		}
 	},
 
