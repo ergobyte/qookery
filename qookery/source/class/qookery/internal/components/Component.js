@@ -74,7 +74,10 @@ qx.Class.define("qookery.internal.components.Component", {
 		},
 
 		getAttribute: function(attributeName, defaultValue) {
-			var value = this.__attributes[attributeName];
+			var attributes = this.__attributes;
+			if(attributes == null)
+				return defaultValue;
+			var value = attributes[attributeName];
 			if(value !== undefined)
 				return value;
 			if(defaultValue === Error)
