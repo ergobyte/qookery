@@ -169,6 +169,13 @@ qx.Interface.define("qookery.IComponent", {
 		// User interface
 
 		/**
+		 * Check whether component is able to receive focus
+		 *
+		 * @return {Boolean} <code>true</code> in case focus may be received
+		 */
+		isFocusable: function() { },
+
+		/**
 		 * Set the focus to this component
 		 */
 		focus: function() { },

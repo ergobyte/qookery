@@ -135,16 +135,18 @@ qx.Class.define("qookery.contexts.Qookery", {
 		 * @param component {qookery.IComponent} the component to start descending from
 		 * @param callback {Function} a function that will be called with each encountered component
 		 *			- a non-undefined return value breaks the recursion
+		 * @param thisArg {Object} object to set as <code>this</code> for callback
 		 * @return {any} value returned by callback if descending was interrupted or <code>undefined</code>
 		 */
-		descendComponents: function(component, callback) {
-			var result = callback(component);
-			if(result !== undefined) return result;
+		descendComponents: function(component, callback, thisArg) {
+			var result = callback.call(thisArg, component);
+			if(result !== undefined)
+				return result;
 			if(!(qx.Class.hasInterface(component.constructor, qookery.IContainerComponent)))
 				return undefined;
 			var childComponents = component.listChildren();
 			for(var i = 0; i < childComponents.length; i++) {
-				qookery.contexts.Qookery.descendComponents(childComponents[i], callback);
+				qookery.contexts.Qookery.descendComponents(childComponents[i], callback, thisArg);
 			}
 		},
 

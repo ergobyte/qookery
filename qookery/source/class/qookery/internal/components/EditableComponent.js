@@ -126,6 +126,15 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 			return this._widgets[1];
 		},
 
+		isFocusable: function() {
+			var focusable = this.base(arguments);
+			if(!focusable)
+				return false;
+			if(this.isReadOnly())
+				return false;
+			return true;
+		},
+
 		// Model connection and UI
 
 		connect: function(connectionSpecification) {

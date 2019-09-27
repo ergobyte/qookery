@@ -161,8 +161,25 @@ qx.Class.define("qookery.internal.components.Component", {
 			return this.listWidgets("main")[0];
 		},
 
+		isFocusable: function() {
+			if(!this.isEnabled())
+				return false;
+			var widget = this.getMainWidget();
+			if(widget == null)
+				return false;
+			if(widget.isDisposed())
+				return false;
+			if(!(widget instanceof qx.ui.core.Widget))
+				return false;
+			if(!widget.isFocusable())
+				return false;
+			return true;
+		},
+
 		focus: function() {
-			this.getMainWidget().focus();
+			var widget = this.getMainWidget();
+			if(widget != null)
+				widget.focus();
 		},
 
 		addEventHandler: function(eventName, handler, onlyOnce) {
@@ -261,8 +278,9 @@ qx.Class.define("qookery.internal.components.Component", {
 			for(var i = 0; i < this._widgets.length; i++)
 				this._widgets[i].setUserData("qookeryComponent", this);
 
-			if(this.getId())
-				this.getMainWidget().getContentElement().setAttribute("qkid", this.getId());
+			var componentId = this.getId();
+			if(componentId != null)
+				this.getMainWidget().getContentElement().setAttribute("qkid", componentId);
 		},
 
 		_applyAttribute: function(attributeName, target, propertyName, defaultValue) {
