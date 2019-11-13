@@ -54,7 +54,10 @@ qx.Interface.define("qookery.IFormComponent", {
 	events: {
 
 		/** This event is fired when the form has been closed. Its value is set to the form's <code>result</code> variable. */
-		"close": "qx.event.type.Data"
+		"close": "qx.event.type.Data",
+
+		/** Event that marks form's readiness to process inputs; it is fired at most once, on first invocation of the markAsReady() method */
+		"ready": "qx.event.type.Event"
 	},
 
 	properties: {

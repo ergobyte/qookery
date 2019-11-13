@@ -38,6 +38,7 @@ qx.Class.define("qookerydemo.ResultArea",
 					this._disposeObjects("__formComponent");
 				}, this);
 				this.add(this.__formComponent.getMainWidget());
+				this.__formComponent.markAsReady();
 			}
 			catch(e) {
 				this.error("Error creating form window", e);

@@ -35,16 +35,13 @@
 		$("#loginButton").setEnabled(event.getData());
 	</script>
 
-	<script event="appear" arguments="event">
-		$("#username").focus();
-	</script>
-
 	<script event="keypress" arguments="event">
 		if(event.getKeyIdentifier() === "Enter") $("#loginButton").execute();
 	</script>
 
-	<script>
+	<script event="ready">
 		$.Form.validate();
+		$("#username").focus();
 	</script>
 
 </form>

@@ -23,13 +23,14 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	construct: function(parentComponent) {
 		this.base(arguments, parentComponent);
-		this.__status = "NEW";
+		this.__state = "NEW";
 		this.__components = { };
 		this.__connections = [ ];
 	},
 
 	events: {
-		"close": "qx.event.type.Data"
+		"close": "qx.event.type.Data",
+		"ready": "qx.event.type.Event"
 	},
 
 	properties: {
@@ -41,7 +42,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 	members: {
 
-		__status: null,
+		__state: null,
 		__components: null,
 		__connections: null,
 		__scriptingContext: null,
@@ -115,11 +116,14 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		isReady: function() {
-			return this.__status === "READY";
+			return this.__state === "READY";
 		},
 
 		markAsReady: function() {
-			this.__status = "READY";
+			if(this.__state !== "NEW")
+				return;
+			this.__state = "READY";
+			this.fireEvent("ready");
 		},
 
 		// Getters and setters
@@ -434,7 +438,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 	},
 
 	destruct: function() {
-		this.__status = "DISPOSED";
+		this.__state = "DISPOSED";
 		for(var i = 0; i < this.__connections.length; i++)
 			this.__connections[i].disconnect();
 		this.debug("Destructed");
