@@ -25,9 +25,9 @@
 
 	<dirname property="qookery.repository" file="${ant.file.qookery.common}" />
 
-	<condition property="qooxdoo.version" value="5.0.2"><not><isset property="qooxdoo.version" /></not></condition>
+	<condition property="qooxdoo.branch" value="master"><not><isset property="qooxdoo.branch" /></not></condition>
 	<!-- Change below value to "qooxdoo-master" when building against the qooxdoo master branch checkout -->
-	<property name="qooxdoo.directoryName" value="qooxdoo-${qooxdoo.version}-sdk" />
+	<property name="qooxdoo.directoryName" value="qooxdoo-${qooxdoo.branch}" />
 	<property name="qooxdoo.downloadDirectory" value="${build.root}/qooxdoo" />
 	<property name="qooxdoo.repository" value="${qooxdoo.downloadDirectory}/${qooxdoo.directoryName}" />
 	<property name="qooxdoo.relativePath" value="../../qooxdoo" />
@@ -76,19 +76,11 @@
 	</target>
 
 	<target name="Setup-Qooxdoo-DownloadSdk" unless="build.qooxdooInstalled">
-		<loadresource property="qooxdoo.version.underscores">
-			<propertyresource name="qooxdoo.version" />
-			<filterchain>
-				<tokenfilter>
-					<replaceregex pattern="\." replace="_" flags="g" />
-				</tokenfilter>
-			</filterchain>
-		</loadresource>
 		<get dest="${qooxdoo.downloadDirectory}" skipExisting="true" verbose="on" httpusecaches="no">
-			<url url="https://github.com/qooxdoo/qooxdoo/releases/download/release_${qooxdoo.version.underscores}/qooxdoo-${qooxdoo.version}-sdk.zip" />
+			<url url="https://github.com/qooxdoo/qooxdoo/archive/${qooxdoo.branch}.zip" />
 		</get>
-		<unzip src="${qooxdoo.downloadDirectory}/qooxdoo-${qooxdoo.version}-sdk.zip" dest="${qooxdoo.downloadDirectory}/" />
-		<chmod dir="${qooxdoo.downloadDirectory}/qooxdoo-${qooxdoo.version}-sdk/tool/bin" includes="*.py" perm="+x" />
+		<unzip src="${qooxdoo.downloadDirectory}/${qooxdoo.branch}.zip" dest="${qooxdoo.downloadDirectory}/" />
+		<chmod dir="${qooxdoo.downloadDirectory}/qooxdoo-${qooxdoo.branch}/tool/bin" includes="*.py" perm="+x" />
 	</target>
 
 	<target name="Setup-Qooxdoo-SymLinks" unless="build.qooxdooInstalled">

@@ -1,16 +1,15 @@
 {
+	"$schema": "https://www.qooxdoo.org/schema/Manifest-1-0-0.json",
 	"info": {
 		"name": "Qookery Calendar",
 		"summary": "Qookery extension: FullCalendar integration",
 		"homepage": "http://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
-			{ "name": "George Nikolaidis (geonik)", "email": "geonik@ergobyte.gr" },
-			{ "name": "Stelios Joseph Karras (jkarr)", "email": "jkarr@ergobyte.gr" }
+			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },
+			{ "name": "Stelios Joseph Karras", "email": "jkarr@ergobyte.gr" }
 		],
-		"version": "0.6.0",
-		"qooxdoo-versions": [ "5.0.2", "6.0.0" ],
-		"qooxdoo-range" : "^6.0.0-alpha"
+		"version": "0.7.0"
 	},
 	"provides": {
 		"namespace": "qookery.calendar",
@@ -18,6 +17,11 @@
 		"class": "source/class",
 		"resource": "source/resource",
 		"translation": "source/translation",
-		"type": "component"
+		"type": "contribution"
+	},
+	"requires": {
+		"@qooxdoo/framework": "^6.0.0-beta",
+		"@qooxdoo/compiler": "^1.0.0-beta",
+		"ergobyte/qookery/qookery": ">=0.7.0"
 	}
 }
