@@ -49,7 +49,7 @@ qx.Class.define("qookerydemo.Application", {
 
 	members: {
 
-		__applicationForm: null,
+		__form: null,
 
 		main: function() {
 			this.base(arguments);
@@ -62,20 +62,17 @@ qx.Class.define("qookerydemo.Application", {
 
 			// Setup Qookery
 			qookery.Qookery.setOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY, "AIzaSyB6WP2UY69lxzzLtpdTw4GVBlXRyLF4_Pw");
-			qookery.Qookery.getRegistry().registerComponentType(
-					"{http://www.qookery.org/ns/Form/Demo}demo-selector",
-					qookery.impl.WrapperComponent.bind(null, qookerydemo.DemoSelector));
-			qookery.Qookery.getRegistry().registerComponentType(
-					"{http://www.qookery.org/ns/Form/Demo}result-area",
-					qookery.impl.WrapperComponent.bind(null, qookerydemo.ResultArea));
+			qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/Demo}demo-selector", qookerydemo.DemoSelector);
+			qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/Demo}result-area", qookerydemo.ResultArea);
 
 			// Load application form and install it in root composite
 			var applicationXml = qookery.Qookery.getService("ResourceLoader", true).loadResource("qookerydemo/forms/application.xml");
 			var applicationDocument = qx.xml.Document.fromString(applicationXml);
 			var parser = qookery.Qookery.createFormParser({ isRoot: true });
 			try {
-				var component = this.__applicationForm = parser.parseXmlDocument(applicationDocument);
-				this.getRoot().add(component.getMainWidget(), { edge: 0 });
+				this.__form = parser.parseXmlDocument(applicationDocument);
+				this.getRoot().add(this.__form.getMainWidget(), { edge: 0 });
+				qx.core.Id.getInstance().register(this.__form, "qookerydemo");
 			}
 			catch(e) {
 				this.error("Error creating application root form", e);
@@ -95,6 +92,6 @@ qx.Class.define("qookerydemo.Application", {
 	},
 
 	destruct: function() {
-		this._disposeObjects("__applicationForm");
+		this._disposeObjects("__form");
 	}
 });

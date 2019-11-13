@@ -16,29 +16,38 @@
 	limitations under the License.
 */
 
-qx.Class.define("qookerydemo.ResultArea",
-{
-	extend: qx.ui.container.Scroll,
+qx.Class.define("qookerydemo.ResultArea", {
 
-	construct: function(component) {
-		this.base(arguments);
+	extend: qookery.internal.components.Component,
+
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
 	},
 
 	members: {
 
-		__formComponent: null,
+		__form: null,
+
+		_createWidgets: function() {
+			var scroll = new qx.ui.container.Scroll();
+			this._applyWidgetAttributes(scroll);
+			return [ scroll ];
+		},
 
 		loadForm: function(formXml) {
-			this._disposeObjects("__formComponent");
+			if(this.getQxObject("result") != null)
+				this.removeOwnedQxObject("result");
+			this._disposeObjects("__form");
 			var xmlDocument = qx.xml.Document.fromString(formXml);
 			var parser = qookery.Qookery.createFormParser();
 			try {
-				this.__formComponent = parser.parseXmlDocument(xmlDocument);
-				this.__formComponent.addListenerOnce("close", function() {
-					this._disposeObjects("__formComponent");
+				this.__form = parser.parseXmlDocument(xmlDocument);
+				this.__form.addListenerOnce("close", function() {
+					this._disposeObjects("__form");
 				}, this);
-				this.add(this.__formComponent.getMainWidget());
-				this.__formComponent.markAsReady();
+				this.getMainWidget().add(this.__form.getMainWidget());
+				this.addOwnedQxObject(this.__form, "result");
+				this.__form.markAsReady();
 			}
 			catch(e) {
 				this.error("Error creating form window", e);
@@ -49,19 +58,19 @@ qx.Class.define("qookerydemo.ResultArea",
 		},
 
 		getFormComponent: function() {
-			return this.__formComponent;
+			return this.__form;
 		},
 
 		getModel: function() {
-			return this.__formComponent.getModel();
+			return this.__form.getModel();
 		},
 
 		setModel: function(model) {
-			this.__formComponent.setModel(model);
+			this.__form.setModel(model);
 		}
 	},
 
 	destruct: function() {
-		this._disposeObjects("__formComponent");
+		this._disposeObjects("__form");
 	}
 });

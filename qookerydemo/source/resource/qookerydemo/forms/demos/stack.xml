@@ -5,6 +5,8 @@
 <form xmlns="http://www.qookery.org/ns/Form"
 		layout="v-box" spacing="10">
 
+	<import class="qx.core.Id" />
+
 	<composite layout="h-box" spacing="10">
 		<button label="Page 1">
 			<script event="execute">
@@ -25,14 +27,18 @@
 
 	<stack id="stack" decorator="group" height="100" flex="1">
 		<composite id="page1" layout="basic">
-			<label label="First Page" text-color="red" />
+			<label label="Tap to find out page's ID" text-color="red" />
 		</composite>
 		<composite id="page2" layout="basic">
-			<label label="Second Page" text-color="blue" />
+			<label label="Tap to find out page's ID" text-color="blue" />
 		</composite>
 		<composite id="page3" layout="basic">
-			<label label="Third Page" text-color="green" />
+			<label label="Tap to find out page's ID" text-color="green" />
 		</composite>
 	</stack>
+
+	<script event="tap" component="page1 page2 page3">
+		alert($.Id.getAbsoluteIdOf(this));
+	</script>
 
 </form>

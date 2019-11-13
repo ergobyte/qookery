@@ -18,21 +18,29 @@
 
 qx.Class.define("qookerydemo.DemoSelector", {
 
-	extend: qx.ui.toolbar.MenuButton,
+	extend: qookery.internal.components.Component,
 
-	construct: function(component) {
-		this.base(arguments, "Demo Selection", "qookerydemo/icons/24/samples.png");
-		var demoListMenu = new qx.ui.menu.Menu();
-		qookerydemo.Application.CONFIGURATIONS.forEach(function(configuration) {
-			var label = configuration["label"];
-			var button = new qx.ui.menu.Button(label);
-			button.addListener("execute", function() {
-				var demoName = configuration["name"];
-				var form = this.getUserData("qookeryComponent").getForm();
-				form.executeAction("load", demoName);
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
+	},
+
+	members: {
+
+		_createWidgets: function() {
+			var button = new qx.ui.toolbar.MenuButton("Demo Selection", "qookerydemo/icons/24/samples.png");
+			var demoListMenu = new qx.ui.menu.Menu();
+			qookerydemo.Application.CONFIGURATIONS.forEach(function(configuration) {
+				var label = configuration["label"];
+				var button = new qx.ui.menu.Button(label);
+				button.addListener("execute", function() {
+					var demoName = configuration["name"];
+					this.getForm().executeAction("load", demoName);
+				}, this);
+				demoListMenu.add(button);
 			}, this);
-			demoListMenu.add(button);
-		}, this);
-		this.setMenu(demoListMenu);
+			button.setMenu(demoListMenu);
+			this._applyWidgetAttributes(button);
+			return [ button ];
+		}
 	}
 });

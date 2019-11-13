@@ -106,7 +106,7 @@
 							var text = $("#jsonEditor").getValue();
 							var json = qx.lang.Json.parse(text);
 							var model = qx.data.marshal.Json.createModel(json, true);
-							$("#resultArea").getMainWidget().setModel(model);
+							$("#resultArea").setModel(model);
 
 						</script>
 
@@ -116,7 +116,7 @@
 
 						<script event="execute">
 
-							$("#resultArea").getMainWidget().setModel(null);
+							$("#resultArea").setModel(null);
 
 						</script>
 
@@ -126,7 +126,7 @@
 
 						<script event="execute">
 
-							var model = $("#resultArea").getMainWidget().getModel();
+							var model = $("#resultArea").getModel();
 							var text = qx.util.Serializer.toJson(model);
 							$("#jsonEditor").setValue(text);
 
@@ -169,7 +169,7 @@
 		var xmlCode = $("#xmlEditor").getValue();
 		if(xmlCode == null) return;
 
-		$("#resultArea").getMainWidget().loadForm(xmlCode);
+		$("#resultArea").loadForm(xmlCode);
 
 	</script>
 
