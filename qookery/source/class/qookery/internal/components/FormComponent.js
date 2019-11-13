@@ -178,14 +178,21 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		// Component registration
 
 		getComponent: function(componentId, required) {
-			var component = this.__components[componentId];
+			var component;
+			if(qx.core.Environment.get("module.objectid"))
+				component = this.getQxObject(componentId);
+			else
+				component = this.__components[componentId];
 			if(component == null && required === true)
 				throw new Error(qx.lang.String.format("Reference to unregistered component '%1'", [ componentId ]));
 			return component;
 		},
 
 		putComponent: function(componentId, component) {
-			this.__components[componentId] = component;
+			if(qx.core.Environment.get("module.objectid"))
+				this.addOwnedQxObject(component, componentId);
+			else
+				this.__components[componentId] = component;
 		},
 
 		// Client scripting context
