@@ -36,6 +36,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 	construct: function(configuration) {
 		this.base(arguments);
+		qx.core.ObjectRegistry.register(this);
 		this.__configuration = configuration;
 		// Defer creation of CKEditor until after positioning is done
 		this.addListenerOnce("appear", function(event) {

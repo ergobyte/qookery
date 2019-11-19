@@ -163,11 +163,24 @@ qx.Class.define("qookery.util.Xml", {
 			case "RegularExpression":
 				return new RegExp(text);
 			case "ReplaceableString":
-				if(text.length < 2) return text;
-				if(text.charAt(0) !== "%") return text;
+				if(text.length < 2)
+					return text;
+				if(text.charAt(0) !== "%")
+					return text;
 				if(text.charAt(1) === "{" && text.charAt(text.length - 1) === "}") {
 					var expression = text.substring(2, text.length - 1);
-					return component.evaluateExpression(expression);
+					switch(expression) {
+					case "false":
+						return false;
+					case "null":
+						return null;
+					case "undefined":
+						return undefined;
+					case "true":
+						return true;
+					default:
+						return component.evaluateExpression(expression);
+					}
 				}
 				var messageId = text.substring(1);
 				return component["tr"](messageId);

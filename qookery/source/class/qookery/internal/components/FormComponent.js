@@ -189,8 +189,12 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 		},
 
 		putComponent: function(componentId, component) {
-			if(qx.core.Environment.get("module.objectid"))
+			if(qx.core.Environment.get("module.objectid")) {
+				var owner = component.getQxOwner();
+				if(owner != null)
+					owner.removeOwnedQxObject(component);
 				this.addOwnedQxObject(component, componentId);
+			}
 			else
 				this.__components[componentId] = component;
 		},
