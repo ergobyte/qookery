@@ -151,7 +151,11 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		// Public APIs
 
 		getDate: function() {
-			return jQuery("#" + this.__domIdentifier).fullCalendar("getDate");
+			return this.__calendar.fullCalendar("getDate");
+		},
+
+		setDate: function(date) {
+			this.__calendar.fullCalendar("gotoDate", date);
 		},
 
 		// Internals
@@ -179,7 +183,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "addEventSource":
 				try {
 					// Work around a strange bug when fullcalendar is loaded in an invisible DOM element
-					this.__calendar.fullCalendar("gotoDate", this.getAttribute("default-date", new Date()));
+					this.setDate(this.getAttribute("default-date", new Date()));
 					this.__calendar.fullCalendar("addEventSource", { events: function(start, end, timezone, callback) {
 						this.executeAction("getEvents", start, end, timezone, callback);
 					}.bind(this) });

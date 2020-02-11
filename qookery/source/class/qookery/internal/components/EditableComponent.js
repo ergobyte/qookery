@@ -223,8 +223,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		validate: function() {
-			if(!this.getEnabled()) return null;
-			var errors = this._runValidations();
+			var errors = this.getEnabled() ? this._runValidations() : null;
 			return this._applyValidationErrors(errors);
 		},
 
