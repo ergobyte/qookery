@@ -151,11 +151,14 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		// Public APIs
 
 		getDate: function() {
-			return this.__calendar.fullCalendar("getDate");
+			return this.__calendar != null ?
+				this.__calendar.fullCalendar("getDate") :
+				moment(this.getAttribute("default-date", new Date()));
 		},
 
 		setDate: function(date) {
-			this.__calendar.fullCalendar("gotoDate", date);
+			if(this.__calendar != null)
+				this.__calendar.fullCalendar("gotoDate", date);
 		},
 
 		// Internals

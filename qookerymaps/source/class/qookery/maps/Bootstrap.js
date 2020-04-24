@@ -41,12 +41,20 @@ qx.Bootstrap.define("qookery.maps.Bootstrap", {
 
 	defer: function() {
 		var registry = qookery.Qookery.getRegistry();
-		registry.registerLibrary("googleLoader", [ "js@//www.google.com/jsapi" ]);
-		registry.registerLibrary("googleMaps", null, [ "googleLoader" ], function(callback) {
-			var parameters = { };
+		registry.registerLibrary("googleMaps", null, null, function(callback) {
+			var src = "https://maps.googleapis.com/maps/api/js?callback=_googleMapsCallback";
 			var apiKey = qookery.Qookery.getOption(qookery.maps.Bootstrap.OPTIONS_GOOGLE_API_KEY);
-			if(apiKey != null) parameters["key"] = apiKey;
-			google.load("maps", "3", { other_params: qx.util.Uri.toParameter(parameters, false), callback: callback });
+			if(apiKey != null)
+				src += "&key=" + apiKey;
+			var script = document.createElement("script");
+			script.src = src;
+			script.defer = true;
+			script.async = true;
+			window._googleMapsCallback = function() {
+				window._googleMapsCallback = null;
+				callback();
+			};
+			document.head.appendChild(script);
 			return false;
 		});
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Maps}map-location", qookery.maps.internal.MapLocationComponent);
