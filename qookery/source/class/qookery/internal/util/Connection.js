@@ -33,21 +33,42 @@ qx.Class.define("qookery.internal.util.Connection", {
 
 		connect: function(model) {
 			this.disconnect();
-			if(qx.core.ObjectRegistry.inShutDown) return;
+			if(qx.core.ObjectRegistry.inShutDown)
+				return;
 			var editableComponent = this.__editableComponent;
-			if(model == null || editableComponent == null) return;
-			var bindingId = model.bind(this.__propertyPath, editableComponent, "value");
-			this.__disconnectCallback = function() {
-				if(model.isDisposed()) return;
-				qx.data.SingleValueBinding.removeBindingFromObject(model, bindingId);
-			};
+			if(model == null || editableComponent == null)
+				return;
+			try {
+				var bindingId = model.bind(this.__propertyPath, editableComponent, "value");
+				this.__disconnectCallback = function() {
+					if(model.isDisposed())
+						return;
+					qx.data.SingleValueBinding.removeBindingFromObject(model, bindingId);
+				};
+			}
+			catch(e) {
+				// Creation of binding failed, probably due to the lack of appropriate event in the model
+				// We resort to simply setting the editor's value, without reacting to model changes
+				editableComponent.setValue(this.getModelValue(model));
+			}
+		},
+
+		getModelValue: function(model) {
+			var segments = this.__propertyPath.split(".");
+			for(var i = 0; i < segments.length; i++) {
+				model = model["get" + qx.lang.String.firstUp(segments[i])]();
+				if(model == null)
+					return null;
+			}
+			return model;
 		},
 
 		setModelValue: function(model, value) {
 			var segments = this.__propertyPath.split(".");
 			for(var i = 0; i < segments.length - 1; i++) {
 				model = model["get" + qx.lang.String.firstUp(segments[i])]();
-				if(model == null) return;
+				if(model == null)
+					return;
 			}
 			model["set" + qx.lang.String.firstUp(segments[segments.length - 1])](value);
 		},
@@ -72,12 +93,6 @@ qx.Class.define("qookery.internal.util.Connection", {
 		equals: function(other) {
 			return other.__editableComponent === this.__editableComponent &&
 					other.__propertyPath == this.__propertyPath;
-		},
-
-		__getPropertyChainArray: function(propertyChain) {
-			return propertyChain.replace(/\[/g, ".[").split(".").filter(function(name) {
-				return name !== "";
-			});
 		}
 	}
 });
