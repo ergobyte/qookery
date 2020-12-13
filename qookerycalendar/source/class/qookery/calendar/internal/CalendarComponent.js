@@ -161,6 +161,10 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				this.__calendar.fullCalendar("gotoDate", date);
 		},
 
+		getView: function() {
+			return this.__calendar.fullCalendar("getView");
+		},
+
 		// Internals
 
 		__isCalendarSeeable: function() {
