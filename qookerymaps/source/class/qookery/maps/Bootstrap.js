@@ -57,6 +57,7 @@ qx.Bootstrap.define("qookery.maps.Bootstrap", {
 			document.head.appendChild(script);
 			return false;
 		});
+		registry.registerComponentType("{http://www.qookery.org/ns/Form/Maps}map-component", qookery.maps.internal.MapComponent);
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Maps}map-location", qookery.maps.internal.MapLocationComponent);
 	}
 });

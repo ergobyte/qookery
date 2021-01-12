@@ -25,6 +25,20 @@
 
 	<import namespace="http://www.qookery.org/ns/Form" />
 
+	<element name="map-component"><complexType><complexContent><extension base="q:editable-component">
+		<attribute name="center"><simpleType><list itemType="decimal" /></simpleType></attribute>
+		<attribute name="map-type" default="roadmap"><simpleType><restriction base="token">
+			<enumeration value="roadmap"/>
+			<enumeration value="satellite"/>
+			<enumeration value="hybrid"/>
+			<enumeration value="terrain"/>
+		</restriction></simpleType></attribute>
+		<attribute name="provider" default="google"><simpleType><restriction base="token">
+			<enumeration value="google"/>
+		</restriction></simpleType></attribute>
+		<attribute name="zoom" type="positiveInteger" default="6" />
+	</extension></complexContent></complexType></element>
+
 	<element name="map-location"><complexType><complexContent><extension base="q:editable-component">
 		<attribute name="center"><simpleType><list itemType="decimal" /></simpleType></attribute>
 		<attribute name="map-type" default="roadmap"><simpleType><restriction base="token">
