@@ -38,6 +38,7 @@
 			<enumeration value="wide" />
 		</restriction></simpleType></attribute>
 		<attribute name="display-indent-guides" type="boolean" default="true" />
+		<attribute name="font-size" type="positiveInteger" default="12" />
 		<attribute name="h-scroll-bar-always-visible" default="false" />
 		<attribute name="highlight-active-line" default="true" />
 		<attribute name="mode" default="plain_text"><simpleType><restriction base="token">

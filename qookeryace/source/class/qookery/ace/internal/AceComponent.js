@@ -49,6 +49,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			case "use-wrap-mode":
 			case "v-scroll-bar-always-visible":
 				return "Boolean";
+			case "font-size":
 			case "print-margin-column":
 			case "tab-size":
 				return "Integer";
@@ -150,6 +151,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.setShowInvisibles(this.getAttribute("show-invisibles", false));
 			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
 			editor.setOption("cursorStyle", this.getAttribute("cursor-style", "ace"));
+			editor.setFontSize(this.getAttribute("font-size", 12));
 			var autoComplete = this.getAttribute("auto-complete");
 			if(autoComplete != null) {
 				editor.setOption("enableBasicAutocompletion", qx.lang.Array.contains(autoComplete, "basic"));
