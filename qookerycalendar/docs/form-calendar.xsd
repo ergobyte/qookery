@@ -54,6 +54,7 @@
 		<attribute name="min-time" type="time" default="00:00:00" />
 		<attribute name="scroll-time" type="time" default="06:00:00" />
 		<attribute name="selectable" type="boolean" default="false" />
+		<attribute name="snap-duration" type="time" default="00:10:00" />
 		<attribute name="slot-duration" type="time" default="00:30:00" />
 		<attribute name="time-format" type="string" default="h(:mm)t" />
 		<attribute name="timezone"><simpleType><union memberTypes="token"><simpleType><restriction base="token">

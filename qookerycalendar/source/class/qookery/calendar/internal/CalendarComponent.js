@@ -124,6 +124,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				minTime: this.getAttribute("min-time", "00:00:00"),
 				scrollTime: this.getAttribute("scroll-time", "06:00:00"),
 				selectable: this.getAttribute("selectable", false),
+				snapDuration: this.getAttribute("snap-duration", "00:10:00"),
 				slotDuration: this.getAttribute("slot-duration", "00:30:00"),
 				timeFormat: this.getAttribute("time-format", "h(:mm)t"),
 				timezone: this.getAttribute("timezone", false)
