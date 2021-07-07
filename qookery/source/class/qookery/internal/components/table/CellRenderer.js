@@ -50,13 +50,14 @@ qx.Class.define("qookery.internal.components.table.CellRenderer", {
 
 		_getContentHtml: function(cellInfo) {
 			var text = this._formatValue(cellInfo);
-			return qx.bom.String.escape(text);
+			return String.escapeXml(text);
 		},
 
 		_formatValue: function(cellInfo) {
 			var value = cellInfo.value;
-			if(value == null) return "";
-			if(this.__format) try {
+			if(value == null)
+				return "";
+			if(this.__format != null) try {
 				value = this.__format.format(value);
 			}
 			catch(e) {
