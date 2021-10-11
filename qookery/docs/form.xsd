@@ -526,6 +526,7 @@
 	<group name="flow-control-statements">
 		<annotation><documentation>Elements that control the parsing flow</documentation></annotation>
 		<choice>
+			<element ref="q:for-each" />
 			<element ref="q:else" />
 			<element ref="q:if" />
 			<element ref="q:switch" />
@@ -967,6 +968,24 @@
 				</element>
 			</sequence>
 			<attribute name="expression" type="q:javascript-expression" use="required" />
+		</complexType>
+	</element>
+
+	<element name="for-each">
+		<annotation><documentation>
+			Evaluate a JS expression producing an array or map and execute statement block for each element
+		</documentation></annotation>
+		<complexType>
+			<choice minOccurs="0" maxOccurs="unbounded">
+				<group ref="q:statements" />
+			</choice>
+			<attribute name="expression" type="q:javascript-expression" use="required" />
+			<attribute name="key-variable" type="q:javascript-identifier"><annotation><documentation>
+				Name of the form context ("$") variable that will receive the current iteration map key or array index
+			</documentation></annotation></attribute>
+			<attribute name="value-variable" type="q:javascript-identifier"><annotation><documentation>
+				Name of the form context ("$") variable that will receive the current iteration map value or array element
+			</documentation></annotation></attribute>
 		</complexType>
 	</element>
 

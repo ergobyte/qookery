@@ -34,4 +34,20 @@
 		</case>
 	</switch>
 
+	<for-each expression="['forever', 'ever', 'ever again']" key-variable="ordinal" value-variable="duration">
+		<label label="%{$.duration}" />
+		<if expression="$.ordinal !== 2">
+			<label label="and" />
+		</if>
+	</for-each>
+
+	<label label="because" />
+
+	<for-each expression="{'roses': 'red', 'violets': 'blue'}" key-variable="flower" value-variable="color">
+		<label label="%{$.flower}" />
+		<label label="are" />
+		<label label="%{$.color}" />
+		<label label="%{$.flower !== 'violets' ? 'and' : '!'}" />
+	</for-each>
+
 </form>

@@ -99,6 +99,9 @@ qx.Class.define("qookery.internal.FormParser", {
 				case "{http://www.qookery.org/ns/Form}if":
 					selectionMade = this.__parseIfElse(statementElement, component);
 					return previousResult;
+				case "{http://www.qookery.org/ns/Form}for-each":
+					this.__parseForEach(statementElement, component);
+					return previousResult;
 				case "{http://www.qookery.org/ns/Form}script":
 					this.__parseScript(statementElement, component);
 					return previousResult;
@@ -222,6 +225,37 @@ qx.Class.define("qookery.internal.FormParser", {
 			finally {
 				formParser.dispose();
 			}
+		},
+
+		__parseForEach: function(forEachElement, component) {
+			var expression = qookery.util.Xml.getAttribute(forEachElement, "expression");
+			if(expression == null)
+				throw new Error("For-each expression is required");
+			var result = component.evaluateExpression(expression);
+			if(result == null)
+				return;
+			var scriptingContext = component.getForm().getScriptingContext();
+			var keyVariable = qookery.util.Xml.getAttribute(forEachElement, "key-variable");
+			var valueVariable = qookery.util.Xml.getAttribute(forEachElement, "value-variable");
+			if(qx.lang.Type.isArray(result)) {
+				for(var i = 0; i < result.length; i++) {
+					if(keyVariable != null)
+						scriptingContext[keyVariable] = i;
+					if(valueVariable != null)
+						scriptingContext[valueVariable] = result[i];
+					this.__parseStatementBlock(forEachElement, component);
+				}
+			}
+			else if(qx.lang.Type.isObject(result)) {
+				for(var key in result) {
+					if(keyVariable != null)
+						scriptingContext[keyVariable] = key;
+					if(valueVariable != null)
+						scriptingContext[valueVariable] = result[key];
+					this.__parseStatementBlock(forEachElement, component);
+				}
+			}
+			else throw new Error("For-each expression must evaluate to a map or array");
 		},
 
 		__parseIfElse: function(selectionElement, component) {
