@@ -50,6 +50,15 @@ qx.Class.define("qookery.internal.components.ToggleButtonComponent", {
 				var type = this.getAttribute("model-type", "String");
 				this.setModel(qookery.util.Xml.parseValue(this, type, model));
 			}
+			var toggleButton = this.getMainWidget();
+			if(this.getAttribute("tri-state", false)) {
+				toggleButton.__availableStates = [ true, false, null ];
+				toggleButton.toggleValue = function() {
+					this.__currentState = this.__availableStates.indexOf(this.getValue());
+					this.__currentState = this.__currentState >= 2 ? 0 : this.__currentState + 1;
+					this.setValue(this.__availableStates[this.__currentState]);
+				}.bind(toggleButton);
+			}
 			return this.base(arguments);
 		},
 

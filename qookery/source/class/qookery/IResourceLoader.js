@@ -30,10 +30,11 @@ qx.Interface.define("qookery.IResourceLoader", {
 		 * by qx.util.ResourceManager</p>
 		 *
 		 * @param name {String} the name of the resource
+		 * @param absolute {Boolean} if <code>true</code>, return an absolute URL instead of default relative one
 		 *
 		 * @return {String} a URI that can be used to load the resource
 		 */
-		resolveResourceUri: function(name) { },
+		resolveResourceUri: function(name, absolute) { },
 
 		/**
 		 * Load a remote resource (sync or async)

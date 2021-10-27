@@ -50,7 +50,8 @@ qx.Class.define("qookery.internal.components.ContainerComponent", {
 		create: function(attributes) {
 			this.base(arguments, attributes);
 			var layoutName = this.getAttribute("layout", "{http://www.qookery.org/ns/Form}grid");
-			if(layoutName === "none") return;
+			if(layoutName === "none")
+				return;
 			var layoutFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_LAYOUT_FACTORY, layoutName, true);
 			var layout = this.__layout = layoutFactory.createLayout(this);
 			this.getContainerWidget().setLayout(layout);
