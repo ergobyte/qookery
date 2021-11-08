@@ -138,13 +138,6 @@ qx.Interface.define("qookery.IFormComponent", {
 		// Operations
 
 		/**
-		 * Validate form contents
-		 *
-		 * @return {qookery.util.ValidationError?} error found or <code>null</code> in case form is valid
-		 */
-		validate: function() { },
-
-		/**
 		 * Close the form
 		 *
 		 * @param result {any} optional value to set into the <code>result</code> variable

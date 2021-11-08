@@ -1,0 +1,47 @@
+ {
+	"$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
+	"applications": [
+		{
+			"class": "qookerydemo.Application",
+			"name": "qookerydemo",
+			"theme": "qookerydemo.theme.Theme",
+			"bootPath": "source/boot",
+			"include": [
+				"qookery.*",
+				"qookery.ace.*",
+				"qookery.calendar.*",
+				"qookery.maps.*",
+				"qookery.richtext.*",
+				"qookerydemo.*"
+			]
+		}
+	],
+	"targets": [
+		{
+			"type": "source",
+			"outputPath": "compiled/source"
+
+		},
+		{
+			"type": "build",
+			"outputPath": "compiled/build",
+			"deployPath": "compiled/deploy"
+		}
+	],
+	"defaultTarget": "source",
+	"locales": [ "en", "el" ],
+	"libraries": [
+		"../qookeryace",
+		"../qookerycalendar",
+		"../qookerymaps",
+		"../qookeryrichtext",
+		"../qookery",
+		"."
+	],
+	"eslintConfig": {
+		"extends": [
+			"@qooxdoo/eslint-config-qx",
+			"../qookery/.eslintrc.json"
+		]
+	}
+}

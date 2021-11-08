@@ -154,8 +154,7 @@
 			<!-- A application specific component is used to load / unload forms within an
 				 initially empty scroll area -->
 
-			<demo:result-area xmlns:demo="http://www.qookery.org/ns/Form/Demo"
-					id="resultArea" flex="1" />
+			<demo:result-area xmlns:demo="http://www.qookery.org/ns/Form/Demo" id="resultArea" flex="1" />
 
 		</composite>
 

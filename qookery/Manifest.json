@@ -1,5 +1,5 @@
 {
-	"$schema": "https://www.qooxdoo.org/schema/Manifest-1-0-0.json",
+	"$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json",
 	"info": {
 		"name": "Qookery",
 		"summary": "Qookery: Declarative UI Building for Qooxdoo",
@@ -8,6 +8,7 @@
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },
+			{ "name": "Jenny Pliatsika", "email": "jenny@ergobyte.gr", "githubUser": "jennytzen" },
 			{ "name": "Stelios Joseph Karras", "email": "jkarr@ergobyte.gr" },
 			{ "name": "Nikos Lamprakis", "email": "nikoslam@ergobyte.gr" }
 		],
@@ -18,11 +19,10 @@
 		"encoding": "utf-8",
 		"class": "source/class",
 		"resource": "source/resource",
-		"translation": "source/translation",
-		"type": "library"
+		"translation": "source/translation"
 	},
 	"requires": {
-		"@qooxdoo/framework": "^6.0.0-beta",
-		"@qooxdoo/compiler": "^1.0.0-beta"
+		"@qooxdoo/framework": "^6.0.2",
+		"@qooxdoo/compiler": "^1.0.2"
 	}
 }

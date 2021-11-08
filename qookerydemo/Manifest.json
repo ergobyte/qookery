@@ -1,5 +1,5 @@
 {
-	"$schema": "https://www.qooxdoo.org/schema/Manifest-1-0-0.json",
+	"$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json",
 	"info": {
 		"name": "Qookery Demo",
 		"summary": "Qookery demo runner application",
@@ -8,6 +8,7 @@
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },
+			{ "name": "Jenny Pliatsika", "email": "jenny@ergobyte.gr", "githubUser": "jennytzen" },
 			{ "name": "Stelios Joseph Karras", "email": "stylkarr@gmail.com" },
 			{ "name": "Nikos Lamprakis", "email": "nikoslam@ergobyte.gr" }
 		],
@@ -18,12 +19,10 @@
 		"encoding": "utf-8",
 		"class": "source/class",
 		"resource": "source/resource",
-		"translation": "source/translation",
-		"type": "application"
+		"translation": "source/translation"
 	},
 	"requires": {
-		"@qooxdoo/framework": "^6.0.0-beta",
-		"@qooxdoo/compiler": "^1.0.0-beta",
-		"ergobyte/qookery/qookery": ">=0.7.0"
+		"@qooxdoo/framework": "^6.0.2",
+		"@qooxdoo/compiler": "^1.0.2"
 	}
 }

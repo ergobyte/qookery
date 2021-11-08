@@ -83,11 +83,15 @@ qx.Class.define("qookerydemo.Application", {
 			}
 
 			// Remove splash screen
-			qx.dom.Element.remove(document.getElementById("splash"));
+			var splashElement = document.getElementById("splash");
+			if(splashElement != null)
+				qx.dom.Element.remove(splashElement);
 		},
 
 		getDemoConfiguration: function(name) {
-			return this.constructor.CONFIGURATIONS.filter(function(c) { return c["name"] === name; })[0];
+			return this.constructor.CONFIGURATIONS.filter(function(c) {
+				return c["name"] === name;
+			})[0];
 		}
 	},
 

@@ -29,8 +29,7 @@
 				margin: 200px auto 0 auto;
 				border: 1px solid #ccc;
 				width: 400px;
-				-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
-				-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+				box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
 			}
 			#splash a, #splash a:visited {
 				color: #225588;
@@ -41,6 +40,7 @@
 			}
 		</style>
 
+		${preBootJs}
 	</head>
 
 	<body>
@@ -65,7 +65,7 @@
 				var version = "0.4.3.01";
 				var scriptElement = document.createElement("script");
 				scriptElement.type = "text/javascript";
-				scriptElement.src = "script/qookerydemo.js?version=" + version;
+				scriptElement.src = "qookerydemo/index.js?version=" + version;
 				var headElement = document.getElementsByTagName("head")[0];
 				headElement.appendChild(scriptElement);
 			})();

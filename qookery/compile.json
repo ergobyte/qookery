@@ -1,0 +1,8 @@
+{
+	"eslintConfig": {
+		"extends": [
+			"@qooxdoo/eslint-config-qx",
+			".eslintrc.json"
+		]
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"env": {
+		"browser": true
+	},
+	"rules": {
+		"brace-style": [ "error", "stroustrup", { "allowSingleLine": true } ],
+		"curly": "off",
+		"keyword-spacing": "off",
+		"max-statements-per-line": [ "error", { "max": 2 } ],
+		"no-eq-null": "off",
+		"one-var": "off",
+		"one-var-declaration-per-line": "off"
+	}
+}

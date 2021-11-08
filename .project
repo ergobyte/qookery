@@ -13,7 +13,6 @@
 	</buildSpec>
 	<natures>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
-		<nature>org.eclipse.mylyn.wikitext.ui.wikiTextNature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
@@ -31,7 +30,7 @@
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-true-true-qookery[a-z]*/(api|build|source/script|source/resource/qookery[a-z]*/lib)</arguments>
+				<arguments>1.0-projectRelativePath-matches-true-true-qookery[a-z]*/(api|build|compiled|source/script|source/resource/qookery[a-z]*/lib)</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>
