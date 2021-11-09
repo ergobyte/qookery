@@ -127,12 +127,12 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 
 			//user give only time
 			if(dateParts[0].indexOf(":") != -1) {
-					datePart = qx.lang.String.format("%1/%2/%3", [new Date().getDate(),new Date().getMonth()+1, new Date().getFullYear()]);
+					datePart = qx.lang.String.format("%1/%2/%3", [new Date().getDate(), new Date().getMonth()+1, new Date().getFullYear()]);
 					timePart = dateParts[0];
 			}
 			else {
 				datePart = dateParts.length >= 1 ? this.__parseDate(dateParts[0]) : "";
-				if(dateParts.length === 2 && parseInt(this.__inputIndexMap.minutes, 10) !== 0 && parseInt(this.__inputIndexMap.hours, 10) !== 0 ) {
+				if(dateParts.length === 2 && parseInt(this.__inputIndexMap.minutes, 10) !== 0 && parseInt(this.__inputIndexMap.hours, 10) !== 0) {
 					if(dateParts[1].indexOf(":") != -1) {
 						timePart = dateParts[1];
 					}
@@ -167,7 +167,7 @@ qx.Class.define("qookery.internal.components.DateFieldComponent", {
 				string = qx.lang.String.format("%1/%2/%3", [date[0], date[1], date[2]]);
 				break;
 			default:
-				string = qx.lang.String.format("%1/%2/%3", [new Date().getDate(),new Date().getMonth()+1, new Date().getFullYear()]);
+				string = qx.lang.String.format("%1/%2/%3", [new Date().getDate(), new Date().getMonth()+1, new Date().getFullYear()]);
 				break;
 			}
 			return string;

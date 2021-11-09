@@ -304,7 +304,6 @@ qx.Class.define("qookery.internal.components.Component", {
 		 * @param widget {qx.ui.core.Widget} widget to receive layout properties
 		 */
 		_applyWidgetAttributes: function(widget) {
-
 			// Size and position
 
 			this._applyAttribute("width", widget, "width");

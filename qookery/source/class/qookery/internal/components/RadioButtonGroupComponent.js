@@ -68,7 +68,7 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 				items = items.toArray();
 			}
 			if(qx.lang.Type.isArray(items)) {
-				items.map(function(model) {
+				items.forEach(function(model) {
 					var label = this._getLabelOf(model);
 					this.__addGroupItem(model, label);
 				}, this);

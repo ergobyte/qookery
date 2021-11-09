@@ -39,7 +39,7 @@ qx.Class.define("qookery.util.Debug", {
 			var stackTraceLines = qx.dev.StackTrace.getStackTraceFromError(error);
 			if(stackTraceLines == null) return;
 			var lineNumber = null, match;
-			for(var i = 0; i < stackTraceLines.length; i++) {
+			for(let i = 0; i < stackTraceLines.length; i++) {
 				var stackTraceLine = stackTraceLines[i];
 				match = stackTraceLine.match(/<anonymous>:([\d]+):([\d+])/);
 				if(match == null) continue;
@@ -48,7 +48,7 @@ qx.Class.define("qookery.util.Debug", {
 			}
 			if(lineNumber == null) return;
 			var startIndex = 0;
-			for(var i = 3; i < lineNumber; i++) {
+			for(let i = 3; i < lineNumber; i++) {
 				var newLineIndex = sourceCode.indexOf("\n", startIndex);
 				if(newLineIndex === -1) break;
 				startIndex = newLineIndex + 1;

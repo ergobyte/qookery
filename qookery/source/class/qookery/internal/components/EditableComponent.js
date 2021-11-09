@@ -253,6 +253,8 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		/**
 		 * Update component state according to (possibly empty) array of validation errors
 		 *
+		 * @param errors {Array} array of validation errors
+		 *
 		 * @return {qookery.util.ValidationError} merged validation error or <code>null</code> if no errors passed
 		 */
 		_applyValidationErrors: function(errors) {
@@ -260,14 +262,12 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 				this.setValid(true);
 				return null;
 			}
-			else {
-				var componentLabel = this.getLabel() || "";
-				var message = this.tr("qookery.internal.components.EditableComponent.componentError", componentLabel);
-				var error = new qookery.util.ValidationError(this, message, errors);
-				this.setValid(false);
-				this.setInvalidMessage(error.getFormattedMessage());
-				return error;
-			}
+			var componentLabel = this.getLabel() || "";
+			var message = this.tr("qookery.internal.components.EditableComponent.componentError", componentLabel);
+			var error = new qookery.util.ValidationError(this, message, errors);
+			this.setValid(false);
+			this.setInvalidMessage(error.getFormattedMessage());
+			return error;
 		},
 
 		// Apply methods
@@ -365,7 +365,7 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		/**
 		 * Perform all operation about align, width and height for a label
 		 *
-		 * @param widget {qx.ui.basic.Label} label widget
+		 * @param labelWidget {qx.ui.basic.Label} label widget
 		 */
 		_setupLabelAppearance: function(labelWidget) {
 			var currentWidth = labelWidget.getWidth();

@@ -258,7 +258,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		_updateUI: function(value) {
 			// Setting the model data requires some cooperation from the model implementation
 			var tableModel = this.getTableModel();
-			if(tableModel && tableModel.setData && typeof(tableModel.setData) == "function") {
+			if(tableModel && tableModel.setData && typeof tableModel.setData == "function") {
 				tableModel.setData(value);
 			}
 		},

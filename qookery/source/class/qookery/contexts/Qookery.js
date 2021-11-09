@@ -127,6 +127,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 				if(result !== undefined) return result;
 				form = form.getParentForm();
 			}
+			return null;
 		},
 
 		/**
@@ -148,6 +149,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 			for(var i = 0; i < childComponents.length; i++) {
 				qookery.contexts.Qookery.descendComponents(childComponents[i], callback, thisArg);
 			}
+			return null;
 		},
 
 		/**
@@ -202,6 +204,7 @@ qx.Class.define("qookery.contexts.Qookery", {
 				finally {
 					parser.dispose();
 				}
+				return null;
 			};
 
 			var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);

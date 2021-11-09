@@ -87,15 +87,18 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 				return;
 			}
 			var selection = [ ];
+			let item;
 			switch(this.getMainWidget().getSelectionMode()) {
 			case "single": case "one":
-				var item = this.__findItem(value);
-				if(item) selection.push(item);
+				item = this.__findItem(value);
+				if(item)
+					selection.push(item);
 				break;
 			case "multi": case "additive":
 				for(var i = 0; i < value.length; i++) {
-					var item = this.__findItem(value[i]);
-					if(item) selection.push(item);
+					item = this.__findItem(value[i]);
+					if(item)
+						selection.push(item);
 				}
 				break;
 			}
@@ -119,17 +122,18 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 
 		setItems: function(items) {
 			this.removeAllItems();
-			if(items instanceof qx.data.Array) items = items.toArray();
+			if(items instanceof qx.data.Array)
+				items = items.toArray();
 			if(qx.lang.Type.isArray(items)) {
-				for(var i = 0; i < items.length; i++) {
-					var model = items[i];
-					var label = this._getLabelOf(model);
+				for(let i = 0; i < items.length; i++) {
+					let model = items[i];
+					let label = this._getLabelOf(model);
 					this.addItem(model, label);
 				}
 			}
 			else if(qx.lang.Type.isObject(items)) {
-				for(var model in items) {
-					var label = items[model];
+				for(let model in items) {
+					let label = items[model];
 					this.addItem(model, qx.data.Conversion.toString(label));
 				}
 			}

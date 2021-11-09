@@ -4,10 +4,14 @@
 	},
 	"rules": {
 		"brace-style": [ "error", "stroustrup", { "allowSingleLine": true } ],
+		"consistent-return": "off",
 		"curly": "off",
 		"keyword-spacing": "off",
 		"max-statements-per-line": [ "error", { "max": 2 } ],
+		"new-cap": [ "error", { "newIsCap": false } ],
 		"no-eq-null": "off",
+		"no-prototype-builtins": "off",
+		"no-warning-comments": [ 1, { "location": "start", "terms": [ "fixme" ] } ],
 		"one-var": "off",
 		"one-var-declaration-per-line": "off"
 	}

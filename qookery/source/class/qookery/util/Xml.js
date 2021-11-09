@@ -239,6 +239,23 @@ qx.Class.define("qookery.util.Xml", {
 			return attributes;
 		},
 
+		/**
+		 * Escape those five characters that are used as control characters in XML 1.0
+		 *
+		 * @param text {String}
+		 */
+		escape: function(text) {
+			return text.replace(/[<>&'"]/g, function(character) {
+				switch(character) {
+					case "<": return "&lt;";
+					case ">": return "&gt;";
+					case "&": return "&amp;";
+					case "'": return "&apos;";
+					case "\"": return "&quot;";
+				}
+			});
+		},
+
 		__NAMED_SIZES: {
 			"null": null,
 			"XXS": 28,

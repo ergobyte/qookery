@@ -26,8 +26,8 @@ qx.Class.define("qookery.impl.FormWindow", {
 	/**
 	 * Create a new Qookery form window
 	 *
-	 * @param title { String } title of the window
-	 * @param icon { uri } icon of the window
+	 * @param caption {String} title of the window
+	 * @param icon {uri} icon of the window
 	 * @param options {Map ? null} options as defined below
 	 * @param thisArg {Object ? null} an object to set as <code>this</code> for callbacks
 	 *
@@ -61,6 +61,7 @@ qx.Class.define("qookery.impl.FormWindow", {
 		 *
 		 * @param formXml {String} the XML source of the form to create
 		 * @param model {Object} an initial model to set, or <code>null</code> if not needed
+		 * @param variables {Map ? null} optional variables
 		 */
 		createAndOpen: function(formXml, model, variables) {
 			var xmlDocument = qx.xml.Document.fromString(formXml);

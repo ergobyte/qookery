@@ -225,7 +225,8 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 
 		removeRow: function(rowIndex) {
 			var row = this.__accessor.removeRow(this.__data, rowIndex);
-			if(row == null) return;
+			if(row == null)
+				return null;
 			this.fireDataEvent("dataChanged", {
 				firstColumn: 0,
 				lastColumn: this.getColumnCount() - 1,
@@ -359,6 +360,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		 * <li>Fallback to direct reading of the JavaScript object key</li>
 		 * </ol>
 		 *
+		 * @param column {Object}
+		 * @param row {Object}
+		 *
 		 * @return {any} the cell's value or <code>null</code> if not available
 		 */
 		__readCellValue: function(column, row) {
@@ -396,6 +400,9 @@ qx.Class.define("qookery.impl.DefaultTableModel", {
 		 * <li>In case a setter method is available, invoke it</li>
 		 * <li>Fallback to direct writing of the JavaScript object key</li>
 		 * </ol>
+		 * @param column {Object}
+		 * @param row {Object}
+		 * @param value {any} value to write into cell
 		 *
 		 * @return {Boolean} <code>true</code> if cell's value was modified
 		 */

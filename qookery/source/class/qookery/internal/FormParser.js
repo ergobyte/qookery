@@ -62,13 +62,12 @@ qx.Class.define("qookery.internal.FormParser", {
 			if(!qx.dom.Element.hasChildren(blockElement)) return null;
 			var selectionMade = false;
 			return qx.dom.Hierarchy.getChildElements(blockElement).reduce(function(previousResult, statementElement) {
-
 				var elementQName = qx.dom.Node.getName(statementElement);
 				if(elementQName === "parsererror")
 					throw new Error(qx.lang.String.format("Parser error in statement block: %1", [ qx.dom.Node.getText(statementElement) ]));
 
 				var namespaces = qookery.util.Xml.getNamespaceDeclarations(statementElement);
-				var elementQName = qx.dom.Node.getName(statementElement);
+				elementQName = qx.dom.Node.getName(statementElement);
 				var elementName = qookery.util.Xml.resolveQName(function(prefix) {
 					if(namespaces != null) {
 						var namespaceUri = namespaces[prefix];
@@ -119,17 +118,14 @@ qx.Class.define("qookery.internal.FormParser", {
 
 				// Tough luck with this element, interrupt parser progress here
 				throw new Error(qx.lang.String.format("Unexpected element '%1' encountered in statement block", [ elementName ]));
-
 			}.bind(this), null);
 		},
 
 		__parseComponent: function(componentElement, parentComponent, componentName, namespaces) {
-
 			// Instantiate and initialize new component
 
 			var component = this.constructor.__REGISTRY.createComponent(componentName, parentComponent);
 			try {
-
 				// Set component attributes
 
 				var componentId = qookery.util.Xml.getAttribute(componentElement, "id");

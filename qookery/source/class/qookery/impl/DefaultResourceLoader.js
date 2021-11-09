@@ -31,7 +31,10 @@ qx.Class.define("qookery.impl.DefaultResourceLoader", {
 
 		loadResource: function(name, thisArg, successCallback, failCallback) {
 			var asynchronous = true;
-			if(!successCallback) { successCallback = this._defaultSuccessCallback; asynchronous = false; }
+			if(!successCallback) {
+				successCallback = this._defaultSuccessCallback;
+				asynchronous = false;
+			}
 			if(!failCallback) { failCallback = this._defaultFailCallback; }
 			var result;
 			var resourceUri = this.resolveResourceUri(name);

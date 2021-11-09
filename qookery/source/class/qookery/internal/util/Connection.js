@@ -77,6 +77,7 @@ qx.Class.define("qookery.internal.util.Connection", {
 		 * Return the value of a connection's attribute, if available
 		 *
 		 * @param attributeName {String} name of wanted attribute
+		 * @param defaultValue {any} an optional default value
 		 *
 		 * @return {any} attribute value or second argument if <code>undefined</code>
 		 */
