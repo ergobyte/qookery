@@ -1,4 +1,35 @@
 {
+	"$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
+	"applications": [
+		{
+			"class": "qxl.apiviewer.Application",
+			"theme": "qxl.apiviewer.Theme",
+			"name": "qookeryapi",
+			"title": "Qookery API Viewer",
+			"environment": {
+				"qx.icontheme": "Tango",
+				"qxl.apiviewer.applicationName": "qookeryapi",
+				"qxl.apiviewer.exclude": [
+					"qookery.impl.*", "qookery.internal.*", "qxl.*", "qx.*", "qxWeb"
+				],
+				"qxl.apiviewer.include": [ ]
+			},
+			"include": [
+				"qookery.*"
+			]
+		}
+	],
+	"targets": [
+		{
+			"type": "source",
+			"outputPath": "compiled/source"
+		},
+		{
+			"type": "build",
+			"outputPath": "compiled/build",
+			"deployPath": "compiled/deploy"
+		}
+	],
 	"eslintConfig": {
 		"extends": [
 			"@qooxdoo/eslint-config-qx",

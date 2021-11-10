@@ -52,6 +52,7 @@
 	</module>
 
 	<module name="Header">
+		<property name="id" value="jsHeader" />
 		<property name="fileExtensions" value="js" />
 		<property name="headerFile" value="${samedir}/header.js.txt" />
 		<property name="ignoreLines" value="3, 5, 9, 11" />

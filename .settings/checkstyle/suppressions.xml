@@ -23,5 +23,6 @@
 <suppressions>
 
 	<suppress files=".*\.(bmp|gif|ico|png)" checks=".*" />
+	<suppress files="__init__.js" id="jsHeader" />
 
 </suppressions>
