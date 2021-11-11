@@ -4,7 +4,7 @@
 		"name": "Qookery",
 		"summary": "Qookery: Declarative UI Building for Qooxdoo",
 		"description": "XML-based language for authoring Qooxdoo user interfaces.",
-		"homepage": "http://www.qookery.org/",
+		"homepage": "https://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },

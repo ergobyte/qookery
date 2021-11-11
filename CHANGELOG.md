@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.7.0] - in progress
+
+* Upgraded source code and tooling to the new nodejs-based QX compiler
+* New flow control statement <for-each>, helps with component repetitions in forms
+* Using objectid module of QX6 for component identifiers
+* Support for the embedded version of Google Maps
+* More options supported by Ace editor component
+* Forms automatically place focus onto the lowest tab-index component 
+* Many ESLint errors fixed
+
 ## [0.6.0] - 2019-03-03
 
 * New `qookery.IAttributeSet` interface simplifies attribute handling

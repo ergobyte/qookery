@@ -4,7 +4,7 @@
 		"name": "Qookery Demo",
 		"summary": "Qookery demo runner application",
 		"description": "Demonstration and testing environment for Qookery developers and users.",
-		"homepage": "http://www.qookery.org/",
+		"homepage": "https://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },

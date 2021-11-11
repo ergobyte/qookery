@@ -3,7 +3,7 @@
 	"info": {
 		"name": "Qookery Maps",
 		"summary": "Qookery extension: Google Maps integration",
-		"homepage": "http://www.qookery.org/",
+		"homepage": "https://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },

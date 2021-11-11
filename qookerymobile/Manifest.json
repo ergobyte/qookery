@@ -3,7 +3,7 @@
 	"info": {
 		"name": "Qookery Mobile",
 		"summary": "Qookery extension: Additional components for qx.ui.mobile package",
-		"homepage": "http://www.qookery.org/",
+		"homepage": "https://www.qookery.org/",
 		"license": "Apache License 2.0",
 		"authors": [
 			{ "name": "George Nikolaidis", "email": "geonik@ergobyte.gr", "githubUser": "gnikolaidis" },

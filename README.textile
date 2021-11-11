@@ -12,13 +12,14 @@ h2(#demo). Live Demo
 
 You can discover Qookery and experiment with its features by visiting its interactive live demo
 
-* "Qookery Demo and Playground":http://www.qookery.org/content/waffle/qookerydemo/index.html
+* "Qookery Demo and Playground":https://www.qookery.org/content/waffle/qookerydemo/index.html
 
 h2(#examples). Real-life Examples
 
 Below applications are using Qookery for their user interface requirements exclusively. All components, from the browser window up, are assembled and laid out declaratively via Qookery forms.
 
-* "Galen Office":https://www.galenoffice.com/portal/medical/en/home - Cloud-based medical practice management system; provides patient management, appointment scheduling, customizable health records, document management, reporting and more.
+* "DataLife HIS":https://www.datalife.gr/ - Hospital information system; handles in- and out-patient care, materials, financials, contact relationships, human resources and more.
+* "Galen Office":https://www.galenoffice.com/ - Medical practice management system; handles patient appointments, electronic health records, document management, electronic prescription and more.
 * "Ergobyte Electronic Services":https://www.ergobyte.net/ - Ergobyte's customer account management interface
 
 You may study their forms' XML source code by firing up your browser's developer tools and track network requests as you use the applications.
@@ -27,13 +28,13 @@ h2(#tutorials). Tutorials
 
 A short introductory tutorial is available:
 
-* "Getting Started with Qookery":http://www.qookery.org/portal/qookery/en/getting-started
+* "Getting Started with Qookery":https://www.qookery.org/portal/qookery/en/getting-started
 
 h2(#documentation). Documentation
 
 The documentation is generated from class files and is under construction.
 
-* "API Documentation":http://www.qookery.org/content/waffle/qookeryapi/index.html
+* "API Documentation":https://www.qookery.org/content/waffle/qookeryapi/index.html
 
 You might want to have a look at the XML schemata, which are the normative reference of the language:
 
@@ -68,5 +69,5 @@ For requests and comments, please contact the project's maintainer:
 
 h2(#links). See also
 
-* Qookery Home - "www.qookery.org":http://www.qookery.org/
+* Qookery Home - "www.qookery.org":https://www.qookery.org/
 * Ergobyte Informatics S.A. - "www.ergobyte.gr":https://www.ergobyte.gr/

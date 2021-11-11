@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Qookery - Declarative UI Building for Qooxdoo
+
+	Copyright (c) Ergobyte Informatics S.A., www.ergobyte.gr
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="Qookery" basedir=".">
+
+	<!-- QX CLI -->
+
+	<macrodef name="qx-compiler">
+		<attribute name="dir" default="." />
+		<attribute name="command" />
+		<attribute name="failonerror" default="true" />
+		<element name="exec-elements" optional="true" />
+		<sequential>
+			<echo>Executing "@{command}" QX command in directory "@{dir}"</echo>
+			<exec executable="qx" failonerror="@{failonerror}" dir="@{dir}">
+				<arg value="@{command}" />
+				<exec-elements />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="Clean" description="Clean project workspace">
+		<qx-compiler dir="qookery" command="clean" />
+		<qx-compiler dir="qookerydemo" command="clean" />
+		<delete failonerror="no" dir="." includes="*/compiled" />
+		<delete failonerror="no" dir="." includes="*/qx_packages" />
+		<delete failonerror="no" dir="." includes="*/source/resource/qookery/lib/" />
+	</target>
+
+	<target name="Lint" description="Perform syntactic checks on application">
+		<qx-compiler dir="qookery" command="lint" failonerror="false" />
+		<qx-compiler dir="qookeryace" command="lint" failonerror="false" />
+		<qx-compiler dir="qookerycalendar" command="lint" failonerror="false" />
+		<qx-compiler dir="qookerydemo" command="lint" failonerror="false" />
+		<qx-compiler dir="qookerymaps" command="lint" failonerror="false" />
+		<qx-compiler dir="qookerymobile" command="lint" failonerror="false" />
+		<qx-compiler dir="qookeryrichtext" command="lint" failonerror="false" />
+	</target>
+
+	<!-- Demo -->
+
+	<target name="Demo.Source" description="Generate the source version of the demo application">
+		<qx-compiler dir="qookerydemo" command="compile">
+			<exec-elements>
+				<arg line="--target source" />
+			</exec-elements>
+		</qx-compiler>
+	</target>
+
+	<target name="Demo.Build" description="Generate the build version of the demo application">
+		<qx-compiler dir="qookerydemo" command="compile">
+			<exec-elements>
+				<arg line="--target build" />
+			</exec-elements>
+		</qx-compiler>
+	</target>
+
+	<target name="Demo.Deploy" description="Generate and deploy the build version of the demo application">
+		<qx-compiler dir="qookerydemo" command="deploy">
+			<exec-elements>
+				<arg line="--clean" />
+			</exec-elements>
+		</qx-compiler>
+	</target>
+
+	<target name="Demo.Publish" depends="Demo.Deploy" description="Publish project build to a WAFFLE server - do not use if not working at Ergobyte">
+		<zip destfile="qookerydemo/compiled/waffle-archive.zip" level="9" basedir="qookerydemo/compiled/deploy" includes="qookerydemo/** resource/** index.html" />
+		<input addproperty="waffle.serverHost" message="WAFFLE server hostname : " defaultvalue="www.ergobyte.net" />
+		<input addproperty="waffle.safiraUsername" message="Safira username : " defaultvalue="${user.name}" />
+		<input addproperty="waffle.safiraPassword" message="Safira password : " />
+		<exec executable="${user.home}/git/kitchen/com.ergobyte.ria.waffle/tool/uploader.py">
+			<arg line="--server ${waffle.serverHost}" />
+			<arg line="--username ${waffle.safiraUsername}" />
+			<arg line="--password ${waffle.safiraPassword}" />
+			<arg line="--application qookerydemo" />
+			<arg value="qookerydemo/compiled/waffle-archive.zip" />
+		</exec>
+	</target>
+
+	<!-- API -->
+
+	<target name="Api.Deploy" description="Deploy the Qookery API">
+		<qx-compiler dir="qookery" command="deploy">
+			<exec-elements>
+				<arg line="--clean" />
+			</exec-elements>
+		</qx-compiler>
+	</target>
+
+	<target name="Api.Publish" depends="Api.Deploy" description="Publish API documentation to a WAFFLE server - do not use if not working at Ergobyte">
+		<zip destfile="qookery/compiled/waffle-archive.zip" level="9" basedir="qookery/compiled/deploy" includes="qookeryapi/** resource/** index.html" />
+		<input addproperty="waffle.serverHost" message="WAFFLE server hostname : " defaultvalue="www.ergobyte.net" />
+		<input addproperty="waffle.safiraUsername" message="Safira username : " defaultvalue="${user.name}" />
+		<input addproperty="waffle.safiraPassword" message="Safira password : " />
+		<exec executable="${user.home}/git/kitchen/com.ergobyte.ria.waffle/tool/uploader.py">
+			<arg line="--server ${waffle.serverHost}" />
+			<arg line="--username ${waffle.safiraUsername}" />
+			<arg line="--password ${waffle.safiraPassword}" />
+			<arg line="--application qookeryapi" />
+			<arg value="qookery/compiled/waffle-archive.zip" />
+		</exec>
+	</target>
+
+	<!-- External libraries -->
+
+	<macrodef name="define-library">
+		<attribute name="project" />
+		<attribute name="library" />
+		<attribute name="version" />
+		<sequential>
+			<property file="@{project}/source/resource/qookery/lib/versions.properties" />
+			<property name="@{project}.@{library}.version" value="@{version}" />
+			<condition property="@{project}.@{library}.uptodate">
+				<equals arg1="${@{project}.@{library}.installed}" arg2="@{version}" />
+			</condition>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="install-library">
+		<attribute name="project" />
+		<attribute name="library" />
+		<sequential>
+			<propertyfile file="@{project}/source/resource/qookery/lib/versions.properties">
+				<entry key="@{project}.@{library}.installed" value="${@{project}.@{library}.version}" />
+			</propertyfile>
+			<echo message="Installed @{library} ${@{project}.@{library}.version}" />
+		</sequential>
+	</macrodef>
+
+	<extension-point name="Download" description="Download external dependencies" />
+
+	<target name="Download.Init">
+		<define-library project="qookeryace" library="Ace" version="1.4.3" />
+		<define-library project="qookerycalendar" library="FullCalendar" version="2.1.1" />
+		<define-library project="qookeryrichtext" library="CKEditor" version="4.9.2" />
+	</target>
+
+	<target name="Download.Ace" depends="Download.Init" extensionOf="Download" unless="qookeryace.Ace.uptodate">
+		<property name="ace.target" location="qookeryace/source/resource/qookery/lib/ace" />
+		<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${qookeryace.Ace.version}/src-min" />
+		<mkdir dir="${ace.target}" />
+		<get dest="${ace.target}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="${ace.downloadBase}/ace.js" />
+			<url url="${ace.downloadBase}/ext-language_tools.js" />
+			<url url="${ace.downloadBase}/ext-searchbox.js" />
+			<url url="${ace.downloadBase}/mode-html.js" />
+			<url url="${ace.downloadBase}/mode-javascript.js" />
+			<url url="${ace.downloadBase}/mode-json.js" />
+			<url url="${ace.downloadBase}/mode-plain_text.js" />
+			<url url="${ace.downloadBase}/mode-textile.js" />
+			<url url="${ace.downloadBase}/mode-xml.js" />
+			<url url="${ace.downloadBase}/theme-eclipse.js" />
+			<url url="${ace.downloadBase}/theme-textmate.js" />
+			<url url="${ace.downloadBase}/worker-html.js" />
+			<url url="${ace.downloadBase}/worker-javascript.js" />
+			<url url="${ace.downloadBase}/worker-json.js" />
+			<url url="${ace.downloadBase}/worker-xml.js" />
+		</get>
+		<install-library project="qookeryace" library="Ace" />
+	</target>
+
+	<target name="Download.Calendar" depends="Download.Init" extensionOf="Download" unless="qookerycalendar.FullCalendar.uptodate">
+		<property name="fullcalendar.zipFilename" value="fullcalendar-${qookerycalendar.FullCalendar.version}.zip" />
+		<property name="fullcalendar.downloadUrl" value="https://github.com/arshaw/fullcalendar/releases/download/v${qookerycalendar.FullCalendar.version}/${fullcalendar.zipFilename}" />
+		<property name="fullcalendar.temp" location="/tmp/" />
+		<property name="fullcalendar.target" location="qookerycalendar/source/resource/qookery/lib" />
+		<get dest="${fullcalendar.temp}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="${fullcalendar.downloadUrl}" />
+		</get>
+		<unzip src="${fullcalendar.temp}/${fullcalendar.zipFilename}" dest="${fullcalendar.temp}/" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/fullcalendar.min.js" tofile="${fullcalendar.target}/fullcalendar/fullcalendar.min.js" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/fullcalendar.min.css" tofile="${fullcalendar.target}/fullcalendar/fullcalendar.min.css" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/lang/el.js" tofile="${fullcalendar.target}/fullcalendar/lang/el.js" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/lib/jquery.min.js" tofile="${fullcalendar.target}/jquery/jquery.min.js" overwrite="true" />
+		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/lib/moment.min.js" tofile="${fullcalendar.target}/moment/moment.min.js" overwrite="true" />
+		<install-library project="qookerycalendar" library="FullCalendar" />
+	</target>
+
+	<target name="Download.CKEditor" depends="Download.Init" extensionOf="Download" unless="qookeryrichtext.CKEditor.uptodate">
+		<property name="ckeditor.package" value="full" />
+		<property name="ckeditor.zipFilename" value="ckeditor_${qookeryrichtext.CKEditor.version}_${ckeditor.package}.zip" />
+		<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${qookeryrichtext.CKEditor.version}/${ckeditor.zipFilename}" />
+		<property name="ckeditor.target" location="qookeryrichtext/source/resource/qookery/lib" />
+		<mkdir dir="${ckeditor.target}" />
+		<get dest="${ckeditor.target}" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="${ckeditor.downloadUrl}" />
+		</get>
+		<unzip src="${ckeditor.target}/${ckeditor.zipFilename}" dest="${ckeditor.target}/" />
+		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
+		<install-library project="qookeryrichtext" library="CKEditor" />
+	</target>
+
+</project>
