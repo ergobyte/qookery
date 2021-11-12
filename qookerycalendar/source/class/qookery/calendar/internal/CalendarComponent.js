@@ -55,7 +55,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "event-limit": return "Boolean";
 			case "first-day": return "Integer";
 			case "selectable": return "Boolean";
-			default: return this.base(arguments, attributeName); }
+			default: return this.base(arguments, attributeName);
+			}
 		},
 
 		// Construction

@@ -31,7 +31,8 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			case "title": return "Boolean";
 			case "toolbar-can-collapse": return "Boolean";
 			case "custom-config": return "String";
-			default: return this.base(arguments, attributeName); }
+			default: return this.base(arguments, attributeName);
+			}
 		},
 
 		_createMainWidget: function() {

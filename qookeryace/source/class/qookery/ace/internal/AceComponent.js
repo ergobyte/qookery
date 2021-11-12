@@ -115,8 +115,9 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			if(!this.__editor) return;
 			this.__ignoreChangeEvents = true;
 			try {
-				var value = this.getValue();
-				if(value == null) value = "";
+				value = this.getValue();
+				if(value == null)
+					value = "";
 				this.__editor.getSession().setValue(value);
 			}
 			catch(e) {
