@@ -202,6 +202,7 @@
 		</get>
 		<unzip src="${ckeditor.target}/${ckeditor.zipFilename}" dest="${ckeditor.target}/" />
 		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
+		<delete dir="${ckeditor.target}/ckeditor/samples" />
 		<install-library project="qookeryrichtext" library="CKEditor" />
 	</target>
 
