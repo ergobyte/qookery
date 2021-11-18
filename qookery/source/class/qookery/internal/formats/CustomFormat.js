@@ -22,14 +22,14 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 	implement: [ qx.util.format.IFormat ],
 
 	construct: function(options) {
-		this.base(arguments);
+		this.base(arguments, options);
 		var expression = options["expression"];
-		if(expression) {
+		if(expression != null) {
 			this.__formatFunction = new Function([ "value" ], "return(" + expression + ");");
 			return;
 		}
 		var format = options["format"];
-		if(format) {
+		if(format != null) {
 			this.__formatFunction = format;
 			return;
 		}
@@ -40,11 +40,9 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 
 		__formatFunction: null,
 
-		format: function(obj) {
-			if(this.__formatFunction != null)
-				return obj;
+		format: function(value) {
 			try {
-				return this.__formatFunction(obj);
+				return this.__formatFunction(value);
 			}
 			catch(e) {
 				this.error("Error applying custom format", e);
@@ -52,7 +50,7 @@ qx.Class.define("qookery.internal.formats.CustomFormat", {
 			}
 		},
 
-		parse: function(str) {
+		parse: function(text) {
 			throw new Error("Parsing is not supported");
 		}
 	}
