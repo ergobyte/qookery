@@ -733,6 +733,7 @@
 			<element ref="q:script" />
 			<element ref="q:radio-button" />
 			<element ref="q:toggle-button" />
+			<element ref="q:for-each" />
 		</choice>
 		<attributeGroup ref="q:container" />
 		<attribute name="allow-empty-selection" type="boolean" default="false" />

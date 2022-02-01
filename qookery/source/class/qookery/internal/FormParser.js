@@ -324,12 +324,15 @@ qx.Class.define("qookery.internal.FormParser", {
 			// Apply requested operations to all target components
 			components.forEach(function(component) {
 				var componentFunction = function() {
-					if(component.isDisposed()) return;
-					if(preventRecursion && componentFunction.__isRunning === true) return;
+					if(component.isDisposed())
+						return;
+					if(components.__preventRecursion === true)
+						return;
 					var scriptArguments = Array.prototype.slice.call(arguments);
 					scriptArguments.unshift(component.getForm().getScriptingContext());
+					if(preventRecursion)
+						components.__preventRecursion = true;
 					try {
-						componentFunction.__isRunning = true;
 						return scriptFunction.apply(component, scriptArguments);
 					}
 					catch(error) {
@@ -337,7 +340,8 @@ qx.Class.define("qookery.internal.FormParser", {
 						throw error;
 					}
 					finally {
-						componentFunction.__isRunning = false;
+						if(preventRecursion)
+							components.__preventRecursion = false;
 					}
 				};
 				if(debounceMillis > 0) {
