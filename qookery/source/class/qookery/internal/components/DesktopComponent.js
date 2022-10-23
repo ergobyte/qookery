@@ -16,6 +16,26 @@
 	limitations under the License.
 */
 
-/**
- * BROKEN/UNMAINTAINED implementation of some Qookery interfaces for the mobile subset of Qooxdoo - do not use
- */
+qx.Class.define("qookery.internal.components.DesktopComponent", {
+
+	extend: qookery.internal.components.ContainerComponent,
+
+	construct: function(parentComponent) {
+		this.base(arguments, parentComponent);
+	},
+
+	members: {
+
+		getAttribute: function(attributeName, defaultValue) {
+			if(attributeName === "layout")
+				return "none";
+			return this.base(arguments, attributeName, defaultValue);
+		},
+
+		_createContainerWidget: function() {
+			var container = new qx.ui.window.Desktop();
+			this._applyWidgetAttributes(container);
+			return container;
+		}
+	}
+});

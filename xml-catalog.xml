@@ -34,10 +34,6 @@
 			name="http://www.qookery.org/ns/Form/Maps"
 			uri="qookerymaps/docs/form-maps.xsd" />
 
-	<uri id="q-mobile"
-			name="http://www.qookery.org/ns/Form/Mobile"
-			uri="qookerymobile/docs/form-mobile.xsd" />
-
 	<uri id="q-richtext"
 			name="http://www.qookery.org/ns/Form/RichText"
 			uri="qookeryrichtext/docs/form-richtext.xsd" />

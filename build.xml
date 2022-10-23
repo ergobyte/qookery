@@ -48,7 +48,6 @@
 		<qx-compiler dir="qookerycalendar" command="lint" failonerror="false" />
 		<qx-compiler dir="qookerydemo" command="lint" failonerror="false" />
 		<qx-compiler dir="qookerymaps" command="lint" failonerror="false" />
-		<qx-compiler dir="qookerymobile" command="lint" failonerror="false" />
 		<qx-compiler dir="qookeryrichtext" command="lint" failonerror="false" />
 	</target>
 

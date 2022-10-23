@@ -85,7 +85,7 @@ qx.Class.define("qookery.internal.Registry", {
 
 		partition = this.__createPartition(qookery.IRegistry.P_SERVICE);
 		partition["qookery.IModelProvider"] = qookery.impl.DefaultModelProvider;
-		partition["qookery.IRegistry"] = this;
+		partition["qookery.IRegistry"] = qookery.internal.Registry;
 		partition["qookery.IResourceLoader"] = qookery.impl.DefaultResourceLoader;
 		partition["qx.application.IApplication"] = { getInstance: function() {
 			return qx.core.Init.getApplication();
@@ -132,6 +132,7 @@ qx.Class.define("qookery.internal.Registry", {
 		partition["{http://www.qookery.org/ns/Form}combo-box"] = qookery.internal.components.ComboBoxComponent;
 		partition["{http://www.qookery.org/ns/Form}composite"] = qookery.internal.components.CompositeComponent;
 		partition["{http://www.qookery.org/ns/Form}date-field"] = qookery.internal.components.DateFieldComponent;
+		partition["{http://www.qookery.org/ns/Form}desktop"] = qookery.internal.components.DesktopComponent;
 		partition["{http://www.qookery.org/ns/Form}form"] = qookery.internal.components.FormComponent;
 		partition["{http://www.qookery.org/ns/Form}group-box"] = qookery.internal.components.GroupBoxComponent;
 		partition["{http://www.qookery.org/ns/Form}hover-button"] = qookery.internal.components.HoverButtonComponent;

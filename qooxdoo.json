@@ -4,7 +4,6 @@
 		{ "path": "./qookeryace" },
 		{ "path": "./qookerycalendar" },
 		{ "path": "./qookerymaps" },
-		{ "path": "./qookerymobile" },
 		{ "path": "./qookeryrichtext" }
 	],
 	"applications": [

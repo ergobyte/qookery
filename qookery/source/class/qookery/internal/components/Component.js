@@ -28,11 +28,13 @@ qx.Class.define("qookery.internal.components.Component", {
 	statics: {
 
 		__LAYOUT_ITEM_PROPERTY_MAP: {
+			"bottom": "bottom",
 			"col-span": "colSpan",
 			"column": "column",
 			"flex": "flex",
 			"left": "left",
 			"line-break": "lineBreak",
+			"right": "right",
 			"row": "row",
 			"row-span": "rowSpan",
 			"stretch": "stretch",

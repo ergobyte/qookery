@@ -22,7 +22,7 @@
 		"translation": "source/translation"
 	},
 	"requires": {
-		"@qooxdoo/framework": "^6.0.2",
-		"@qooxdoo/compiler": "^1.0.2"
+		"@qooxdoo/framework": ">=6",
+		"@qooxdoo/compiler": "1"
 	}
 }
