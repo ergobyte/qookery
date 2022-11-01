@@ -521,6 +521,7 @@
 			<element ref="q:script" />
 			<group ref="q:components" />
 			<group ref="q:flow-control-statements" />
+			<group ref="q:configuration-artifacts" />
 			<any namespace="##other" processContents="strict" />
 		</choice>
 	</group>
@@ -576,6 +577,12 @@
 			<element ref="q:toggle-button" />
 			<element ref="q:tool-bar" />
 			<element ref="q:virtual-tree" />
+		</choice>
+	</group>
+
+	<group name="configuration-artifacts">
+		<choice>
+			<element ref="q:table-column" />
 		</choice>
 	</group>
 
@@ -810,8 +817,7 @@
 	<element name="table"><complexType><complexContent><extension base="q:editable-component.attributes">
 		<sequence>
 			<element ref="q:table-model" minOccurs="0" maxOccurs="1" />
-			<element ref="q:table-column" minOccurs="0" maxOccurs="unbounded" />
-			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+			<group ref="q:statements" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="column-visibility-button-visible" type="boolean" default="true" />
 		<attribute name="header-cells-visible" type="boolean" default="true" />

@@ -227,7 +227,10 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 					errors.push(actionError);
 			}
 			this.setValid(false);
-			var message = this.tr("qookery.internal.components.FormComponent.validationErrors", this.getTitle());
+			var message = this.tr("qookery.internal.components.FormComponent.validationErrors");
+			var formTitle = this.getTitle();
+			if(formTitle != null)
+				message += " '" + formTitle + "'";
 			return new qookery.util.ValidationError(this, message, errors);
 		},
 

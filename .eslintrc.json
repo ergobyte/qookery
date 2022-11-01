@@ -3,6 +3,7 @@
 		"browser": true
 	},
 	"rules": {
+		"arrow-body-style": "off",
 		"brace-style": [ "error", "stroustrup", { "allowSingleLine": true } ],
 		"consistent-return": "off",
 		"curly": "off",
@@ -19,6 +20,7 @@
 		"no-new": "off",
 		"no-prototype-builtins": "off",
 		"no-script-url": "off",
+		"no-template-curly-in-string": "off",
 		"no-warning-comments": [ 1, { "location": "start", "terms": [ "fixme" ] } ],
 		"one-var": "off",
 		"one-var-declaration-per-line": "off"

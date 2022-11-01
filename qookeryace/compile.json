@@ -2,8 +2,7 @@
 	"$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
 	"eslintConfig": {
 		"extends": [
-			"@qooxdoo/eslint-config-qx",
-			"../qookery/.eslintrc.json"
+			"@qooxdoo/eslint-config-qx"
 		],
 		"globals": {
 			"ace": true

@@ -40,8 +40,7 @@
 	],
 	"eslintConfig": {
 		"extends": [
-			"@qooxdoo/eslint-config-qx",
-			"../qookery/.eslintrc.json"
+			"@qooxdoo/eslint-config-qx"
 		]
 	}
 }
