@@ -46,7 +46,6 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			case "editable": return "Boolean";
 			case "flex": return "Integer";
 			case "header-cells-visible": return "Boolean";
-			case "header-click": return "ReplaceableString";
 			case "header-icon": return "String";
 			case "row-height": return "Number";
 			case "show-cell-focus-indicator": return "Boolean";
@@ -152,21 +151,16 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					resizeBehavior.setMaxWidth(i, column["max-width"]);
 				}
 
-				var headerWidget = table.getPaneScroller(0).getHeader().getHeaderWidgetAtColumn(i);
+				var headerRenderer = columnModel.getHeaderCellRenderer(i);
 				if(column["header-icon"]) {
-					headerWidget.setIcon(column["header-icon"]);
+					columnModel.setHeaderCellRenderer(i, headerRenderer = new qx.ui.table.headerrenderer.Icon(column["header-icon"]));
 				}
 				if(column["tool-tip-text"]) {
-					headerWidget.setToolTipText(column["tool-tip-text"]);
+					headerRenderer.setToolTip(column["tool-tip-text"]);
 				}
-				if(column["header-click"]) {
-					headerWidget.addListener("tap", function(event) {
-						column["header-click"](event);
-					});
-				}
-				if(column["text-align"]) {
-					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
-				}
+//				if(column["text-align"]) {
+//					headerWidget.getChildControl("label").setTextAlign(column["text-align"]);
+//				}
 				if(column["cell-editor"]) {
 					var cellEditorName = this.resolveQName(column["cell-editor"]);
 					var cellEditorFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_CELL_EDITOR_FACTORY, cellEditorName, true);

@@ -872,7 +872,6 @@
 		<attribute name="font-weight" />
 		<attribute name="format" type="q:format-specification" />
 		<attribute name="header-icon" type="string" />
-		<attribute name="header-click" type="string" />
 		<attribute name="height" type="string" />
 		<attribute name="label" type="string" />
 		<attribute name="line-height" type="string" />

@@ -16,7 +16,6 @@
 		"namespace": "qookery.maps",
 		"encoding": "utf-8",
 		"class": "source/class",
-		"resource": "source/resource",
 		"translation": "source/translation"
 	},
 	"requires": {
