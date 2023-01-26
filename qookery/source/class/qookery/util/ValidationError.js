@@ -29,11 +29,13 @@ qx.Class.define("qookery.util.ValidationError", {
 	 * @param source {any} value that represents the source of error
 	 * @param message {String?} error message
 	 * @param cause {Array?} array of underlying errors
+	 * @param location {any} a value that can help consumers of this error locate its source
 	 */
-	construct : function(source, message, cause) {
+	construct: function(source, message, cause, location) {
 		this.__source = source;
 		this.__message = message;
 		this.__cause = cause;
+		this.__location = location;
 		Object.defineProperties(this, {
 			"message": {
 				enumerable: false,
@@ -75,6 +77,15 @@ qx.Class.define("qookery.util.ValidationError", {
 		 */
 		getCause: function() {
 			return this.__cause;
+		},
+
+		/**
+		 * Return an object that points to the source of the error
+		 *
+		 * @return {any} location of error's source
+		 */
+		getLocation: function() {
+			return this.__location;
 		},
 
 		/**

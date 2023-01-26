@@ -156,15 +156,14 @@ qx.Class.define("qookery.internal.components.EditableComponent", {
 		},
 
 		updateUI: function(value) {
-			if(this._disableValueEvents || this.isDisposed()) return false;
-			if(value === undefined) value = this.getValue();
+			if(this._disableValueEvents || this.isDisposed())
+				return false;
+			if(value === undefined)
+				value = this.getValue();
 			this._disableValueEvents = true;
 			try {
 				this._updateUI(value);
 				return true;
-			}
-			catch(e) {
-				throw e;
 			}
 			finally {
 				this._disableValueEvents = false;

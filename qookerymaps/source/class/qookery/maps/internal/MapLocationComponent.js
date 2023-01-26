@@ -268,7 +268,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			}, this);
 
 			if(this.getAttribute("allow-maximize", false) && this.isActionSupported("maximize")) {
-				var fullScreenButton = new qx.ui.toolbar.Button("Μεγιστοποίηση", "waffle/icons/material-18/ic_fullscreen_grey600_18dp.png");
+				var fullScreenButton = new qx.ui.toolbar.Button("Μεγιστοποίηση", "@MaterialIconsOutlined/fullscreen/18");
 				fullScreenButton.setAppearance("tool-button");
 				fullScreenButton.addListener("execute", function() {
 					this.__popup.hide();
@@ -278,7 +278,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 			}
 
 			if(this.getAttribute("allow-edit", false) && this.isActionSupported("edit")) {
-				var pasteButton = new qx.ui.toolbar.Button("Επεξεργασία", "waffle/icons/material-18/ic_create_grey600_18dp.png");
+				var pasteButton = new qx.ui.toolbar.Button("Επεξεργασία", "@MaterialIcons/create/18");
 				pasteButton.setAppearance("tool-button");
 				pasteButton.addListener("execute", function() {
 					this.__popup.hide();
@@ -287,7 +287,7 @@ qx.Class.define("qookery.maps.internal.MapLocationComponent", {
 				popup.add(pasteButton);
 			}
 
-			var deleteButton = new qx.ui.toolbar.Button("Διαγραφή", "waffle/icons/material-18/ic_clear_all_grey600_18dp.png");
+			var deleteButton = new qx.ui.toolbar.Button("Διαγραφή", "@MaterialIconsOutlined/clear_all/18");
 			deleteButton.setAppearance("tool-button");
 			deleteButton.addListener("execute", function() {
 				this.setValue(null);

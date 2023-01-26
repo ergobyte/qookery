@@ -892,6 +892,7 @@
 		<attribute name="width" type="string" />
 		<attribute name="white-space" type="string" />
 		<attribute name="cell-renderer-callback" type="string" />
+		<anyAttribute namespace="##other" />
 	</complexType></element>
 
 	<!-- Statement block non-component elements -->
