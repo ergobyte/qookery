@@ -1,5 +1,5 @@
 {
-	"$schema": "https://qooxdoo.org/schema/Manifest-1-0-0.json",
+	"$schema": "https://qooxdoo.org/schema/Manifest-2-0-0.json",
 	"info": {
 		"name": "Qookery",
 		"summary": "Qookery: Declarative UI Building for Qooxdoo",

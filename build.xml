@@ -27,7 +27,8 @@
 		<element name="exec-elements" optional="true" />
 		<sequential>
 			<echo>Executing "@{command}" QX command in directory "@{dir}"</echo>
-			<exec executable="qx" failonerror="@{failonerror}" dir="@{dir}">
+			<exec executable="npx" failonerror="@{failonerror}" dir="@{dir}">
+				<arg value="qx" />
 				<arg value="@{command}" />
 				<exec-elements />
 			</exec>

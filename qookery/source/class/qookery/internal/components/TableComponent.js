@@ -111,7 +111,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 			var tableModel = this.getTableModel();
 			if(qx.lang.Type.isFunction(tableModel["setup"])) {
 				// Give model a chance to perform last minute changes
-				tableModel["setup"].call(tableModel, table, this.__columns);
+				tableModel["setup"](table, this.__columns);
 			}
 			table.setTableModel(tableModel);
 			var columnModel = table.getTableColumnModel();

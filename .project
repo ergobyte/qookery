@@ -21,7 +21,7 @@
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-true-true-(.git|release)</arguments>
+				<arguments>1.0-projectRelativePath-matches-true-true-(.git|node_modules|release)</arguments>
 			</matcher>
 		</filter>
 		<filter>
