@@ -146,7 +146,8 @@
 
 	<target name="Download.Init">
 		<define-library project="qookeryace" library="Ace" version="1.4.3" />
-		<define-library project="qookerycalendar" library="FullCalendar" version="2.1.1" />
+		<define-library project="qookerycalendar" library="FullCalendar" version="6.1.4" />
+		<define-library project="qookerycalendar" library="Moment" version="2.27.0" />
 		<define-library project="qookeryrichtext" library="CKEditor" version="4.9.2" />
 	</target>
 
@@ -175,19 +176,16 @@
 	</target>
 
 	<target name="Download.Calendar" depends="Download.Init" extensionOf="Download" unless="qookerycalendar.FullCalendar.uptodate">
-		<property name="fullcalendar.zipFilename" value="fullcalendar-${qookerycalendar.FullCalendar.version}.zip" />
-		<property name="fullcalendar.downloadUrl" value="https://github.com/arshaw/fullcalendar/releases/download/v${qookerycalendar.FullCalendar.version}/${fullcalendar.zipFilename}" />
-		<property name="fullcalendar.temp" location="/tmp/" />
 		<property name="fullcalendar.target" location="qookerycalendar/source/resource/qookery/lib" />
-		<get dest="${fullcalendar.temp}" skipExisting="true" verbose="on" httpusecaches="no">
-			<url url="${fullcalendar.downloadUrl}" />
+		<mkdir dir="${fullcalendar.target}/fullcalendar" />
+		<get dest="${fullcalendar.target}/fullcalendar" skipExisting="true" verbose="on" httpusecaches="no">
+			<url url="https://cdn.jsdelivr.net/npm/fullcalendar@${qookerycalendar.FullCalendar.version}/index.global.min.js" />
+			<url url="https://cdn.jsdelivr.net/npm/@fullcalendar/core@${qookerycalendar.FullCalendar.version}/locales/el.global.min.js" />
 		</get>
-		<unzip src="${fullcalendar.temp}/${fullcalendar.zipFilename}" dest="${fullcalendar.temp}/" />
-		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/fullcalendar.min.js" tofile="${fullcalendar.target}/fullcalendar/fullcalendar.min.js" overwrite="true" />
-		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/fullcalendar.min.css" tofile="${fullcalendar.target}/fullcalendar/fullcalendar.min.css" overwrite="true" />
-		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/lang/el.js" tofile="${fullcalendar.target}/fullcalendar/lang/el.js" overwrite="true" />
-		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/lib/jquery.min.js" tofile="${fullcalendar.target}/jquery/jquery.min.js" overwrite="true" />
-		<copy file="${fullcalendar.temp}/fullcalendar-${qookerycalendar.FullCalendar.version}/lib/moment.min.js" tofile="${fullcalendar.target}/moment/moment.min.js" overwrite="true" />
+		<get verbose="on" httpusecaches="no" skipExisting="true" src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@${qookerycalendar.FullCalendar.version}/index.global.min.js"
+				dest="${fullcalendar.target}/fullcalendar/moment-to-fullcalendar.min.js" />
+		<get verbose="on" httpusecaches="no" skipExisting="true" src="https://cdn.jsdelivr.net/npm/moment@${qookerycalendar.Moment.version}/min/moment.min.js"
+				dest="${fullcalendar.target}/moment" />
 		<install-library project="qookerycalendar" library="FullCalendar" />
 	</target>
 

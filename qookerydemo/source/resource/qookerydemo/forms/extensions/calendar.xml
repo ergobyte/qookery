@@ -7,11 +7,11 @@
 
 	<q-cal:calendar xmlns:q-cal="http://www.qookery.org/ns/Form/Calendar"
 			id="calendar" width="400" height="400" editable="true" selectable="true"
-			first-day="1" event-limit="true" default-date="2014-09-12"
-			header-left="prev,next today" header-center="title" header-right="month,basicWeek,basicDay">
+			first-day="1" day-max-event-rows="true" initial-date="2014-09-12"
+			header-left="prev,next today" header-center="title" header-right="dayGridMonth,dayGridWeek,dayGridDay">
 
-		<script action="getEvents" arguments="start end timezone callback">
-			callback([
+		<script action="getEvents" arguments="info successCallback failureCallback">
+			successCallback([
 				{
 					title: 'All Day Event',
 					start: '2014-09-01'
@@ -77,8 +77,8 @@
 			]);
 		</script>
 
-		<script event="eventClick" arguments="event jsEvent view">
-			alert(event.title);
+		<script event="eventClick" arguments="info">
+			alert(info.event.title);
 		</script>
 
 	</q-cal:calendar>

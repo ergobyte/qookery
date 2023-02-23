@@ -28,36 +28,36 @@
 	<element name="calendar"><complexType><complexContent><extension base="q:component">
 		<attribute name="all-day-slot" type="boolean" default="true" />
 		<attribute name="aspect-ratio" type="float" default="1.35" />
-		<attribute name="axis-format" type="string" default="h(:mm)a" />
 		<attribute name="button-text-day" type="string" />
 		<attribute name="button-text-month" type="string" />
 		<attribute name="button-text-today" type="string" />
 		<attribute name="button-text-week" type="string" />
+		<attribute name="day-max-event-rows" default="false"><simpleType><union memberTypes="boolean nonNegativeInteger" /></simpleType></attribute>
 		<attribute name="default-all-day-event-duration" type="nonNegativeInteger" default="1" />
-		<attribute name="default-date" type="date" />
 		<attribute name="default-timed-event-duration" type="time" default="02:00:00" />
-		<attribute name="default-view" default="month"><simpleType><union memberTypes="q:replaced-string"><simpleType><restriction base="token">
-			<enumeration value="month" />
-			<enumeration value="basicWeek" />
-			<enumeration value="basicDay" />
-			<enumeration value="agendaWeek" />
-			<enumeration value="agendaDay" />
-		</restriction></simpleType></union></simpleType></attribute>
-		<attribute name="first-day" type="nonNegativeInteger" default="0" />
 		<attribute name="editable" default="false" type="boolean" />
-		<attribute name="event-limit" default="false"><simpleType><union memberTypes="boolean nonNegativeInteger" /></simpleType></attribute>
+		<attribute name="event-time-format" type="string" default="h(:mm)t" />
+		<attribute name="first-day" type="nonNegativeInteger" default="0" />
 		<attribute name="header-left" type="string" default="title" />
 		<attribute name="header-center" type="string" default="" />
 		<attribute name="header-right" type="string" default="today prev,next" />
-		<attribute name="lang" type="language" />
-		<attribute name="max-time" type="time" default="24:00:00" />
-		<attribute name="min-time" type="time" default="00:00:00" />
+		<attribute name="initial-date" type="date" />
+		<attribute name="initial-view" default="dayGridMonth"><simpleType><union memberTypes="q:replaced-string"><simpleType><restriction base="token">
+			<enumeration value="dayGridMonth" />
+			<enumeration value="dayGridWeek" />
+			<enumeration value="dayGridDay" />
+			<enumeration value="timeGridWeek" />
+			<enumeration value="timeGridDay" />
+		</restriction></simpleType></union></simpleType></attribute>
+		<attribute name="locale" type="language" />
 		<attribute name="scroll-time" type="time" default="06:00:00" />
 		<attribute name="selectable" type="boolean" default="false" />
-		<attribute name="snap-duration" type="time" default="00:10:00" />
 		<attribute name="slot-duration" type="time" default="00:30:00" />
-		<attribute name="time-format" type="string" default="h(:mm)t" />
-		<attribute name="timezone"><simpleType><union memberTypes="token"><simpleType><restriction base="token">
+		<attribute name="slot-label-format" type="string" default="h(:mm)a" />
+		<attribute name="slot-max-time" type="time" default="24:00:00" />
+		<attribute name="slot-min-time" type="time" default="00:00:00" />
+		<attribute name="snap-duration" type="time" default="00:10:00" />
+		<attribute name="time-zone"><simpleType><union memberTypes="token"><simpleType><restriction base="token">
 			<enumeration value="local" />
 			<enumeration value="UTC" />
 		</restriction></simpleType></union></simpleType></attribute>

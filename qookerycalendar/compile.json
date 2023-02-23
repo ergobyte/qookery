@@ -1,11 +1,10 @@
 {
-	"$schema": "https://qooxdoo.org/schema/compile-1-0-0.json",
 	"eslintConfig": {
 		"extends": [
 			"@qooxdoo/eslint-config-qx"
 		],
 		"globals": {
-			"jQuery": true,
+			"FullCalendar": true,
 			"moment": true
 		}
 	}

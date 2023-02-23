@@ -18,17 +18,16 @@
 
 /**
  * @asset(qookery/lib/moment/*)
- * @asset(qookery/lib/jquery/*)
  * @asset(qookery/lib/fullcalendar/*)
  *
- * @ignore(jQuery.*)
+ * @ignore(FullCalendar.*)
  */
 qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 	extend: qookery.internal.components.Component,
 
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
+	construct(parentComponent) {
+		super(parentComponent);
 	},
 
 	members: {
@@ -38,10 +37,11 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		__options: null,
 		__backgroundOperations: null,
 		__backgroundOperationsTimer: null,
+		__widget: null,
 
 		// Metadata
 
-		getAttributeType: function(attributeName) {
+		getAttributeType(attributeName) {
 			switch(attributeName) {
 			case "all-day-slot": return "Boolean";
 			case "aspect-ratio": return "Number";
@@ -50,48 +50,50 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "button-text-week": return "ReplaceableString";
 			case "button-text-day": return "ReplaceableString";
 			case "default-all-day-event-duration": return "Integer";
-			case "default-view": return "ReplaceableString";
+			case "initial-view": return "ReplaceableString";
 			case "editable": return "Boolean";
-			case "event-limit": return "Boolean";
+			case "day-max-event-rows": return "Boolean";
 			case "first-day": return "Integer";
 			case "selectable": return "Boolean";
-			default: return this.base(arguments, attributeName);
+			default: return super(attributeName);
 			}
 		},
 
 		// Construction
 
-		create: function(attributes) {
-			this.setAction("refetchEvents", function() { this.__queueOperation("refetchEvents"); });
+		create(attributes) {
+			this.setAction("refetchEvents", () => { this.__queueOperation("refetchEvents"); });
 			this.__domIdentifier = "calendar-" + this.toHashCode();
 			this.__options = {
 				handleWindowResize: false
 			};
-			this.base(arguments, attributes);
+			super(attributes);
 		},
 
-		_createWidgets: function() {
+		_createWidgets() {
 			// Create lightest possible widget since we only need a <div>
-			var widget = new qx.ui.core.Widget();
+			let widget = this.__widget = new qx.ui.core.Widget();
 			widget.getContentElement().setAttribute("id", this.__domIdentifier);
 			// Configure widget positioning by applying layout
 			this._applyWidgetAttributes(widget);
 			// Defer creation of fullcalendar until after positioning is done
-			widget.addListenerOnce("appear", function(event) {
+			widget.addListenerOnce("appear", event => {
 				qookery.Qookery.getRegistry().loadLibrary("fullcalendar", this.__onLibraryLoaded, this);
-			}, this);
-			widget.addListener("resize", function(event) {
+			});
+			widget.addListener("resize", event => {
 				// Use a timeout to let the layout queue apply its changes to the DOM
-				var height = event.getData()["height"];
-				qx.event.Timer.once(function() {
-					if(this.__calendar != null)
-						this.__calendar.fullCalendar("option", "height", height);
+				let height = event.getData()["height"];
+				qx.event.Timer.once(() => {
+					if(this.__calendar == null)
+						return;
+					this.__calendar.setOption("height", height);
+					this.__calendar.updateSize();
 				}, this, 0);
-			}, this);
+			});
 			return [ widget ];
 		},
 
-		__onLibraryLoaded: function(error) {
+		__onLibraryLoaded(error) {
 			if(error != null) {
 				this.error("Error loading library", error);
 				return;
@@ -100,37 +102,50 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			qx.lang.Object.mergeWith(this.__options, {
 				allDaySlot: this.getAttribute("all-day-slot", true),
 				aspectRatio: this.getAttribute("aspect-ratio", 1.35),
-				axisFormat: this.getAttribute("axis-format", "h(:mm)a"),
 				buttonText: {
-					today: this.getAttribute("button-text-today", undefined),
-					month: this.getAttribute("button-text-month", undefined),
-					week: this.getAttribute("button-text-week", undefined),
-					day: this.getAttribute("button-text-day", undefined)
+					today: this.getAttribute("button-text-today", "today")?.toString(),
+					month: this.getAttribute("button-text-month", undefined)?.toString(),
+					week: this.getAttribute("button-text-week", undefined)?.toString(),
+					day: this.getAttribute("button-text-day", undefined)?.toString()
 				},
+				dayMaxEventRows: this.getAttribute("day-max-event-rows", false),
 				defaultAllDayEventDuration: { days: this.getAttribute("default-all-day-event-duration", 1) },
-				defaultDate: this.getAttribute("default-date", undefined),
 				defaultTimedEventDuration: this.getAttribute("default-timed-event-duration", "02:00:00"),
-				defaultView: this.getAttribute("default-view", "month"),
 				editable: this.getAttribute("editable", false),
-				eventLimit: this.getAttribute("event-limit", false),
+				eventTimeFormat: this.getAttribute("event-time-format", "h:mm a"),
 				firstDay: this.getAttribute("first-day", 0),
-				header: {
+				headerToolbar: {
 					left: this.getAttribute("header-left", "title"),
 					center: this.getAttribute("header-center", ""),
 					right: this.getAttribute("header-right", "today prev,next")
 				},
 				height: this.getMainWidget().getBounds()["height"],
-				lang: this.getAttribute("lang", qx.locale.Manager.getInstance().getLanguage()),
-				maxTime: this.getAttribute("max-time", "24:00:00"),
-				minTime: this.getAttribute("min-time", "00:00:00"),
+				initialDate: this.getAttribute("initial-date", undefined),
+				initialView: this.getAttribute("initial-view", "dayGridMonth"),
+				locale: this.getAttribute("locale", qx.locale.Manager.getInstance().getLanguage()),
 				scrollTime: this.getAttribute("scroll-time", "06:00:00"),
 				selectable: this.getAttribute("selectable", false),
-				snapDuration: this.getAttribute("snap-duration", "00:10:00"),
 				slotDuration: this.getAttribute("slot-duration", "00:30:00"),
-				timeFormat: this.getAttribute("time-format", "h(:mm)t"),
-				timezone: this.getAttribute("timezone", false)
+				slotLabelFormat: this.getAttribute("slot-label-format", "h:mm a"),
+				slotLabelInterval: "01:00",
+				slotMaxTime: this.getAttribute("slot-max-time", "24:00:00"),
+				slotMinTime: this.getAttribute("slot-min-time", "00:00:00"),
+				snapDuration: this.getAttribute("snap-duration", "00:10:00"),
+				timeZone: this.getAttribute("time-zone", "local"),
+				views: {
+					"timeGridWeek": {
+						dayHeaderFormat: { weekday: "short", month: "2-digit", day: "numeric", omitCommas: true }
+					}
+				}
 			});
-			this.__calendar = jQuery("#" + this.__domIdentifier).fullCalendar(this.__options);
+
+			// Below hack is to ensure that the FC popup is properly displayed when positioned outside the bounds of the widget
+			let domElement = this.__widget.getContentElement().getDomElement();
+			qx.bom.element.Style.set(domElement, "overflow", "visible");
+			qx.bom.element.Style.set(domElement, "z-index", 11);
+
+			let calendar = this.__calendar = new FullCalendar.Calendar(domElement, this.__options);
+			calendar.render();
 
 			// Start background operations
 			this.__queueOperation("addEventSource");
@@ -138,64 +153,74 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 
 		// Component implementation
 
-		addEventHandler: function(eventName, handler, onlyOnce) {
+		addEventHandler(eventName, handler, onlyOnce) {
 			switch(eventName) {
 			case "eventClick":
 			case "eventResize":
 			case "eventDrop":
 			case "select":
-			case "viewRender":
+			case "datesSet":
 				return this.__options[eventName] = handler;
 			}
-			this.base(arguments, eventName, handler, onlyOnce);
+			super(eventName, handler, onlyOnce);
 		},
 
 		// Public APIs
 
-		getDate: function() {
+		getDate() {
 			return this.__calendar != null ?
-				this.__calendar.fullCalendar("getDate") :
-				moment(this.getAttribute("default-date", new Date()));
+				this.__calendar.getDate() :
+				moment(this.getAttribute("initial-date", new Date()));
 		},
 
-		setDate: function(date) {
-			if(this.__calendar != null)
-				this.__calendar.fullCalendar("gotoDate", date);
+		setDate(date) {
+			if(this.__calendar == null)
+				return;
+			let state = this.__calendar.getCurrentData();
+			this.__calendar.dispatch({
+				type: "CHANGE_DATE",
+				dateMarker: state.dateEnv.createMarker(date)
+			});
 		},
 
-		getView: function() {
-			return this.__calendar.fullCalendar("getView");
+		getView() {
+			return this.__calendar?.view;
 		},
 
 		// Internals
 
-		__isCalendarSeeable: function() {
+		__isCalendarSeeable() {
 			return this.getMainWidget().isSeeable();
 		},
 
-		__queueOperation: function(operationName) {
-			if(!this.__backgroundOperations) this.__backgroundOperations = [ ];
-			else if(qx.lang.Array.contains(this.__backgroundOperations, operationName)) return;
+		__queueOperation(operationName) {
+			if(!this.__backgroundOperations)
+				this.__backgroundOperations = [ ];
+			else if(qx.lang.Array.contains(this.__backgroundOperations, operationName))
+				return;
 			this.__backgroundOperations.push(operationName);
 
-			if(this.__backgroundOperationsTimer) return;
+			if(this.__backgroundOperationsTimer)
+				return;
 			this.__backgroundOperationsTimer = new qx.event.Timer(500);
 			this.__backgroundOperationsTimer.addListener("interval", this.__onBackgroundOperationInterval, this);
 			this.__backgroundOperationsTimer.start();
 		},
 
-		__onBackgroundOperationInterval: function() {
-			if(this.__backgroundOperations.length === 0) return;
-			if(!this.__isCalendarSeeable()) return;
-			var operationName = this.__backgroundOperations.shift();
+		__onBackgroundOperationInterval() {
+			if(this.__backgroundOperations.length === 0)
+				return;
+			if(!this.__isCalendarSeeable())
+				return;
+			let operationName = this.__backgroundOperations.shift();
 			switch(operationName) {
 			case "addEventSource":
 				try {
 					// Work around a strange bug when fullcalendar is loaded in an invisible DOM element
-					this.setDate(this.getAttribute("default-date", new Date()));
-					this.__calendar.fullCalendar("addEventSource", { events: function(start, end, timezone, callback) {
-						this.executeAction("getEvents", start, end, timezone, callback);
-					}.bind(this) });
+					this.setDate(this.getAttribute("initial-date", new Date()));
+					this.__calendar.addEventSource((info, successCallback, failureCallback) => {
+						this.executeAction("getEvents", info, successCallback, failureCallback);
+					});
 				}
 				catch(e) {
 					this.warn("Error adding event source to calendar", e);
@@ -203,15 +228,15 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				return;
 			case "refetchEvents":
 				if(this.__calendar != null)
-					this.__calendar.fullCalendar("refetchEvents");
+					this.__calendar.refetchEvents();
 				return;
 			}
 		}
 	},
 
-	destruct: function() {
+	destruct() {
 		if(this.__calendar != null) {
-			this.__calendar.fullCalendar("destroy");
+			this.__calendar.destroy();
 			this.__calendar = null;
 		}
 		this._disposeObjects("__backgroundOperationsTimer");

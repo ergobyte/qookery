@@ -16,21 +16,17 @@
 	limitations under the License.
 */
 
-/**
- * @ignore(jQuery.*)
- */
 qx.Bootstrap.define("qookery.calendar.Bootstrap", {
 
-	defer: function() {
-		var registry = qookery.Qookery.getRegistry();
+	defer() {
+		let registry = qookery.Qookery.getRegistry();
 
-		registry.registerLibrary("jquery", [ "${q:external-libraries}/jquery/jquery.min.js" ], null, function() { jQuery.noConflict(); });
 		registry.registerLibrary("moment", [ "${q:external-libraries}/moment/moment.min.js" ]);
 		registry.registerLibrary("fullcalendar", [
-			"${q:external-libraries}/fullcalendar/fullcalendar.min.css",
-			"${q:external-libraries}/fullcalendar/fullcalendar.min.js",
-			"${q:external-libraries}/fullcalendar/lang/el.js"
-		], [ "moment", "jquery" ]);
+			"${q:external-libraries}/fullcalendar/index.global.min.js",
+			"${q:external-libraries}/fullcalendar/moment-to-fullcalendar.min.js",
+			"${q:external-libraries}/fullcalendar/el.global.min.js"
+		], [ "moment" ]);
 
 		registry.registerComponentType("{http://www.qookery.org/ns/Form/Calendar}calendar", qookery.calendar.internal.CalendarComponent);
 	}

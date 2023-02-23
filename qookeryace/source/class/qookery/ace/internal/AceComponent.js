@@ -137,7 +137,8 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 		},
 
 		focus: function() {
-			this.__editor.focus();
+			if(this.__editor != null)
+				this.__editor.focus();
 		},
 
 		// Internal
