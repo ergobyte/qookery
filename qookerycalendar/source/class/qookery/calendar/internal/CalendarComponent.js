@@ -50,11 +50,14 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "button-text-week": return "ReplaceableString";
 			case "button-text-day": return "ReplaceableString";
 			case "default-all-day-event-duration": return "Integer";
+			case "display-event-end": return "Boolean";
 			case "initial-view": return "ReplaceableString";
 			case "editable": return "Boolean";
+			case "event-min-height": return "Integer";
 			case "day-max-event-rows": return "Boolean";
 			case "first-day": return "Integer";
 			case "selectable": return "Boolean";
+			case "slot-event-overlap": return "Boolean";
 			default: return super(attributeName);
 			}
 		},
@@ -112,6 +115,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				defaultAllDayEventDuration: { days: this.getAttribute("default-all-day-event-duration", 1) },
 				defaultTimedEventDuration: this.getAttribute("default-timed-event-duration", "02:00:00"),
 				editable: this.getAttribute("editable", false),
+				eventMinHeight: this.getAttribute("event-min-height", 15),
 				eventTimeFormat: this.getAttribute("event-time-format", "h:mm a"),
 				firstDay: this.getAttribute("first-day", 0),
 				headerToolbar: {
@@ -126,18 +130,19 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				scrollTime: this.getAttribute("scroll-time", "06:00:00"),
 				selectable: this.getAttribute("selectable", false),
 				slotDuration: this.getAttribute("slot-duration", "00:30:00"),
+				slotEventOverlap: this.getAttribute("slot-event-overlap", true),
 				slotLabelFormat: this.getAttribute("slot-label-format", "h:mm a"),
-				slotLabelInterval: "01:00",
 				slotMaxTime: this.getAttribute("slot-max-time", "24:00:00"),
 				slotMinTime: this.getAttribute("slot-min-time", "00:00:00"),
 				snapDuration: this.getAttribute("snap-duration", "00:10:00"),
-				timeZone: this.getAttribute("time-zone", "local"),
-				views: {
-					"timeGridWeek": {
-						dayHeaderFormat: { weekday: "short", month: "2-digit", day: "numeric", omitCommas: true }
-					}
-				}
+				timeZone: this.getAttribute("time-zone", "local")
 			});
+			let displayEventEnd = this.getAttribute("display-event-end");
+			if(displayEventEnd != null)
+				this.__options["displayEventEnd"] = displayEventEnd;
+			let slotLabelInterval = this.getAttribute("slot-label-interval");
+			if(slotLabelInterval != null)
+				this.__options["slotLabelInterval"] = slotLabelInterval;
 
 			// Below hack is to ensure that the FC popup is properly displayed when positioned outside the bounds of the widget
 			let domElement = this.__widget.getContentElement().getDomElement();
