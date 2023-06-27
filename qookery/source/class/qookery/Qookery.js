@@ -38,6 +38,11 @@ qx.Class.define("qookery.Qookery", {
 		// Options
 
 		/**
+		 * Default value of <code>cell-renderer</code> attribute for table columns
+		 */
+		OPTION_DEFAULT_CELL_RENDERER: "q:default-cell-renderer",
+
+		/**
 		 * Default value of <code>spacing-x</code> attribute for layout managers that support it
 		 */
 		OPTION_DEFAULT_LAYOUT_SPACING_X: "q:default-layout-spacing-x",

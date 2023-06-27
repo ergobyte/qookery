@@ -165,7 +165,7 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 					columnModel.setCellEditorFactory(i, cellEditor);
 				}
 
-				var cellRendererName = this.resolveQName(column["cell-renderer"] || "{http://www.qookery.org/ns/Form}model");
+				var cellRendererName = this.resolveQName(column["cell-renderer"] || qookery.Qookery.getOption(qookery.Qookery.OPTION_DEFAULT_CELL_RENDERER, "{http://www.qookery.org/ns/Form}model"));
 				var cellRendererFactory = qookery.Qookery.getRegistry().get(qookery.IRegistry.P_CELL_RENDERER_FACTORY, cellRendererName, true);
 				var cellRenderer = cellRendererFactory(this, column);
 				columnModel.setDataCellRenderer(i, cellRenderer);
