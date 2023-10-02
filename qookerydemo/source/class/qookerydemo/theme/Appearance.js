@@ -22,6 +22,14 @@ qx.Theme.define("qookerydemo.theme.Appearance", {
 
 	appearances: {
 
+		"rich-text": {
+			style: function(states) {
+				return {
+					decorator: "input"
+				};
+			}
+		},
+
 		// Label
 
 		"undecorated-splitpane": {

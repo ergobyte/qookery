@@ -22,14 +22,10 @@
 qx.Bootstrap.define("qookery.richtext.Bootstrap", {
 
 	defer: function() {
-		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [ "${q:external-libraries}/ckeditor/ckeditor.js" ], null, function() {
-			CKEDITOR.disableAutoInline = true;
-			CKEDITOR.config.basicEntities = false;
-			CKEDITOR.config.entities = true;
-			CKEDITOR.config.entities_latin = false;
-			CKEDITOR.config.entities_greek = false;
-			CKEDITOR.config.entities_additional = "nbsp,lt,gt,amp";
-		});
+		qookery.Qookery.getRegistry().registerLibrary("ckeditor", [
+			"${q:external-libraries}/ckeditor/ckeditor.js",
+			"${q:external-libraries}/ckeditor/translations/el.js"
+		], null, function() { });
 		qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/RichText}rich-text", qookery.richtext.internal.RichTextComponent);
 	}
 });

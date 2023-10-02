@@ -19,15 +19,15 @@
 /**
  * @asset(qookery/lib/ckeditor/*)
  *
- * @ignore(CKEDITOR)
- * @ignore(CKEDITOR.*)
+ * @ignore(InlineEditor)
+ * @ignore(InlineEditor.*)
  */
 qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 	extend: qx.ui.core.Widget,
 
 	properties: {
-		appearance: { refine: true, init: "textfield" },
+		appearance: { refine: true, init: "rich-text" },
 		focusable: { refine: true, init: true },
 		selectable: { refine: true, init: true },
 		readOnly: { nullable: false, init: false, apply: "__applyReadOnly" },
@@ -41,10 +41,6 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		// Defer creation of CKEditor until after positioning is done
 		this.addListenerOnce("appear", function(event) {
 			qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__onLibraryLoaded, this);
-		}, this);
-		this.addListener("focusin", function() {
-			if(this.__ckEditor == null) return;
-			this.__ckEditor.focus();
 		}, this);
 	},
 
@@ -64,7 +60,6 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 				overflowX: "auto",
 				overflowY: "auto"
 			});
-			element.addClass("qk-rich-text");
 			element.setSelectable(true);
 			return element;
 		},
@@ -75,34 +70,38 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 				return;
 			}
 			// Method might be called after widget destruction
-			if(this.isDisposed()) return;
-
-			// Horrific kludge to prevent qx.ui.root.Abstract#__preventScrollWhenFocused() from eating up Space keypresses
-			var element = this.getContentElement();
-			element.getNodeName = function() {
-				return "textarea";
-			};
+			if(this.isDisposed())
+				return;
 
 			// Check that CKEditor is in a supported environment
+			var element = this.getContentElement();
 			var domElement = element.getDomElement();
-			if(!CKEDITOR.env.isCompatible) {
-				domElement.innerHTML = "<span style='color: red;'>Rich text editing is not supported in this environment. Please upgrade your browser.</span>";
-				return;
-			}
-
 			// Invoke CKEditor inline()
-			domElement.setAttribute("contenteditable", "true");
 			domElement.setAttribute("data-qk-widget", this.toHashCode());
-			this.__ckEditor = CKEDITOR.inline(domElement, this.__configuration);
-			// Defer further setup after instance is ready
-			this.__ckEditor.on("instanceReady", function() {
-				// Insert current value into newly created editor
-				this.__setCkEditorText(this.getValue());
-				// Register value change listener
-				this.__ckEditor.on("change", this.__onCkEditorChange, this);
-				this.__ckEditor.setReadOnly(this.getReadOnly());
-			}, this);
+			InlineEditor
+				.create(domElement, this.__configuration)
+				.then(function(editor) {
+					this.__ckEditor = editor;
+					var value = this.getValue();
+					if(value == null)
+						value = "";
+					// Insert current value into newly created editor
+					this.__setCkEditorText(value);
+					this.__ckEditor.model.document.on("change:data", this.__onCkEditorChange.bind(this));
+					this.__applyReadOnlyMode(this.getReadOnly());
+				}.bind(this))
+				.catch(function(error) {
+					this.error("Error creating editor", error);
+				}.bind(this));
 			this.setFocusable(true);
+			this.addListener("resize", function(event) {
+				if(!this.__ckEditor)
+					return;
+				this.__ckEditor.editing.view.change(function(writer) {
+					writer.setStyle("width", event.getData().width + "px", this.__ckEditor.editing.view.document.getRoot());
+					writer.setStyle("height", event.getData().height + "px", this.__ckEditor.editing.view.document.getRoot());
+				}.bind(this));
+			}, this);
 		},
 
 		__onCkEditorChange: function() {
@@ -122,18 +121,16 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 
 		__setCkEditorText: function(text) {
 			// It is possible that we are not ready to accept values yet
-			if(this.__ckEditor == null || this.__disableValueUpdate) return;
+			if(this.__ckEditor == null || this.__disableValueUpdate)
+				return;
 			// Store and set new value into CKEditor
-			this.__ckEditor.setData(text, {
-				noSnapshot: true
-			});
+			this.__ckEditor.setData(text);
 		},
 
 		__applyReadOnly: function(value) {
 			var element = this.getContentElement();
 			element.setAttribute("readOnly", value);
-			if(this.__ckEditor != null)
-				this.__ckEditor.setReadOnly(value);
+			this.__applyReadOnlyMode(value);
 			if(value) {
 				this.addState("readonly");
 				this.setFocusable(false);
@@ -142,13 +139,22 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 				this.removeState("readonly");
 				this.setFocusable(true);
 			}
+		},
+
+		__applyReadOnlyMode: function(value) {
+			if(this.__ckEditor == null)
+				return;
+			var myFeatureLockId = this.toHashCode();
+			if(value)
+				this.__ckEditor.enableReadOnlyMode(myFeatureLockId);
+			else
+				this.__ckEditor.disableReadOnlyMode(myFeatureLockId);
 		}
 	},
 
 	destruct: function() {
 		// We have to behave ourselves and properly clean up our mess
 		if(this.__ckEditor != null) {
-			this.__ckEditor.focusManager.blur(true);
 			this.__ckEditor.destroy();
 			this.__ckEditor = null;
 		}

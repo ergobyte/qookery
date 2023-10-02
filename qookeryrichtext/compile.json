@@ -4,7 +4,7 @@
 			"@qooxdoo/eslint-config-qx"
 		],
 		"globals": {
-			"CKEDITOR": true
+			"InlineEditor": true
 		}
 	}
 }

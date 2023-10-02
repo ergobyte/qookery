@@ -148,7 +148,7 @@
 		<define-library project="qookeryace" library="Ace" version="1.4.3" />
 		<define-library project="qookerycalendar" library="FullCalendar" version="6.1.4" />
 		<define-library project="qookerycalendar" library="Moment" version="2.27.0" />
-		<define-library project="qookeryrichtext" library="CKEditor" version="4.9.2" />
+		<define-library project="qookeryrichtext" library="CKEditor" version="39.0.2" />
 	</target>
 
 	<target name="Download.Ace" depends="Download.Init" extensionOf="Download" unless="qookeryace.Ace.uptodate">
@@ -189,18 +189,16 @@
 		<install-library project="qookerycalendar" library="FullCalendar" />
 	</target>
 
-	<target name="Download.CKEditor" depends="Download.Init" extensionOf="Download" unless="qookeryrichtext.CKEditor.uptodate">
-		<property name="ckeditor.package" value="full" />
-		<property name="ckeditor.zipFilename" value="ckeditor_${qookeryrichtext.CKEditor.version}_${ckeditor.package}.zip" />
-		<property name="ckeditor.downloadUrl" value="http://download.cksource.com/CKEditor/CKEditor/CKEditor%20${qookeryrichtext.CKEditor.version}/${ckeditor.zipFilename}" />
+	<target name="Download.CKEditor" extensionOf="Download" depends="Download.Init" unless="qookeryrichtext.CKEditor.uptodate">
 		<property name="ckeditor.target" location="qookeryrichtext/source/resource/qookery/lib" />
-		<mkdir dir="${ckeditor.target}" />
-		<get dest="${ckeditor.target}" skipExisting="true" verbose="on" httpusecaches="no">
-			<url url="${ckeditor.downloadUrl}" />
-		</get>
-		<unzip src="${ckeditor.target}/${ckeditor.zipFilename}" dest="${ckeditor.target}/" />
-		<delete file="${ckeditor.target}/${ckeditor.zipFilename}" />
-		<delete dir="${ckeditor.target}/ckeditor/samples" />
+		<mkdir dir="${ckeditor.target}/ckeditor" />
+		<get verbose="on" httpusecaches="no"
+				src="https://cdn.ckeditor.com/ckeditor5/${qookeryrichtext.CKEditor.version}/inline/ckeditor.js"
+				dest="${ckeditor.target}/ckeditor/ckeditor.js" />
+		<mkdir dir="${ckeditor.target}/ckeditor/translations" />
+		<get verbose="on" httpusecaches="no"
+				src="https://cdn.ckeditor.com/ckeditor5/${qookeryrichtext.CKEditor.version}/inline/translations/el.js"
+				dest="${ckeditor.target}/ckeditor/translations/el.js" />
 		<install-library project="qookeryrichtext" library="CKEditor" />
 	</target>
 

@@ -28,9 +28,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 		getAttributeType: function(attributeName) {
 			switch(attributeName) {
-			case "title": return "Boolean";
-			case "toolbar-can-collapse": return "Boolean";
-			case "custom-config": return "String";
+			case "placeholder": return "Boolean";
 			default: return this.base(arguments, attributeName);
 			}
 		},
@@ -41,24 +39,15 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			configuration["language"] = qx.locale.Manager.getInstance().getLanguage();
 			configuration["readOnly"] = this.getReadOnly();
 			configuration["tabIndex"] = this.getAttribute("tab-index");
-			configuration["title"] = this.getAttribute("title", false);
-			configuration["toolbarCanCollapse"] = this.getAttribute("toolbar-can-collapse", false);
-			configuration["uiColor"] = qx.theme.manager.Color.getInstance().resolve(this.getAttribute("ui-color", "background"));
+			configuration["placeholder"] = this.getAttribute("placeholder", "");
 
-			var toolbarName = this.getAttribute("toolbar");
-			if(toolbarName != null)
-				configuration["toolbar"] = toolbarName;
+			var toolbarItems = this.getAttribute("toolbar");
+			if(toolbarItems != null)
+				configuration["toolbar"] = toolbarItems.split(/\s+/);
 
 			var removePluginsSpecification = this.getAttribute("remove-plugins");
 			if(removePluginsSpecification)
 				configuration["removePlugins"] = removePluginsSpecification.split(/\s+/).join(",");
-
-			var customConfigName = this.getAttribute("custom-config", qookery.Qookery.getOption("q-richtext:default-custom-config", null));
-			if(customConfigName != null) {
-				var resourceLoader = qookery.Qookery.getService("qookery.IResourceLoader", true);
-				var customConfigUri = resourceLoader.resolveResourceUri(customConfigName);
-				configuration["customConfig"] = qx.util.Uri.getAbsolute(customConfigUri);
-			}
 
 			// Create the wrapping widget
 			var widget = new qookery.richtext.internal.RichTextWidget(configuration);
@@ -80,6 +69,11 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 		_applyReadOnly: function(readOnly) {
 			this.base(arguments, readOnly);
 			this.getMainWidget().setReadOnly(readOnly);
+		},
+
+		_applyEnabled: function(value) {
+			this.base(arguments, value);
+			this.getMainWidget().setReadOnly(!value);
 		},
 
 		_applyValid: function(valid) {
