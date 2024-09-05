@@ -56,6 +56,7 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 				this._setValueSilently(event.getData());
 			}, this);
 			this._applyAttribute("tab-index", widget, "tabIndex");
+			this._applyAttribute("native-context-menu", widget, "nativeContextMenu", true);
 
 			// Configure widget positioning by applying layout
 			this._applyWidgetAttributes(widget);

@@ -32,7 +32,10 @@
 		<attribute name="button-text-month" type="string" />
 		<attribute name="button-text-today" type="string" />
 		<attribute name="button-text-week" type="string" />
+		<attribute name="button-text-resource-time-grid-day" type="string" />
+		<attribute name="button-text-resource-timeline-day" type="string" />
 		<attribute name="day-max-event-rows" default="false"><simpleType><union memberTypes="boolean nonNegativeInteger" /></simpleType></attribute>
+		<attribute name="day-min-width" type="integer" default="150" />
 		<attribute name="default-all-day-event-duration" type="nonNegativeInteger" default="1" />
 		<attribute name="default-timed-event-duration" type="time" default="02:00:00" />
 		<attribute name="display-event-end" type="boolean" />

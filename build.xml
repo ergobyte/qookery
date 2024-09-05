@@ -179,7 +179,7 @@
 		<property name="fullcalendar.target" location="qookerycalendar/source/resource/qookery/lib" />
 		<mkdir dir="${fullcalendar.target}/fullcalendar" />
 		<get dest="${fullcalendar.target}/fullcalendar" skipExisting="true" verbose="on" httpusecaches="no">
-			<url url="https://cdn.jsdelivr.net/npm/fullcalendar@${qookerycalendar.FullCalendar.version}/index.global.min.js" />
+			<url url="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@${qookerycalendar.FullCalendar.version}/index.global.min.js" />
 			<url url="https://cdn.jsdelivr.net/npm/@fullcalendar/core@${qookerycalendar.FullCalendar.version}/locales/el.global.min.js" />
 		</get>
 		<get verbose="on" httpusecaches="no" skipExisting="true" src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@${qookerycalendar.FullCalendar.version}/index.global.min.js"

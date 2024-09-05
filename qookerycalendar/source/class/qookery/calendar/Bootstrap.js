@@ -18,6 +18,14 @@
 
 qx.Bootstrap.define("qookery.calendar.Bootstrap", {
 
+	statics: {
+
+		/**
+		 * Option {String}: A license key as provided by FullCalendar for accessing the premium plugins
+		 */
+		OPTIONS_SCHEDULER_LICENSE_KEY: "q-cal:scheduler-license-key"
+	},
+
 	defer() {
 		let registry = qookery.Qookery.getRegistry();
 

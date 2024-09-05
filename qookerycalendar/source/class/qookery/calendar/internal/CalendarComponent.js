@@ -49,6 +49,8 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "button-text-month": return "ReplaceableString";
 			case "button-text-week": return "ReplaceableString";
 			case "button-text-day": return "ReplaceableString";
+			case "button-text-resource-time-grid-day": return "ReplaceableString";
+			case "button-text-resource-timeline-day": return "ReplaceableString";
 			case "default-all-day-event-duration": return "Integer";
 			case "display-event-end": return "Boolean";
 			case "initial-view": return "ReplaceableString";
@@ -109,7 +111,9 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 					today: this.getAttribute("button-text-today", "today")?.toString(),
 					month: this.getAttribute("button-text-month", undefined)?.toString(),
 					week: this.getAttribute("button-text-week", undefined)?.toString(),
-					day: this.getAttribute("button-text-day", undefined)?.toString()
+					day: this.getAttribute("button-text-day", undefined)?.toString(),
+					resourceTimeGridDay: this.getAttribute("button-text-resource-time-grid-day", undefined)?.toString(),
+					resourceTimelineDay: this.getAttribute("button-text-resource-timeline-day", undefined)?.toString()
 				},
 				dayMaxEventRows: this.getAttribute("day-max-event-rows", false),
 				defaultAllDayEventDuration: { days: this.getAttribute("default-all-day-event-duration", 1) },
@@ -140,9 +144,15 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			let displayEventEnd = this.getAttribute("display-event-end");
 			if(displayEventEnd != null)
 				this.__options["displayEventEnd"] = displayEventEnd;
+			let dayMinWidth = this.getAttribute("day-min-width");
+			if(dayMinWidth != null)
+				this.__options["dayMinWidth"] = dayMinWidth;
 			let slotLabelInterval = this.getAttribute("slot-label-interval");
 			if(slotLabelInterval != null)
 				this.__options["slotLabelInterval"] = slotLabelInterval;
+			let schedulerLicenseKey = qookery.Qookery.getOption(qookery.calendar.Bootstrap.OPTIONS_SCHEDULER_LICENSE_KEY);
+			if(schedulerLicenseKey != null)
+				this.__options["schedulerLicenseKey"] = schedulerLicenseKey;
 
 			// Below hack is to ensure that the FC popup is properly displayed when positioned outside the bounds of the widget
 			let domElement = this.__widget.getContentElement().getDomElement();
@@ -150,6 +160,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			qx.bom.element.Style.set(domElement, "z-index", 11);
 
 			let calendar = this.__calendar = new FullCalendar.Calendar(domElement, this.__options);
+			this.executeAction("setupCalendar", calendar);
 			calendar.render();
 
 			// Start background operations
@@ -171,6 +182,10 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 		},
 
 		// Public APIs
+
+		getCalendar() {
+			return this.__calendar;
+		},
 
 		getDate() {
 			return this.__calendar != null ?

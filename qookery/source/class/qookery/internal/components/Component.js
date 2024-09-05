@@ -301,11 +301,21 @@ qx.Class.define("qookery.internal.components.Component", {
 		},
 
 		/**
-		 * Apply common attributes to a widget
+		 * Apply component attributes to a widget
 		 *
-		 * @param widget {qx.ui.core.Widget} widget to receive layout properties
+		 * @param widget {qx.ui.core.Widget} widget to receive property values
 		 */
-		_applyWidgetAttributes: function(widget) {
+		_applyWidgetAttributes(widget) {
+			this._applyMainAttributes(widget);
+			this._applyLayoutAttributes(widget);
+		},
+
+		/**
+		 * Apply size, positioning, appearance and other component attributes to a widget
+		 *
+		 * @param widget {qx.ui.core.Widget} widget to receive property values
+		 */
+		_applyMainAttributes(widget) {
 			// Size and position
 
 			this._applyAttribute("width", widget, "width");
@@ -362,16 +372,18 @@ qx.Class.define("qookery.internal.components.Component", {
 			this._applyAttribute("droppable", widget, "droppable");
 			this._applyAttribute("focusable", widget, "focusable");
 			this._applyAttribute("tab-index", widget, "tabIndex");
+		},
 
+		_applyLayoutAttributes(widget) {
 			// Layout item properties
-
-			var layoutProperties = null;
-			var layoutPropertyMap = qookery.internal.components.Component.__LAYOUT_ITEM_PROPERTY_MAP;
-			for(var attributeName in layoutPropertyMap) {
-				var value = this.getAttribute(attributeName, undefined);
+			let layoutProperties = null;
+			let layoutPropertyMap = qookery.internal.components.Component.__LAYOUT_ITEM_PROPERTY_MAP;
+			for(let attributeName in layoutPropertyMap) {
+				let value = this.getAttribute(attributeName, undefined);
 				if(value === undefined)
 					continue;
-				if(layoutProperties == null) layoutProperties = { };
+				if(layoutProperties == null)
+					layoutProperties = { };
 				layoutProperties[layoutPropertyMap[attributeName]] = value;
 			}
 			if(layoutProperties != null)
