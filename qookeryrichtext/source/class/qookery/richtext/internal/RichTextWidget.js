@@ -34,37 +34,45 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		value: { nullable: true, check: "String", event: "changeValue", apply: "__setCkEditorText" }
 	},
 
-	construct: function(configuration) {
-		this.base(arguments);
+	construct(configuration) {
+		super();
 		qx.core.ObjectRegistry.register(this);
 		this.__configuration = configuration;
 		// Defer creation of CKEditor until after positioning is done
-		this.addListenerOnce("appear", function(event) {
+		this.addListenerOnce("appear", event => {
 			qookery.Qookery.getRegistry().loadLibrary("ckeditor", this.__onLibraryLoaded, this);
-		}, this);
+		});
 	},
 
 	members: {
 
 		__configuration: null,
+		__outerDiv: null,
+		__innerDiv: null,
 		__ckEditor: null,
 		__disableValueUpdate: false,
 
-		getCkEditor: function() {
+		getCkEditor() {
 			return this.__ckEditor;
 		},
 
-		_createContentElement: function() {
-			// Create a selectable and overflow enabled <div> for CKEDITOR.inline()
-			var element = new qx.html.Element("div", {
+		_createContentElement() {
+			// Create an outer div for Qooxdoo to play with
+			let outerDiv = this.__outerDiv = new qx.html.Element("div", {
+				overflowX: "hidden",
+				overflowY: "hidden"
+			});
+			// Create an inner selectable and overflow enabled <div> for CKEDITOR.inline()
+			let innerDiv = this.__innerDiv = new qx.html.Element("div", {
 				overflowX: "auto",
 				overflowY: "auto"
 			});
-			element.setSelectable(true);
-			return element;
+			innerDiv.setSelectable(true);
+			outerDiv.add(innerDiv);
+			return outerDiv;
 		},
 
-		__onLibraryLoaded: function(error) {
+		__onLibraryLoaded(error) {
 			if(error != null) {
 				this.error("Error loading library", error);
 				return;
@@ -74,18 +82,18 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 				return;
 
 			// Check that CKEditor is in a supported environment
-			var element = this.getContentElement();
-			var domElement = element.getDomElement();
+			let domElement = this.__innerDiv.getDomElement();
 			// Invoke CKEditor inline()
 			domElement.setAttribute("data-qk-widget", this.toHashCode());
 			InlineEditor
 				.create(domElement, this.__configuration)
 				.then(function(editor) {
 					this.__ckEditor = editor;
-					var value = this.getValue();
+					let value = this.getValue();
 					if(value == null)
 						value = "";
 					// Insert current value into newly created editor
+					this.__resizeCkEditor(this.__outerDiv.getDimensions("padding"));
 					this.__setCkEditorText(value);
 					this.__ckEditor.model.document.on("change:data", this.__onCkEditorChange.bind(this));
 					this.__applyReadOnlyMode(this.getReadOnly());
@@ -94,18 +102,29 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 					this.error("Error creating editor", error);
 				}.bind(this));
 			this.setFocusable(true);
-			this.addListener("resize", function(event) {
-				if(!this.__ckEditor)
+			this.addListener("resize", event => {
+				if(this.__ckEditor == null)
 					return;
-				this.__ckEditor.editing.view.change(function(writer) {
-					writer.setStyle("width", event.getData().width + "px", this.__ckEditor.editing.view.document.getRoot());
-					writer.setStyle("height", event.getData().height + "px", this.__ckEditor.editing.view.document.getRoot());
-				}.bind(this));
+				let dimensions = event.getData();
+				// When dimensions come from the resize event, insets are included and must be accounted for
+				let insets = this.getInsets();
+				dimensions.width -= insets.left;
+				dimensions.width -= insets.right;
+				dimensions.height -= insets.top;
+				dimensions.height -= insets.bottom;
+				this.__resizeCkEditor(dimensions);
 			}, this);
 		},
 
-		__onCkEditorChange: function() {
-			var text = this.__ckEditor.getData();
+		__resizeCkEditor(dimensions) {
+			this.__ckEditor.editing.view.change(writer => {
+				writer.setStyle("width", dimensions.width + "px", this.__ckEditor.editing.view.document.getRoot());
+				writer.setStyle("height", dimensions.height + "px", this.__ckEditor.editing.view.document.getRoot());
+			});
+		},
+
+		__onCkEditorChange() {
+			let text = this.__ckEditor.getData();
 			// Couldn't figure out a way to prevent CKEditor from inserting spurious non-breaking spaces - removing manually
 			text = text.replace(/(&nbsp;|\u00A0|\u202F)+/g, " ");
 			if(text.trim().length === 0)
@@ -119,7 +138,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			}
 		},
 
-		__setCkEditorText: function(text) {
+		__setCkEditorText(text) {
 			// It is possible that we are not ready to accept values yet
 			if(this.__ckEditor == null || this.__disableValueUpdate)
 				return;
@@ -127,9 +146,8 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			this.__ckEditor.setData(text);
 		},
 
-		__applyReadOnly: function(value) {
-			var element = this.getContentElement();
-			element.setAttribute("readOnly", value);
+		__applyReadOnly(value) {
+			this.__innerDiv.setAttribute("readOnly", value);
 			this.__applyReadOnlyMode(value);
 			if(value) {
 				this.addState("readonly");
@@ -141,10 +159,10 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			}
 		},
 
-		__applyReadOnlyMode: function(value) {
+		__applyReadOnlyMode(value) {
 			if(this.__ckEditor == null)
 				return;
-			var myFeatureLockId = this.toHashCode();
+			let myFeatureLockId = this.toHashCode();
 			if(value)
 				this.__ckEditor.enableReadOnlyMode(myFeatureLockId);
 			else
@@ -152,7 +170,7 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 		}
 	},
 
-	destruct: function() {
+	destruct() {
 		// We have to behave ourselves and properly clean up our mess
 		if(this.__ckEditor != null) {
 			this.__ckEditor.destroy();

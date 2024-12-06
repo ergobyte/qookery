@@ -25,7 +25,8 @@ qx.Theme.define("qookerydemo.theme.Appearance", {
 		"rich-text": {
 			style: function(states) {
 				return {
-					decorator: "input"
+					decorator: "main",
+					backgroundColor: "white"
 				};
 			}
 		},

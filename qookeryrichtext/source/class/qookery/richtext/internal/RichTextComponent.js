@@ -20,39 +20,52 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
+	events: {
+		"wordCount": "qx.event.type.Data"
+	},
+
+	construct(parentComponent) {
+		super(parentComponent);
 	},
 
 	members: {
 
-		getAttributeType: function(attributeName) {
+		__widget: null,
+
+		getAttributeType(attributeName) {
 			switch(attributeName) {
 			case "placeholder": return "Boolean";
-			default: return this.base(arguments, attributeName);
+			default: return super(attributeName);
 			}
 		},
 
-		_createMainWidget: function() {
+		_createMainWidget() {
 			// Prepare CKEditor configuration
-			var configuration = { };
+			let configuration = { };
 			configuration["language"] = qx.locale.Manager.getInstance().getLanguage();
 			configuration["readOnly"] = this.getReadOnly();
 			configuration["tabIndex"] = this.getAttribute("tab-index");
 			configuration["placeholder"] = this.getAttribute("placeholder", "");
 
-			var toolbarItems = this.getAttribute("toolbar");
+			let toolbarItems = this.getAttribute("toolbar");
 			if(toolbarItems != null)
 				configuration["toolbar"] = toolbarItems.split(/\s+/);
 
-			var removePluginsSpecification = this.getAttribute("remove-plugins");
+			let removePluginsSpecification = this.getAttribute("remove-plugins");
 			if(removePluginsSpecification)
 				configuration["removePlugins"] = removePluginsSpecification.split(/\s+/).join(",");
 
+			configuration["wordCount"] = {
+				onUpdate: function(stats) {
+					this.fireDataEvent("wordCount", stats);
+				}.bind(this)
+			};
+
 			// Create the wrapping widget
-			var widget = new qookery.richtext.internal.RichTextWidget(configuration);
-			widget.addListener("changeValue", function(event) {
-				if(this._disableValueEvents) return;
+			let widget = this.__widget = new qookery.richtext.internal.RichTextWidget(configuration);
+			widget.addListener("changeValue", event => {
+				if(this._disableValueEvents)
+					return;
 				this._setValueSilently(event.getData());
 			}, this);
 			this._applyAttribute("tab-index", widget, "tabIndex");
@@ -63,33 +76,41 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			return widget;
 		},
 
-		_updateUI: function(value) {
-			this.getMainWidget().setValue(this._getLabelOf(value));
+		getMainWidget() {
+			return this.__widget;
 		},
 
-		_applyReadOnly: function(readOnly) {
-			this.base(arguments, readOnly);
-			this.getMainWidget().setReadOnly(readOnly);
+		_updateUI(value) {
+			this.__widget.setValue(this._getLabelOf(value));
 		},
 
-		_applyEnabled: function(value) {
-			this.base(arguments, value);
-			this.getMainWidget().setReadOnly(!value);
+		_applyReadOnly(readOnly) {
+			super(readOnly);
+			this.__widget.setReadOnly(readOnly);
 		},
 
-		_applyValid: function(valid) {
+		_applyEnabled(value) {
+			super(value);
+			this.__widget.setReadOnly(!value);
+		},
+
+		_applyValid(valid) {
 			if(!valid)
-				this.getMainWidget().addState("invalid");
+				this.__widget.addState("invalid");
 			else
-				this.getMainWidget().removeState("invalid");
+				this.__widget.removeState("invalid");
 		},
 
-		getCkEditor: function() {
-			return this.getMainWidget().getCkEditor();
+		getCkEditor() {
+			return this.__widget.getCkEditor();
 		},
 
-		setInvalidMessage: function(invalidMessage) {
+		setInvalidMessage(invalidMessage) {
 			// Overriden to block default implementation
+		},
+
+		_applyValidationErrors() {
+			// Qookery validation is not supported
 		}
 	}
 });
