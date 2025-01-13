@@ -80,6 +80,10 @@ qx.Class.define("qookery.richtext.internal.RichTextComponent", {
 			return this.__widget;
 		},
 
+		focus() {
+			this.__widget?.focus();
+		},
+
 		_updateUI(value) {
 			this.__widget.setValue(this._getLabelOf(value));
 		},

@@ -56,6 +56,14 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			return this.__ckEditor;
 		},
 
+		focus() {
+			this.__innerDiv?.focus();
+		},
+
+		getFocusElement() {
+			return this.__innerDiv;
+		},
+
 		_createContentElement() {
 			// Create an outer div for Qooxdoo to play with
 			let outerDiv = this.__outerDiv = new qx.html.Element("div", {
