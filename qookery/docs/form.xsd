@@ -866,6 +866,9 @@
 	</complexType></element>
 
 	<element name="table-column"><complexType>
+		<sequence>
+			<element ref="q:script" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
 		<attribute name="cell-editor" type="q:cell-editor" />
 		<attribute name="cell-renderer" default="model" type="q:cell-renderer" />
 		<attribute name="color" type="string" />

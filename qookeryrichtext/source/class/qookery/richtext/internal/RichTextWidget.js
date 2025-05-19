@@ -89,10 +89,11 @@ qx.Class.define("qookery.richtext.internal.RichTextWidget", {
 			if(this.isDisposed())
 				return;
 
-			// Check that CKEditor is in a supported environment
+			// Add some useful attributes to HTML elements
+			this.__outerDiv.getDomElement().setAttribute("data-qk-widget", this.toHashCode());
 			let domElement = this.__innerDiv.getDomElement();
-			// Invoke CKEditor inline()
 			domElement.setAttribute("data-qk-widget", this.toHashCode());
+			// Create CKEditor inline()
 			InlineEditor
 				.create(domElement, this.__configuration)
 				.then(function(editor) {

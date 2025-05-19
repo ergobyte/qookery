@@ -50,7 +50,7 @@ qx.Class.define("qookery.internal.components.ComboBoxComponent", {
 				if(text != null && text.trim().length === 0)
 					text = null;
 				var format = this.getFormat();
-				var value = format != null ? format.parse(text) : text;
+				var value = format != null && text != null ? format.parse(text) : text;
 				this.getEditableWidget().setValue(this._getLabelOf(value));
 				this._setValueSilently(value);
 			}, this);

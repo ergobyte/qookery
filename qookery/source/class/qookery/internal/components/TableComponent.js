@@ -91,13 +91,23 @@ qx.Class.define("qookery.internal.components.TableComponent", {
 		parseXmlElement: function(elementName, xmlElement) {
 			switch(elementName) {
 			case "{http://www.qookery.org/ns/Form}table-model":
-				if(this.__tableModel) throw new Error("Table model has already been created");
+				if(this.__tableModel)
+					throw new Error("Table model has already been created");
 				var tableModelClassName = qookery.util.Xml.getAttribute(xmlElement, "class", Error);
 				var tableModelClass = qx.Class.getByName(tableModelClassName);
 				this.__tableModel = new tableModelClass(this, xmlElement);
 				return true;
 			case "{http://www.qookery.org/ns/Form}table-column":
 				var column = qookery.util.Xml.parseAllAttributes(this, xmlElement);
+				for(let e of qx.dom.Hierarchy.getChildElements(xmlElement)) {
+					if(qx.dom.Node.getName(e) === "script") {
+						let name = qookery.util.Xml.getAttribute(e, "name", Error);
+						if(name === "format") {
+							let clientCode = qookery.util.Xml.getNodeText(e);
+							column["format"] = value => this.executeClientCode(clientCode, { value: value });
+						}
+					}
+				}
 				this.addColumn(column);
 				return true;
 			}

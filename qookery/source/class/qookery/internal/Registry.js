@@ -364,10 +364,12 @@ qx.Class.define("qookery.internal.Registry", {
 			var colonPos = specification.indexOf(":");
 			if(colonPos === -1 && options === undefined) {
 				var format = this.get(qookery.IRegistry.P_FORMAT, specification);
-				if(format) return format;
+				if(format != null)
+					return format;
 			}
 			var factoryName = specification;
-			if(options === undefined) options = { };
+			if(options === undefined)
+				options = { };
 			if(colonPos !== -1) {
 				factoryName = specification.slice(0, colonPos);
 				specification.slice(colonPos + 1).replace(/([^=,]+)=([^,]*)/g, function(m, key, value) {
