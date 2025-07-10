@@ -139,7 +139,15 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 				slotMaxTime: this.getAttribute("slot-max-time", "24:00:00"),
 				slotMinTime: this.getAttribute("slot-min-time", "00:00:00"),
 				snapDuration: this.getAttribute("snap-duration", "00:10:00"),
-				timeZone: this.getAttribute("time-zone", "local")
+				timeZone: this.getAttribute("time-zone", "local"),
+				views: {
+					resourceTimeGridDay: {
+						titleFormat: { year: "numeric", month: "long", day: "2-digit", weekday: "long" }
+					},
+					resourceTimelineDay: {
+						titleFormat: { year: "numeric", month: "long", day: "2-digit", weekday: "long" }
+					}
+				}
 			});
 			let displayEventEnd = this.getAttribute("display-event-end");
 			if(displayEventEnd != null)
