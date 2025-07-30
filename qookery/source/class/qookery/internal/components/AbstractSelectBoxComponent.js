@@ -129,6 +129,12 @@ qx.Class.define("qookery.internal.components.AbstractSelectBoxComponent", {
 						this.addItem(model, qx.data.Conversion.toString(label));
 					}
 				}
+				else if(items instanceof Map) {
+					items.forEach((label, model) => {
+						this.addItem(model, qx.data.Conversion.toString(label));
+					});
+				}
+				else throw new Error("Items argument is of unsupported type");
 			}
 			finally {
 				this._disableValueEvents = false;

@@ -62,24 +62,37 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 		// Public methods
 
 		setItems: function(items) {
-			this.__removeAllGroupItems();
-			if(items == null) return;
-			if(items instanceof qx.data.Array) {
-				items = items.toArray();
-			}
-			if(qx.lang.Type.isArray(items)) {
-				items.forEach(function(model) {
-					var label = this._getLabelOf(model);
-					this.__addGroupItem(model, label);
-				}, this);
-			}
-			else if(qx.lang.Type.isObject(items)) {
-				for(var model in items) {
-					var label = items[model];
-					this.__addGroupItem(model, label);
+			this._disableValueEvents = true;
+			try {
+				this.__removeAllGroupItems();
+				if(items == null)
+					return;
+				if(items instanceof qx.data.Array) {
+					items = items.toArray();
 				}
+				if(qx.lang.Type.isArray(items)) {
+					items.forEach(function(model) {
+						var label = this._getLabelOf(model);
+						this.__addGroupItem(model, label);
+					}, this);
+				}
+				else if(qx.lang.Type.isObject(items)) {
+					for(var model in items) {
+						var label = items[model];
+						this.__addGroupItem(model, label);
+					}
+				}
+				else if(items instanceof Map) {
+					items.forEach((label, model) => {
+						this.__addGroupItem(model, label);
+					});
+				}
+				else throw new Error("Items argument is of unsupported type");
 			}
-			else throw new Error("Items are of unsupported type");
+			finally {
+				this._disableValueEvents = false;
+			}
+			this._updateUI(this.getValue());
 		},
 
 		setSelection: function(itemNumber) {
@@ -150,6 +163,24 @@ qx.Class.define("qookery.internal.components.RadioButtonGroupComponent", {
 
 		__removeAllGroupItems: function() {
 			this.getMainWidget().removeAll().forEach(function(widget) { widget.dispose(); }, this);
+		},
+
+		_applyEnabled: function(enabled) {
+			var labelWidget = this.getLabelWidget();
+			if(labelWidget != null)
+				labelWidget.setEnabled(enabled);
+			this.__updateEnabled();
+		},
+
+		_applyReadOnly: function(readOnly) {
+			this.base(arguments, readOnly);
+			this.__updateEnabled();
+		},
+
+		__updateEnabled: function() {
+			var isEnabled = this.getEnabled();
+			var isReadOnly = this.getReadOnly();
+			this.getMainWidget().setEnabled(isEnabled && !isReadOnly);
 		}
 	},
 

@@ -121,22 +121,35 @@ qx.Class.define("qookery.internal.components.ListComponent", {
 		},
 
 		setItems: function(items) {
-			this.removeAllItems();
-			if(items instanceof qx.data.Array)
-				items = items.toArray();
-			if(qx.lang.Type.isArray(items)) {
-				for(let i = 0; i < items.length; i++) {
-					let model = items[i];
-					let label = this._getLabelOf(model);
-					this.addItem(model, label);
+			this._disableValueEvents = true;
+			try {
+				this.removeAllItems();
+				if(items instanceof qx.data.Array)
+					items = items.toArray();
+				if(qx.lang.Type.isArray(items)) {
+					for(let i = 0; i < items.length; i++) {
+						let model = items[i];
+						let label = this._getLabelOf(model);
+						this.addItem(model, label);
+					}
 				}
-			}
-			else if(qx.lang.Type.isObject(items)) {
-				for(let model in items) {
-					let label = items[model];
-					this.addItem(model, qx.data.Conversion.toString(label));
+				else if(qx.lang.Type.isObject(items)) {
+					for(let model in items) {
+						let label = items[model];
+						this.addItem(model, qx.data.Conversion.toString(label));
+					}
 				}
+				else if(items instanceof Map) {
+					items.forEach((label, model) => {
+						this.addItem(model, qx.data.Conversion.toString(label));
+					});
+				}
+				else throw new Error("Items argument is of unsupported type");
 			}
+			finally {
+				this._disableValueEvents = false;
+			}
+			this._updateUI(this.getValue());
 		},
 
 		removeAllItems: function() {
