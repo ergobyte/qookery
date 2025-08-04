@@ -184,6 +184,7 @@
 		</get>
 		<get verbose="on" httpusecaches="no" skipExisting="true" src="https://cdn.jsdelivr.net/npm/@fullcalendar/moment@${qookerycalendar.FullCalendar.version}/index.global.min.js"
 				dest="${fullcalendar.target}/fullcalendar/moment-to-fullcalendar.min.js" />
+		<mkdir dir="${fullcalendar.target}/moment" />
 		<get verbose="on" httpusecaches="no" skipExisting="true" src="https://cdn.jsdelivr.net/npm/moment@${qookerycalendar.Moment.version}/min/moment.min.js"
 				dest="${fullcalendar.target}/moment" />
 		<install-library project="qookerycalendar" library="FullCalendar" />
