@@ -146,7 +146,7 @@
 
 	<target name="Download.Init">
 		<define-library project="qookeryace" library="Ace" version="1.4.3" />
-		<define-library project="qookerycalendar" library="FullCalendar" version="6.1.4" />
+		<define-library project="qookerycalendar" library="FullCalendar" version="6.1.19" />
 		<define-library project="qookerycalendar" library="Moment" version="2.27.0" />
 		<define-library project="qookeryrichtext" library="CKEditor" version="39.0.2" />
 	</target>

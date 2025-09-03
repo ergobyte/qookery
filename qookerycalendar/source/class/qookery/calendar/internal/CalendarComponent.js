@@ -81,10 +81,19 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			widget.getContentElement().setAttribute("id", this.__domIdentifier);
 			// Configure widget positioning by applying layout
 			this._applyWidgetAttributes(widget);
-			// Defer creation of fullcalendar until after positioning is done
+			// Defer creation of fullcalendar until after positioning and sizing is done
 			widget.addListenerOnce("appear", event => {
-				qookery.Qookery.getRegistry().loadLibrary("fullcalendar", this.__onLibraryLoaded, this);
-			});
+				let promise = this.executeAction("prepare");
+				Promise.resolve(promise).then(() => {
+					qookery.Qookery.getRegistry().loadLibrary("fullcalendar", error => {
+						if(error != null) {
+							this.error("Error loading library", error);
+							return;
+						}
+						this.__createCalendar();
+					});
+				});
+			 });
 			widget.addListener("resize", event => {
 				// Use a timeout to let the layout queue apply its changes to the DOM
 				let height = event.getData()["height"];
@@ -98,11 +107,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			return [ widget ];
 		},
 
-		__onLibraryLoaded(error) {
-			if(error != null) {
-				this.error("Error loading library", error);
-				return;
-			}
+		__createCalendar() {
 			// Create calendar
 			qx.lang.Object.mergeWith(this.__options, {
 				allDaySlot: this.getAttribute("all-day-slot", true),
@@ -116,7 +121,9 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 					resourceTimelineDay: this.getAttribute("button-text-resource-timeline-day", undefined)?.toString()
 				},
 				dayMaxEventRows: this.getAttribute("day-max-event-rows", false),
-				defaultAllDayEventDuration: { days: this.getAttribute("default-all-day-event-duration", 1) },
+				defaultAllDayEventDuration: {
+					days: this.getAttribute("default-all-day-event-duration", 1)
+				},
 				defaultTimedEventDuration: this.getAttribute("default-timed-event-duration", "02:00:00"),
 				editable: this.getAttribute("editable", false),
 				eventMinHeight: this.getAttribute("event-min-height", 15),
@@ -183,6 +190,7 @@ qx.Class.define("qookery.calendar.internal.CalendarComponent", {
 			case "eventResize":
 			case "eventDrop":
 			case "select":
+			case "unselect":
 			case "datesSet":
 				return this.__options[eventName] = handler;
 			}
