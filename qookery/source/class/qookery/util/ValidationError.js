@@ -30,12 +30,16 @@ qx.Class.define("qookery.util.ValidationError", {
 	 * @param message {String?} error message
 	 * @param cause {Array?} array of underlying errors
 	 * @param location {any} a value that can help consumers of this error locate its source
+	 * @param domain {String?} error domain
+	 * @param reason {String?} error reason
 	 */
-	construct: function(source, message, cause, location) {
+	construct(source, message, cause, location, domain, reason) {
 		this.__source = source;
 		this.__message = message;
 		this.__cause = cause;
 		this.__location = location;
+		this.__domain = domain;
+		this.__reason = reason;
 		Object.defineProperties(this, {
 			"message": {
 				enumerable: false,
@@ -51,13 +55,16 @@ qx.Class.define("qookery.util.ValidationError", {
 		__source: null,
 		__message: null,
 		__cause: null,
+		__location: null,
+		__domain: null,
+		__reason: null,
 
 		/**
 		 * Return the source of this error, if available
 		 *
 		 * @return {any} value that represents the source of error, may be <code>null</code>
 		 */
-		getSource: function() {
+		getSource() {
 			return this.__source;
 		},
 
@@ -66,7 +73,7 @@ qx.Class.define("qookery.util.ValidationError", {
 		 *
 		 * @return {String} error message, may be <code>null</code>
 		 */
-		getMessage: function() {
+		getMessage() {
 			return this.__message;
 		},
 
@@ -75,7 +82,7 @@ qx.Class.define("qookery.util.ValidationError", {
 		 *
 		 * @return {Array} array of underlying errors or <code>null</code> if not set
 		 */
-		getCause: function() {
+		getCause() {
 			return this.__cause;
 		},
 
@@ -84,8 +91,26 @@ qx.Class.define("qookery.util.ValidationError", {
 		 *
 		 * @return {any} location of error's source
 		 */
-		getLocation: function() {
+		getLocation() {
 			return this.__location;
+		},
+
+		/**
+		 * Return a domain for this error
+		 *
+		 * @return {String} domain
+		 */
+		getDomain() {
+			return this.__domain;
+		},
+
+		/**
+		 * Return a reason for this error
+		 *
+		 * @return {String} reason, may be <code>null</code>
+		 */
+		getReason() {
+			return this.__reason;
 		},
 
 		/**
@@ -93,13 +118,15 @@ qx.Class.define("qookery.util.ValidationError", {
 		 *
 		 * @return {String} an error message, <code>null</code> is never returned
 		 */
-		getFormattedMessage: function() {
-			var message = this.__message || "";
+		getFormattedMessage() {
+			let message = this.__message || "";
 			if(this.__cause != null) {
-				if(message) message += ": ";
-				message += this.__cause.map(function(cause) { return cause.getFormattedMessage(); }).join("; ");
+				if(message)
+					message += ": ";
+				message += this.__cause.map(cause => cause.getFormattedMessage()).join("; ");
 			}
-			if(!message) message = "Nondescript error";
+			if(!message)
+				message = "Nondescript error";
 			return message;
 		}
 	}
