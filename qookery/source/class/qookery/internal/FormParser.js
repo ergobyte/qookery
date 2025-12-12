@@ -144,6 +144,10 @@ qx.Class.define("qookery.internal.FormParser", {
 						component.setAttribute(qookery.IFormComponent.A_TRANSLATION_PREFIX, translationPrefix);
 				}
 
+				// Give component the chance to preprocess its XML element
+
+				component.preprocessXmlContainer(componentElement);
+
 				// Register component into its form
 
 				if(componentId != null && parentComponent != null)

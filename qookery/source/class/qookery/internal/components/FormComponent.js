@@ -77,6 +77,11 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 
 		// Lifecycle
 
+		preprocessXmlContainer(element) {
+			for(let translationElement of qx.xml.Element.getElementsByTagNameNS(element, "http://www.qookery.org/ns/Form", "translation"))
+				this.__parseTranslation(translationElement);
+		},
+
 		create: function(attributes) {
 			this.__enableOperationQueuing();
 			this.debug("Created");
@@ -240,7 +245,7 @@ qx.Class.define("qookery.internal.components.FormComponent", {
 				this.__parseImport(xmlElement);
 				return true;
 			case "{http://www.qookery.org/ns/Form}translation":
-				this.__parseTranslation(xmlElement);
+				// Preprocessed above
 				return true;
 			case "{http://www.qookery.org/ns/Form}variable":
 				this.__parseVariable(xmlElement);

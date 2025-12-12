@@ -118,6 +118,10 @@ qx.Class.define("qookery.internal.components.Component", {
 
 		// Lifecycle
 
+		preprocessXmlContainer(element) {
+			// Subclasses may override to handle the XML element that defines this component
+		},
+
 		create: function(attributes) {
 			// Attention: If overriden, base must be called early in order to setup initial attributes
 			for(var attributeName in attributes) {
