@@ -145,32 +145,29 @@
 	<extension-point name="Download" description="Download external dependencies" />
 
 	<target name="Download.Init">
-		<define-library project="qookeryace" library="Ace" version="1.4.3" />
+		<define-library project="qookeryace" library="Ace" version="1.43.3" />
 		<define-library project="qookerycalendar" library="FullCalendar" version="6.1.19" />
 		<define-library project="qookerycalendar" library="Moment" version="2.27.0" />
 		<define-library project="qookeryrichtext" library="CKEditor" version="39.0.2" />
 	</target>
 
 	<target name="Download.Ace" depends="Download.Init" extensionOf="Download" unless="qookeryace.Ace.uptodate">
-		<property name="ace.target" location="qookeryace/source/resource/qookery/lib/ace" />
-		<property name="ace.downloadBase" value="https://raw.githubusercontent.com/ajaxorg/ace-builds/v${qookeryace.Ace.version}/src-min" />
-		<mkdir dir="${ace.target}" />
-		<get dest="${ace.target}" skipExisting="true" verbose="on" httpusecaches="no">
-			<url url="${ace.downloadBase}/ace.js" />
-			<url url="${ace.downloadBase}/ext-language_tools.js" />
-			<url url="${ace.downloadBase}/ext-searchbox.js" />
-			<url url="${ace.downloadBase}/mode-html.js" />
-			<url url="${ace.downloadBase}/mode-javascript.js" />
-			<url url="${ace.downloadBase}/mode-json.js" />
-			<url url="${ace.downloadBase}/mode-plain_text.js" />
-			<url url="${ace.downloadBase}/mode-textile.js" />
-			<url url="${ace.downloadBase}/mode-xml.js" />
-			<url url="${ace.downloadBase}/theme-eclipse.js" />
-			<url url="${ace.downloadBase}/theme-textmate.js" />
-			<url url="${ace.downloadBase}/worker-html.js" />
-			<url url="${ace.downloadBase}/worker-javascript.js" />
-			<url url="${ace.downloadBase}/worker-json.js" />
-			<url url="${ace.downloadBase}/worker-xml.js" />
+		<get verbose="on" httpusecaches="no" dest="qookeryace/source/resource/qookery/lib/ace">
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/ace.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/ext-language_tools.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/ext-searchbox.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/mode-html.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/mode-javascript.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/mode-json.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/mode-plain_text.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/mode-textile.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/mode-xml.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/theme-eclipse.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/theme-textmate.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/worker-html.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/worker-javascript.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/worker-json.min.js" />
+			<url url="https://cdnjs.cloudflare.com/ajax/libs/ace/${qookeryace.Ace.version}/worker-xml.min.js" />
 		</get>
 		<install-library project="qookeryace" library="Ace" />
 	</target>

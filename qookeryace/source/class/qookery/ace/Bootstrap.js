@@ -19,8 +19,8 @@
 qx.Bootstrap.define("qookery.ace.Bootstrap", {
 
 	defer: function() {
-		qookery.Qookery.getRegistry().registerLibrary("ace", [ "${q:external-libraries}/ace/ace.js" ]);
-		qookery.Qookery.getRegistry().registerLibrary("aceLanguageTools", [ "${q:external-libraries}/ace/ext-language_tools.js" ]);
+		qookery.Qookery.getRegistry().registerLibrary("ace", [ "${q:external-libraries}/ace/ace.min.js" ]);
+		qookery.Qookery.getRegistry().registerLibrary("aceLanguageTools", [ "${q:external-libraries}/ace/ext-language_tools.min.js" ]);
 		qookery.Qookery.getRegistry().registerComponentType("{http://www.qookery.org/ns/Form/Ace}editor", qookery.ace.internal.AceComponent);
 	}
 });

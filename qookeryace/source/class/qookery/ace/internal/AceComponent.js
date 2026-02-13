@@ -25,8 +25,8 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 	extend: qookery.internal.components.EditableComponent,
 
-	construct: function(parentComponent) {
-		this.base(arguments, parentComponent);
+	construct(parentComponent) {
+		super(parentComponent);
 	},
 
 	members: {
@@ -36,7 +36,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 
 		// Metadata
 
-		getAttributeType: function(attributeName) {
+		getAttributeType(attributeName) {
 			switch(attributeName) {
 			case "display-indent-guides":
 			case "h-scroll-bar-always-visible":
@@ -58,11 +58,11 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 				return "String";
 			case "auto-complete":
 				return "StringList";
-			default: return this.base(arguments, attributeName);
+			default: return super(attributeName);
 			}
 		},
 
-		setAttribute: function(attributeName, value) {
+		setAttribute(attributeName, value) {
 			if(this.__editor != null) {
 				switch(attributeName) {
 				case "mode":
@@ -70,49 +70,50 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 					break;
 				}
 			}
-			return this.base(arguments, attributeName, value);
+			return super(attributeName, value);
 		},
 
 		// Construction
 
-		_createMainWidget: function() {
-			var widget = new qookery.ace.internal.AceWidget(this);
+		_createMainWidget() {
+			let widget = new qookery.ace.internal.AceWidget(this);
 			this._applyWidgetAttributes(widget);
 			return widget;
 		},
 
-		setup: function() {
-			var libraryNames = [ "ace" ];
-			var autoComplete = this.getAttribute("auto-complete");
+		setup() {
+			let libraryNames = [ "ace" ];
+			let autoComplete = this.getAttribute("auto-complete");
 			if(autoComplete != null)
 				libraryNames.push("aceLanguageTools");
-			qookery.Qookery.getRegistry().loadLibrary(libraryNames, function(error) {
+			qookery.Qookery.getRegistry().loadLibrary(libraryNames, error => {
 				if(error != null) {
 					this.error("Error loading library", error);
 					return;
 				}
-				var aceWidget = this.getMainWidget();
+				let aceWidget = this.getMainWidget();
 				if(aceWidget.getContentElement().getDomElement()) {
 					this.__attachAceEditor(aceWidget);
 					return;
 				}
-				aceWidget.addListenerOnce("appear", function() {
+				aceWidget.addListenerOnce("appear", () => {
 					this.__attachAceEditor(aceWidget);
 				}, this);
-			}, this);
-			this.base(arguments);
+			});
+			super();
 		},
 
 		// Public methods
 
-		getEditor: function() {
+		getEditor() {
 			return this.__editor;
 		},
 
 		// Component implementation
 
-		_updateUI: function(value) {
-			if(!this.__editor) return;
+		_updateUI(value) {
+			if(!this.__editor)
+				return;
 			this.__ignoreChangeEvents = true;
 			try {
 				value = this.getValue();
@@ -128,25 +129,28 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			}
 		},
 
-		_applyValid: function(valid) {
-			if(!valid) this.getMainWidget().addState("invalid"); else this.getMainWidget().removeState("invalid");
+		_applyValid(valid) {
+			if(!valid)
+				this.getMainWidget().addState("invalid");
+			else
+				this.getMainWidget().removeState("invalid");
 		},
 
-		setInvalidMessage: function(invalidMessage) {
+		setInvalidMessage(invalidMessage) {
 			// Overriden to block default implementation
 		},
 
-		focus: function() {
+		focus() {
 			if(this.__editor != null)
 				this.__editor.focus();
 		},
 
 		// Internal
 
-		__attachAceEditor: function(aceWidget) {
-			var aceContainer = aceWidget.getContentElement().getDomElement();
+		__attachAceEditor(aceWidget) {
+			let aceContainer = aceWidget.getContentElement().getDomElement();
 
-			var editor = this.__editor = ace.edit(aceContainer);
+			let editor = this.__editor = ace.edit(aceContainer);
 			editor.setReadOnly(this.isReadOnly());
 			editor.setHighlightActiveLine(this.getAttribute("highlight-active-line", true));
 			editor.setShowFoldWidgets(this.getAttribute("show-fold-widgets", true));
@@ -154,7 +158,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.setShowPrintMargin(this.getAttribute("show-print-margin", true));
 			editor.setOption("cursorStyle", this.getAttribute("cursor-style", "ace"));
 			editor.setFontSize(this.getAttribute("font-size", 12));
-			var autoComplete = this.getAttribute("auto-complete");
+			let autoComplete = this.getAttribute("auto-complete");
 			if(autoComplete != null) {
 				editor.setOption("enableBasicAutocompletion", qx.lang.Array.contains(autoComplete, "basic"));
 				editor.setOption("enableLiveAutocompletion", qx.lang.Array.contains(autoComplete, "live"));
@@ -163,7 +167,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			editor.$blockScrolling = Infinity;
 			editor.on("change", this.__onChange.bind(this));
 
-			var renderer = editor.renderer;
+			let renderer = editor.renderer;
 			renderer.setPrintMarginColumn(this.getAttribute("print-margin-column", 80));
 			renderer.setDisplayIndentGuides(this.getAttribute("display-indent-guides", true));
 			renderer.setShowGutter(this.getAttribute("show-gutter", true));
@@ -171,7 +175,7 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			renderer.setVScrollBarAlwaysVisible(this.getAttribute("v-scroll-bar-always-visible", false));
 			renderer.setTheme("ace/theme/" + this.getAttribute("theme", "textmate"));
 
-			var session = editor.getSession();
+			let session = editor.getSession();
 			session.setMode("ace/mode/" + this.getAttribute("mode", "plain_text"));
 			session.setTabSize(this.getAttribute("tab-size", 4));
 			session.setUseSoftTabs(this.getAttribute("use-soft-tabs", true));
@@ -185,15 +189,17 @@ qx.Class.define("qookery.ace.internal.AceComponent", {
 			this.executeAction("initializeEditor", editor);
 		},
 
-		__onChange: function(event) {
-			if(this.__ignoreChangeEvents) return;
-			var value = this.__editor.getSession().getValue();
-			if(value === "") value = null;
+		__onChange(event) {
+			if(this.__ignoreChangeEvents)
+				return;
+			let value = this.__editor.getSession().getValue();
+			if(value === "")
+				value = null;
 			this._setValueSilently(value);
 		}
 	},
 
-	destruct: function() {
+	destruct() {
 		this.__editor = null;
 	}
 });

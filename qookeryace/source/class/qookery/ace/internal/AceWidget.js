@@ -20,14 +20,16 @@ qx.Class.define("qookery.ace.internal.AceWidget", {
 
 	extend: qx.ui.core.Widget,
 
-	construct: function(component) {
-		this.base(arguments);
+	construct(component) {
+		super();
 		this.__component = component;
-		this.addListener("resize", function() {
-			qx.event.Timer.once(function() {
-				if(this.isDisposed()) return;
-				var editor = this.__component.getEditor();
-				if(editor == null) return;
+		this.addListener("resize", () => {
+			qx.event.Timer.once(() => {
+				if(this.isDisposed())
+					return;
+				let editor = this.__component.getEditor();
+				if(editor == null)
+					return;
 				editor.resize();
 			}, this, 0);
 		}, this);
@@ -37,9 +39,9 @@ qx.Class.define("qookery.ace.internal.AceWidget", {
 
 		__component: null,
 
-		_createContentElement: function() {
+		_createContentElement() {
 			// Create a selectable and overflow disabled <div>
-			var element = new qx.html.Element("div", {
+			let element = new qx.html.Element("div", {
 				overflowX: "hidden",
 				overflowY: "hidden"
 			});
